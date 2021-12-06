@@ -1,5 +1,6 @@
 # Yadds
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
 [![GitHub](https://img.shields.io/github/license/shensven/Yadds)](./LICENSE)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/dev/electron)](./package.json)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/react)](./package.json)
