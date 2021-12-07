@@ -24,10 +24,14 @@ Start the app in the `dev` environment:
 npm start
 ```
 
-## PACKAGING FOR PRODUCTION
+### PACKAGING FOR PRODUCTION
 
 To package apps for the local platform:
 
 ```bash
 npm run package
 ```
+
+## CREDITS
+
+- [electron-react-boilerplate/electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
