@@ -1,0 +1,25 @@
+{
+  "extends": ["config:base"],
+  "baseBranches": ["dev"],
+  "semanticCommits": "enabled",
+  "major": false,
+  "packageRules": [
+    {
+      "groupName": "devDependencies",
+      "matchDepTypes": ["devDependencies"],
+      "enabled": false,
+      "excludePackageNames": []
+    },
+    {
+      "groupName": "dependencies",
+      "matchDepTypes": ["dependencies"],
+      "enabled": false,
+      "excludePackageNames": [
+        "@emotion/react",
+        "@emotion/styled",
+        "@mui/icons-material",
+        "@mui/material"
+      ]
+    }
+  ]
+}
