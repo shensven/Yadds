@@ -21,7 +21,7 @@ Yet another DSM [Download Station](https://www.synology.com/en-us/dsm/packages/D
 Start the app in the `dev` environment:
 
 ```bash
-npm start
+npm run start
 ```
 
 ### PACKAGING FOR PRODUCTION
