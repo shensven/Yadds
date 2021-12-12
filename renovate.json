@@ -18,7 +18,8 @@
         "@emotion/react",
         "@emotion/styled",
         "@mui/icons-material",
-        "@mui/material"
+        "@mui/material",
+        "@mui/styles"
       ]
     }
   ]
