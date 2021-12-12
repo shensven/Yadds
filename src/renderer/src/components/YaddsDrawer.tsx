@@ -30,7 +30,7 @@ const YaddsDrawer: React.FC = () => {
       name: '全部下载项目',
       icon: (
         <Icon>
-          <img src={shapesOutlineSvg} width={23} />
+          <img src={shapesOutlineSvg} alt="全部下载项目" width={23} />
         </Icon>
       ),
     },
@@ -39,7 +39,7 @@ const YaddsDrawer: React.FC = () => {
       name: '下载中',
       icon: (
         <Icon>
-          <img src={arrowDownCircleOutlineSvg} width={24} />
+          <img src={arrowDownCircleOutlineSvg} alt="下载中" width={24} />
         </Icon>
       ),
     },
@@ -48,7 +48,7 @@ const YaddsDrawer: React.FC = () => {
       name: '已完成',
       icon: (
         <Icon>
-          <img src={checkmarkCircleOutlineSvg} width={24} />
+          <img src={checkmarkCircleOutlineSvg} alt="已完成" width={24} />
         </Icon>
       ),
     },
@@ -57,7 +57,7 @@ const YaddsDrawer: React.FC = () => {
       name: '进行中',
       icon: (
         <Icon>
-          <img src={cloudUploadOutlineSvg} width={22} />
+          <img src={cloudUploadOutlineSvg} alt="进行中" width={22} />
         </Icon>
       ),
     },
@@ -66,7 +66,7 @@ const YaddsDrawer: React.FC = () => {
       name: '非进行中',
       icon: (
         <Icon>
-          <img src={cloudOfflineOutlineSvg} width={21} />
+          <img src={cloudOfflineOutlineSvg} alt="非进行中" width={21} />
         </Icon>
       ),
     },
@@ -75,7 +75,7 @@ const YaddsDrawer: React.FC = () => {
       name: '停用',
       icon: (
         <Icon>
-          <img src={stopCircleOutlineSvg} width={24} />
+          <img src={stopCircleOutlineSvg} alt="停用" width={24} />
         </Icon>
       ),
     },
@@ -131,7 +131,7 @@ const YaddsDrawer: React.FC = () => {
           >
             <ListItemIcon>
               <Icon>
-                <img src={cogOutlineSvg} width={24} />
+                <img src={cogOutlineSvg} alt="设置" width={24} />
               </Icon>
             </ListItemIcon>
             <ListItemText
