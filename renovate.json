@@ -19,7 +19,7 @@
         "@emotion/styled",
         "@mui/icons-material",
         "@mui/material",
-        "@mui/styles"
+        "@mui/system"
       ]
     }
   ]
