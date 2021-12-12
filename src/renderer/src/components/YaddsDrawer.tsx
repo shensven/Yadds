@@ -1,15 +1,15 @@
 import { useContext } from 'react';
 import { useHistory, withRouter } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import CategoryRoundedIcon from '@mui/icons-material/CategoryRounded';
-import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
-import FileDownloadDoneRoundedIcon from '@mui/icons-material/FileDownloadDoneRounded';
-import SyncRoundedIcon from '@mui/icons-material/SyncRounded';
-import SyncDisabledRoundedIcon from '@mui/icons-material/SyncDisabledRounded';
-import FileDownloadOffRoundedIcon from '@mui/icons-material/FileDownloadOffRounded';
-import SettingsIcon from '@mui/icons-material/Settings';
+import { Drawer, Icon, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { YaddsCtx } from '../context/YaddsContext';
 import yaddsTheme from '../theme/yaddsTheme';
+import shapesOutlineSvg from '../assets/ionicons/shapes-outline.svg';
+import arrowDownCircleOutlineSvg from '../assets/ionicons/arrow-down-circle-outline.svg';
+import checkmarkCircleOutlineSvg from '../assets/ionicons/checkmark-circle-outline.svg';
+import cloudUploadOutlineSvg from '../assets/ionicons/cloud-upload-outline.svg';
+import cloudOfflineOutlineSvg from '../assets/ionicons/cloud-offline-outline.svg';
+import stopCircleOutlineSvg from '../assets/ionicons/stop-circle-outline.svg';
+import cogOutlineSvg from '../assets/ionicons/cog-outline.svg';
 
 interface Category {
   path: string;
@@ -28,32 +28,56 @@ const YaddsDrawer: React.FC = () => {
     {
       path: '/queueAll',
       name: '全部下载项目',
-      icon: <CategoryRoundedIcon />,
+      icon: (
+        <Icon>
+          <img src={shapesOutlineSvg} width={23} />
+        </Icon>
+      ),
     },
     {
       path: '/queueDownloading',
       name: '下载中',
-      icon: <FileDownloadRoundedIcon />,
+      icon: (
+        <Icon>
+          <img src={arrowDownCircleOutlineSvg} width={24} />
+        </Icon>
+      ),
     },
     {
       path: '/queueFinished',
       name: '已完成',
-      icon: <FileDownloadDoneRoundedIcon />,
+      icon: (
+        <Icon>
+          <img src={checkmarkCircleOutlineSvg} width={24} />
+        </Icon>
+      ),
     },
     {
       path: '/queueActive',
       name: '进行中',
-      icon: <SyncRoundedIcon />,
+      icon: (
+        <Icon>
+          <img src={cloudUploadOutlineSvg} width={22} />
+        </Icon>
+      ),
     },
     {
       path: '/queueInactive',
       name: '非进行中',
-      icon: <SyncDisabledRoundedIcon />,
+      icon: (
+        <Icon>
+          <img src={cloudOfflineOutlineSvg} width={21} />
+        </Icon>
+      ),
     },
     {
       path: '/queueStopped',
       name: '停用',
-      icon: <FileDownloadOffRoundedIcon />,
+      icon: (
+        <Icon>
+          <img src={stopCircleOutlineSvg} width={24} />
+        </Icon>
+      ),
     },
   ];
 
@@ -106,7 +130,9 @@ const YaddsDrawer: React.FC = () => {
             }}
           >
             <ListItemIcon>
-              <SettingsIcon />
+              <Icon>
+                <img src={cogOutlineSvg} width={24} />
+              </Icon>
             </ListItemIcon>
             <ListItemText
               primary={

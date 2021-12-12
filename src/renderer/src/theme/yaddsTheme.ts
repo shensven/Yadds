@@ -10,10 +10,27 @@ const yaddsPalette = createTheme({
 
 const yaddsTheme = createTheme(yaddsPalette, {
   components: {
+    MuiDrawer: {
+      styleOverrides: {
+        paper: {
+          justifyContent: 'space-between',
+          backgroundColor: '#f3f6f9',
+        },
+      },
+    },
     MuiListItemButton: {
       styleOverrides: {
         root: {
-          borderRadius: '8px',
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiIcon: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         },
       },
     },
