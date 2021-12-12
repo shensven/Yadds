@@ -4,6 +4,7 @@ const yaddsPalette = createTheme({
   palette: {
     primary: {
       main: '#007fff',
+      dark: '#0059b2',
     },
   },
 });
