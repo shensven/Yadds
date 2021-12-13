@@ -10,7 +10,7 @@ const YaddsDrawerSwitch: React.FC = () => {
   const [src, setScr] = useState<string>(inactiveSvg);
 
   return (
-    <Box sx={{ position: 'fixed', top: '50%' }}>
+    <Box sx={{ position: 'fixed', top: '45%' }}>
       <Icon
         sx={{ height: 40 }}
         onMouseOver={() => setScr(hasDrawer ? activeLeftSvg : activeRightSvg)}

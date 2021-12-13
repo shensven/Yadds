@@ -11,10 +11,10 @@ const QueueAll: React.FC = () => {
 
   return (
     <YaddsMain halfWidth={hasDrawer}>
-      <Box sx={{ display: 'flex' }}>
-        <YaddsDrawerSwitch />
-        <Box sx={{ marginLeft: theme.spacing(3), marginRight: theme.spacing(3) }}>
-          <YaddsTableBar />
+      <YaddsDrawerSwitch />
+      <Box sx={{ flexGrow: 1, marginLeft: theme.spacing(3), marginRight: theme.spacing(3) }}>
+        <YaddsTableBar />
+        <Box sx={{ padding: theme.spacing(1) }}>
           <Typography paragraph sx={{ textAlign: 'justify' }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
             dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi
