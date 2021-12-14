@@ -14,8 +14,9 @@ const yaddsTheme = createTheme(yaddsPalette, {
     MuiDrawer: {
       styleOverrides: {
         paper: {
+          borderRight: 0,
           justifyContent: 'space-between',
-          backgroundColor: '#f3f6f9',
+          // backgroundColor: '#f3f6f9',
         },
       },
     },

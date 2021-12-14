@@ -12,9 +12,9 @@ const YaddsMainContainer: React.FC = ({ children }) => {
   return (
     <YaddsMain halfWidth={hasDrawer}>
       <YaddsDrawerSwitch />
-      <Box sx={{ flexGrow: 1, marginLeft: theme.spacing(3), marginRight: theme.spacing(3) }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', height: '100vh' }}>
         <YaddsTableBar />
-        <Box sx={{ padding: theme.spacing(1) }}>{children}</Box>
+        <Box sx={{ overflowY: 'auto', paddingLeft: theme.spacing(3), paddingRight: theme.spacing(2) }}>{children}</Box>
       </Box>
     </YaddsMain>
   );
