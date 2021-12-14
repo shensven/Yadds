@@ -1,4 +1,4 @@
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import { Box, ThemeProvider } from '@mui/material';
 import { YaddsProvider } from './src/context/YaddsContext';
 import yaddsTheme from './src/theme/yaddsTheme';
