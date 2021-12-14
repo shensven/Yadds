@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
-import YaddsMainContainer from '../containers/YaddsMainContainer';
+import YaddsMain from '../containers/YaddsMain';
 
 const QueueFinished: React.FC = () => {
   return (
-    <YaddsMainContainer>
+    <YaddsMain hasAppbar>
       <Typography>QueueFinished</Typography>
-    </YaddsMainContainer>
+    </YaddsMain>
   );
 };
 

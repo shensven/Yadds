@@ -1,43 +1,31 @@
-import { Typography } from '@mui/material';
-import YaddsMainContainer from '../containers/YaddsMainContainer';
+import { Box, Drawer, List } from '@mui/material';
+import YaddsMain from '../containers/YaddsMain';
+import MainListItem from '../components/listItem/MainListItem';
 
 const QueueAll: React.FC = () => {
+  const arr: string[] = [
+    'No.Time.To.Die.2021.2160p.WEBRip.x265.10bit.SDR.DDP5.1.Atmos-SWTYBLZ.mkv1111111111111111111',
+    'The.Eight.Hundred.2020.CHINESE.1080p.BluRay.x264-iKiW.mkv',
+    'City.Hall.2020.1080p.WEB-DL.AAC2.0.H.264-PTP.mkv',
+    'Shock.Wave.II.2021.WEB-DL.4k.H265.DD5.1-HDSWEB.mkv',
+    'Chungking.Express.1994.Criterion.Collection.1080p.BluRay.x264.DTS-WiKi.mkv',
+    'Assassins.2020.1080p.AMZN.WEBRip.DDP5.1.x264-NOGRP.mkv',
+    'Never.Rarely.Sometimes.Always.2020.1080p.AMZN.WEB-DL.DDP5.1.H.264-NTG.mkv',
+    'Inception.2010.BluRay.1080p.DTS.2Audio.x264-CHD.mkv',
+    'Venom.Let.There.Be.Carnage.2021.2160p.WEB-DL.DDP5.1.Atmos.HEVC-TEPES.mkv',
+  ];
+
   return (
-    <YaddsMainContainer>
-      <Typography paragraph sx={{ textAlign: 'justify' }}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-        imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-        velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-        adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-        scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
-        lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-        ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac. Lorem ipsum dolor sit amet,
-        consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor
-        purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-        hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id donec
-        ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum est
-        ultricies integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate scelerisque felis imperdiet proin
-        fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue.
-        At augue eget arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec
-        massa sapien faucibus et molestie ac. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis
-        leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-        Convallis convallis tellus id interdum velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-        adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh
-        cras. Metus vulputate scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis imperdiet massa
-        tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-        consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-        imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-        velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-        adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-        scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
-        lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-        ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-      </Typography>
-    </YaddsMainContainer>
+    <YaddsMain hasAppbar>
+      <List>
+        {arr.map((item: string, index: number) => (
+          <MainListItem item={item} index={index} />
+        ))}
+      </List>
+      <Drawer anchor="right" open={false} onClose={() => {}}>
+        <Box sx={{ width: 480 }}>list(anchor)</Box>
+      </Drawer>
+    </YaddsMain>
   );
 };
 

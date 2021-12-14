@@ -2,7 +2,7 @@ import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import { Box, ThemeProvider } from '@mui/material';
 import { YaddsProvider } from './src/context/YaddsContext';
 import yaddsTheme from './src/theme/yaddsTheme';
-import YaddsDrawer from './src/components/YaddsDrawer';
+import YaddsDrawer from './src/containers/YaddsDrawer';
 import QueueAll from './src/pages/QueueAll';
 import QueueDownloading from './src/pages/QueueDownloading';
 import QueueFinished from './src/pages/QueueFinished';
@@ -10,11 +10,7 @@ import QueueActive from './src/pages/QueueActive';
 import QueueInactive from './src/pages/QueueInactive';
 import QueueStopped from './src/pages/QueueStopped';
 import Settings from './src/pages/Settings';
-import './App.css';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import './App.scss';
 
 const App: React.FC = () => {
   return (

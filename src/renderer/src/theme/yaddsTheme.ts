@@ -16,7 +16,6 @@ const yaddsTheme = createTheme(yaddsPalette, {
         paper: {
           borderRight: 0,
           justifyContent: 'space-between',
-          // backgroundColor: '#f3f6f9',
         },
       },
     },
@@ -33,6 +32,21 @@ const yaddsTheme = createTheme(yaddsPalette, {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'rgba(255,255,255,0.8)',
+          backdropFilter: 'blur(20px)',
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          lineHeight: 'normal',
         },
       },
     },
