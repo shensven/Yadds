@@ -11,6 +11,10 @@ import QueueInactive from './src/pages/QueueInactive';
 import QueueStopped from './src/pages/QueueStopped';
 import Settings from './src/pages/Settings';
 import './App.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 const App: React.FC = () => {
   return (

@@ -17,6 +17,7 @@
       "excludePackageNames": [
         "@emotion/react",
         "@emotion/styled",
+        "@fontsource/roboto",
         "@mui/icons-material",
         "@mui/material",
         "@mui/system"
