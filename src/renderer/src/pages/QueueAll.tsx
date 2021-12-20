@@ -4,7 +4,7 @@ import MainListItem from '../components/listItem/MainListItem';
 
 const QueueAll: React.FC = () => {
   const arr: string[] = [
-    'No.Time.To.Die.2021.2160p.WEBRip.x265.10bit.SDR.DDP5.1.Atmos-SWTYBLZ.mkv1111111111111111111',
+    'No.Time.To.Die.2021.2160p.WEBRip.x265.10bit.SDR.DDP5.1.Atmos-SWTYBLZ.mkv',
     'The.Eight.Hundred.2020.CHINESE.1080p.BluRay.x264-iKiW.mkv',
     'City.Hall.2020.1080p.WEB-DL.AAC2.0.H.264-PTP.mkv',
     'Shock.Wave.II.2021.WEB-DL.4k.H265.DD5.1-HDSWEB.mkv',

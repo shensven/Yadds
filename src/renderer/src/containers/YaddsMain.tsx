@@ -12,6 +12,7 @@ import activeRightSvg from '../assets/Figma/YaddsDrawerSwitch/active_right.svg';
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'halfWidth' })<{ halfWidth?: boolean }>(
   ({ theme, halfWidth }) => ({
     width: '100%',
+    flexGrow: 1,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
