@@ -29,6 +29,7 @@ const yaddsTheme = createTheme(yaddsPalette, {
       styleOverrides: {
         root: {
           borderRadius: 8,
+          cursor: 'default',
         },
       },
     },
@@ -49,10 +50,10 @@ const yaddsTheme = createTheme(yaddsPalette, {
         },
       },
     },
-    MuiTypography: {
+    MuiButtonBase: {
       styleOverrides: {
         root: {
-          lineHeight: 'normal',
+          cursor: 'default',
         },
       },
     },

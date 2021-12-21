@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
-import { Box, ThemeProvider } from '@mui/material';
+import { Stack, ThemeProvider } from '@mui/material';
 import { YaddsProvider } from './src/context/YaddsContext';
 import yaddsTheme from './src/theme/yaddsTheme';
 import YaddsDrawer from './src/containers/YaddsDrawer';
@@ -14,7 +14,7 @@ import './App.scss';
 
 const App: React.FC = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Stack direction="row">
       <Router>
         <YaddsDrawer />
         <Switch>
@@ -28,7 +28,7 @@ const App: React.FC = () => {
           <Route path="/settings" component={Settings} />
         </Switch>
       </Router>
-    </Box>
+    </Stack>
   );
 };
 

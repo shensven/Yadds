@@ -1,16 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  alpha,
-  Box,
-  Button,
-  ButtonGroup,
-  Icon,
-  IconButton,
-  InputBase,
-  styled,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { alpha, Box, Button, Icon, IconButton, InputBase, Stack, styled, Typography, useTheme } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
 import SearchOutlineIcon from '../components/icons/SearchOutlineIcon';
@@ -128,7 +117,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           <img src={src} alt="" draggable="false" />
         </Icon>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+      <Stack>
         <AppBar
           sx={{
             display: hasAppbar ? 'flex' : 'none',
@@ -140,7 +129,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           elevation={0}
           hasDrawer={hasDrawer}
         >
-          <Search>
+          <Search sx={{ marginRight: theme.spacing(6) }}>
             <SearchIconWrapper>
               <SearchOutlineIcon sx={{ fontSize: 14 }} />
             </SearchIconWrapper>
@@ -152,25 +141,23 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
             />
           </Search>
           <Button
-            sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, marginLeft: theme.spacing(4) }}
+            sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, marginRight: theme.spacing(2) }}
             size="small"
           >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Stack direction="row" alignItems="center">
               <AddOutlineIcon fontSize="small" color="primary" />
               <Typography sx={{ fontSize: 12 }}>新建</Typography>
-            </Box>
+            </Stack>
           </Button>
-          <ButtonGroup sx={{ marginLeft: theme.spacing(2) }}>
-            <IconButton color="primary" size="small" sx={{ backgroundColor: theme.palette.grey[100] }}>
-              <EllipsisHorizontalIcon fontSize="small" color="primary" />
-            </IconButton>
-          </ButtonGroup>
+          <IconButton color="primary" size="small" sx={{ backgroundColor: theme.palette.grey[100] }}>
+            <EllipsisHorizontalIcon fontSize="small" color="primary" />
+          </IconButton>
         </AppBar>
-        <Box sx={{ paddingLeft: theme.spacing(3), paddingRight: theme.spacing(3) }}>
+        <Stack sx={{ paddingLeft: theme.spacing(3), paddingRight: theme.spacing(3) }}>
           <MainHeader sx={{ display: hasAppbar ? 'flex' : 'none' }} />
           {children}
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
     </Main>
   );
 };

@@ -56,6 +56,11 @@ const YaddsDrawer: React.FC = () => {
           <ListItem key={item.path}>
             <ListItemButton
               dense
+              sx={{
+                '& .MuiTouchRipple-child': {
+                  backgroundColor: theme.palette.grey[300],
+                },
+              }}
               selected={select === item.path}
               onClick={() => {
                 setSelect(item.path);
