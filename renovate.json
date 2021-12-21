@@ -18,7 +18,6 @@
         "@emotion/react",
         "@emotion/styled",
         "@fontsource/barlow",
-        "@fontsource/roboto",
         "@mui/icons-material",
         "@mui/material",
         "@mui/system"
