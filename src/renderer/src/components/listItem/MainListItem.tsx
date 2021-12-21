@@ -36,7 +36,13 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
         <ListItemText>
           <Typography
             noWrap
-            sx={{ fontWeight: 'bold', overflow: 'hidden', textOverflow: 'ellipsis', wordBreak: 'break-all' }}
+            sx={{
+              fontWeight: 600,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              wordBreak: 'break-all',
+              color: theme.palette.grey[800],
+            }}
           >
             {item}
           </Typography>
@@ -45,7 +51,11 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
           >
             <Box sx={{ display: 'flex' }}>
               <Box sx={{ display: 'flex', alignItems: 'center', width: '320px' }}>
-                <LinearProgress sx={{ width: 96, borderRadius: 4 }} variant="determinate" value={progress} />
+                <LinearProgress
+                  sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
+                  variant="determinate"
+                  value={progress}
+                />
                 <Typography variant="caption" sx={{ marginLeft: 1, color: theme.palette.text.secondary }}>
                   {progress}MB / 100MB
                 </Typography>

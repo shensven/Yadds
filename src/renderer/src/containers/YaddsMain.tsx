@@ -1,9 +1,21 @@
 import React, { useContext, useState } from 'react';
-import { Box, Button, ButtonGroup, Icon, IconButton, styled, Typography, useTheme } from '@mui/material';
+import {
+  alpha,
+  Box,
+  Button,
+  ButtonGroup,
+  Icon,
+  IconButton,
+  InputBase,
+  styled,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import AddIcon from '@mui/icons-material/Add';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { YaddsCtx } from '../context/YaddsContext';
+import SearchOutlineIcon from '../components/icons/SearchOutlineIcon';
+import AddOutlineIcon from '../components/icons/AddOutlineIcon';
+import EllipsisHorizontalIcon from '../components/icons/EllipsisHorizontalIcon';
 import drawerWidth from '../context/drawerWidth';
 import inactiveSvg from '../assets/Figma/YaddsDrawerSwitch/inactive.svg';
 import activeLeftSvg from '../assets/Figma/YaddsDrawerSwitch/active_left.svg';
@@ -55,6 +67,45 @@ const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'hasDra
   })
 );
 
+const Search = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.grey[100],
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+  },
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 1),
+  height: '100%',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: theme.palette.grey[500],
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'primary',
+  '& .MuiInputBase-input': {
+    padding: 0,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: 120,
+      '&:focus': {
+        width: 160,
+      },
+    },
+  },
+}));
+
 interface YaddsMainProps {
   children: React.ReactNode;
   hasAppbar: boolean;
@@ -89,15 +140,29 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           elevation={0}
           hasDrawer={hasDrawer}
         >
-          <Button sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8 }} size="small">
+          <Search>
+            <SearchIconWrapper>
+              <SearchOutlineIcon sx={{ fontSize: 14 }} />
+            </SearchIconWrapper>
+            <StyledInputBase
+              spellCheck={false}
+              size="small"
+              placeholder="搜索..."
+              sx={{ fontSize: 12, color: theme.palette.grey[800] }}
+            />
+          </Search>
+          <Button
+            sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, marginLeft: theme.spacing(4) }}
+            size="small"
+          >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <AddIcon fontSize="small" />
+              <AddOutlineIcon fontSize="small" color="primary" />
               <Typography sx={{ fontSize: 12 }}>新建</Typography>
             </Box>
           </Button>
           <ButtonGroup sx={{ marginLeft: theme.spacing(2) }}>
             <IconButton color="primary" size="small" sx={{ backgroundColor: theme.palette.grey[100] }}>
-              <MoreHorizIcon fontSize="small" color="primary" />
+              <EllipsisHorizontalIcon fontSize="small" color="primary" />
             </IconButton>
           </ButtonGroup>
         </AppBar>

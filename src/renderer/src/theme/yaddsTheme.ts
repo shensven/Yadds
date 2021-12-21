@@ -7,6 +7,12 @@ const yaddsPalette = createTheme({
       dark: '#0059b2',
     },
   },
+  shape: {
+    borderRadius: 8,
+  },
+  typography: {
+    fontFamily: ['Barlow'].join(','),
+  },
 });
 
 const yaddsTheme = createTheme(yaddsPalette, {

@@ -68,7 +68,7 @@ const YaddsDrawer: React.FC = () => {
                   <Typography
                     style={{
                       fontWeight: select === item.path ? 'bold' : 'normal',
-                      color: select === item.path ? theme.palette.primary.main : theme.palette.text.primary,
+                      color: select === item.path ? theme.palette.primary.main : theme.palette.grey[800],
                     }}
                   >
                     {item.name}
