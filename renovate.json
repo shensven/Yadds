@@ -20,7 +20,8 @@
         "@fontsource/barlow",
         "@mui/icons-material",
         "@mui/material",
-        "@mui/system"
+        "@mui/system",
+        "axios"
       ]
     }
   ]
