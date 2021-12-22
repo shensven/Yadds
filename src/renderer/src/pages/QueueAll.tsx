@@ -19,7 +19,7 @@ const QueueAll: React.FC = () => {
     <YaddsMain hasAppbar>
       <List>
         {arr.map((item: string, index: number) => (
-          <MainListItem item={item} index={index} />
+          <MainListItem key={item} item={item} index={index} />
         ))}
       </List>
       <Drawer anchor="right" open={false} onClose={() => {}}>
