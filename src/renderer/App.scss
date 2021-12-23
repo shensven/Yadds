@@ -1,6 +1,14 @@
 @use '@fontsource/barlow/scss/mixins.scss' as Barlow;
 
-@include Barlow.fontFace($display: block);
+@include Barlow.fontFace($display: block, $weight: 100);
+@include Barlow.fontFace($display: block, $weight: 200);
+@include Barlow.fontFace($display: block, $weight: 300);
+@include Barlow.fontFace($display: block, $weight: 400);
+@include Barlow.fontFace($display: block, $weight: 500);
+@include Barlow.fontFace($display: block, $weight: 600);
+@include Barlow.fontFace($display: block, $weight: 700);
+@include Barlow.fontFace($display: block, $weight: 800);
+@include Barlow.fontFace($display: block, $weight: 900);
 
 body {
   margin: 0;
