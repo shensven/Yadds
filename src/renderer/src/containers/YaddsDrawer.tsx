@@ -72,7 +72,7 @@ const YaddsDrawer: React.FC = () => {
                 primary={
                   <Typography
                     style={{
-                      fontWeight: select === item.path ? 'bold' : 'normal',
+                      fontWeight: select === item.path ? 600 : 400,
                       color: select === item.path ? theme.palette.primary.main : theme.palette.grey[800],
                     }}
                   >
@@ -100,6 +100,7 @@ const YaddsDrawer: React.FC = () => {
               primary={
                 <Typography
                   style={{
+                    fontWeight: select === 'settings' ? 600 : 400,
                     color: select === 'settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
