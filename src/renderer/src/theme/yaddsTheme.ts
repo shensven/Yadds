@@ -11,7 +11,20 @@ const yaddsPalette = createTheme({
     borderRadius: 8,
   },
   typography: {
-    fontFamily: ['Barlow'].join(','),
+    fontFamily: [
+      'Barlow',
+      'system-ui',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
   },
 });
 
