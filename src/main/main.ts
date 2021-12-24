@@ -12,6 +12,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -26,6 +27,8 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+
+const store = new Store();
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
@@ -72,8 +75,10 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    x: (store.get('windowBounds.x') as number) || undefined,
+    y: (store.get('windowBounds.y') as number) || undefined,
+    width: (store.get('windowBounds.width') as number) || 1024,
+    height: (store.get('windowBounds.height') as number) || 728,
     minWidth: 1024,
     minHeight: 728,
     // titleBarStyle: 'hidden',
@@ -96,6 +101,20 @@ const createWindow = async () => {
       mainWindow.minimize();
     } else {
       mainWindow.show();
+    }
+  });
+
+  mainWindow.on('resized', () => {
+    if (mainWindow) {
+      const bounds = mainWindow.getBounds();
+      store.set('windowBounds', bounds);
+    }
+  });
+
+  mainWindow.on('moved', () => {
+    if (mainWindow) {
+      const bounds = mainWindow.getBounds();
+      store.set('windowBounds', bounds);
     }
   });
 
