@@ -78,9 +78,9 @@ const createWindow = async () => {
     x: (store.get('windowBounds.x') as number) || undefined,
     y: (store.get('windowBounds.y') as number) || undefined,
     width: (store.get('windowBounds.width') as number) || 1024,
-    height: (store.get('windowBounds.height') as number) || 728,
+    height: (store.get('windowBounds.height') as number) || 768,
     minWidth: 1024,
-    minHeight: 728,
+    minHeight: 768,
     // titleBarStyle: 'hidden',
     icon: getAssetPath('icon.png'),
     webPreferences: {
