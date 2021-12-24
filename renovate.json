@@ -21,7 +21,8 @@
         "@mui/icons-material",
         "@mui/material",
         "@mui/system",
-        "axios"
+        "axios",
+        "electron-store"
       ]
     }
   ]
