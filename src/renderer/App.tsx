@@ -1,3 +1,4 @@
+import { MenuItemConstructorOptions } from 'electron';
 import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
 import { Stack, ThemeProvider } from '@mui/material';
 import { YaddsProvider } from './src/context/YaddsContext';
@@ -11,6 +12,16 @@ import QueueInactive from './src/pages/QueueInactive';
 import QueueStopped from './src/pages/QueueStopped';
 import Settings from './src/pages/Settings';
 import './App.scss';
+
+declare global {
+  interface Window {
+    electron: {
+      contextMenu: {
+        popup: (val: MenuItemConstructorOptions[]) => void;
+      };
+    };
+  }
+}
 
 const App: React.FC = () => {
   return (

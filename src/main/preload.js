@@ -20,4 +20,9 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
+  contextMenu: {
+    popup(props) {
+      ipcRenderer.send('context-menu-popup', props);
+    },
+  },
 });

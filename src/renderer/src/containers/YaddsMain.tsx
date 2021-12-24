@@ -1,3 +1,4 @@
+import { MenuItemConstructorOptions } from 'electron';
 import React, { useContext, useState } from 'react';
 import { alpha, Box, Button, Icon, IconButton, InputBase, Stack, styled, Typography, useTheme } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -105,6 +106,19 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
   const { hasDrawer, setHasDrawer } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
+  const template: MenuItemConstructorOptions[] = [
+    {
+      label: '按照名称排序',
+    },
+    {
+      label: '按照时间排序',
+    },
+  ];
+
+  const handleContextMenu = () => {
+    window.electron.contextMenu.popup(template);
+  };
+
   return (
     <Main halfWidth={hasDrawer}>
       <Box sx={{ position: 'fixed', top: '45%' }}>
@@ -149,7 +163,12 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
               <Typography sx={{ fontSize: 12 }}>新建</Typography>
             </Stack>
           </Button>
-          <IconButton color="primary" size="small" sx={{ backgroundColor: theme.palette.grey[100] }}>
+          <IconButton
+            color="primary"
+            size="small"
+            sx={{ backgroundColor: theme.palette.grey[100] }}
+            onClick={() => handleContextMenu()}
+          >
             <EllipsisHorizontalIcon fontSize="small" color="primary" />
           </IconButton>
         </AppBar>
