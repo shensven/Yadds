@@ -16,8 +16,14 @@ import './App.scss';
 declare global {
   interface Window {
     electron: {
+      appVersion: {
+        get: () => string;
+      };
       contextMenu: {
         popup: (val: MenuItemConstructorOptions[]) => void;
+      };
+      userBrowser: {
+        openUrl: (val: string) => void;
       };
     };
   }

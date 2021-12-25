@@ -92,20 +92,16 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                   variant="determinate"
                   value={progress}
                 />
-                <Typography variant="caption" sx={{ marginLeft: 1, color: theme.palette.text.secondary }}>
+                <Typography sx={{ fontSize: 12, marginLeft: 1, color: theme.palette.text.secondary }}>
                   {progress}MB / 100MB
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center">
                 <ArrowDownOutlineIcon sx={{ fontSize: 12 }} color="warning" />
-                <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
-                  {progress}MB/s
-                </Typography>
+                <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary }}>{progress}MB/s</Typography>
               </Stack>
             </Stack>
-            <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
-              00:{progress}:00
-            </Typography>
+            <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary }}>00:{progress}:00</Typography>
           </Stack>
         </ListItemText>
       </ListItemButton>

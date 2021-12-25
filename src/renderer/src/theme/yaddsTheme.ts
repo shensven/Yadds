@@ -30,6 +30,13 @@ const yaddsPalette = createTheme({
 
 const yaddsTheme = createTheme(yaddsPalette, {
   components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          userSelect: 'none',
+        },
+      },
+    },
     MuiDrawer: {
       styleOverrides: {
         paper: {
@@ -64,6 +71,13 @@ const yaddsTheme = createTheme(yaddsPalette, {
       },
     },
     MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          cursor: 'default',
+        },
+      },
+    },
+    MuiFormControlLabel: {
       styleOverrides: {
         root: {
           cursor: 'default',

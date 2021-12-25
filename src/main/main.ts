@@ -34,8 +34,16 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
+ipcMain.on('app-version-get', async (event) => {
+  event.returnValue = app.getVersion();
+});
+
 ipcMain.on('context-menu-popup', async (_, props) => {
   Menu.buildFromTemplate(props).popup();
+});
+
+ipcMain.on('user-broswer-open-url', async (_, url) => {
+  shell.openExternal(url);
 });
 
 const store = new Store();

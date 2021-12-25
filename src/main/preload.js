@@ -20,9 +20,19 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
+  appVersion: {
+    get() {
+      return ipcRenderer.sendSync('app-version-get');
+    },
+  },
   contextMenu: {
     popup(props) {
       ipcRenderer.send('context-menu-popup', props);
+    },
+  },
+  userBrowser: {
+    openUrl(url) {
+      ipcRenderer.send('user-broswer-open-url', url);
     },
   },
 });

@@ -11,12 +11,12 @@ import {
   useTheme,
 } from '@mui/material';
 import { YaddsCtx } from '../context/YaddsContext';
-import drawerWidth from '../context/drawerWidth';
+import DRAWER_WIDTH from '../context/drawerWidth';
 import ShapesOutlineIcon from '../components/icons/ShapesOutlineIcon';
 import ArrowDownCircleOutlineIcon from '../components/icons/ArrowDownCircleOutlineIcon';
 import CheckmarkCircleOutlineIcon from '../components/icons/CheckmarkCircleOutlineIcon';
-import CloudUploadOutlineIcon from '../components/icons/CloudUploadOutlineIcon';
-import CloudOfflineOutlineIcon from '../components/icons/CloudOfflineOutlineIcon';
+import ArrowUpCircleOutlineIcon from '../components/icons/ArrowUpCircleOutlineIcon';
+import CloseCircleOutlineIcon from '../components/icons/CloseCircleOutlineIcon';
 import StopCircleOutlineIcon from '../components/icons/StopCircleOutlineIcon';
 import CogOutlineIcon from '../components/icons/CogOutlineIcon';
 
@@ -36,8 +36,8 @@ const YaddsDrawer: React.FC = () => {
     { path: '/queueAll', name: '全部下载项目', icon: <ShapesOutlineIcon /> },
     { path: '/queueDownloading', name: '下载中', icon: <ArrowDownCircleOutlineIcon /> },
     { path: '/queueFinished', name: '已完成', icon: <CheckmarkCircleOutlineIcon /> },
-    { path: '/queueActive', name: '进行中', icon: <CloudUploadOutlineIcon /> },
-    { path: '/queueInactive', name: '非进行中', icon: <CloudOfflineOutlineIcon /> },
+    { path: '/queueActive', name: '进行中', icon: <ArrowUpCircleOutlineIcon /> },
+    { path: '/queueInactive', name: '非进行中', icon: <CloseCircleOutlineIcon /> },
     { path: '/queueStopped', name: '停用', icon: <StopCircleOutlineIcon /> },
   ];
 
@@ -46,8 +46,8 @@ const YaddsDrawer: React.FC = () => {
       anchor="left"
       variant="persistent"
       sx={{
-        width: drawerWidth,
-        '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' },
+        width: DRAWER_WIDTH,
+        '& .MuiDrawer-paper': { width: DRAWER_WIDTH, boxSizing: 'border-box' },
       }}
       open={hasDrawer}
     >
@@ -56,11 +56,7 @@ const YaddsDrawer: React.FC = () => {
           <ListItem key={item.path}>
             <ListItemButton
               dense
-              sx={{
-                '& .MuiTouchRipple-child': {
-                  backgroundColor: theme.palette.grey[300],
-                },
-              }}
+              disableRipple
               selected={select === item.path}
               onClick={() => {
                 setSelect(item.path);
@@ -71,6 +67,7 @@ const YaddsDrawer: React.FC = () => {
               <ListItemText
                 primary={
                   <Typography
+                    noWrap
                     style={{
                       fontWeight: select === item.path ? 600 : 400,
                       color: select === item.path ? theme.palette.primary.main : theme.palette.grey[800],
@@ -87,7 +84,10 @@ const YaddsDrawer: React.FC = () => {
       <List>
         <ListItem>
           <ListItemButton
+            dense
+            disableRipple
             selected={select === 'settings'}
+            sx={{ width: '100%' }}
             onClick={() => {
               setSelect('settings');
               history.push('/settings');
@@ -99,12 +99,18 @@ const YaddsDrawer: React.FC = () => {
             <ListItemText
               primary={
                 <Typography
+                  noWrap
                   style={{
                     fontWeight: select === 'settings' ? 600 : 400,
                     color: select === 'settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
                   设置
+                </Typography>
+              }
+              secondary={
+                <Typography noWrap sx={{ fontSize: 12, color: theme.palette.text.secondary }}>
+                  192.168.100.2 - Lina
                 </Typography>
               }
             />

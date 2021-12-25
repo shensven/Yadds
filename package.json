@@ -32,6 +32,7 @@
   "build": {
     "productName": "Yadds",
     "appId": "com.shensven.yadds",
+    "buildVersion": 1,
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

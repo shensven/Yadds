@@ -3,13 +3,13 @@ import React, { useContext, useState } from 'react';
 import { alpha, Box, Button, Icon, IconButton, InputBase, Stack, styled, Typography, useTheme } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
+import DRAWER_WIDTH from '../context/drawerWidth';
 import SearchOutlineIcon from '../components/icons/SearchOutlineIcon';
 import AddOutlineIcon from '../components/icons/AddOutlineIcon';
 import EllipsisHorizontalIcon from '../components/icons/EllipsisHorizontalIcon';
-import drawerWidth from '../context/drawerWidth';
-import inactiveSvg from '../assets/Figma/YaddsDrawerSwitch/inactive.svg';
-import activeLeftSvg from '../assets/Figma/YaddsDrawerSwitch/active_left.svg';
-import activeRightSvg from '../assets/Figma/YaddsDrawerSwitch/active_right.svg';
+import inactiveSvg from '../assets/YaddsDrawerSwitch/inactive.svg';
+import activeLeftSvg from '../assets/YaddsDrawerSwitch/active_left.svg';
+import activeRightSvg from '../assets/YaddsDrawerSwitch/active_right.svg';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'halfWidth' })<{ halfWidth?: boolean }>(
   ({ theme, halfWidth }) => ({
@@ -19,9 +19,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'halfWidth' 
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `-${drawerWidth}px`,
+    marginLeft: `-${DRAWER_WIDTH}px`,
     ...(halfWidth && {
-      width: `calc(100% - ${drawerWidth}px)`,
+      width: `calc(100% - ${DRAWER_WIDTH}px)`,
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -40,15 +40,15 @@ interface AppBarProps extends MuiAppBarProps {
   hasDrawer?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<AppBarProps>(
+const StyledAppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<AppBarProps>(
   ({ theme, hasDrawer }) => ({
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     ...(hasDrawer && {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: `${drawerWidth}px`,
+      width: `calc(100% - ${DRAWER_WIDTH}px)`,
+      marginLeft: `${DRAWER_WIDTH}px`,
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -57,7 +57,7 @@ const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'hasDra
   })
 );
 
-const Search = styled('div')(({ theme }) => ({
+const StyledSearch = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   borderRadius: theme.shape.borderRadius,
@@ -71,7 +71,7 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const StyledSearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 1),
   height: '100%',
   pointerEvents: 'none',
@@ -107,17 +107,20 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
   const [src, setScr] = useState<string>(inactiveSvg);
 
   const template: MenuItemConstructorOptions[] = [
-    {
-      label: '按照名称排序',
-    },
-    {
-      label: '按照时间排序',
-    },
+    { label: '全部开始' },
+    { label: '全部暂停' },
+    { label: '全部删除...' },
+    { type: 'separator' },
+    { label: '按添加时间排序', type: 'radio', checked: true },
+    { label: '按下载进度排序', type: 'radio', checked: false },
+    { label: '按下载速率排序', type: 'radio', checked: false },
+    { label: '按文件名称排序', type: 'radio', checked: false },
+    { type: 'separator' },
+    { label: '显示为列表', type: 'radio', checked: true },
+    { label: '显示为矩阵', type: 'radio', checked: false },
   ];
 
-  const handleContextMenu = () => {
-    window.electron.contextMenu.popup(template);
-  };
+  const handleContextMenu = () => window.electron.contextMenu.popup(template);
 
   return (
     <Main halfWidth={hasDrawer}>
@@ -132,7 +135,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
         </Icon>
       </Box>
       <Stack>
-        <AppBar
+        <StyledAppBar
           sx={{
             display: hasAppbar ? 'flex' : 'none',
             flexDirection: 'row',
@@ -143,17 +146,17 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           elevation={0}
           hasDrawer={hasDrawer}
         >
-          <Search sx={{ marginRight: theme.spacing(6) }}>
-            <SearchIconWrapper>
+          <StyledSearch sx={{ marginRight: theme.spacing(6) }}>
+            <StyledSearchIconWrapper>
               <SearchOutlineIcon sx={{ fontSize: 14 }} />
-            </SearchIconWrapper>
+            </StyledSearchIconWrapper>
             <StyledInputBase
               spellCheck={false}
               size="small"
               placeholder="搜索..."
               sx={{ fontSize: 12, color: theme.palette.grey[800] }}
             />
-          </Search>
+          </StyledSearch>
           <Button
             sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, marginRight: theme.spacing(2) }}
             size="small"
@@ -171,7 +174,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           >
             <EllipsisHorizontalIcon fontSize="small" color="primary" />
           </IconButton>
-        </AppBar>
+        </StyledAppBar>
         <Stack sx={{ paddingLeft: theme.spacing(3), paddingRight: theme.spacing(3) }}>
           <MainHeader sx={{ display: hasAppbar ? 'flex' : 'none' }} />
           {children}
