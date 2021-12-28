@@ -22,9 +22,32 @@ import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67
 import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
 import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
 
-const Settings: React.FC = () => {
+interface YaddsFormProps {
+  label: string;
+  children: React.ReactNode;
+  hasMargin?: boolean;
+}
+const YaddsFormItem: React.FC<YaddsFormProps> = (props: YaddsFormProps) => {
+  const { label, children, hasMargin } = props;
   const theme = useTheme();
   const LABEL_WIDTH: string = theme.spacing(24);
+  return (
+    <Stack flex={1} flexDirection="row" padding={theme.spacing(2)}>
+      <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ minWidth: LABEL_WIDTH, width: '20%' }}>
+        <Typography variant="subtitle2" color={theme.palette.grey[800]}>
+          {label}
+        </Typography>
+      </FormControl>
+      {children}
+    </Stack>
+  );
+};
+YaddsFormItem.defaultProps = {
+  hasMargin: true,
+};
+
+const Settings: React.FC = () => {
+  const theme = useTheme();
 
   const [appearance, setAppearance] = useState<number>(0);
   const [address, setAddress] = useState<string>('0');
@@ -37,61 +60,34 @@ const Settings: React.FC = () => {
     label: string;
     appearanceSrc: string;
     appearanceNoColorSrc: string;
-    onClick: () => void;
   }
   const appearanceItemArray: AppearanceItem[] = [
-    {
-      id: 0,
-      label: '浅色',
-      appearanceSrc: AppearanceLight,
-      appearanceNoColorSrc: AppearanceLightNoColor,
-      onClick: () => setAppearance(0),
-    },
-    {
-      id: 1,
-      label: '深色',
-      appearanceSrc: AppearanceDark,
-      appearanceNoColorSrc: AppearanceDarkNoColor,
-      onClick: () => setAppearance(1),
-    },
-    {
-      id: 2,
-      label: '跟随系统',
-      appearanceSrc: AppearanceAuto,
-      appearanceNoColorSrc: AppearanceAutoNoColor,
-      onClick: () => setAppearance(2),
-    },
+    { id: 0, label: '浅色', appearanceSrc: AppearanceLight, appearanceNoColorSrc: AppearanceLightNoColor },
+    { id: 1, label: '深色', appearanceSrc: AppearanceDark, appearanceNoColorSrc: AppearanceDarkNoColor },
+    { id: 2, label: '跟随系统', appearanceSrc: AppearanceAuto, appearanceNoColorSrc: AppearanceAutoNoColor },
+  ];
+
+  interface AddressItem {
+    id: number;
+    address: string;
+    username: string;
+  }
+  const addressItemArray: AddressItem[] = [
+    { id: 0, address: '192.168.100.2', username: 'Lina' },
+    { id: 1, address: '192.168.100.2', username: 'Luna' },
+    { id: 2, address: '192.168.101.2', username: 'Minara' },
+    { id: 3, address: 'minara-nas', username: 'Minara' },
   ];
 
   interface I18nItem {
     label: string;
     id: number;
-    onClick: () => void;
   }
   const i18nItemArray: I18nItem[] = [
-    { id: 0, label: '简体中文', onClick: () => setI18n(0) },
-    { id: 1, label: '正體中文', onClick: () => setI18n(1) },
-    { id: 2, label: 'English', onClick: () => setI18n(2) },
+    { id: 0, label: '简体中文' },
+    { id: 1, label: '正體中文' },
+    { id: 2, label: 'English' },
   ];
-
-  interface YaddsFormProps {
-    label: string;
-    children: React.ReactNode;
-    hasMargin?: boolean;
-  }
-  const YaddsFormItem: React.FC<YaddsFormProps> = (props: YaddsFormProps) => {
-    const { label, children, hasMargin } = props;
-    return (
-      <Stack flex={1} flexDirection="row" padding={theme.spacing(2)}>
-        <FormControl margin={hasMargin ?? true ? 'dense' : 'none'} sx={{ minWidth: LABEL_WIDTH, width: '20%' }}>
-          <Typography variant="subtitle2" color={theme.palette.grey[800]}>
-            {label}
-          </Typography>
-        </FormControl>
-        {children}
-      </Stack>
-    );
-  };
 
   return (
     <YaddsMain hasAppbar={false}>
@@ -106,7 +102,7 @@ const Settings: React.FC = () => {
               <Stack key={item.label} alignItems="center" marginRight={theme.spacing(2)}>
                 <Box
                   sx={{ filter: appearance === item.id ? 'brightness(100%)' : 'brightness(75%)' }}
-                  onClick={() => item.onClick()}
+                  onClick={() => setAppearance(item.id)}
                 >
                   <img
                     src={appearance === item.id ? item.appearanceSrc : item.appearanceNoColorSrc}
@@ -145,18 +141,11 @@ const Settings: React.FC = () => {
                 sx={{ fontSize: 14, minWidth: theme.spacing(40) }}
                 onChange={(event) => setAddress(event.target.value as string)}
               >
-                <MenuItem disableRipple value={0} sx={{ fontSize: 14, fontWeight: 500 }}>
-                  192.168.100.2 - Lina
-                </MenuItem>
-                <MenuItem disableRipple value={1} sx={{ fontSize: 14, fontWeight: 500 }}>
-                  192.168.100.2 - Luna
-                </MenuItem>
-                <MenuItem disableRipple value={2} sx={{ fontSize: 14, fontWeight: 500 }}>
-                  192.168.101.2 - Minara
-                </MenuItem>
-                <MenuItem disableRipple value={3} sx={{ fontSize: 14, fontWeight: 500 }}>
-                  minara-nas - Minara
-                </MenuItem>
+                {addressItemArray.map((item: AddressItem) => (
+                  <MenuItem disableRipple value={item.id} sx={{ fontSize: 14, fontWeight: 500 }}>
+                    {item.address} - {item.username}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <Button size="small" sx={{ marginLeft: theme.spacing(1) }} onClick={() => {}}>
@@ -170,9 +159,10 @@ const Settings: React.FC = () => {
             {i18nItemArray.map((item: I18nItem) => (
               <FormControlLabel
                 key={item.id}
+                checked={i18n === item.id}
                 label={<Typography variant="subtitle2">{item.label}</Typography>}
                 control={<Radio size="small" defaultChecked={item.id === i18n} />}
-                onClick={item.onClick}
+                onClick={() => setI18n(item.id)}
               />
             ))}
           </FormGroup>
