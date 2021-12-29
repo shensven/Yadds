@@ -146,7 +146,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           elevation={0}
           hasDrawer={hasDrawer}
         >
-          <StyledSearch sx={{ marginRight: theme.spacing(6) }}>
+          <StyledSearch sx={{ mr: theme.spacing(6) }}>
             <StyledSearchIconWrapper>
               <SearchOutlineIcon sx={{ fontSize: 14 }} />
             </StyledSearchIconWrapper>
@@ -157,10 +157,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
               sx={{ fontSize: 12, color: theme.palette.grey[800] }}
             />
           </StyledSearch>
-          <Button
-            sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, marginRight: theme.spacing(2) }}
-            size="small"
-          >
+          <Button sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, mr: theme.spacing(2) }} size="small">
             <Stack direction="row" alignItems="center">
               <AddOutlineIcon fontSize="small" color="primary" />
               <Typography sx={{ fontSize: 12 }}>新建</Typography>
@@ -175,7 +172,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
             <EllipsisHorizontalIcon fontSize="small" color="primary" />
           </IconButton>
         </StyledAppBar>
-        <Stack sx={{ paddingLeft: theme.spacing(3), paddingRight: theme.spacing(3) }}>
+        <Stack sx={{ pl: theme.spacing(3), pr: theme.spacing(3) }}>
           <MainHeader sx={{ display: hasAppbar ? 'flex' : 'none' }} />
           {children}
         </Stack>

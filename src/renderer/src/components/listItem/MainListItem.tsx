@@ -71,10 +71,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
             </Typography>
             <ButtonBase
               disableRipple
-              sx={{
-                display: hasAction ? 'flex' : 'none',
-                marginLeft: theme.spacing(1),
-              }}
+              sx={{ ml: theme.spacing(1), display: hasAction ? 'flex' : 'none' }}
               onClick={() => setIsDownload(!isDownload)}
             >
               {isDownload ? (
@@ -92,7 +89,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                   variant="determinate"
                   value={progress}
                 />
-                <Typography sx={{ fontSize: 12, marginLeft: 1, color: theme.palette.text.secondary }}>
+                <Typography sx={{ fontSize: 12, ml: 1, color: theme.palette.text.secondary }}>
                   {progress}MB / 100MB
                 </Typography>
               </Stack>
