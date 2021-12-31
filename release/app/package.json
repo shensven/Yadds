@@ -1,6 +1,5 @@
 {
   "name": "yadds",
-  "productName": "Yadds",
   "version": "0.0.1",
   "description": "Yet Another DSM Download Station",
   "main": "./dist/main/main.js",
@@ -11,8 +10,9 @@
   },
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
-    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.js",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
+  "dependencies": {},
   "license": "GPL-3.0"
 }

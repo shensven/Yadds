@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { MemoryRouter as Router, Route, Switch } from 'react-router-dom';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Stack, ThemeProvider } from '@mui/material';
 import { YaddsProvider } from './src/context/YaddsContext';
 import yaddsTheme from './src/theme/yaddsTheme';
@@ -38,16 +38,16 @@ const App: React.FC = () => {
     <Stack direction="row">
       <Router>
         <YaddsDrawer />
-        <Switch>
-          <Route exact path="/" component={QueueAll} />
-          <Route path="/queueAll" component={QueueAll} />
-          <Route path="/queueDownloading" component={QueueDownloading} />
-          <Route path="/queueFinished" component={QueueFinished} />
-          <Route path="/queueActive" component={QueueActive} />
-          <Route path="/queueInactive" component={QueueInactive} />
-          <Route path="/queueStopped" component={QueueStopped} />
-          <Route path="/settings" component={Settings} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<QueueAll />} />
+          <Route path="/queueAll" element={<QueueAll />} />
+          <Route path="/queueDownloading" element={<QueueDownloading />} />
+          <Route path="/queueFinished" element={<QueueFinished />} />
+          <Route path="/queueActive" element={<QueueActive />} />
+          <Route path="/queueInactive" element={<QueueInactive />} />
+          <Route path="/queueStopped" element={<QueueStopped />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
       </Router>
     </Stack>
   );

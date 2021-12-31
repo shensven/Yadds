@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useHistory, withRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Drawer,
   List,
@@ -27,7 +27,7 @@ interface Category {
 }
 
 const YaddsDrawer: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
 
   const { hasDrawer, select, setSelect } = useContext(YaddsCtx);
@@ -60,7 +60,7 @@ const YaddsDrawer: React.FC = () => {
               selected={select === item.path}
               onClick={() => {
                 setSelect(item.path);
-                history.push(item.path);
+                navigate(item.path);
               }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
@@ -90,7 +90,7 @@ const YaddsDrawer: React.FC = () => {
             sx={{ width: '100%' }}
             onClick={() => {
               setSelect('settings');
-              history.push('/settings');
+              navigate('/settings');
             }}
           >
             <ListItemIcon>
@@ -121,4 +121,4 @@ const YaddsDrawer: React.FC = () => {
   );
 };
 
-export default withRouter(YaddsDrawer);
+export default YaddsDrawer;

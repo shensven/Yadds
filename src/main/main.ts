@@ -60,7 +60,8 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+const isDevelopment =
+  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDevelopment) {
   require('electron-debug')();
@@ -103,7 +104,6 @@ const createWindow = async () => {
     // titleBarStyle: 'hidden',
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      webSecurity: true,
       preload: path.join(__dirname, 'preload.js'),
     },
   });
@@ -145,18 +145,22 @@ const createWindow = async () => {
   menuBuilder.buildMenu();
 
   // CORS workaround
-  mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
-  });
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    }
+  );
 
-  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        'Access-Control-Allow-Origin': ['*'],
-        ...details.responseHeaders,
-      },
-    });
-  });
+  mainWindow.webContents.session.webRequest.onHeadersReceived(
+    (details, callback) => {
+      callback({
+        responseHeaders: {
+          'Access-Control-Allow-Origin': ['*'],
+          ...details.responseHeaders,
+        },
+      });
+    }
+  );
 
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {

@@ -37,7 +37,7 @@ if (
   execSync('npm run postinstall');
 }
 
-export default merge(baseConfig, {
+const configuration: webpack.Configuration = {
   devtool: 'inline-source-map',
 
   mode: 'development',
@@ -84,26 +84,15 @@ export default merge(baseConfig, {
         use: ['style-loader', 'css-loader', 'sass-loader'],
         exclude: /\.module\.s?(c|a)ss$/,
       },
-      //Font Loader
+      // Fonts
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
         type: 'asset/resource',
       },
-      // SVG Font
+      // Images
       {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'image/svg+xml',
-          },
-        },
-      },
-      // Common Image Formats
-      {
-        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader',
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
       },
     ],
   },
@@ -170,7 +159,6 @@ export default merge(baseConfig, {
     },
     historyApiFallback: {
       verbose: true,
-      disableDotRule: false,
     },
     onBeforeSetupMiddleware() {
       console.log('Starting Main Process...');
@@ -183,4 +171,6 @@ export default merge(baseConfig, {
         .on('error', (spawnError) => console.error(spawnError));
     },
   },
-});
+};
+
+export default merge(baseConfig, configuration);
