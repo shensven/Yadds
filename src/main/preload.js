@@ -20,6 +20,14 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
+  store: {
+    get(val) {
+      return ipcRenderer.sendSync('electron-store-get', val);
+    },
+    set(property, val) {
+      ipcRenderer.send('electron-store-set', property, val);
+    },
+  },
   appVersion: {
     get() {
       return ipcRenderer.sendSync('app-version-get');

@@ -27,11 +27,20 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+const store = new Store();
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('electron-store-get', async (event, val) => {
+  event.returnValue = store.get(val);
+});
+
+ipcMain.on('electron-store-set', async (_, key, val) => {
+  store.set(key, val);
 });
 
 ipcMain.on('app-version-get', async (event) => {
@@ -45,8 +54,6 @@ ipcMain.on('context-menu-popup', async (_, props) => {
 ipcMain.on('user-broswer-open-url', async (_, url) => {
   shell.openExternal(url);
 });
-
-const store = new Store();
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

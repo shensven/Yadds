@@ -16,6 +16,10 @@ import './App.scss';
 declare global {
   interface Window {
     electron: {
+      store: {
+        get: (key: string) => unknown;
+        set: (key: string, val: unknown) => void;
+      };
       appVersion: {
         get: () => string;
       };
