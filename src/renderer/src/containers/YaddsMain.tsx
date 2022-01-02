@@ -103,7 +103,7 @@ interface YaddsMainProps {
 
 const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
   const theme = useTheme();
-  const { hasDrawer, setHasDrawer } = useContext(YaddsCtx);
+  const { hasYaddsDrawer, setHasYaddsDrawer } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
   const template: MenuItemConstructorOptions[] = [
@@ -123,13 +123,13 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
   const handleContextMenu = () => window.electron.contextMenu.popup(template);
 
   return (
-    <Main halfWidth={hasDrawer}>
+    <Main halfWidth={hasYaddsDrawer}>
       <Box sx={{ position: 'fixed', top: '45%' }}>
         <Icon
           sx={{ height: 40 }}
-          onMouseOver={() => setScr(hasDrawer ? activeLeftSvg : activeRightSvg)}
+          onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
           onMouseOut={() => setScr(inactiveSvg)}
-          onClick={() => setHasDrawer(!hasDrawer)}
+          onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
         >
           <img src={src} alt="" draggable="false" />
         </Icon>
@@ -144,7 +144,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           }}
           position="fixed"
           elevation={0}
-          hasDrawer={hasDrawer}
+          hasDrawer={hasYaddsDrawer}
         >
           <StyledSearch sx={{ mr: theme.spacing(6) }}>
             <StyledSearchIconWrapper>

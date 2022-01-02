@@ -1,15 +1,17 @@
 import React, { createContext, useState } from 'react';
 
 interface CtxType {
-  hasDrawer: boolean;
-  setHasDrawer: (hasDrawer: boolean) => void;
+  hasYaddsDrawer: boolean;
+  setHasYaddsDrawer: (hasDrawer: boolean) => void;
+
   select: string;
   setSelect: (select: string) => void;
 }
 
 export const YaddsCtx = createContext<CtxType>({
-  hasDrawer: true,
-  setHasDrawer: () => {},
+  hasYaddsDrawer: true,
+  setHasYaddsDrawer: () => {},
+
   select: '',
   setSelect: () => null,
 });
@@ -17,12 +19,19 @@ export const YaddsCtx = createContext<CtxType>({
 export const YaddsProvider: React.FC = (props) => {
   const { children } = props;
 
-  const [hasDrawerVal, setHasDrawerVal] = useState(true);
+  const [hasYaddsDrawerVal, setHasYaddsDrawerVal] = useState(
+    (window.electron.store.get('hasYaddsDrawer') as boolean) ?? true
+  );
+
   const [selectVal, setSelectVal] = useState<string>('/queueAll');
 
   const ctxValue = {
-    hasDrawer: hasDrawerVal,
-    setHasDrawer: (bool: boolean) => setHasDrawerVal(bool),
+    hasYaddsDrawer: hasYaddsDrawerVal,
+    setHasYaddsDrawer: (bool: boolean) => {
+      setHasYaddsDrawerVal(bool);
+      window.electron.store.set('hasYaddsDrawer', bool);
+    },
+
     select: selectVal,
     setSelect: (str: string) => setSelectVal(str),
   };

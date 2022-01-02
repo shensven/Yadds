@@ -30,7 +30,7 @@ const YaddsDrawer: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { hasDrawer, select, setSelect } = useContext(YaddsCtx);
+  const { hasYaddsDrawer, select, setSelect } = useContext(YaddsCtx);
 
   const category: Category[] = [
     { path: '/queueAll', name: '全部下载项目', icon: <ShapesOutlineIcon /> },
@@ -49,7 +49,7 @@ const YaddsDrawer: React.FC = () => {
         width: DRAWER_WIDTH,
         '& .MuiDrawer-paper': { width: DRAWER_WIDTH, boxSizing: 'border-box' },
       }}
-      open={hasDrawer}
+      open={hasYaddsDrawer}
     >
       <List>
         {category.map((item: Category) => (
