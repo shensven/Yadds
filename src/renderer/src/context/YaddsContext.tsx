@@ -20,11 +20,11 @@ export const YaddsProvider: React.FC = (props) => {
   const { children } = props;
 
   const [hasYaddsDrawerVal, setHasYaddsDrawerVal] = useState(
-    (window.electron.store.get('hasYaddsDrawer') as boolean) ?? true
+    (window.electron?.store.get('hasYaddsDrawer') as boolean) ?? true
   );
 
   const [yaddsDrawerCategoryVal, setYaddsDrawerCategoryVal] = useState<string>(
-    (window.electron.store.get('yaddsDrawerCategory') as string) ?? '/queueAll'
+    (window.electron?.store.get('yaddsDrawerCategory') as string) ?? '/queueAll'
   );
 
   const ctxValue = {
