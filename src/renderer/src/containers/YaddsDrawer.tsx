@@ -30,7 +30,7 @@ const YaddsDrawer: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { hasYaddsDrawer, select, setSelect } = useContext(YaddsCtx);
+  const { hasYaddsDrawer, yaddsDrawerCategory, setYaddsDrawerCategory } = useContext(YaddsCtx);
 
   const category: Category[] = [
     { path: '/queueAll', name: '全部下载项目', icon: <ShapesOutlineIcon /> },
@@ -57,9 +57,9 @@ const YaddsDrawer: React.FC = () => {
             <ListItemButton
               dense
               disableRipple
-              selected={select === item.path}
+              // selected={yaddsDrawerCategory === item.path}
               onClick={() => {
-                setSelect(item.path);
+                setYaddsDrawerCategory(item.path);
                 navigate(item.path);
               }}
             >
@@ -69,8 +69,8 @@ const YaddsDrawer: React.FC = () => {
                   <Typography
                     noWrap
                     style={{
-                      fontWeight: select === item.path ? 600 : 400,
-                      color: select === item.path ? theme.palette.primary.main : theme.palette.grey[800],
+                      fontWeight: yaddsDrawerCategory === item.path ? 600 : 400,
+                      color: yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.grey[800],
                     }}
                   >
                     {item.name}
@@ -86,10 +86,10 @@ const YaddsDrawer: React.FC = () => {
           <ListItemButton
             dense
             disableRipple
-            selected={select === 'settings'}
+            // selected={yaddsDrawerCategory === 'settings'}
             sx={{ width: '100%' }}
             onClick={() => {
-              setSelect('settings');
+              setYaddsDrawerCategory('settings');
               navigate('/settings');
             }}
           >
@@ -101,8 +101,8 @@ const YaddsDrawer: React.FC = () => {
                 <Typography
                   noWrap
                   style={{
-                    fontWeight: select === 'settings' ? 600 : 400,
-                    color: select === 'settings' ? theme.palette.primary.main : theme.palette.text.primary,
+                    fontWeight: yaddsDrawerCategory === 'settings' ? 600 : 400,
+                    color: yaddsDrawerCategory === 'settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
                   设置

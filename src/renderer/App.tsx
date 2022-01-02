@@ -33,13 +33,35 @@ declare global {
   }
 }
 
+const RedirectEl: React.FC = () => {
+  const category = window.electron.store.get('yaddsDrawerCategory') as string;
+  switch (category) {
+    case '/queueAll':
+      return <QueueAll />;
+    case '/queueDownloading':
+      return <QueueDownloading />;
+    case '/queueFinished':
+      return <QueueFinished />;
+    case '/queueActive':
+      return <QueueActive />;
+    case '/queueInactive':
+      return <QueueInactive />;
+    case '/queueStopped':
+      return <QueueStopped />;
+    case '/settings':
+      return <Settings />;
+    default:
+      return <QueueAll />;
+  }
+};
+
 const App: React.FC = () => {
   return (
     <Stack direction="row">
       <Router>
         <YaddsDrawer />
         <Routes>
-          <Route path="/" element={<QueueAll />} />
+          <Route path="/" element={<RedirectEl />} />
           <Route path="/queueAll" element={<QueueAll />} />
           <Route path="/queueDownloading" element={<QueueDownloading />} />
           <Route path="/queueFinished" element={<QueueFinished />} />

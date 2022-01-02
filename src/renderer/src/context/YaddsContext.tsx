@@ -4,16 +4,16 @@ interface CtxType {
   hasYaddsDrawer: boolean;
   setHasYaddsDrawer: (hasDrawer: boolean) => void;
 
-  select: string;
-  setSelect: (select: string) => void;
+  yaddsDrawerCategory: string;
+  setYaddsDrawerCategory: (select: string) => void;
 }
 
 export const YaddsCtx = createContext<CtxType>({
   hasYaddsDrawer: true,
   setHasYaddsDrawer: () => {},
 
-  select: '',
-  setSelect: () => null,
+  yaddsDrawerCategory: '',
+  setYaddsDrawerCategory: () => null,
 });
 
 export const YaddsProvider: React.FC = (props) => {
@@ -23,7 +23,9 @@ export const YaddsProvider: React.FC = (props) => {
     (window.electron.store.get('hasYaddsDrawer') as boolean) ?? true
   );
 
-  const [selectVal, setSelectVal] = useState<string>('/queueAll');
+  const [yaddsDrawerCategoryVal, setYaddsDrawerCategoryVal] = useState<string>(
+    (window.electron.store.get('yaddsDrawerCategory') as string) ?? '/queueAll'
+  );
 
   const ctxValue = {
     hasYaddsDrawer: hasYaddsDrawerVal,
@@ -32,8 +34,11 @@ export const YaddsProvider: React.FC = (props) => {
       window.electron.store.set('hasYaddsDrawer', bool);
     },
 
-    select: selectVal,
-    setSelect: (str: string) => setSelectVal(str),
+    yaddsDrawerCategory: yaddsDrawerCategoryVal,
+    setYaddsDrawerCategory: (str: string) => {
+      setYaddsDrawerCategoryVal(str);
+      window.electron.store.set('yaddsDrawerCategory', str);
+    },
   };
 
   return <YaddsCtx.Provider value={ctxValue}>{children}</YaddsCtx.Provider>;
