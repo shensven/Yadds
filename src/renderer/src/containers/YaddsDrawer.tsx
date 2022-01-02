@@ -89,7 +89,7 @@ const YaddsDrawer: React.FC = () => {
             // selected={yaddsDrawerCategory === 'settings'}
             sx={{ width: '100%' }}
             onClick={() => {
-              setYaddsDrawerCategory('settings');
+              setYaddsDrawerCategory('/settings');
               navigate('/settings');
             }}
           >
@@ -101,8 +101,8 @@ const YaddsDrawer: React.FC = () => {
                 <Typography
                   noWrap
                   style={{
-                    fontWeight: yaddsDrawerCategory === 'settings' ? 600 : 400,
-                    color: yaddsDrawerCategory === 'settings' ? theme.palette.primary.main : theme.palette.text.primary,
+                    fontWeight: yaddsDrawerCategory === '/settings' ? 600 : 400,
+                    color: yaddsDrawerCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
                   设置
