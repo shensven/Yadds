@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Box,
   Button,
@@ -32,6 +32,7 @@ import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
 import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67x44_@2x.png';
 import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
 import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
+import { YaddsCtx } from '../context/YaddsContext';
 
 interface SettingsFormItemProps {
   label: string;
@@ -60,7 +61,17 @@ SettingsFormItem.defaultProps = {
 const Settings: React.FC = () => {
   const theme = useTheme();
 
-  const [appearanceIndex, setAppearanceIndex] = useState<number>(0);
+  const {
+    yaddsAppearanceIndex,
+    setYaddsAppearanceIndex,
+    yaddsI18nCode,
+    setYaddsI18nCode,
+    isYaddsAutoLaunch,
+    setIsYaddsAutoLaunch,
+    isYaddsAutoUpdate,
+    setIsYaddsAutoUpdate,
+  } = useContext(YaddsCtx);
+
   const [dsmAddress, setDsmAddress] = useState({
     value: [1],
     renderValue: {
@@ -70,9 +81,6 @@ const Settings: React.FC = () => {
       password: '123456',
     },
   });
-  const [i18nIndex, setI18nIndex] = useState<number>(0);
-  const [isAutoLaunch, setIsAutoLaunch] = useState<boolean>(false);
-  const [isAutoUpdate, setIsAutoUpdate] = useState<boolean>(true);
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
@@ -117,13 +125,14 @@ const Settings: React.FC = () => {
   ];
 
   interface I18nItem {
-    label: string;
     id: number;
+    languageCode: string;
+    label: string;
   }
   const i18nItemArray: I18nItem[] = [
-    { id: 0, label: '简体中文' },
-    { id: 1, label: '正體中文' },
-    { id: 2, label: 'English' },
+    { id: 0, languageCode: 'en', label: 'English' },
+    { id: 1, languageCode: 'zh-chs', label: '简体中文' },
+    { id: 2, languageCode: 'zh-cht', label: '正體中文' },
   ];
 
   const handleDaialogAddOnClose = () => {
@@ -162,11 +171,11 @@ const Settings: React.FC = () => {
             {appearanceItemArray.map((item: AppearanceItem) => (
               <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>
                 <Box
-                  sx={{ filter: appearanceIndex === item.id ? 'brightness(100%)' : 'brightness(75%)' }}
-                  onClick={() => setAppearanceIndex(item.id)}
+                  sx={{ filter: yaddsAppearanceIndex === item.id ? 'brightness(100%)' : 'brightness(75%)' }}
+                  onClick={() => setYaddsAppearanceIndex(item.id)}
                 >
                   <img
-                    src={appearanceIndex === item.id ? item.appearanceSrc : item.appearanceNoColorSrc}
+                    src={yaddsAppearanceIndex === item.id ? item.appearanceSrc : item.appearanceNoColorSrc}
                     alt=""
                     draggable="false"
                     width={67}
@@ -175,7 +184,7 @@ const Settings: React.FC = () => {
                 </Box>
                 <Typography
                   variant="overline"
-                  color={appearanceIndex === item.id ? theme.palette.grey[900] : theme.palette.grey[500]}
+                  color={yaddsAppearanceIndex === item.id ? theme.palette.grey[900] : theme.palette.grey[500]}
                 >
                   {item.label}
                 </Typography>
@@ -234,10 +243,10 @@ const Settings: React.FC = () => {
             {i18nItemArray.map((item: I18nItem) => (
               <FormControlLabel
                 key={item.id}
-                checked={i18nIndex === item.id}
+                checked={yaddsI18nCode === item.languageCode}
                 label={<Typography variant="subtitle2">{item.label}</Typography>}
-                control={<Radio size="small" checked={i18nIndex === item.id} />}
-                onClick={() => setI18nIndex(item.id)}
+                control={<Radio size="small" checked={yaddsI18nCode === item.languageCode} />}
+                onClick={() => setYaddsI18nCode(item.languageCode)}
               />
             ))}
           </FormGroup>
@@ -246,16 +255,16 @@ const Settings: React.FC = () => {
         <SettingsFormItem label="应用程序">
           <FormGroup>
             <FormControlLabel
-              checked={isAutoLaunch}
+              checked={isYaddsAutoLaunch}
               label={<Typography variant="subtitle2">登录时启动</Typography>}
-              control={<Checkbox size="small" checked={isAutoLaunch} />}
-              onClick={() => setIsAutoLaunch(!isAutoLaunch)}
+              control={<Checkbox size="small" checked={isYaddsAutoLaunch} />}
+              onClick={() => setIsYaddsAutoLaunch(!isYaddsAutoLaunch)}
             />
             <FormControlLabel
-              checked={isAutoUpdate}
+              checked={isYaddsAutoUpdate}
               label={<Typography variant="subtitle2">自动更新</Typography>}
-              control={<Checkbox size="small" checked={isAutoUpdate} />}
-              onClick={() => setIsAutoUpdate(!isAutoUpdate)}
+              control={<Checkbox size="small" checked={isYaddsAutoUpdate} />}
+              onClick={() => setIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
             />
             <FormHelperText>当前版本 {window.electron.appVersion.get()}</FormHelperText>
           </FormGroup>
@@ -360,7 +369,7 @@ const Settings: React.FC = () => {
           <Button color="inherit" onClick={() => handleDaialogAddOnClose()}>
             取消
           </Button>
-          <Button onClick={() => console.log(newConnect)}>确定</Button>
+          <Button onClick={() => {}}>确定</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={hasDialogDelete} onClose={() => handleDaialogDeleteOnClose()}>
