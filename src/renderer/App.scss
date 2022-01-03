@@ -11,7 +11,7 @@
 @include Barlow.fontFace($display: block, $weight: 900);
 
 ::-webkit-scrollbar {
-  visibility: hidden;
+  width: 0;
 }
 
 body {
