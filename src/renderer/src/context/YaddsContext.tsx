@@ -1,5 +1,12 @@
 import React, { createContext, useState } from 'react';
 
+export interface DsmConnectListType {
+  host: string;
+  username: string;
+  did: string;
+  id: string;
+}
+
 interface CtxType {
   hasYaddsDrawer: boolean;
   setHasYaddsDrawer: (hasYaddsDrawer: boolean) => void;
@@ -18,6 +25,12 @@ interface CtxType {
 
   isYaddsAutoUpdate: boolean;
   setIsYaddsAutoUpdate: (isYaddsAutoUpdate: boolean) => void;
+
+  dsmConnectList: DsmConnectListType[];
+  setDsmConnectList: (arr: DsmConnectListType[]) => void;
+
+  dsmConnectIndex: number;
+  setDsmConnectIndex: (index: number) => void;
 }
 
 export const YaddsCtx = createContext<CtxType>({
@@ -38,6 +51,12 @@ export const YaddsCtx = createContext<CtxType>({
 
   isYaddsAutoUpdate: false,
   setIsYaddsAutoUpdate: () => null,
+
+  dsmConnectList: [],
+  setDsmConnectList: () => null,
+
+  dsmConnectIndex: 0,
+  setDsmConnectIndex: () => null,
 });
 
 export const YaddsProvider: React.FC = (props) => {
@@ -67,6 +86,16 @@ export const YaddsProvider: React.FC = (props) => {
 
   const [isYaddsAutoUpdateVal, setIsYaddsAutoUpdateVal] = useState<boolean>(
     (window.electron?.store.get('isYaddsAutoUpdate') as boolean) ?? true
+  );
+
+  // ---------------------------------------------------------------------------
+
+  const [dsmConnectListVal, setDsmConnectListVal] = useState<DsmConnectListType[]>(
+    (window.electron?.store.get('dsmConnectList') as DsmConnectListType[]) ?? []
+  );
+
+  const [dsmConnectIndexVal, setDsmConnectIndexVal] = useState<number>(
+    (window.electron?.store.get('dsmConnectIndex') as number) ?? 0
   );
 
   // ---------------------------------------------------------------------------
@@ -106,6 +135,20 @@ export const YaddsProvider: React.FC = (props) => {
     setIsYaddsAutoUpdate: (bool: boolean) => {
       setIsYaddsAutoUpdateVal(bool);
       window.electron.store.set('isYaddsAutoUpdate', bool);
+    },
+
+    // ---------------------------------------------------------------------------
+
+    dsmConnectList: dsmConnectListVal,
+    setDsmConnectList: (arr: DsmConnectListType[]) => {
+      setDsmConnectListVal(arr);
+      window.electron.store.set('dsmConnectList', arr);
+    },
+
+    dsmConnectIndex: dsmConnectIndexVal,
+    setDsmConnectIndex: (index: number) => {
+      setDsmConnectIndexVal(index);
+      window.electron.store.set('dsmConnectIndex', index);
     },
   };
 

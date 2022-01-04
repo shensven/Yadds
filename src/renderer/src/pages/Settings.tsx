@@ -18,6 +18,8 @@ import {
   Select,
   Stack,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -32,7 +34,7 @@ import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
 import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67x44_@2x.png';
 import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
 import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
-import { YaddsCtx } from '../context/YaddsContext';
+import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
 
 interface SettingsFormItemProps {
   label: string;
@@ -70,24 +72,19 @@ const Settings: React.FC = () => {
     setIsYaddsAutoLaunch,
     isYaddsAutoUpdate,
     setIsYaddsAutoUpdate,
+    dsmConnectList,
+    setDsmConnectList,
+    dsmConnectIndex,
+    setDsmConnectIndex,
   } = useContext(YaddsCtx);
-
-  const [dsmAddress, setDsmAddress] = useState({
-    value: [1],
-    renderValue: {
-      id: 1,
-      address: '192.168.100.2',
-      username: 'Luna',
-      password: '123456',
-    },
-  });
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
 
   const [newConnect, setNewConnect] = useState({
-    address: '',
+    isQuickConnectID: true,
+    connectAddress: '',
     isHttps: false,
     username: '',
     password: '',
@@ -106,43 +103,15 @@ const Settings: React.FC = () => {
     { id: 2, label: '跟随系统', appearanceSrc: AppearanceAuto, appearanceNoColorSrc: AppearanceAutoNoColor },
   ];
 
-  interface AddressItem {
-    id: number;
-    address: string;
-    username: string;
-    password: string;
-  }
-  const addressItemArray: AddressItem[] = [
-    {
-      id: 0,
-      address: '192.168.100.2',
-      username: 'Lina123456789101112131415161718192021222324252627282930',
-      password: '123456',
-    },
-    { id: 1, address: '192.168.100.2', username: 'Luna', password: '123456' },
-    { id: 2, address: '192.168.101.2', username: 'Minara', password: '123456' },
-    { id: 3, address: 'minara-nas', username: 'Minara', password: '123456' },
-  ];
-
   interface I18nItem {
-    id: number;
     languageCode: string;
     label: string;
   }
   const i18nItemArray: I18nItem[] = [
-    { id: 0, languageCode: 'en', label: 'English' },
-    { id: 1, languageCode: 'zh-chs', label: '简体中文' },
-    { id: 2, languageCode: 'zh-cht', label: '正體中文' },
+    { languageCode: 'en', label: 'English' },
+    { languageCode: 'zh-chs', label: '简体中文' },
+    { languageCode: 'zh-cht', label: '正體中文' },
   ];
-
-  const handleDaialogAddOnClose = () => {
-    setHasDialogAdd(false);
-    setNewConnect({ address: '', isHttps: false, username: '', password: '', showPassword: false });
-  };
-
-  const handleDaialogDeleteOnClose = () => {
-    setHasDialogDelete(false);
-  };
 
   const handleSelectOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
     if (isDelete) {
@@ -152,11 +121,24 @@ const Settings: React.FC = () => {
       return;
     }
     // console.log(isDelete);
-    setDsmAddress({
-      value: [menuItemAddressIndex],
-      renderValue: addressItemArray[menuItemAddressIndex],
-    });
+    setDsmConnectIndex(menuItemAddressIndex);
     setIsSelectOpen(false);
+  };
+
+  const dismissDailogAdd = () => {
+    setHasDialogAdd(false);
+    setNewConnect({
+      isQuickConnectID: true,
+      connectAddress: '',
+      isHttps: false,
+      username: '',
+      password: '',
+      showPassword: false,
+    });
+  };
+
+  const dismissDaialogDelete = () => {
+    setHasDialogDelete(false);
   };
 
   return (
@@ -192,8 +174,8 @@ const Settings: React.FC = () => {
             ))}
           </FormGroup>
         </SettingsFormItem>
-        {/* IP or QuickConnect ID */}
-        <SettingsFormItem label="地址 / QuickConnect ID">
+        {/* QuickConnect ID or Address */}
+        <SettingsFormItem label="QuickConnect ID / 地址">
           <FormGroup row>
             <FormControl>
               <Select
@@ -209,22 +191,26 @@ const Settings: React.FC = () => {
                   },
                 }}
                 sx={{ minWidth: theme.spacing(40), maxWidth: theme.spacing(40), fontSize: 14 }}
-                value={dsmAddress.value}
-                renderValue={() => `${dsmAddress.renderValue.address} - ${dsmAddress.renderValue.username}`}
+                value={[dsmConnectIndex]}
+                renderValue={() =>
+                  `${dsmConnectList[dsmConnectIndex]?.host ?? 'null'} - ${
+                    dsmConnectList[dsmConnectIndex]?.username ?? 'null'
+                  }`
+                }
                 open={isSelectOpen}
                 onOpen={() => setIsSelectOpen(true)}
                 onClose={() => setIsSelectOpen(false)}
               >
-                {addressItemArray.map((item: AddressItem) => (
+                {dsmConnectList.map((item: DsmConnectListType, index: number) => (
                   <MenuItem key={item.id} dense disableRipple value={item.id}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectOnChange(item.id, false)}
+                        onClick={() => handleSelectOnChange(index, false)}
                       >
-                        {item.address} - {item.username}
+                        {item.host} - {item.username}
                       </Typography>
-                      <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectOnChange(item.id, true)}>
+                      <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectOnChange(index, true)}>
                         <TrashOutlineIcon sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Stack>
@@ -242,7 +228,7 @@ const Settings: React.FC = () => {
           <FormGroup>
             {i18nItemArray.map((item: I18nItem) => (
               <FormControlLabel
-                key={item.id}
+                key={item.languageCode}
                 checked={yaddsI18nCode === item.languageCode}
                 label={<Typography variant="subtitle2">{item.label}</Typography>}
                 control={<Radio size="small" checked={yaddsI18nCode === item.languageCode} />}
@@ -300,30 +286,71 @@ const Settings: React.FC = () => {
           </FormGroup>
         </SettingsFormItem>
       </Stack>
-      <Dialog open={hasDialogAdd} onClose={() => handleDaialogAddOnClose()}>
+      <Dialog open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
         <DialogTitle>
-          <Stack flexDirection="row" alignItems="center">
-            <Typography>新增连接</Typography>
-            <PersonAddIcon sx={{ fontSize: 17, ml: theme.spacing(1) }} />
+          <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+            <Stack flexDirection="row" alignItems="center">
+              <Typography>新增连接</Typography>
+              <PersonAddIcon sx={{ fontSize: 17, ml: theme.spacing(1) }} />
+            </Stack>
+            <ToggleButtonGroup size="small">
+              <ToggleButton
+                value="left"
+                disableRipple
+                selected={newConnect.isQuickConnectID}
+                onClick={() =>
+                  setNewConnect({
+                    ...newConnect,
+                    isQuickConnectID: true,
+                    connectAddress: '',
+                    isHttps: false,
+                    username: '',
+                    password: '',
+                    showPassword: false,
+                  })
+                }
+              >
+                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>QuickConnect ID</Typography>
+              </ToggleButton>
+              <ToggleButton
+                value="right"
+                disableRipple
+                selected={!newConnect.isQuickConnectID}
+                onClick={() =>
+                  setNewConnect({
+                    ...newConnect,
+                    isQuickConnectID: false,
+                    connectAddress: '',
+                    isHttps: false,
+                    username: '',
+                    password: '',
+                    showPassword: false,
+                  })
+                }
+              >
+                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>地址</Typography>
+              </ToggleButton>
+            </ToggleButtonGroup>
           </Stack>
         </DialogTitle>
         <DialogContent>
-          <Stack width={theme.spacing(34)} ml={theme.spacing(1)} mr={theme.spacing(1)}>
+          <Stack width={theme.spacing(34)} mt={theme.spacing(1)}>
             <TextField
               size="small"
-              label="地址 / QuickConnect ID"
               spellCheck={false}
+              label={newConnect.isQuickConnectID ? 'QuickConnect ID' : '地址'}
+              value={newConnect.connectAddress}
               sx={{ mt: theme.spacing(2) }}
               InputLabelProps={{ sx: { fontSize: 14 } }}
               InputProps={{
-                startAdornment: (
+                [(!newConnect.isQuickConnectID && 'startAdornment') as string]: (
                   <InputAdornment position="start">{newConnect.isHttps ? 'https://' : 'http://'}</InputAdornment>
                 ),
               }}
-              onChange={(evt) => setNewConnect({ ...newConnect, address: evt.target.value })}
+              onChange={(evt) => setNewConnect({ ...newConnect, connectAddress: evt.target.value })}
             />
             <FormControlLabel
-              sx={{ alignSelf: 'flex-end' }}
+              sx={{ alignSelf: 'flex-end', visibility: newConnect.isQuickConnectID ? 'hidden' : 'visible' }}
               labelPlacement="start"
               label={<Typography color={theme.palette.text.secondary}>HTTPS</Typography>}
               control={<Checkbox size="small" checked={newConnect.isHttps} />}
@@ -333,7 +360,7 @@ const Settings: React.FC = () => {
               size="small"
               label="用户名"
               spellCheck={false}
-              sx={{ mt: theme.spacing(1) }}
+              value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
               onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value })}
             />
@@ -341,6 +368,7 @@ const Settings: React.FC = () => {
               size="small"
               label="密码"
               spellCheck={false}
+              value={newConnect.password}
               type={newConnect.showPassword ? 'text' : 'password'}
               sx={{ mt: theme.spacing(2) }}
               InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -366,13 +394,29 @@ const Settings: React.FC = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button color="inherit" onClick={() => handleDaialogAddOnClose()}>
-            取消
+          <Button color="inherit" onClick={() => console.log(dsmConnectList)}>
+            打印
           </Button>
-          <Button onClick={() => {}}>确定</Button>
+          <Button color="inherit" onClick={() => setDsmConnectList([])}>
+            清空
+          </Button>
+          <Button
+            onClick={() => {
+              const arr = [...dsmConnectList];
+              arr.push({
+                host: `10.10.10.${dsmConnectList.length + 1}`,
+                username: `root${dsmConnectList.length + 1}`,
+                did: '123456789',
+                id: new Date().getTime().toString(),
+              });
+              setDsmConnectList(arr);
+            }}
+          >
+            新增
+          </Button>
         </DialogActions>
       </Dialog>
-      <Dialog open={hasDialogDelete} onClose={() => handleDaialogDeleteOnClose()}>
+      <Dialog open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
             <Typography>确认删除</Typography>
@@ -385,7 +429,7 @@ const Settings: React.FC = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button color="inherit" onClick={() => handleDaialogDeleteOnClose()}>
+          <Button color="inherit" onClick={() => dismissDaialogDelete()}>
             取消
           </Button>
           <Button color="error" onClick={() => {}}>
