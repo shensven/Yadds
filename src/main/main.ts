@@ -145,13 +145,18 @@ const createWindow = async () => {
 
   // CORS workaround
   mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    callback({
+      requestHeaders: {
+        Origin: '*',
+        ...details.requestHeaders,
+      },
+    });
   });
 
   mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
-        'Access-Control-Allow-Origin': ['*'],
+        'access-control-allow-origin': '*',
         ...details.responseHeaders,
       },
     });
