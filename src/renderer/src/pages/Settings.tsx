@@ -35,6 +35,7 @@ import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67
 import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
 import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
+import auth from '../utils/auth';
 
 interface SettingsFormItemProps {
   label: string;
@@ -402,14 +403,15 @@ const Settings: React.FC = () => {
           </Button>
           <Button
             onClick={() => {
-              const arr = [...dsmConnectList];
-              arr.push({
-                host: `10.10.10.${dsmConnectList.length + 1}`,
-                username: `root${dsmConnectList.length + 1}`,
-                did: '123456789',
-                id: new Date().getTime().toString(),
-              });
-              setDsmConnectList(arr);
+              // const arr = [...dsmConnectList];
+              // arr.push({
+              //   host: `10.10.10.${dsmConnectList.length + 1}`,
+              //   username: `root${dsmConnectList.length + 1}`,
+              //   did: '123456789',
+              //   id: new Date().getTime().toString(),
+              // });
+              // setDsmConnectList(arr);
+              auth(newConnect.connectAddress);
             }}
           >
             新增
