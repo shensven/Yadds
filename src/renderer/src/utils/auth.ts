@@ -1,23 +1,5 @@
 import axios from 'axios';
 
-async function requestCoordinator(quickConnectID: string) {
-  const resp = await axios.post(
-    'https://global.quickconnect.to/Serv.php',
-    JSON.stringify({
-      version: 1,
-      // command: 'get_server_info',
-      command: 'request_tunnel',
-      stop_when_error: false,
-      stop_when_success: false,
-      id: 'dsm_portal_https',
-      serverID: quickConnectID,
-      is_gofile: false,
-    })
-  );
-
-  return resp.data;
-}
-
 interface ServerInfo {
   command: string;
   version: number;
@@ -52,9 +34,27 @@ interface ServerInfo {
   smartdns?: { host: string; lan: string[]; hole_punch: string };
 }
 
+async function requestCoordinator(quickConnectID: string) {
+  const resp = await axios.post(
+    'https://global.quickconnect.to/Serv.php',
+    JSON.stringify({
+      version: 1,
+      // command: 'get_server_info',
+      command: 'request_tunnel',
+      stop_when_error: false,
+      stop_when_success: false,
+      id: 'dsm_portal_https',
+      serverID: quickConnectID,
+      is_gofile: false,
+    })
+  );
+
+  return resp.data;
+}
+
 async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   if (serverInfo.errno !== 0) {
-    return '连接失败';
+    return '请求 https://global.quickconnect.to/Serv.php 失败';
   }
 
   // 5001
@@ -67,7 +67,7 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   const PINGPONG_PATH = serverInfo.server?.pingpong_path as string;
 
   // 192.168.x.xxx
-  const LAN_IP = serverInfo.server?.interface[0].ip as string;
+  // const LAN_IP = serverInfo.server?.interface[0].ip as string;
 
   // 192-168-x-xxx.Your-QuickConnect-ID.direct.quickconnect.to
   const SMARTDNS_LAN = serverInfo.smartdns?.lan[0] as string;
@@ -81,38 +81,46 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   // cn3.quickconnect.cn
   const RELAY_HOST = `${serverInfo.env?.relay_region}.${serverInfo.env?.control_host.split('.').slice(-2).join('.')}`;
 
-  // 以请求 SMARTDNS_LAN 为例
-  const appAxios = axios.create({
-    baseURL: `https://${SMARTDNS_LAN}:${PORT}`,
-    timeout: 5000,
-  });
+  const newInstance = async (baseURL: string) => {
+    const appAxios = axios.create({ baseURL });
 
-  appAxios.interceptors.request.use(
-    (config) => {
-      return config;
-    },
-    (error) => {
-      if (error.message.includes('timeout')) {
-        return '请求网络超时';
+    appAxios.interceptors.request.use(
+      (config) => {
+        console.log(`请求 ${baseURL} 成功`);
+        return config;
+      },
+      (error) => {
+        console.log(`响应 ${baseURL} 失败`);
+        return Promise.reject(error);
       }
-      return Promise.reject(error);
-    }
-  );
+    );
 
-  appAxios.interceptors.response.use(
-    (config) => {
-      return config;
-    },
-    (error) => {
-      if (error.message.includes('timeout')) {
-        return '响应网络超时';
+    appAxios.interceptors.response.use(
+      (config) => {
+        console.log(`响应 ${baseURL} 成功`);
+        return config;
+      },
+      (error) => {
+        console.log(`响应 ${baseURL} 失败`);
+        return Promise.reject(error);
       }
-      return Promise.reject(error);
-    }
-  );
+    );
 
-  const resp = await appAxios.get(PINGPONG_PATH, {});
-  return resp;
+    try {
+      return await appAxios.get(PINGPONG_PATH);
+    } catch (error) {
+      return `catchhhhhhhhhhh ${error}`;
+    }
+  };
+
+  return Promise.race([
+    newInstance(`https://${SMARTDNS_LAN}:${PORT}`),
+    newInstance(`https://${SMARTDNS_HOST}:${PORT}`),
+    newInstance(`https://${SMARTDNS_HOST}:${EXT_PORT}`),
+    newInstance(`https://${WAN_IP}:${PORT}`),
+    newInstance(`https://${WAN_IP}:${EXT_PORT}`),
+    newInstance(`https://${quickConnectID}.${RELAY_HOST}`),
+  ]);
 }
 
 export default async function auth(quickConnectID: string) {
