@@ -339,6 +339,7 @@ const Settings: React.FC = () => {
             <TextField
               size="small"
               spellCheck={false}
+              autoFocus
               label={newConnect.isQuickConnectID ? 'QuickConnect ID' : '地址'}
               value={newConnect.connectAddress}
               sx={{ mt: theme.spacing(2) }}
