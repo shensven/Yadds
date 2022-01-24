@@ -54,7 +54,7 @@ async function requestCoordinator(quickConnectID: string) {
 
 async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   if (serverInfo.errno !== 0) {
-    return '请求 https://global.quickconnect.to/Serv.php 失败';
+    return 'bad request https://global.quickconnect.to/Serv.php';
   }
 
   // 5001
@@ -86,22 +86,22 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
 
     appAxios.interceptors.request.use(
       (config) => {
-        console.log(`请求 ${baseURL} 成功`);
+        console.log(`good request ${baseURL}`);
         return config;
       },
       (error) => {
-        console.log(`响应 ${baseURL} 失败`);
+        console.log(`bad request ${baseURL}`);
         return Promise.reject(error);
       }
     );
 
     appAxios.interceptors.response.use(
       (config) => {
-        console.log(`响应 ${baseURL} 成功`);
+        console.log(`good response ${baseURL}`);
         return config;
       },
       (error) => {
-        console.log(`响应 ${baseURL} 失败`);
+        console.log(`bad response ${baseURL}`);
         return Promise.reject(error);
       }
     );
