@@ -120,7 +120,7 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
     { label: '显示为矩阵', type: 'radio', checked: false },
   ];
 
-  const handleContextMenu = () => window.electron.contextMenu.popup(template);
+  const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
     <Main halfWidth={hasYaddsDrawer}>

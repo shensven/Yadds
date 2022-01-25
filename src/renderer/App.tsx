@@ -20,15 +20,13 @@ declare global {
         get: (key: string) => unknown;
         set: (key: string, val: unknown) => void;
       };
-      appVersion: {
-        get: () => string;
-      };
-      contextMenu: {
-        popup: (val: MenuItemConstructorOptions[]) => void;
-      };
-      userBrowser: {
-        openUrl: (val: string) => void;
-      };
+
+      getAppVersion: () => string;
+
+      popupContextMenu: (val: MenuItemConstructorOptions[]) => void;
+
+      openViaBrowser: (val: string) => void;
+
       net: {
         auth: (quickConnectID: string) => void;
       };

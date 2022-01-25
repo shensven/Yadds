@@ -20,32 +20,31 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
+
   store: {
     get(val) {
-      return ipcRenderer.sendSync('electron-store-get', val);
+      return ipcRenderer.sendSync('get-electron-store', val);
     },
     set(property, val) {
-      ipcRenderer.send('electron-store-set', property, val);
+      ipcRenderer.send('set-electron-store', property, val);
     },
   },
-  appVersion: {
-    get() {
-      return ipcRenderer.sendSync('app-version-get');
-    },
+
+  getAppVersion: () => {
+    return ipcRenderer.sendSync('get-app-version');
   },
-  contextMenu: {
-    popup(props) {
-      ipcRenderer.send('context-menu-popup', props);
-    },
+
+  popupContextMenu: (props) => {
+    ipcRenderer.send('popup-context-menu', props);
   },
-  userBrowser: {
-    openUrl(url) {
-      ipcRenderer.send('user-broswer-open-url', url);
-    },
+
+  openViaBrowser: (url) => {
+    ipcRenderer.send('open-via-broswer', url);
   },
+
   net: {
     auth(quickConnectID) {
-      return ipcRenderer.sendSync('net-auth', quickConnectID);
+      return ipcRenderer.sendSync('axios-auth', quickConnectID);
     },
   },
 });

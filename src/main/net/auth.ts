@@ -35,44 +35,6 @@ interface ServerInfo {
   smartdns?: { host: string; lan: string[]; hole_punch: string };
 }
 
-// function requestCoordinator(quickConnectID: string) {
-//   const options = {
-//     protocol: 'https:',
-//     hostname: 'global.quickconnect.to',
-//     path: '/Serv.php',
-//     method: 'POST',
-//   };
-
-//   const body = JSON.stringify({
-//     version: 1,
-//     command: 'request_tunnel',
-//     stop_when_error: false,
-//     stop_when_success: false,
-//     id: 'dsm_portal_https',
-//     serverID: quickConnectID,
-//     is_gofile: false,
-//   });
-
-//   return new Promise<ServerInfo>((resolve, reject) => {
-//     const request = net.request(options);
-
-//     request.write(body);
-
-//     request.on('response', (response: Electron.IncomingMessage) => {
-//       response.on('data', (chunk: Buffer) => {
-//         const parsed: ServerInfo = JSON.parse(chunk.toString());
-//         resolve(parsed);
-//       });
-//     });
-
-//     request.on('error', (error: Error) => {
-//       reject(error);
-//     });
-
-//     request.end();
-//   });
-// }
-
 async function requestCoordinator(quickConnectID: string) {
   const resp = await axios.post(
     'https://global.quickconnect.to/Serv.php',

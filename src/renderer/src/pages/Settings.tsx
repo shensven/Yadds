@@ -252,7 +252,7 @@ const Settings: React.FC = () => {
               control={<Checkbox size="small" checked={isYaddsAutoUpdate} />}
               onClick={() => setIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
             />
-            <FormHelperText>当前版本 {window.electron.appVersion.get()}</FormHelperText>
+            <FormHelperText>当前版本 {window.electron.getAppVersion()}</FormHelperText>
           </FormGroup>
         </SettingsFormItem>
         {/* About */}
@@ -264,9 +264,7 @@ const Settings: React.FC = () => {
                 variant="subtitle2"
                 color={theme.palette.primary.main}
                 sx={{ ml: theme.spacing(1) }}
-                onClick={() =>
-                  window.electron.userBrowser.openUrl('https://github.com/shensven/Yadds/blob/main/LICENSE')
-                }
+                onClick={() => window.electron.openViaBrowser('https://github.com/shensven/Yadds/blob/main/LICENSE')}
               >
                 本拷贝通过 GPL-3.0 协议授权
               </Typography>
@@ -277,7 +275,7 @@ const Settings: React.FC = () => {
                 variant="subtitle2"
                 color={theme.palette.primary.main}
                 sx={{ ml: theme.spacing(1) }}
-                onClick={() => window.electron.userBrowser.openUrl('https://github.com/shensven')}
+                onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
               >
                 @SvenFE
               </Typography>

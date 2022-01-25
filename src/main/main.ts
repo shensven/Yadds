@@ -17,7 +17,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import auth from './net/net';
+import auth from './net/auth';
 
 export default class AppUpdater {
   constructor() {
@@ -36,27 +36,27 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.on('electron-store-get', async (event, val) => {
+ipcMain.on('get-electron-store', async (event, val) => {
   event.returnValue = store.get(val);
 });
 
-ipcMain.on('electron-store-set', async (_, key, val) => {
+ipcMain.on('set-electron-store', async (_, key, val) => {
   store.set(key, val);
 });
 
-ipcMain.on('app-version-get', async (event) => {
+ipcMain.on('get-app-version', async (event) => {
   event.returnValue = app.getVersion();
 });
 
-ipcMain.on('context-menu-popup', async (_, props) => {
+ipcMain.on('popup-context-menu', async (_, props) => {
   Menu.buildFromTemplate(props).popup();
 });
 
-ipcMain.on('user-broswer-open-url', async (_, url) => {
+ipcMain.on('open-via-broswer', async (_, url) => {
   shell.openExternal(url);
 });
 
-ipcMain.on('net-auth', async (event, quickConnectID) => {
+ipcMain.on('axios-auth', async (event, quickConnectID) => {
   event.returnValue = await auth(quickConnectID);
 });
 
