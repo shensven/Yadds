@@ -43,4 +43,9 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.send('user-broswer-open-url', url);
     },
   },
+  net: {
+    auth(quickConnectID) {
+      return ipcRenderer.sendSync('net-auth', quickConnectID);
+    },
+  },
 });

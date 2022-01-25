@@ -35,7 +35,6 @@ import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67
 import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
 import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
-import auth from '../utils/auth';
 
 interface SettingsFormItemProps {
   label: string;
@@ -412,7 +411,7 @@ const Settings: React.FC = () => {
               //   id: new Date().getTime().toString(),
               // });
               // setDsmConnectList(arr);
-              auth(newConnect.connectAddress);
+              window.electron.net.auth(newConnect.connectAddress);
             }}
           >
             新增

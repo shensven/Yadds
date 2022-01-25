@@ -17,6 +17,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import auth from './net/net';
 
 export default class AppUpdater {
   constructor() {
@@ -53,6 +54,10 @@ ipcMain.on('context-menu-popup', async (_, props) => {
 
 ipcMain.on('user-broswer-open-url', async (_, url) => {
   shell.openExternal(url);
+});
+
+ipcMain.on('net-auth', async (event, quickConnectID) => {
+  event.returnValue = await auth(quickConnectID);
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -144,23 +149,23 @@ const createWindow = async () => {
   menuBuilder.buildMenu();
 
   // CORS workaround
-  mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    callback({
-      requestHeaders: {
-        Origin: '*',
-        ...details.requestHeaders,
-      },
-    });
-  });
+  // mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+  //   callback({
+  //     requestHeaders: {
+  //       Origin: '*',
+  //       ...details.requestHeaders,
+  //     },
+  //   });
+  // });
 
-  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        'access-control-allow-origin': '*',
-        ...details.responseHeaders,
-      },
-    });
-  });
+  // mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+  //   callback({
+  //     responseHeaders: {
+  //       'access-control-allow-origin': '*',
+  //       ...details.responseHeaders,
+  //     },
+  //   });
+  // });
 
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {

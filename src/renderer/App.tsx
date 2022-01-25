@@ -29,6 +29,9 @@ declare global {
       userBrowser: {
         openUrl: (val: string) => void;
       };
+      net: {
+        auth: (quickConnectID: string) => void;
+      };
     };
   }
 }
