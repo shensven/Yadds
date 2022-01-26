@@ -57,7 +57,8 @@ ipcMain.on('open-via-broswer', async (_, url) => {
 });
 
 ipcMain.on('axios-auth', async (event, quickConnectID) => {
-  event.returnValue = await auth(quickConnectID);
+  const respData = await auth(quickConnectID);
+  event.sender.send('axios-auth-reply', respData);
 });
 
 if (process.env.NODE_ENV === 'production') {

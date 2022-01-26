@@ -1,4 +1,3 @@
-// import { net } from 'electron';
 import axios from 'axios';
 
 interface ServerInfo {
@@ -86,11 +85,9 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
 
     appAxios.interceptors.request.use(
       (config) => {
-        console.log(`good request ${baseURL}`);
         return config;
       },
       (error) => {
-        console.log(`bad request ${baseURL}`);
         return Promise.reject(error);
       }
     );
@@ -106,11 +103,12 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
       }
     );
 
-    try {
-      return await appAxios.get(PINGPONG_PATH);
-    } catch (error) {
-      return `catchhhhhhhhhhh ${error}`;
-    }
+    const resp = await appAxios.get(PINGPONG_PATH, {
+      headers: {
+        Cookie: 'type=tunnel; Path=/',
+      },
+    });
+    return resp.data;
   };
 
   return Promise.race([
@@ -126,5 +124,5 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
 export default async function auth(quickConnectID: string) {
   const serverInfo = await requestCoordinator(quickConnectID);
   const pingpongInfo = await requestPingPong(quickConnectID, serverInfo);
-  console.log(pingpongInfo);
+  return pingpongInfo;
 }
