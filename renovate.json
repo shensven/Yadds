@@ -22,7 +22,8 @@
         "@mui/material",
         "@mui/system",
         "axios",
-        "electron-store"
+        "electron-store",
+        "query-string"
       ]
     }
   ]
