@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { net } from 'electron';
 
 interface ServerInfo {
   command: string;
@@ -34,28 +34,50 @@ interface ServerInfo {
   smartdns?: { host: string; lan: string[]; hole_punch: string };
 }
 
-async function requestCoordinator(quickConnectID: string) {
-  const resp = await axios.post(
-    'https://global.quickconnect.to/Serv.php',
-    JSON.stringify({
-      version: 1,
-      command: 'request_tunnel',
-      stop_when_error: false,
-      stop_when_success: false,
-      id: 'dsm_portal_https',
-      serverID: quickConnectID,
-      is_gofile: false,
-    })
-  );
+interface PingpongInfo {
+  ezid: string;
+  success: boolean;
+}
 
-  return resp.data;
+async function requestCoordinator(quickConnectID: string) {
+  const options = {
+    method: 'POST',
+    protocol: 'https:',
+    hostname: 'global.quickconnect.to',
+    path: '/Serv.php',
+  };
+
+  const body = JSON.stringify({
+    version: 1,
+    command: 'request_tunnel',
+    stop_when_error: false,
+    stop_when_success: false,
+    id: 'dsm_portal_https',
+    serverID: quickConnectID,
+    is_gofile: false,
+  });
+
+  return new Promise<ServerInfo>((resolve, reject) => {
+    const request = net.request(options);
+
+    request.write(body);
+
+    request.on('response', (response: Electron.IncomingMessage) => {
+      response.on('data', (chunk: Buffer) => {
+        const parsed: ServerInfo = JSON.parse(chunk.toString());
+        resolve(parsed);
+      });
+    });
+
+    request.on('error', (error: Error) => {
+      reject(error);
+    });
+
+    request.end();
+  });
 }
 
 async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
-  if (serverInfo.errno !== 0) {
-    return 'bad request https://global.quickconnect.to/Serv.php';
-  }
-
   // 5001
   const PORT = serverInfo.service?.port as number;
 
@@ -80,49 +102,56 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   // cn3.quickconnect.cn
   const RELAY_HOST = `${serverInfo.env?.relay_region}.${serverInfo.env?.control_host.split('.').slice(-2).join('.')}`;
 
-  const newInstance = async (baseURL: string) => {
-    const appAxios = axios.create({ baseURL });
-
-    appAxios.interceptors.request.use(
-      (config) => {
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
-
-    appAxios.interceptors.response.use(
-      (config) => {
-        console.log(`good response ${baseURL}`);
-        return config;
-      },
-      (error) => {
-        console.log(`bad response ${baseURL}`);
-        return Promise.reject(error);
-      }
-    );
-
-    const resp = await appAxios.get(PINGPONG_PATH, {
+  const newInstance = async (hostname: string, port: number) => {
+    const options = {
+      method: 'GET',
+      protocol: 'https:',
+      hostname,
+      path: PINGPONG_PATH,
+      port,
       headers: {
-        Cookie: 'type=tunnel; Path=/',
+        cookie: 'type=tunnel; Path=/',
       },
+    };
+
+    return new Promise<PingpongInfo>((resolve, reject) => {
+      const request = net.request(options);
+
+      request.on('response', (response: Electron.IncomingMessage) => {
+        response.on('data', (chunk: Buffer) => {
+          const parsed: PingpongInfo = JSON.parse(chunk.toString());
+          resolve(parsed);
+        });
+      });
+
+      request.on('error', (error: Error) => {
+        reject(error);
+      });
+
+      request.end();
     });
-    return resp.data;
   };
 
   return Promise.race([
-    newInstance(`https://${SMARTDNS_LAN}:${PORT}`),
-    newInstance(`https://${SMARTDNS_HOST}:${PORT}`),
-    newInstance(`https://${SMARTDNS_HOST}:${EXT_PORT}`),
-    newInstance(`https://${WAN_IP}:${PORT}`),
-    newInstance(`https://${WAN_IP}:${EXT_PORT}`),
-    newInstance(`https://${quickConnectID}.${RELAY_HOST}`),
+    newInstance(SMARTDNS_LAN, PORT),
+    newInstance(SMARTDNS_HOST, PORT),
+    newInstance(SMARTDNS_HOST, EXT_PORT),
+    newInstance(WAN_IP, PORT),
+    newInstance(WAN_IP, EXT_PORT),
+    newInstance(`${quickConnectID}.${RELAY_HOST}`, 443),
   ]);
 }
 
 export default async function auth(quickConnectID: string) {
+  if (quickConnectID.length === 0) {
+    return 'QuickConnect ID is empty';
+  }
   const serverInfo = await requestCoordinator(quickConnectID);
+
+  if (serverInfo.errno !== 0) {
+    return 'bad request https://global.quickconnect.to/Serv.php';
+  }
   const pingpongInfo = await requestPingPong(quickConnectID, serverInfo);
+
   return pingpongInfo;
 }
