@@ -409,7 +409,7 @@ const Settings: React.FC = () => {
               //   id: new Date().getTime().toString(),
               // });
               // setDsmConnectList(arr);
-              window.electron.net.auth(newConnect.connectAddress);
+              window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
             }}
           >
             新增

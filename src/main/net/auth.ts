@@ -1,4 +1,5 @@
 import { net } from 'electron';
+import queryString from 'query-string';
 
 interface ServerInfo {
   command: string;
@@ -37,6 +38,19 @@ interface ServerInfo {
 interface PingpongInfo {
   ezid: string;
   success: boolean;
+  hostname: string;
+  port: number;
+}
+
+interface LoginInfo {
+  success: boolean;
+  data: {
+    did?: string;
+    sid?: string;
+    code?: number;
+  };
+  hostname: string;
+  port: number;
 }
 
 async function requestCoordinator(quickConnectID: string) {
@@ -120,6 +134,8 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
       request.on('response', (response: Electron.IncomingMessage) => {
         response.on('data', (chunk: Buffer) => {
           const parsed: PingpongInfo = JSON.parse(chunk.toString());
+          parsed.hostname = hostname;
+          parsed.port = port;
           resolve(parsed);
         });
       });
@@ -142,7 +158,49 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   ]);
 }
 
-export default async function auth(quickConnectID: string) {
+async function requestLogin(pingpongInfo: PingpongInfo, account: string, passwd: string) {
+  const params = {
+    api: 'SYNO.API.Auth',
+    version: 3,
+    method: 'login',
+    account,
+    passwd,
+    session: 'DownloadStation',
+    format: 'cookie',
+  };
+
+  const options = {
+    method: 'GET',
+    protocol: 'https:',
+    hostname: pingpongInfo.hostname,
+    port: pingpongInfo.port,
+    path: `webapi/auth.cgi?${queryString.stringify(params)}`,
+    headers: {
+      cookie: 'type=tunnel; Path=/',
+    },
+  };
+
+  return new Promise<LoginInfo>((resolve, reject) => {
+    const request = net.request(options);
+
+    request.on('response', (response: Electron.IncomingMessage) => {
+      response.on('data', (chunk: Buffer) => {
+        const parsed: LoginInfo = JSON.parse(chunk.toString());
+        parsed.hostname = pingpongInfo.hostname;
+        parsed.port = pingpongInfo.port;
+        resolve(parsed);
+      });
+    });
+
+    request.on('error', (error: Error) => {
+      reject(error);
+    });
+
+    request.end();
+  });
+}
+
+export default async function auth(quickConnectID: string, account: string, passwd: string) {
   if (quickConnectID.length === 0) {
     return 'QuickConnect ID is empty';
   }
@@ -153,5 +211,13 @@ export default async function auth(quickConnectID: string) {
   }
   const pingpongInfo = await requestPingPong(quickConnectID, serverInfo);
 
-  return pingpongInfo;
+  if (pingpongInfo.success === false) {
+    return `ban request https://${pingpongInfo.hostname}:${pingpongInfo.port}`;
+  }
+  const loginInfo = await requestLogin(pingpongInfo, account, passwd);
+
+  if (loginInfo.success === false) {
+    return 'access denied';
+  }
+  return loginInfo;
 }

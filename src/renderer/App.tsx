@@ -28,7 +28,7 @@ declare global {
       openViaBrowser: (val: string) => void;
 
       net: {
-        auth: (quickConnectID: string) => void;
+        auth: (quickConnectID: string, account: string, passwd: string) => void;
       };
     };
   }

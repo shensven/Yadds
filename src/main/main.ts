@@ -56,8 +56,8 @@ ipcMain.on('open-via-broswer', async (_, url) => {
   shell.openExternal(url);
 });
 
-ipcMain.on('axios-auth', async (event, quickConnectID) => {
-  const respData = await auth(quickConnectID);
+ipcMain.on('axios-auth', async (event, quickConnectID: string, account: string, passwd: string) => {
+  const respData = await auth(quickConnectID, account, passwd);
   event.sender.send('axios-auth-reply', respData);
 });
 
