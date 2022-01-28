@@ -1,16 +1,16 @@
 import { MenuItemConstructorOptions } from 'electron';
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Stack, ThemeProvider } from '@mui/material';
-import { YaddsProvider } from './src/context/YaddsContext';
-import yaddsTheme from './src/theme/yaddsTheme';
-import YaddsDrawer from './src/containers/YaddsDrawer';
-import QueueAll from './src/pages/QueueAll';
-import QueueDownloading from './src/pages/QueueDownloading';
-import QueueFinished from './src/pages/QueueFinished';
-import QueueActive from './src/pages/QueueActive';
-import QueueInactive from './src/pages/QueueInactive';
-import QueueStopped from './src/pages/QueueStopped';
-import Settings from './src/pages/Settings';
+import { YaddsProvider } from './context/YaddsContext';
+import yaddsTheme from './theme/yaddsTheme';
+import YaddsDrawer from './containers/YaddsDrawer';
+import QueueAll from './pages/QueueAll';
+import QueueDownloading from './pages/QueueDownloading';
+import QueueFinished from './pages/QueueFinished';
+import QueueActive from './pages/QueueActive';
+import QueueInactive from './pages/QueueInactive';
+import QueueStopped from './pages/QueueStopped';
+import Settings from './pages/Settings';
 import './App.scss';
 
 declare global {
