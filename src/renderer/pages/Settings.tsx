@@ -24,10 +24,10 @@ import {
   useTheme,
 } from '@mui/material';
 import YaddsMain from '../containers/YaddsMain';
-import PersonAddIcon from '../components/icons/PersonAddIcon';
-import EyeOffOutlineIcon from '../components/icons/EyeOffOutlineIcon';
-import EyeOutlineIcon from '../components/icons/EyeOutlineIcon';
-import TrashOutlineIcon from '../components/icons/TrashOutlineIcon';
+import IonPersonCircle from '../components/icons/IonPersonCircle';
+import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
+import IonEyeOutline from '../components/icons/IonEyeOutline';
+import IonTrashOutline from '../components/icons/IonTrashOutline';
 import AppearanceLight from '../assets/Settings/AppearanceLight_67x44_@2x.png';
 import AppearanceDark from '../assets/Settings/AppearanceDark_67x44_@2x.png';
 import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
@@ -143,7 +143,8 @@ const Settings: React.FC = () => {
 
   return (
     <YaddsMain hasAppbar={false}>
-      <Stack sx={{ p: theme.spacing(4) }}>
+      <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} />
+      <Stack sx={{ pl: theme.spacing(4), pr: theme.spacing(4), pb: theme.spacing(4) }}>
         <Typography variant="h3" color={theme.palette.grey[900]} sx={{ mb: theme.spacing(2) }}>
           设置
         </Typography>
@@ -211,7 +212,7 @@ const Settings: React.FC = () => {
                         {item.host} - {item.username}
                       </Typography>
                       <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectOnChange(index, true)}>
-                        <TrashOutlineIcon sx={{ fontSize: 14 }} />
+                        <IonTrashOutline sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Stack>
                   </MenuItem>
@@ -289,7 +290,7 @@ const Settings: React.FC = () => {
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
               <Typography>新增连接</Typography>
-              <PersonAddIcon sx={{ fontSize: 17, ml: theme.spacing(1) }} />
+              <IonPersonCircle sx={{ fontSize: 22, ml: theme.spacing(0.5) }} />
             </Stack>
             <ToggleButtonGroup size="small">
               <ToggleButton
@@ -380,9 +381,9 @@ const Settings: React.FC = () => {
                       onClick={() => setNewConnect({ ...newConnect, showPassword: !newConnect.showPassword })}
                     >
                       {newConnect.showPassword ? (
-                        <EyeOutlineIcon fontSize="small" />
+                        <IonEyeOutline fontSize="small" />
                       ) : (
-                        <EyeOffOutlineIcon fontSize="small" />
+                        <IonEyeOffOutline fontSize="small" />
                       )}
                     </IconButton>
                   </InputAdornment>
@@ -420,7 +421,7 @@ const Settings: React.FC = () => {
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
             <Typography>确认删除</Typography>
-            <TrashOutlineIcon sx={{ fontSize: 17, ml: theme.spacing(1) }} />
+            <IonTrashOutline sx={{ fontSize: 17, ml: theme.spacing(1) }} />
           </Stack>
         </DialogTitle>
         <DialogContent>

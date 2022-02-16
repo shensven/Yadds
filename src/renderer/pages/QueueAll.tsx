@@ -1,10 +1,10 @@
-import { Box, Drawer, List } from '@mui/material';
+import { List } from '@mui/material';
 import YaddsMain from '../containers/YaddsMain';
 import MainListItem from '../components/listItem/MainListItem';
 
 const QueueAll: React.FC = () => {
   const arr: string[] = [
-    '蜘蛛侠3.mkv',
+    '奇异博士2：疯狂的多元宇宙.mkv',
     'No.Time.To.Die.2021.2160p.WEBRip.x265.10bit.SDR.DDP5.1.Atmos-SWTYBLZ.mkv',
     'The.Eight.Hundred.2020.CHINESE.1080p.BluRay.x264-iKiW.mkv',
     'City.Hall.2020.1080p.WEB-DL.AAC2.0.H.264-PTP.mkv',
@@ -23,9 +23,6 @@ const QueueAll: React.FC = () => {
           <MainListItem key={item} item={item} index={index} />
         ))}
       </List>
-      <Drawer anchor="right" open={false} onClose={() => {}}>
-        <Box sx={{ width: 480 }}>list(anchor)</Box>
-      </Drawer>
     </YaddsMain>
   );
 };

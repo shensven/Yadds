@@ -1,38 +1,51 @@
 import { MenuItemConstructorOptions } from 'electron';
 import React, { useContext, useState } from 'react';
-import { alpha, Box, Button, Icon, IconButton, InputBase, Stack, styled, Typography, useTheme } from '@mui/material';
+import {
+  alpha,
+  Box,
+  Button,
+  Icon,
+  IconButton,
+  InputBase,
+  Paper,
+  Stack,
+  styled,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
 import DRAWER_WIDTH from '../context/drawerWidth';
-import SearchOutlineIcon from '../components/icons/SearchOutlineIcon';
-import AddOutlineIcon from '../components/icons/AddOutlineIcon';
-import EllipsisHorizontalIcon from '../components/icons/EllipsisHorizontalIcon';
+import IonSearch from '../components/icons/IonSearch';
+import IonAdd from '../components/icons/IonAdd';
+import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import inactiveSvg from '../assets/YaddsDrawerSwitch/inactive.svg';
 import activeLeftSvg from '../assets/YaddsDrawerSwitch/active_left.svg';
 import activeRightSvg from '../assets/YaddsDrawerSwitch/active_right.svg';
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'halfWidth' })<{ halfWidth?: boolean }>(
-  ({ theme, halfWidth }) => ({
+const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<{ hasDrawer?: boolean }>(
+  ({ theme, hasDrawer }) => ({
+    position: 'fixed',
+    overflowY: 'scroll',
+    right: 0,
     width: '100%',
-    flexGrow: 1,
-    transition: theme.transitions.create('margin', {
+    height: '100%',
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: `-${DRAWER_WIDTH}px`,
-    ...(halfWidth && {
+    ...(hasDrawer && {
       width: `calc(100% - ${DRAWER_WIDTH}px)`,
-      transition: theme.transitions.create('margin', {
+      marginLeft: `${DRAWER_WIDTH}px`,
+      transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
-      marginLeft: 0,
     }),
   })
 );
 
 const MainHeader = styled('div')(({ theme }) => ({
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -42,6 +55,9 @@ interface AppBarProps extends MuiAppBarProps {
 
 const StyledAppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<AppBarProps>(
   ({ theme, hasDrawer }) => ({
+    padding: theme.spacing(2),
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -123,61 +139,59 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
   const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
-    <Main halfWidth={hasYaddsDrawer}>
-      <Box sx={{ position: 'fixed', top: '45%' }}>
-        <Icon
-          sx={{ height: 40 }}
-          onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
-          onMouseOut={() => setScr(inactiveSvg)}
-          onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
-        >
-          <img src={src} alt="" draggable="false" />
-        </Icon>
-      </Box>
-      <Stack>
-        <StyledAppBar
-          sx={{
-            display: hasAppbar ? 'flex' : 'none',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(2),
-          }}
-          position="fixed"
-          elevation={0}
-          hasDrawer={hasYaddsDrawer}
-        >
-          <StyledSearch sx={{ mr: theme.spacing(6) }}>
-            <StyledSearchIconWrapper>
-              <SearchOutlineIcon sx={{ fontSize: 14 }} />
-            </StyledSearchIconWrapper>
-            <StyledInputBase
-              spellCheck={false}
-              size="small"
-              placeholder="搜索..."
-              sx={{ fontSize: 12, color: theme.palette.grey[800] }}
-            />
-          </StyledSearch>
-          <Button sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, mr: theme.spacing(2) }} size="small">
-            <Stack direction="row" alignItems="center">
-              <AddOutlineIcon fontSize="small" color="primary" />
-              <Typography sx={{ fontSize: 12 }}>新建</Typography>
-            </Stack>
-          </Button>
-          <IconButton
-            color="primary"
-            size="small"
-            sx={{ backgroundColor: theme.palette.grey[100] }}
-            onClick={() => handleContextMenu()}
+    <Box>
+      <Main hasDrawer={hasYaddsDrawer} square>
+        <Box sx={{ position: 'fixed', top: '47%' }}>
+          <Icon
+            sx={{ height: 40 }}
+            onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
+            onMouseOut={() => setScr(inactiveSvg)}
+            onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
           >
-            <EllipsisHorizontalIcon fontSize="small" color="primary" />
-          </IconButton>
-        </StyledAppBar>
-        <Stack sx={{ pl: theme.spacing(3), pr: theme.spacing(3) }}>
+            <img src={src} alt="" draggable="false" />
+          </Icon>
+        </Box>
+        <Stack sx={{ pl: theme.spacing(3), pr: theme.spacing(3), backgroundColor: theme.palette.background.default }}>
           <MainHeader sx={{ display: hasAppbar ? 'flex' : 'none' }} />
           {children}
         </Stack>
-      </Stack>
-    </Main>
+      </Main>
+      <StyledAppBar
+        sx={{ display: hasAppbar ? 'flex' : 'none', appRegion: 'drag' }}
+        position="fixed"
+        elevation={0}
+        hasDrawer={hasYaddsDrawer}
+      >
+        <StyledSearch sx={{ mr: theme.spacing(6), appRegion: 'no-drag' }}>
+          <StyledSearchIconWrapper>
+            <IonSearch sx={{ fontSize: 14 }} />
+          </StyledSearchIconWrapper>
+          <StyledInputBase
+            spellCheck={false}
+            size="small"
+            placeholder="搜索..."
+            sx={{ fontSize: 12, color: theme.palette.grey[800] }}
+          />
+        </StyledSearch>
+        <Button
+          sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, mr: theme.spacing(2), appRegion: 'no-drag' }}
+          size="small"
+        >
+          <Stack direction="row" alignItems="center">
+            <IonAdd sx={{ fontSize: 16 }} color="primary" />
+            <Typography sx={{ fontSize: 12 }}>新建</Typography>
+          </Stack>
+        </Button>
+        <IconButton
+          color="primary"
+          size="small"
+          sx={{ backgroundColor: theme.palette.grey[100], appRegion: 'no-drag' }}
+          onClick={() => handleContextMenu()}
+        >
+          <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />
+        </IconButton>
+      </StyledAppBar>
+    </Box>
   );
 };
 

@@ -12,18 +12,26 @@ import {
 } from '@mui/material';
 import { YaddsCtx } from '../context/YaddsContext';
 import DRAWER_WIDTH from '../context/drawerWidth';
-import ShapesOutlineIcon from '../components/icons/ShapesOutlineIcon';
-import ArrowDownCircleOutlineIcon from '../components/icons/ArrowDownCircleOutlineIcon';
-import CheckmarkCircleOutlineIcon from '../components/icons/CheckmarkCircleOutlineIcon';
-import ArrowUpCircleOutlineIcon from '../components/icons/ArrowUpCircleOutlineIcon';
-import CloseCircleOutlineIcon from '../components/icons/CloseCircleOutlineIcon';
-import StopCircleOutlineIcon from '../components/icons/StopCircleOutlineIcon';
-import CogOutlineIcon from '../components/icons/CogOutlineIcon';
+import IonShapesOutline from '../components/icons/IonShapesOutline';
+import IonShapes from '../components/icons/IonShapes';
+import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
+import IonArrowDownCircle from '../components/icons/IonArrowDownCircle';
+import IonCheckmarkCircleOutline from '../components/icons/IonCheckmarkCircleOutline';
+import IonCheckmarkCircle from '../components/icons/IonCheckmarkCircle';
+import IonArrowUpCircleOutline from '../components/icons/IonArrowUpCircleOutline';
+import IonArrowUpCircle from '../components/icons/IonArrowUpCircle';
+import IonCloseCircleOutline from '../components/icons/IonCloseCircleOutline';
+import IonCloseCircle from '../components/icons/IonCloseCircle';
+import IonStopCircleOutline from '../components/icons/IonStopCircleOutline';
+import IonStopCircle from '../components/icons/IonStopCircle';
+import IonCogOutline from '../components/icons/IonCogOutline';
+import IonCog from '../components/icons/IonCog';
 
 interface Category {
   path: string;
   name: string;
-  icon: JSX.Element;
+  activeIcon: JSX.Element;
+  inactiveIcon: JSX.Element;
 }
 
 const YaddsDrawer: React.FC = () => {
@@ -33,12 +41,37 @@ const YaddsDrawer: React.FC = () => {
   const { hasYaddsDrawer, yaddsDrawerCategory, setYaddsDrawerCategory } = useContext(YaddsCtx);
 
   const category: Category[] = [
-    { path: '/queueAll', name: '全部下载项目', icon: <ShapesOutlineIcon /> },
-    { path: '/queueDownloading', name: '下载中', icon: <ArrowDownCircleOutlineIcon /> },
-    { path: '/queueFinished', name: '已完成', icon: <CheckmarkCircleOutlineIcon /> },
-    { path: '/queueActive', name: '进行中', icon: <ArrowUpCircleOutlineIcon /> },
-    { path: '/queueInactive', name: '非进行中', icon: <CloseCircleOutlineIcon /> },
-    { path: '/queueStopped', name: '停用', icon: <StopCircleOutlineIcon /> },
+    { path: '/queueAll', name: '全部下载项目', activeIcon: <IonShapes />, inactiveIcon: <IonShapesOutline /> },
+    {
+      path: '/queueDownloading',
+      name: '下载中',
+      activeIcon: <IonArrowDownCircle />,
+      inactiveIcon: <IonArrowDownCircleOutline />,
+    },
+    {
+      path: '/queueFinished',
+      name: '已完成',
+      activeIcon: <IonCheckmarkCircle />,
+      inactiveIcon: <IonCheckmarkCircleOutline />,
+    },
+    {
+      path: '/queueActive',
+      name: '进行中',
+      activeIcon: <IonArrowUpCircle />,
+      inactiveIcon: <IonArrowUpCircleOutline />,
+    },
+    {
+      path: '/queueInactive',
+      name: '非进行中',
+      activeIcon: <IonCloseCircle />,
+      inactiveIcon: <IonCloseCircleOutline />,
+    },
+    {
+      path: '/queueStopped',
+      name: '停用',
+      activeIcon: <IonStopCircle />,
+      inactiveIcon: <IonStopCircleOutline />,
+    },
   ];
 
   return (
@@ -47,27 +80,30 @@ const YaddsDrawer: React.FC = () => {
       variant="persistent"
       sx={{
         width: DRAWER_WIDTH,
-        '& .MuiDrawer-paper': { width: DRAWER_WIDTH, boxSizing: 'border-box' },
+        '& .MuiDrawer-paper': {
+          backgroundColor: 'transparent',
+          width: DRAWER_WIDTH,
+          boxSizing: 'border-box',
+        },
       }}
       open={hasYaddsDrawer}
     >
-      <List>
+      <List sx={{ marginTop: theme.spacing(4) }}>
         {category.map((item: Category) => (
           <ListItem key={item.path}>
             <ListItemButton
               dense
               disableRipple
-              // selected={yaddsDrawerCategory === item.path}
+              selected={yaddsDrawerCategory === item.path}
               onClick={() => {
                 setYaddsDrawerCategory(item.path);
                 navigate(item.path);
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemIcon>{yaddsDrawerCategory === item.path ? item.activeIcon : item.inactiveIcon}</ListItemIcon>
               <ListItemText
                 primary={
                   <Typography
-                    noWrap
                     style={{
                       fontWeight: yaddsDrawerCategory === item.path ? 600 : 400,
                       color: yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.grey[800],
@@ -86,23 +122,22 @@ const YaddsDrawer: React.FC = () => {
           <ListItemButton
             dense
             disableRipple
-            // selected={yaddsDrawerCategory === 'settings'}
+            selected={yaddsDrawerCategory === '/settings'}
             sx={{ width: '100%' }}
             onClick={() => {
               setYaddsDrawerCategory('/settings');
               navigate('/settings');
             }}
           >
-            <ListItemIcon>
-              <CogOutlineIcon />
-            </ListItemIcon>
+            <ListItemIcon>{yaddsDrawerCategory === '/settings' ? <IonCog /> : <IonCogOutline />}</ListItemIcon>
             <ListItemText
               primary={
                 <Typography
                   noWrap
                   style={{
                     fontWeight: yaddsDrawerCategory === '/settings' ? 600 : 400,
-                    color: yaddsDrawerCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
+                    color:
+                      yaddsDrawerCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
                   设置

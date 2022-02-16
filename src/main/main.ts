@@ -106,7 +106,8 @@ const createWindow = async () => {
     height: (store.get('windowBounds.height') as number) || 768,
     minWidth: 1024,
     minHeight: 768,
-    // titleBarStyle: 'hidden',
+    titleBarStyle: 'hiddenInset',
+    vibrancy: 'sidebar',
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

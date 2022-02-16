@@ -9,9 +9,9 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import PlayIcon from '../icons/PlayIcon';
-import PauseIcon from '../icons/PauseIcon';
-import ArrowDownOutlineIcon from '../icons/ArrowDownOutlineIcon';
+import IonPlay from '../icons/IonPlay';
+import IonPause from '../icons/IonPause';
+import IonArrowDownC from '../icons/IonArrowDownC';
 
 interface MainListItemProps {
   item: string;
@@ -57,16 +57,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
       >
         <ListItemText>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography
-              noWrap
-              sx={{
-                fontWeight: 600,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                wordBreak: 'break-all',
-                color: theme.palette.grey[800],
-              }}
-            >
+            <Typography noWrap sx={{ fontWeight: 600, color: theme.palette.grey[800] }}>
               {item}
             </Typography>
             <ButtonBase
@@ -75,9 +66,9 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
               onClick={() => setIsDownload(!isDownload)}
             >
               {isDownload ? (
-                <PauseIcon sx={{ fontSize: 16 }} color="primary" />
+                <IonPause sx={{ fontSize: 16 }} color="primary" />
               ) : (
-                <PlayIcon sx={{ fontSize: 16 }} color="primary" />
+                <IonPlay sx={{ fontSize: 16 }} color="primary" />
               )}
             </ButtonBase>
           </Stack>
@@ -94,7 +85,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center">
-                <ArrowDownOutlineIcon sx={{ fontSize: 12 }} color="warning" />
+                <IonArrowDownC sx={{ fontSize: 12 }} color="warning" />
                 <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary }}>{progress}MB/s</Typography>
               </Stack>
             </Stack>
