@@ -150,25 +150,6 @@ const createWindow = async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  // CORS workaround
-  // mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-  //   callback({
-  //     requestHeaders: {
-  //       Origin: '*',
-  //       ...details.requestHeaders,
-  //     },
-  //   });
-  // });
-
-  // mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-  //   callback({
-  //     responseHeaders: {
-  //       'access-control-allow-origin': '*',
-  //       ...details.responseHeaders,
-  //     },
-  //   });
-  // });
-
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault();
