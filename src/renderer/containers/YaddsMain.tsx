@@ -14,6 +14,7 @@ import {
   useTheme,
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { Route, Routes } from 'react-router-dom';
 import { YaddsCtx } from '../context/YaddsContext';
 import DRAWER_WIDTH from '../context/drawerWidth';
 import IonSearch from '../components/icons/IonSearch';
@@ -22,14 +23,24 @@ import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import inactiveSvg from '../assets/YaddsDrawerSwitch/inactive.svg';
 import activeLeftSvg from '../assets/YaddsDrawerSwitch/active_left.svg';
 import activeRightSvg from '../assets/YaddsDrawerSwitch/active_right.svg';
+import RedirectEl from '../pages/RedirectEl';
+import QueueAll from '../pages/QueueAll';
+import QueueDownloading from '../pages/QueueDownloading';
+import QueueFinished from '../pages/QueueFinished';
+import QueueActive from '../pages/QueueActive';
+import QueueInactive from '../pages/QueueInactive';
+import QueueStopped from '../pages/QueueStopped';
+import Settings from '../pages/Settings';
 
 const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<{ hasDrawer?: boolean }>(
   ({ theme, hasDrawer }) => ({
     position: 'fixed',
-    overflowY: 'scroll',
+    left: 0,
     right: 0,
     width: '100%',
     height: '100%',
+    marginLeft: 0,
+    overflowY: 'scroll',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -58,6 +69,8 @@ const StyledAppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== '
     padding: theme.spacing(2),
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    width: '100%',
+    marginLeft: 0,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -112,14 +125,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-interface YaddsMainProps {
-  children: React.ReactNode;
-  hasAppbar: boolean;
-}
-
-const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
+const YaddsMain: React.FC = () => {
   const theme = useTheme();
-  const { hasYaddsDrawer, setHasYaddsDrawer } = useContext(YaddsCtx);
+  const { yaddsDrawerCategory, hasYaddsDrawer, setHasYaddsDrawer } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
   const template: MenuItemConstructorOptions[] = [
@@ -140,24 +148,8 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
 
   return (
     <Box>
-      <Main hasDrawer={hasYaddsDrawer} square>
-        <Box sx={{ position: 'fixed', top: '47%' }}>
-          <Icon
-            sx={{ height: 40 }}
-            onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
-            onMouseOut={() => setScr(inactiveSvg)}
-            onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
-          >
-            <img src={src} alt="" draggable="false" />
-          </Icon>
-        </Box>
-        <Stack sx={{ pl: theme.spacing(3), pr: theme.spacing(3), backgroundColor: theme.palette.background.default }}>
-          <MainHeader sx={{ display: hasAppbar ? 'flex' : 'none' }} />
-          {children}
-        </Stack>
-      </Main>
       <StyledAppBar
-        sx={{ display: hasAppbar ? 'flex' : 'none', appRegion: 'drag' }}
+        sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex', appRegion: 'drag' }}
         position="fixed"
         elevation={0}
         hasDrawer={hasYaddsDrawer}
@@ -191,6 +183,37 @@ const YaddsMain: React.FC<YaddsMainProps> = ({ children, hasAppbar }) => {
           <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />
         </IconButton>
       </StyledAppBar>
+      <Main square hasDrawer={hasYaddsDrawer}>
+        <Box sx={{ position: 'fixed', top: '47%' }}>
+          <Icon
+            sx={{ height: 40 }}
+            onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
+            onMouseOut={() => setScr(inactiveSvg)}
+            onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
+          >
+            <img src={src} alt="" draggable="false" />
+          </Icon>
+        </Box>
+        <Stack
+          sx={{
+            pl: theme.spacing(3),
+            pr: theme.spacing(3),
+            backgroundColor: theme.palette.background.default,
+          }}
+        >
+          <MainHeader sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }} />
+          <Routes>
+            <Route path="/" element={<RedirectEl />} />
+            <Route path="/queueAll" element={<QueueAll />} />
+            <Route path="/queueDownloading" element={<QueueDownloading />} />
+            <Route path="/queueFinished" element={<QueueFinished />} />
+            <Route path="/queueActive" element={<QueueActive />} />
+            <Route path="/queueInactive" element={<QueueInactive />} />
+            <Route path="/queueStopped" element={<QueueStopped />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Stack>
+      </Main>
     </Box>
   );
 };

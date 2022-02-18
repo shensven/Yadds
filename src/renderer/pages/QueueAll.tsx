@@ -1,5 +1,4 @@
 import { List } from '@mui/material';
-import YaddsMain from '../containers/YaddsMain';
 import MainListItem from '../components/listItem/MainListItem';
 
 const QueueAll: React.FC = () => {
@@ -17,13 +16,11 @@ const QueueAll: React.FC = () => {
   ];
 
   return (
-    <YaddsMain hasAppbar>
-      <List>
-        {arr.map((item: string, index: number) => (
-          <MainListItem key={item} item={item} index={index} />
-        ))}
-      </List>
-    </YaddsMain>
+    <List>
+      {arr.map((item: string, index: number) => (
+        <MainListItem key={item} item={item} index={index} />
+      ))}
+    </List>
   );
 };
 

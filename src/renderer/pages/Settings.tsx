@@ -23,7 +23,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import YaddsMain from '../containers/YaddsMain';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
@@ -142,7 +141,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <YaddsMain hasAppbar={false}>
+    <Box>
       <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} />
       <Stack sx={{ pl: theme.spacing(4), pr: theme.spacing(4), pb: theme.spacing(4) }}>
         <Typography variant="h3" color={theme.palette.grey[900]} sx={{ mb: theme.spacing(2) }}>
@@ -438,7 +437,7 @@ const Settings: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </YaddsMain>
+    </Box>
   );
 };
 
