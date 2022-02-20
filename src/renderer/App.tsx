@@ -1,6 +1,6 @@
 import { MenuItemConstructorOptions } from 'electron';
 import { MemoryRouter as Router } from 'react-router-dom';
-import { Stack, ThemeProvider } from '@mui/material';
+import { Stack, StyledEngineProvider, ThemeProvider } from '@mui/material';
 import { YaddsProvider } from './context/YaddsContext';
 import yaddsTheme from './theme/yaddsTheme';
 import YaddsDrawer from './containers/YaddsDrawer';
@@ -32,12 +32,14 @@ const App: React.FC = () => {
   return (
     <YaddsProvider>
       <ThemeProvider theme={yaddsTheme}>
-        <Router>
-          <Stack direction="row">
-            <YaddsDrawer />
-            <YaddsMain />
-          </Stack>
-        </Router>
+        <StyledEngineProvider injectFirst>
+          <Router>
+            <Stack direction="row">
+              <YaddsDrawer />
+              <YaddsMain />
+            </Stack>
+          </Router>
+        </StyledEngineProvider>
       </ThemeProvider>
     </YaddsProvider>
   );

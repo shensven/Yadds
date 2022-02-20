@@ -4,6 +4,7 @@ import {
   alpha,
   Box,
   Button,
+  Divider,
   Icon,
   IconButton,
   InputBase,
@@ -13,8 +14,8 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { Route, Routes } from 'react-router-dom';
+import MuiAppBar from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
 import DRAWER_WIDTH from '../context/drawerWidth';
 import IonSearch from '../components/icons/IonSearch';
@@ -40,7 +41,6 @@ const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasDrawer' }
     width: '100%',
     height: '100%',
     marginLeft: 0,
-    overflowY: 'scroll',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -56,35 +56,12 @@ const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasDrawer' }
   })
 );
 
-const MainHeader = styled('div')(({ theme }) => ({
-  ...theme.mixins.toolbar,
+const StyledAppBar = styled(MuiAppBar)(() => ({
+  appRegion: 'drag',
+  position: 'sticky',
+  flexDirection: 'column',
+  backgroundColor: 'transparent',
 }));
-
-interface AppBarProps extends MuiAppBarProps {
-  hasDrawer?: boolean;
-}
-
-const StyledAppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<AppBarProps>(
-  ({ theme, hasDrawer }) => ({
-    padding: theme.spacing(2),
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    width: '100%',
-    marginLeft: 0,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(hasDrawer && {
-      width: `calc(100% - ${DRAWER_WIDTH}px)`,
-      marginLeft: `${DRAWER_WIDTH}px`,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  })
-);
 
 const StyledSearch = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -147,74 +124,75 @@ const YaddsMain: React.FC = () => {
   const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
-    <Box>
-      <StyledAppBar
-        sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex', appRegion: 'drag' }}
-        position="fixed"
-        elevation={0}
-        hasDrawer={hasYaddsDrawer}
-      >
-        <StyledSearch sx={{ mr: theme.spacing(6), appRegion: 'no-drag' }}>
-          <StyledSearchIconWrapper>
-            <IonSearch sx={{ fontSize: 14 }} />
-          </StyledSearchIconWrapper>
-          <StyledInputBase
-            spellCheck={false}
+    <Main square hasDrawer={hasYaddsDrawer}>
+      <Box sx={{ position: 'fixed', top: '47%' }}>
+        <Icon
+          sx={{ height: 40 }}
+          onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
+          onMouseOut={() => setScr(inactiveSvg)}
+          onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
+        >
+          <img src={src} alt="" draggable="false" />
+        </Icon>
+      </Box>
+      <StyledAppBar sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }} elevation={0}>
+        <Stack flexDirection="row" justifyContent="flex-end" sx={{ padding: theme.spacing(2) }}>
+          <StyledSearch sx={{ mr: theme.spacing(6), appRegion: 'no-drag' }}>
+            <StyledSearchIconWrapper>
+              <IonSearch sx={{ fontSize: 14 }} />
+            </StyledSearchIconWrapper>
+            <StyledInputBase
+              spellCheck={false}
+              size="small"
+              placeholder="搜索..."
+              sx={{ fontSize: 12, color: theme.palette.grey[800] }}
+            />
+          </StyledSearch>
+          <Button
+            sx={{
+              backgroundColor: theme.palette.grey[100],
+              borderRadius: 8,
+              mr: theme.spacing(2),
+              appRegion: 'no-drag',
+            }}
             size="small"
-            placeholder="搜索..."
-            sx={{ fontSize: 12, color: theme.palette.grey[800] }}
-          />
-        </StyledSearch>
-        <Button
-          sx={{ backgroundColor: theme.palette.grey[100], borderRadius: 8, mr: theme.spacing(2), appRegion: 'no-drag' }}
-          size="small"
-        >
-          <Stack direction="row" alignItems="center">
-            <IonAdd sx={{ fontSize: 16 }} color="primary" />
-            <Typography sx={{ fontSize: 12 }}>新建</Typography>
-          </Stack>
-        </Button>
-        <IconButton
-          color="primary"
-          size="small"
-          sx={{ backgroundColor: theme.palette.grey[100], appRegion: 'no-drag' }}
-          onClick={() => handleContextMenu()}
-        >
-          <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />
-        </IconButton>
-      </StyledAppBar>
-      <Main square hasDrawer={hasYaddsDrawer}>
-        <Box sx={{ position: 'fixed', top: '47%' }}>
-          <Icon
-            sx={{ height: 40 }}
-            onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
-            onMouseOut={() => setScr(inactiveSvg)}
-            onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
           >
-            <img src={src} alt="" draggable="false" />
-          </Icon>
-        </Box>
-        <Stack
-          sx={{
-            pl: theme.spacing(3),
-            pr: theme.spacing(3),
-            backgroundColor: theme.palette.background.default,
-          }}
-        >
-          <MainHeader sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }} />
-          <Routes>
-            <Route path="/" element={<RedirectEl />} />
-            <Route path="/queueAll" element={<QueueAll />} />
-            <Route path="/queueDownloading" element={<QueueDownloading />} />
-            <Route path="/queueFinished" element={<QueueFinished />} />
-            <Route path="/queueActive" element={<QueueActive />} />
-            <Route path="/queueInactive" element={<QueueInactive />} />
-            <Route path="/queueStopped" element={<QueueStopped />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
+            <Stack direction="row" alignItems="center">
+              <IonAdd sx={{ fontSize: 16 }} color="primary" />
+              <Typography sx={{ fontSize: 12 }}>新建</Typography>
+            </Stack>
+          </Button>
+          <IconButton
+            color="primary"
+            size="small"
+            sx={{ backgroundColor: theme.palette.grey[100], appRegion: 'no-drag' }}
+            onClick={() => handleContextMenu()}
+          >
+            <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />
+          </IconButton>
         </Stack>
-      </Main>
-    </Box>
+        <Divider sx={{ opacity: 0.8 }} />
+      </StyledAppBar>
+      <Box
+        sx={{
+          pl: theme.spacing(3),
+          pr: theme.spacing(3),
+          overflowY: yaddsDrawerCategory === '/settings' ? 'hidden' : 'scroll',
+          height: yaddsDrawerCategory === '/settings' ? '100%' : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
+        }}
+      >
+        <Routes>
+          <Route path="/" element={<RedirectEl />} />
+          <Route path="/queueAll" element={<QueueAll />} />
+          <Route path="/queueDownloading" element={<QueueDownloading />} />
+          <Route path="/queueFinished" element={<QueueFinished />} />
+          <Route path="/queueActive" element={<QueueActive />} />
+          <Route path="/queueInactive" element={<QueueInactive />} />
+          <Route path="/queueStopped" element={<QueueStopped />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Box>
+    </Main>
   );
 };
 

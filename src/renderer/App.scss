@@ -10,10 +10,6 @@
 @include Barlow.fontFace($display: block, $weight: 800);
 @include Barlow.fontFace($display: block, $weight: 900);
 
-::-webkit-scrollbar {
-  width: 0;
-}
-
 body {
   margin: 0;
   user-select: none;
