@@ -213,7 +213,7 @@
   "dependencies": {
     "@emotion/react": "11.8.1",
     "@emotion/styled": "11.8.1",
-    "@fontsource/barlow": "4.5.1",
+    "@fontsource/barlow": "4.5.2",
     "@mui/material": "5.4.2",
     "@mui/system": "5.4.2",
     "electron-debug": "^3.2.0",
