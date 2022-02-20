@@ -44,6 +44,10 @@ ipcMain.on('set-electron-store', async (_, key, val) => {
   store.set(key, val);
 });
 
+ipcMain.on('get-os-platform', async (event) => {
+  event.returnValue = process.platform;
+});
+
 ipcMain.on('get-app-version', async (event) => {
   event.returnValue = app.getVersion();
 });

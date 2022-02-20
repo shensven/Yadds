@@ -1,6 +1,6 @@
-import { MenuItemConstructorOptions } from 'electron';
-import { MemoryRouter as Router } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { Stack, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import { MenuItemConstructorOptions } from 'electron';
 import { YaddsProvider } from './context/YaddsContext';
 import yaddsTheme from './theme/yaddsTheme';
 import YaddsDrawer from './containers/YaddsDrawer';
@@ -14,6 +14,8 @@ declare global {
         get: (key: string) => unknown;
         set: (key: string, val: unknown) => void;
       };
+
+      getOS: () => string;
 
       getAppVersion: () => string;
 
@@ -33,12 +35,12 @@ const App: React.FC = () => {
     <YaddsProvider>
       <ThemeProvider theme={yaddsTheme}>
         <StyledEngineProvider injectFirst>
-          <Router>
+          <MemoryRouter>
             <Stack direction="row">
               <YaddsDrawer />
               <YaddsMain />
             </Stack>
-          </Router>
+          </MemoryRouter>
         </StyledEngineProvider>
       </ThemeProvider>
     </YaddsProvider>

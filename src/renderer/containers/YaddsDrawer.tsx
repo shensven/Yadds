@@ -88,7 +88,7 @@ const YaddsDrawer: React.FC = () => {
       }}
       open={hasYaddsDrawer}
     >
-      <List sx={{ marginTop: theme.spacing(4) }}>
+      <List sx={{ marginTop: window.electron.getOS() === 'darwin' ? theme.spacing(4) : 0 }}>
         {category.map((item: Category) => (
           <ListItem key={item.path}>
             <ListItemButton

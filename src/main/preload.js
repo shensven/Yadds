@@ -30,6 +30,10 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
+  getOS: () => {
+    return ipcRenderer.sendSync('get-os-platform');
+  },
+
   getAppVersion: () => {
     return ipcRenderer.sendSync('get-app-version');
   },
