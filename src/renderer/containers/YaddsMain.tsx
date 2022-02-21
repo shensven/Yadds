@@ -136,7 +136,7 @@ const YaddsMain: React.FC = () => {
         </Icon>
       </Box>
       <StyledAppBar sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }} elevation={0}>
-        <Stack flexDirection="row" justifyContent="flex-end" sx={{ padding: theme.spacing(2) }}>
+        <Stack flexDirection="row" justifyContent="flex-end" sx={{ p: theme.spacing(2) }}>
           <StyledSearch sx={{ mr: theme.spacing(6), appRegion: 'no-drag' }}>
             <StyledSearchIconWrapper>
               <IonSearch sx={{ fontSize: 14 }} />
@@ -175,8 +175,7 @@ const YaddsMain: React.FC = () => {
       </StyledAppBar>
       <Box
         sx={{
-          pl: theme.spacing(3),
-          pr: theme.spacing(3),
+          px: theme.spacing(3),
           overflowY: yaddsDrawerCategory === '/settings' ? 'hidden' : 'scroll',
           height: yaddsDrawerCategory === '/settings' ? '100%' : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
         }}

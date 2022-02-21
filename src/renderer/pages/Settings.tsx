@@ -143,7 +143,7 @@ const Settings: React.FC = () => {
   return (
     <Box>
       <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} />
-      <Stack sx={{ pl: theme.spacing(4), pr: theme.spacing(4), pb: theme.spacing(4) }}>
+      <Stack sx={{ px: theme.spacing(4), pb: theme.spacing(4) }}>
         <Typography variant="h3" color={theme.palette.grey[900]} sx={{ mb: theme.spacing(2) }}>
           设置
         </Typography>
