@@ -111,7 +111,8 @@ const createWindow = async () => {
     minWidth: 1024,
     minHeight: 768,
     titleBarStyle: 'hiddenInset',
-    vibrancy: 'sidebar',
+    [(process.platform === 'darwin' && 'vibrancy') as string]: 'sidebar',
+    [(process.platform === 'win32' && 'backgroundColor') as string]: '#dcdee0',
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
