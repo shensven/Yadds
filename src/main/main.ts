@@ -166,6 +166,8 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
+app.commandLine.appendSwitch('force_high_performance_gpu')
+
 /**
  * Add event listeners...
  */
