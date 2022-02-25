@@ -176,6 +176,7 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
+nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
 app.commandLine.appendSwitch('force_high_performance_gpu');
 
 /**
