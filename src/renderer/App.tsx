@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { MenuItemConstructorOptions } from 'electron';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
-import yaddsTheme from './theme/yaddsTheme';
+import initMUITheme from './theme/yaddsMUITheme';
 import YaddsDrawer from './containers/YaddsDrawer';
 import YaddsMain from './containers/YaddsMain';
 import './App.scss';
@@ -53,7 +53,7 @@ const DesignSystem: React.FC = () => {
   };
 
   return (
-    <ThemeProvider theme={yaddsTheme(toogleMUITheme())}>
+    <ThemeProvider theme={initMUITheme(toogleMUITheme())}>
       <CssBaseline />
       <StyledEngineProvider injectFirst>
         <MemoryRouter>

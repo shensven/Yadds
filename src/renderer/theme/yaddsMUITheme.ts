@@ -142,8 +142,8 @@ const customizeCompnents = (mode: PaletteMode) => {
   };
 };
 
-const yaddsTheme = (mode: 'light' | 'dark') => {
+const initMUITheme = (mode: 'light' | 'dark') => {
   return createTheme(designTokens(mode), customizeCompnents(mode));
 };
 
-export default yaddsTheme;
+export default initMUITheme;
