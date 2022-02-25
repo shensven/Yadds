@@ -1,7 +1,8 @@
+import { useContext } from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { Stack, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import { Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { MenuItemConstructorOptions } from 'electron';
-import { YaddsProvider } from './context/YaddsContext';
+import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import yaddsTheme from './theme/yaddsTheme';
 import YaddsDrawer from './containers/YaddsDrawer';
 import YaddsMain from './containers/YaddsMain';
@@ -16,6 +17,8 @@ declare global {
       };
 
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
+
+      listenPrefersColorScheme: () => void;
 
       getOS: () => string;
 
@@ -32,19 +35,41 @@ declare global {
   }
 }
 
+const DesignSystem: React.FC = () => {
+  const { yaddsAppearance } = useContext(YaddsCtx);
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const toogleMUITheme = (): 'light' | 'dark' => {
+    switch (yaddsAppearance) {
+      case 'light':
+        return 'light';
+      case 'dark':
+        return 'dark';
+      case 'system':
+        return prefersDarkMode ? 'dark' : 'light';
+      default:
+        return 'light';
+    }
+  };
+
+  return (
+    <ThemeProvider theme={yaddsTheme(toogleMUITheme())}>
+      <StyledEngineProvider injectFirst>
+        <MemoryRouter>
+          <Stack direction="row">
+            <YaddsDrawer />
+            <YaddsMain />
+          </Stack>
+        </MemoryRouter>
+      </StyledEngineProvider>
+    </ThemeProvider>
+  );
+};
+
 const App: React.FC = () => {
   return (
     <YaddsProvider>
-      <ThemeProvider theme={yaddsTheme}>
-        <StyledEngineProvider injectFirst>
-          <MemoryRouter>
-            <Stack direction="row">
-              <YaddsDrawer />
-              <YaddsMain />
-            </Stack>
-          </MemoryRouter>
-        </StyledEngineProvider>
-      </ThemeProvider>
+      <DesignSystem />
     </YaddsProvider>
   );
 };

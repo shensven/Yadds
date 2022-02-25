@@ -50,14 +50,14 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
         disableRipple
         sx={{
           width: '100%',
-          backgroundColor: index % 2 === 0 ? theme.palette.grey[50] : 'transparent',
+          backgroundColor: index % 2 === 0 ? theme.palette.card.default : 'transparent',
         }}
         onMouseOver={() => setHasAction(true)}
         onMouseOut={() => setHasAction(false)}
       >
         <ListItemText>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography noWrap sx={{ fontWeight: 600, color: theme.palette.grey[800] }}>
+            <Typography noWrap sx={{ fontWeight: 600, color: theme.palette.text.secondary }}>
               {item}
             </Typography>
             <ButtonBase
@@ -80,16 +80,16 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                   variant="determinate"
                   value={progress}
                 />
-                <Typography sx={{ fontSize: 12, ml: 1, color: theme.palette.text.secondary }}>
+                <Typography sx={{ fontSize: 12, ml: 1, color: theme.palette.text.disabled }}>
                   {progress}MB / 100MB
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center">
                 <IonArrowDownC sx={{ fontSize: 12 }} color="warning" />
-                <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary }}>{progress}MB/s</Typography>
+                <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>{progress}MB/s</Typography>
               </Stack>
             </Stack>
-            <Typography sx={{ fontSize: 12, color: theme.palette.text.secondary }}>00:{progress}:00</Typography>
+            <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>00:{progress}:00</Typography>
           </Stack>
         </ListItemText>
       </ListItemButton>

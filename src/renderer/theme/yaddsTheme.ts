@@ -1,10 +1,62 @@
-import { createTheme } from '@mui/material';
+import { createTheme, PaletteMode } from '@mui/material';
 
-const yaddsPalette = createTheme({
+declare module '@mui/material/styles' {
+  interface Palette {
+    input: {
+      default: string;
+    };
+    card: {
+      default: string;
+    };
+  }
+  interface PaletteOptions {
+    input?: {
+      default: string;
+    };
+    card?: {
+      default: string;
+    };
+  }
+}
+
+const designTokens = (mode: PaletteMode) => ({
   palette: {
-    primary: {
+    mode,
+    [(mode === 'light' && 'primary') as string]: {
       main: '#007fff',
       dark: '#0059b2',
+    },
+    [(mode === 'dark' && 'primary') as string]: {
+      main: '#007fff',
+      dark: '#0059b2',
+    },
+    [(mode === 'light' && 'text') as string]: {
+      primary: '#424242',
+      secondary: '#636363',
+      disabled: '#A7A7A7',
+    },
+    [(mode === 'dark' && 'text') as string]: {
+      primary: '#EBEBEB',
+      secondary: '#BABBBA',
+      disabled: '#747474',
+    },
+    [(mode === 'light' && 'background') as string]: {
+      paper: '#FFFFFF',
+    },
+    [(mode === 'dark' && 'background') as string]: {
+      paper: '#282828',
+    },
+    [(mode === 'light' && 'input') as string]: {
+      default: '#F5F5F5',
+    },
+    [(mode === 'dark' && 'input') as string]: {
+      default: '#4B4B4B',
+    },
+    [(mode === 'light' && 'card') as string]: {
+      default: '#F5F5F5',
+    },
+    [(mode === 'dark' && 'card') as string]: {
+      default: '#3A3A3A',
     },
   },
   shape: {
@@ -28,7 +80,7 @@ const yaddsPalette = createTheme({
   },
 });
 
-const yaddsTheme = createTheme(yaddsPalette, {
+const customizeCompnents = {
   components: {
     MuiTypography: {
       styleOverrides: {
@@ -77,6 +129,10 @@ const yaddsTheme = createTheme(yaddsPalette, {
       },
     },
   },
-});
+};
+
+const yaddsTheme = (mode: 'light' | 'dark') => {
+  return createTheme(designTokens(mode), customizeCompnents);
+};
 
 export default yaddsTheme;

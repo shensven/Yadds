@@ -47,7 +47,7 @@ const SettingsFormItem: React.FC<SettingsFormItemProps> = (props: SettingsFormIt
   return (
     <Stack flex={1} flexDirection="row" padding={theme.spacing(2)}>
       <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ minWidth: LABEL_WIDTH, width: '20%' }}>
-        <Typography variant="subtitle2" color={theme.palette.grey[800]}>
+        <Typography variant="subtitle2" color={theme.palette.text.primary}>
           {label}
         </Typography>
       </FormControl>
@@ -159,7 +159,7 @@ const Settings: React.FC = () => {
     <Box>
       <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} />
       <Stack sx={{ px: theme.spacing(4), pb: theme.spacing(4) }}>
-        <Typography variant="h3" color={theme.palette.grey[900]} sx={{ mb: theme.spacing(2) }}>
+        <Typography variant="h3" color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
           设置
         </Typography>
         {/* appearance */}
@@ -184,7 +184,9 @@ const Settings: React.FC = () => {
                 </Box>
                 <Typography
                   variant="overline"
-                  color={yaddsAppearance === item.themeSource ? theme.palette.grey[900] : theme.palette.grey[500]}
+                  color={
+                    yaddsAppearance === item.themeSource ? theme.palette.text.secondary : theme.palette.text.disabled
+                  }
                 >
                   {item.label}
                 </Typography>

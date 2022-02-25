@@ -67,7 +67,7 @@ const StyledSearch = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.grey[100],
+  backgroundColor: theme.palette.input.default,
   '&:hover': {
     backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
   },
@@ -145,12 +145,12 @@ const YaddsMain: React.FC = () => {
               spellCheck={false}
               size="small"
               placeholder="搜索..."
-              sx={{ fontSize: 12, color: theme.palette.grey[800] }}
+              sx={{ fontSize: 12, color: theme.palette.text.primary }}
             />
           </StyledSearch>
           <Button
             sx={{
-              backgroundColor: theme.palette.grey[100],
+              backgroundColor: theme.palette.input.default,
               borderRadius: 8,
               mr: theme.spacing(2),
               appRegion: 'no-drag',
@@ -165,7 +165,7 @@ const YaddsMain: React.FC = () => {
           <IconButton
             color="primary"
             size="small"
-            sx={{ backgroundColor: theme.palette.grey[100], appRegion: 'no-drag' }}
+            sx={{ backgroundColor: theme.palette.input.default, appRegion: 'no-drag' }}
             onClick={() => handleContextMenu()}
           >
             <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />

@@ -41,7 +41,12 @@ const YaddsDrawer: React.FC = () => {
   const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
 
   const category: Category[] = [
-    { path: '/queueAll', name: '全部下载项目', activeIcon: <IonShapes />, inactiveIcon: <IonShapesOutline /> },
+    {
+      path: '/queueAll',
+      name: '全部下载项目',
+      activeIcon: <IonShapes />,
+      inactiveIcon: <IonShapesOutline />,
+    },
     {
       path: '/queueDownloading',
       name: '下载中',
@@ -104,13 +109,16 @@ const YaddsDrawer: React.FC = () => {
                 navigate(item.path);
               }}
             >
-              <ListItemIcon>{yaddsDrawerCategory === item.path ? item.activeIcon : item.inactiveIcon}</ListItemIcon>
+              <ListItemIcon sx={{ color: theme.palette.text.secondary }}>
+                {yaddsDrawerCategory === item.path ? item.activeIcon : item.inactiveIcon}
+              </ListItemIcon>
               <ListItemText
                 primary={
                   <Typography
                     style={{
                       fontWeight: yaddsDrawerCategory === item.path ? 600 : 400,
-                      color: yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.grey[800],
+                      color:
+                        yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.text.primary,
                     }}
                   >
                     {item.name}
@@ -133,7 +141,9 @@ const YaddsDrawer: React.FC = () => {
               navigate('/settings');
             }}
           >
-            <ListItemIcon>{yaddsDrawerCategory === '/settings' ? <IonCog /> : <IonCogOutline />}</ListItemIcon>
+            <ListItemIcon sx={{ color: theme.palette.text.secondary }}>
+              {yaddsDrawerCategory === '/settings' ? <IonCog /> : <IonCogOutline />}
+            </ListItemIcon>
             <ListItemText
               primary={
                 <Typography
