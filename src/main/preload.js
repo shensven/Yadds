@@ -21,6 +21,22 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
+  setNativeTheme: (themeSource) => {
+    switch (themeSource) {
+      case 'light':
+        ipcRenderer.invoke('dark-mode:light');
+        break;
+      case 'dark':
+        ipcRenderer.invoke('dark-mode:dark');
+        break;
+      case 'system':
+        ipcRenderer.invoke('dark-mode:system');
+        break;
+      default:
+        ipcRenderer.invoke('dark-mode:system');
+    }
+  },
+
   store: {
     get(val) {
       return ipcRenderer.sendSync('get-electron-store', val);

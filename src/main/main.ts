@@ -11,7 +11,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, Menu, nativeTheme } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -34,6 +34,16 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.handle('dark-mode:light', async () => {
+  nativeTheme.themeSource = 'light';
+});
+ipcMain.handle('dark-mode:dark', async () => {
+  nativeTheme.themeSource = 'dark';
+});
+ipcMain.handle('dark-mode:system', async () => {
+  nativeTheme.themeSource = 'system';
 });
 
 ipcMain.on('get-electron-store', async (event, val) => {
@@ -166,7 +176,7 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-app.commandLine.appendSwitch('force_high_performance_gpu')
+app.commandLine.appendSwitch('force_high_performance_gpu');
 
 /**
  * Add event listeners...

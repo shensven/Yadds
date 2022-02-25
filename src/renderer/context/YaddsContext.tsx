@@ -14,8 +14,8 @@ interface CtxType {
   yaddsDrawerCategory: string;
   setYaddsDrawerCategory: (yaddsDrawerCategory: string) => void;
 
-  yaddsAppearanceIndex: number;
-  setYaddsAppearanceIndex: (yaddsAppearanceIndex: number) => void;
+  yaddsAppearance: string;
+  setYaddsAppearance: (yaddsAppearance: string) => void;
 
   yaddsI18nCode: string;
   setYaddsI18nCode: (yaddsI18nCode: string) => void;
@@ -40,8 +40,8 @@ export const YaddsCtx = createContext<CtxType>({
   yaddsDrawerCategory: '',
   setYaddsDrawerCategory: () => null,
 
-  yaddsAppearanceIndex: 0,
-  setYaddsAppearanceIndex: () => null,
+  yaddsAppearance: 'system',
+  setYaddsAppearance: () => null,
 
   yaddsI18nCode: 'en',
   setYaddsI18nCode: () => null,
@@ -72,8 +72,8 @@ export const YaddsProvider: React.FC = (props) => {
     (window.electron?.store.get('yaddsDrawerCategory') as string) ?? '/queueAll'
   );
 
-  const [YaddsAppearanceIndexVal, setYaddsAppearanceIndexVal] = useState<number>(
-    (window.electron?.store.get('yaddsAppearanceIndex') as number) ?? 0
+  const [YaddsAppearanceVal, setYaddsAppearanceVal] = useState<string>(
+    (window.electron?.store.get('yaddsAppearance') as string) ?? 'system'
   );
 
   const [yaddsI18nCodeVal, setYaddsI18nCodeVal] = useState<string>(
@@ -113,10 +113,10 @@ export const YaddsProvider: React.FC = (props) => {
       window.electron.store.set('yaddsDrawerCategory', str);
     },
 
-    yaddsAppearanceIndex: YaddsAppearanceIndexVal,
-    setYaddsAppearanceIndex: (index: number) => {
-      setYaddsAppearanceIndexVal(index);
-      window.electron.store.set('yaddsAppearanceIndex', index);
+    yaddsAppearance: YaddsAppearanceVal,
+    setYaddsAppearance: (str: string) => {
+      setYaddsAppearanceVal(str);
+      window.electron.store.set('yaddsAppearance', str);
     },
 
     yaddsI18nCode: yaddsI18nCodeVal,

@@ -63,8 +63,8 @@ const Settings: React.FC = () => {
   const theme = useTheme();
 
   const {
-    yaddsAppearanceIndex,
-    setYaddsAppearanceIndex,
+    yaddsAppearance,
+    setYaddsAppearance,
     yaddsI18nCode,
     setYaddsI18nCode,
     isYaddsAutoLaunch,
@@ -91,15 +91,30 @@ const Settings: React.FC = () => {
   });
 
   interface AppearanceItem {
-    id: number;
+    themeSource: 'system' | 'light' | 'dark';
     label: string;
     appearanceSrc: string;
     appearanceNoColorSrc: string;
   }
   const appearanceItemArray: AppearanceItem[] = [
-    { id: 0, label: '浅色', appearanceSrc: AppearanceLight, appearanceNoColorSrc: AppearanceLightNoColor },
-    { id: 1, label: '深色', appearanceSrc: AppearanceDark, appearanceNoColorSrc: AppearanceDarkNoColor },
-    { id: 2, label: '跟随系统', appearanceSrc: AppearanceAuto, appearanceNoColorSrc: AppearanceAutoNoColor },
+    {
+      themeSource: 'light',
+      label: '浅色',
+      appearanceSrc: AppearanceLight,
+      appearanceNoColorSrc: AppearanceLightNoColor,
+    },
+    {
+      themeSource: 'dark',
+      label: '深色',
+      appearanceSrc: AppearanceDark,
+      appearanceNoColorSrc: AppearanceDarkNoColor,
+    },
+    {
+      themeSource: 'system',
+      label: '跟随系统',
+      appearanceSrc: AppearanceAuto,
+      appearanceNoColorSrc: AppearanceAutoNoColor,
+    },
   ];
 
   interface I18nItem {
@@ -153,11 +168,14 @@ const Settings: React.FC = () => {
             {appearanceItemArray.map((item: AppearanceItem) => (
               <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>
                 <Box
-                  sx={{ filter: yaddsAppearanceIndex === item.id ? 'brightness(100%)' : 'brightness(75%)' }}
-                  onClick={() => setYaddsAppearanceIndex(item.id)}
+                  sx={{ filter: yaddsAppearance === item.themeSource ? 'brightness(100%)' : 'brightness(75%)' }}
+                  onClick={() => {
+                    setYaddsAppearance(item.themeSource);
+                    window.electron.setNativeTheme(item.themeSource);
+                  }}
                 >
                   <img
-                    src={yaddsAppearanceIndex === item.id ? item.appearanceSrc : item.appearanceNoColorSrc}
+                    src={yaddsAppearance === item.themeSource ? item.appearanceSrc : item.appearanceNoColorSrc}
                     alt=""
                     draggable="false"
                     width={67}
@@ -166,7 +184,7 @@ const Settings: React.FC = () => {
                 </Box>
                 <Typography
                   variant="overline"
-                  color={yaddsAppearanceIndex === item.id ? theme.palette.grey[900] : theme.palette.grey[500]}
+                  color={yaddsAppearance === item.themeSource ? theme.palette.grey[900] : theme.palette.grey[500]}
                 >
                   {item.label}
                 </Typography>
