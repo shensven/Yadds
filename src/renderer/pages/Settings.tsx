@@ -64,17 +64,17 @@ const Settings: React.FC = () => {
 
   const {
     yaddsAppearance,
-    setYaddsAppearance,
+    persistYaddsAppearance,
     yaddsI18nCode,
-    setYaddsI18nCode,
+    persistYaddsI18nCode,
     isYaddsAutoLaunch,
-    setIsYaddsAutoLaunch,
+    persistIsYaddsAutoLaunch,
     isYaddsAutoUpdate,
-    setIsYaddsAutoUpdate,
+    persistIsYaddsAutoUpdate,
     dsmConnectList,
-    setDsmConnectList,
+    persistDsmConnectList,
     dsmConnectIndex,
-    setDsmConnectIndex,
+    persistDsmConnectIndex,
   } = useContext(YaddsCtx);
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
@@ -135,7 +135,7 @@ const Settings: React.FC = () => {
       return;
     }
     // console.log(isDelete);
-    setDsmConnectIndex(menuItemAddressIndex);
+    persistDsmConnectIndex(menuItemAddressIndex);
     setIsSelectOpen(false);
   };
 
@@ -170,8 +170,8 @@ const Settings: React.FC = () => {
                 <Box
                   sx={{ filter: yaddsAppearance === item.themeSource ? 'brightness(100%)' : 'brightness(75%)' }}
                   onClick={() => {
-                    setYaddsAppearance(item.themeSource);
-                    window.electron.setNativeTheme(item.themeSource);
+                    persistYaddsAppearance(item.themeSource);
+                    window.electron.toggleNativeTheme(item.themeSource);
                   }}
                 >
                   <img
@@ -250,7 +250,7 @@ const Settings: React.FC = () => {
                 checked={yaddsI18nCode === item.languageCode}
                 label={<Typography variant="subtitle2">{item.label}</Typography>}
                 control={<Radio size="small" checked={yaddsI18nCode === item.languageCode} />}
-                onClick={() => setYaddsI18nCode(item.languageCode)}
+                onClick={() => persistYaddsI18nCode(item.languageCode)}
               />
             ))}
           </FormGroup>
@@ -262,13 +262,13 @@ const Settings: React.FC = () => {
               checked={isYaddsAutoLaunch}
               label={<Typography variant="subtitle2">登录时启动</Typography>}
               control={<Checkbox size="small" checked={isYaddsAutoLaunch} />}
-              onClick={() => setIsYaddsAutoLaunch(!isYaddsAutoLaunch)}
+              onClick={() => persistIsYaddsAutoLaunch(!isYaddsAutoLaunch)}
             />
             <FormControlLabel
               checked={isYaddsAutoUpdate}
               label={<Typography variant="subtitle2">自动更新</Typography>}
               control={<Checkbox size="small" checked={isYaddsAutoUpdate} />}
-              onClick={() => setIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
+              onClick={() => persistIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
             />
             <FormHelperText>当前版本 {window.electron.getAppVersion()}</FormHelperText>
           </FormGroup>
@@ -414,7 +414,7 @@ const Settings: React.FC = () => {
           <Button color="inherit" onClick={() => console.log(dsmConnectList)}>
             打印
           </Button>
-          <Button color="inherit" onClick={() => setDsmConnectList([])}>
+          <Button color="inherit" onClick={() => persistDsmConnectList([])}>
             清空
           </Button>
           <Button

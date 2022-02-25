@@ -38,7 +38,7 @@ const YaddsDrawer: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { hasYaddsDrawer, yaddsDrawerCategory, setYaddsDrawerCategory } = useContext(YaddsCtx);
+  const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
 
   const category: Category[] = [
     { path: '/queueAll', name: '全部下载项目', activeIcon: <IonShapes />, inactiveIcon: <IonShapesOutline /> },
@@ -100,7 +100,7 @@ const YaddsDrawer: React.FC = () => {
               disableRipple
               selected={yaddsDrawerCategory === item.path}
               onClick={() => {
-                setYaddsDrawerCategory(item.path);
+                persistYaddsDrawerCategory(item.path);
                 navigate(item.path);
               }}
             >
@@ -129,7 +129,7 @@ const YaddsDrawer: React.FC = () => {
             selected={yaddsDrawerCategory === '/settings'}
             sx={{ width: '100%' }}
             onClick={() => {
-              setYaddsDrawerCategory('/settings');
+              persistYaddsDrawerCategory('/settings');
               navigate('/settings');
             }}
           >

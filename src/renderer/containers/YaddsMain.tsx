@@ -104,7 +104,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
-  const { yaddsDrawerCategory, hasYaddsDrawer, setHasYaddsDrawer } = useContext(YaddsCtx);
+  const { yaddsDrawerCategory, hasYaddsDrawer, persistHasYaddsDrawer } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
   const template: MenuItemConstructorOptions[] = [
@@ -130,7 +130,7 @@ const YaddsMain: React.FC = () => {
           sx={{ height: 40 }}
           onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
           onMouseOut={() => setScr(inactiveSvg)}
-          onClick={() => setHasYaddsDrawer(!hasYaddsDrawer)}
+          onClick={() => persistHasYaddsDrawer(!hasYaddsDrawer)}
         >
           <img src={src} alt="" draggable="false" />
         </Icon>

@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  setNativeTheme: (themeSource) => {
+  toggleNativeTheme: (themeSource) => {
     switch (themeSource) {
       case 'light':
         ipcRenderer.invoke('dark-mode:light');

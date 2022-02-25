@@ -15,7 +15,7 @@ declare global {
         set: (key: string, val: unknown) => void;
       };
 
-      setNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
+      toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
 
       getOS: () => string;
 

@@ -9,54 +9,54 @@ export interface DsmConnectListType {
 
 interface CtxType {
   hasYaddsDrawer: boolean;
-  setHasYaddsDrawer: (hasYaddsDrawer: boolean) => void;
+  persistHasYaddsDrawer: (hasYaddsDrawer: boolean) => void;
 
   yaddsDrawerCategory: string;
-  setYaddsDrawerCategory: (yaddsDrawerCategory: string) => void;
+  persistYaddsDrawerCategory: (yaddsDrawerCategory: string) => void;
 
   yaddsAppearance: string;
-  setYaddsAppearance: (yaddsAppearance: string) => void;
+  persistYaddsAppearance: (yaddsAppearance: string) => void;
 
   yaddsI18nCode: string;
-  setYaddsI18nCode: (yaddsI18nCode: string) => void;
+  persistYaddsI18nCode: (yaddsI18nCode: string) => void;
 
   isYaddsAutoLaunch: boolean;
-  setIsYaddsAutoLaunch: (isYaddsAutoLaunch: boolean) => void;
+  persistIsYaddsAutoLaunch: (isYaddsAutoLaunch: boolean) => void;
 
   isYaddsAutoUpdate: boolean;
-  setIsYaddsAutoUpdate: (isYaddsAutoUpdate: boolean) => void;
+  persistIsYaddsAutoUpdate: (isYaddsAutoUpdate: boolean) => void;
 
   dsmConnectList: DsmConnectListType[];
-  setDsmConnectList: (arr: DsmConnectListType[]) => void;
+  persistDsmConnectList: (arr: DsmConnectListType[]) => void;
 
   dsmConnectIndex: number;
-  setDsmConnectIndex: (index: number) => void;
+  persistDsmConnectIndex: (index: number) => void;
 }
 
 export const YaddsCtx = createContext<CtxType>({
   hasYaddsDrawer: true,
-  setHasYaddsDrawer: () => {},
+  persistHasYaddsDrawer: () => {},
 
   yaddsDrawerCategory: '',
-  setYaddsDrawerCategory: () => null,
+  persistYaddsDrawerCategory: () => null,
 
   yaddsAppearance: 'system',
-  setYaddsAppearance: () => null,
+  persistYaddsAppearance: () => null,
 
   yaddsI18nCode: 'en',
-  setYaddsI18nCode: () => null,
+  persistYaddsI18nCode: () => null,
 
   isYaddsAutoLaunch: false,
-  setIsYaddsAutoLaunch: () => null,
+  persistIsYaddsAutoLaunch: () => null,
 
   isYaddsAutoUpdate: false,
-  setIsYaddsAutoUpdate: () => null,
+  persistIsYaddsAutoUpdate: () => null,
 
   dsmConnectList: [],
-  setDsmConnectList: () => null,
+  persistDsmConnectList: () => null,
 
   dsmConnectIndex: 0,
-  setDsmConnectIndex: () => null,
+  persistDsmConnectIndex: () => null,
 });
 
 export const YaddsProvider: React.FC = (props) => {
@@ -102,37 +102,37 @@ export const YaddsProvider: React.FC = (props) => {
 
   const ctxValue = {
     hasYaddsDrawer: hasYaddsDrawerVal,
-    setHasYaddsDrawer: (bool: boolean) => {
+    persistHasYaddsDrawer: (bool: boolean) => {
       setHasYaddsDrawerVal(bool);
       window.electron.store.set('hasYaddsDrawer', bool);
     },
 
     yaddsDrawerCategory: yaddsDrawerCategoryVal,
-    setYaddsDrawerCategory: (str: string) => {
+    persistYaddsDrawerCategory: (str: string) => {
       setYaddsDrawerCategoryVal(str);
       window.electron.store.set('yaddsDrawerCategory', str);
     },
 
     yaddsAppearance: YaddsAppearanceVal,
-    setYaddsAppearance: (str: string) => {
+    persistYaddsAppearance: (str: string) => {
       setYaddsAppearanceVal(str);
       window.electron.store.set('yaddsAppearance', str);
     },
 
     yaddsI18nCode: yaddsI18nCodeVal,
-    setYaddsI18nCode: (code: string) => {
+    persistYaddsI18nCode: (code: string) => {
       setYaddsI18nCodeVal(code);
       window.electron.store.set('yaddsI18nCode', code);
     },
 
     isYaddsAutoLaunch: isYaddsAutoLaunchVal,
-    setIsYaddsAutoLaunch: (bool: boolean) => {
+    persistIsYaddsAutoLaunch: (bool: boolean) => {
       setIsYaddsAutoLaunchVal(bool);
       window.electron.store.set('isYaddsAutoLaunch', bool);
     },
 
     isYaddsAutoUpdate: isYaddsAutoUpdateVal,
-    setIsYaddsAutoUpdate: (bool: boolean) => {
+    persistIsYaddsAutoUpdate: (bool: boolean) => {
       setIsYaddsAutoUpdateVal(bool);
       window.electron.store.set('isYaddsAutoUpdate', bool);
     },
@@ -140,13 +140,13 @@ export const YaddsProvider: React.FC = (props) => {
     // ---------------------------------------------------------------------------
 
     dsmConnectList: dsmConnectListVal,
-    setDsmConnectList: (arr: DsmConnectListType[]) => {
+    persistDsmConnectList: (arr: DsmConnectListType[]) => {
       setDsmConnectListVal(arr);
       window.electron.store.set('dsmConnectList', arr);
     },
 
     dsmConnectIndex: dsmConnectIndexVal,
-    setDsmConnectIndex: (index: number) => {
+    persistDsmConnectIndex: (index: number) => {
       setDsmConnectIndexVal(index);
       window.electron.store.set('dsmConnectIndex', index);
     },
