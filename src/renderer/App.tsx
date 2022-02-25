@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
+import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { MenuItemConstructorOptions } from 'electron';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import yaddsTheme from './theme/yaddsTheme';
@@ -54,6 +54,7 @@ const DesignSystem: React.FC = () => {
 
   return (
     <ThemeProvider theme={yaddsTheme(toogleMUITheme())}>
+      <CssBaseline />
       <StyledEngineProvider injectFirst>
         <MemoryRouter>
           <Stack direction="row">
