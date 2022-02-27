@@ -38,12 +38,27 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 ipcMain.handle('dark-mode:light', async () => {
   nativeTheme.themeSource = 'light';
+  if (process.platform === 'win32') {
+    mainWindow?.setBackgroundColor('#f3f3f3');
+  }
 });
 ipcMain.handle('dark-mode:dark', async () => {
   nativeTheme.themeSource = 'dark';
+  if (process.platform === 'win32') {
+    mainWindow?.setBackgroundColor('#202020');
+  }
 });
 ipcMain.handle('dark-mode:system', async () => {
   nativeTheme.themeSource = 'system';
+  if (process.platform === 'win32') {
+    if (nativeTheme.shouldUseDarkColors) {
+      // dark mode
+      mainWindow?.setBackgroundColor('#202020');
+    } else {
+      // light mode
+      mainWindow?.setBackgroundColor('#f3f3f3');
+    }
+  }
 });
 
 ipcMain.on('get-electron-store', async (event, val) => {
@@ -112,6 +127,8 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
+
   mainWindow = new BrowserWindow({
     show: false,
     x: (store.get('windowBounds.x') as number) || undefined,
@@ -122,7 +139,7 @@ const createWindow = async () => {
     minHeight: 768,
     titleBarStyle: 'hiddenInset',
     [(process.platform === 'darwin' && 'vibrancy') as string]: 'sidebar',
-    [(process.platform === 'win32' && 'backgroundColor') as string]: '#dcdee0',
+    [(process.platform === 'win32' && 'backgroundColor') as string]: '#f3f3f3',
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -176,12 +193,23 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
 app.commandLine.appendSwitch('force_high_performance_gpu');
 
 /**
  * Add event listeners...
  */
+
+nativeTheme.on('updated', () => {
+  if (process.platform === 'win32') {
+    if (nativeTheme.shouldUseDarkColors) {
+      // dark mode
+      mainWindow?.setBackgroundColor('#202020');
+    } else {
+      // light mode
+      mainWindow?.setBackgroundColor('#f3f3f3');
+    }
+  }
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
