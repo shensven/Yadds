@@ -11,7 +11,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, Menu, nativeTheme } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, Menu, nativeTheme, Tray, nativeImage } from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -28,6 +28,7 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let tray: Tray | null = null;
 const store = new Store({ encryptionKey: 'yadds0bfs' });
 
 ipcMain.on('ipc-example', async (event, arg) => {
@@ -101,6 +102,14 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
+const getAssetPath = (...paths: string[]): string => {
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets')
+    : path.join(__dirname, '../../assets');
+
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -118,14 +127,6 @@ const createWindow = async () => {
   if (isDevelopment) {
     await installExtensions();
   }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
 
@@ -175,9 +176,27 @@ const createWindow = async () => {
     }
   });
 
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
+  // mainWindow.on('closed', () => {
+  //   mainWindow = null;
+  // });
+
+  let willQuitApp = false;
+
+  if (process.platform === 'darwin') {
+    mainWindow?.on('close', (event: Event) => {
+      // console.log('close');
+      if (willQuitApp) {
+        app.exit();
+      } else {
+        event.preventDefault();
+        mainWindow?.hide();
+      }
+    });
+    app.on('before-quit', () => {
+      // console.log('before-quit');
+      willQuitApp = true;
+    });
+  }
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
@@ -191,6 +210,40 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+};
+
+const creatTray = async () => {
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: '显示主页面',
+      type: 'normal',
+      click: () => mainWindow?.show(),
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: '退出',
+      type: 'normal',
+      click: () => app.exit(),
+    },
+  ]);
+
+  const trayIcon = nativeImage.createFromPath(getAssetPath('tray.png'));
+
+  tray = new Tray(trayIcon);
+
+  if (process.platform === 'win32') {
+    tray.setToolTip('Yadds');
+  }
+
+  tray.setContextMenu(contextMenu);
+
+  tray.on('click', () => {
+    if (process.platform === 'win32') {
+      mainWindow?.show();
+    }
+  });
 };
 
 app.commandLine.appendSwitch('force_high_performance_gpu');
@@ -222,11 +275,15 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
+    creatTray();
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
+      // if (mainWindow === null) createWindow();
+      if (mainWindow?.isVisible() === false) {
+        mainWindow?.show();
+      }
     });
   })
   .catch(console.log);
