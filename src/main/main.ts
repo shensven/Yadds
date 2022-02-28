@@ -183,21 +183,19 @@ const createWindow = async () => {
 
   let willQuitApp = false;
 
-  if (process.platform === 'darwin') {
-    mainWindow?.on('close', (event: Event) => {
-      // console.log('close');
-      if (willQuitApp) {
-        app.exit();
-      } else {
-        event.preventDefault();
-        mainWindow?.hide();
-      }
-    });
-    app.on('before-quit', () => {
-      // console.log('before-quit');
-      willQuitApp = true;
-    });
-  }
+  mainWindow?.on('close', (event: Event) => {
+    // console.log('close');
+    if (willQuitApp) {
+      app.exit();
+    } else {
+      event.preventDefault();
+      mainWindow?.hide();
+    }
+  });
+  app.on('before-quit', () => {
+    // console.log('before-quit');
+    willQuitApp = true;
+  });
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
@@ -285,10 +283,28 @@ app.on('window-all-closed', () => {
   }
 });
 
-app
-  .whenReady()
-  .then(() => {
-    createWindow();
-    creatTray();
-  })
-  .catch(console.log);
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      if (mainWindow.isVisible() === false) {
+        mainWindow.show();
+      }
+      mainWindow.focus();
+    }
+  });
+
+  app
+    .whenReady()
+    .then(() => {
+      createWindow();
+      creatTray();
+    })
+    .catch(console.log);
+}
