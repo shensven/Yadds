@@ -141,7 +141,8 @@ const createWindow = async () => {
     titleBarStyle: 'hiddenInset',
     [(process.platform === 'darwin' && 'vibrancy') as string]: 'sidebar',
     [(process.platform === 'win32' && 'backgroundColor') as string]: '#f3f3f3',
-    icon: getAssetPath('icon.png'),
+    [(process.platform === 'darwin' && 'icon') as string]: getAssetPath('icon_darwin.png'),
+    [(process.platform === 'win32' && 'icon') as string]: getAssetPath('icon_win32.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },

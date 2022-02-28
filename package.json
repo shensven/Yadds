@@ -55,7 +55,7 @@
       "gatekeeperAssess": false
     },
     "dmg": {
-      "icon": "assets/installer.icns",
+      "icon": "assets/DMG_Installer.icns",
       "contents": [
         {
           "x": 130,
@@ -73,6 +73,9 @@
       "target": [
         "nsis"
       ]
+    },
+    "nsis": {
+      "installerIcon": "assets/NSIS_Installer.ico"
     },
     "linux": {
       "target": [
