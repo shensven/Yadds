@@ -55,6 +55,7 @@
       "gatekeeperAssess": false
     },
     "dmg": {
+      "icon": "assets/installer.icns",
       "contents": [
         {
           "x": 130,

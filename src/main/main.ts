@@ -229,7 +229,9 @@ const creatTray = async () => {
     },
   ]);
 
-  const trayIcon = nativeImage.createFromPath(getAssetPath('tray.png'));
+  const trayIcon = isDevelopment
+    ? nativeImage.createFromPath(getAssetPath('trayDevTemplate.png'))
+    : nativeImage.createFromPath(getAssetPath('trayTemplate.png'));
 
   tray = new Tray(trayIcon);
 
@@ -253,14 +255,24 @@ app.commandLine.appendSwitch('force_high_performance_gpu');
  */
 
 nativeTheme.on('updated', () => {
-  if (process.platform === 'win32') {
-    if (nativeTheme.shouldUseDarkColors) {
-      // dark mode
-      mainWindow?.setBackgroundColor('#202020');
-    } else {
-      // light mode
-      mainWindow?.setBackgroundColor('#f3f3f3');
-    }
+  switch (process.platform) {
+    case 'win32':
+      if (nativeTheme.shouldUseDarkColors) {
+        mainWindow?.setBackgroundColor('#202020');
+      } else {
+        mainWindow?.setBackgroundColor('#f3f3f3');
+      }
+      break;
+    default:
+  }
+});
+
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  // console.log('activate');
+  if (mainWindow?.isVisible() === false) {
+    mainWindow?.show();
   }
 });
 
@@ -275,15 +287,7 @@ app.on('window-all-closed', () => {
 app
   .whenReady()
   .then(() => {
-    creatTray();
     createWindow();
-    app.on('activate', () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      // if (mainWindow === null) createWindow();
-      if (mainWindow?.isVisible() === false) {
-        mainWindow?.show();
-      }
-    });
+    creatTray();
   })
   .catch(console.log);
