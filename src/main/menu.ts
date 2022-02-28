@@ -172,7 +172,7 @@ export default class MenuBuilder {
       ],
     };
     const subMenuNavigation: MenuItemConstructorOptions = {
-      // label: 'Navigation',
+      // label: 'Navigate',
       label: '前往',
       submenu: [
         {

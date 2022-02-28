@@ -27,6 +27,11 @@ export default class AppUpdater {
   }
 }
 
+const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+const isProduction = process.env.NODE_ENV === 'production';
+const isDarwin = process.platform === 'darwin';
+const isWin32 = process.platform === 'win32';
+
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 const store = new Store({ encryptionKey: 'yadds0bfs' });
@@ -39,19 +44,19 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 ipcMain.handle('dark-mode:light', async () => {
   nativeTheme.themeSource = 'light';
-  if (process.platform === 'win32') {
+  if (isWin32) {
     mainWindow?.setBackgroundColor('#f3f3f3');
   }
 });
 ipcMain.handle('dark-mode:dark', async () => {
   nativeTheme.themeSource = 'dark';
-  if (process.platform === 'win32') {
+  if (isWin32) {
     mainWindow?.setBackgroundColor('#202020');
   }
 });
 ipcMain.handle('dark-mode:system', async () => {
   nativeTheme.themeSource = 'system';
-  if (process.platform === 'win32') {
+  if (isWin32) {
     if (nativeTheme.shouldUseDarkColors) {
       // dark mode
       mainWindow?.setBackgroundColor('#202020');
@@ -91,15 +96,13 @@ ipcMain.on('axios-auth', async (event, quickConnectID: string, account: string, 
   event.sender.send('axios-auth-reply', respData);
 });
 
-if (process.env.NODE_ENV === 'production') {
-  const sourceMapSupport = require('source-map-support');
-  sourceMapSupport.install();
-}
-
-const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
 if (isDevelopment) {
   require('electron-debug')();
+}
+
+if (isProduction) {
+  const sourceMapSupport = require('source-map-support');
+  sourceMapSupport.install();
 }
 
 const getAssetPath = (...paths: string[]): string => {
@@ -110,22 +113,17 @@ const getAssetPath = (...paths: string[]): string => {
   return path.join(RESOURCES_PATH, ...paths);
 };
 
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
-
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload
-    )
-    .catch(console.log);
-};
-
 const createWindow = async () => {
   if (isDevelopment) {
-    await installExtensions();
+    const installer = require('electron-devtools-installer');
+    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+    const extensions = ['REACT_DEVELOPER_TOOLS'];
+    await installer
+      .default(
+        extensions.map((name) => installer[name]),
+        forceDownload
+      )
+      .catch(console.log);
   }
 
   nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
@@ -139,10 +137,10 @@ const createWindow = async () => {
     minWidth: 1024,
     minHeight: 768,
     titleBarStyle: 'hiddenInset',
-    [(process.platform === 'darwin' && 'vibrancy') as string]: 'sidebar',
-    [(process.platform === 'win32' && 'backgroundColor') as string]: '#f3f3f3',
-    [(process.platform === 'darwin' && 'icon') as string]: getAssetPath('icon_darwin.png'),
-    [(process.platform === 'win32' && 'icon') as string]: getAssetPath('icon_win32.png'),
+    [(isDarwin && 'vibrancy') as string]: 'sidebar',
+    [(isWin32 && 'backgroundColor') as string]: '#f3f3f3',
+    [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
+    [(isWin32 && 'icon') as string]: getAssetPath('icon_win32.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -177,14 +175,9 @@ const createWindow = async () => {
     }
   });
 
-  // mainWindow.on('closed', () => {
-  //   mainWindow = null;
-  // });
-
   let willQuitApp = false;
 
   mainWindow?.on('close', (event: Event) => {
-    // console.log('close');
     if (willQuitApp) {
       app.exit();
     } else {
@@ -193,7 +186,6 @@ const createWindow = async () => {
     }
   });
   app.on('before-quit', () => {
-    // console.log('before-quit');
     willQuitApp = true;
   });
 
@@ -234,17 +226,17 @@ const creatTray = async () => {
 
   tray = new Tray(trayIcon);
 
-  if (process.platform === 'win32') {
+  tray.on('click', () => {
+    if (isWin32) {
+      mainWindow?.show();
+    }
+  });
+
+  if (isWin32) {
     tray.setToolTip('Yadds');
   }
 
   tray.setContextMenu(contextMenu);
-
-  tray.on('click', () => {
-    if (process.platform === 'win32') {
-      mainWindow?.show();
-    }
-  });
 };
 
 app.commandLine.appendSwitch('force_high_performance_gpu');
@@ -254,22 +246,18 @@ app.commandLine.appendSwitch('force_high_performance_gpu');
  */
 
 nativeTheme.on('updated', () => {
-  switch (process.platform) {
-    case 'win32':
-      if (nativeTheme.shouldUseDarkColors) {
-        mainWindow?.setBackgroundColor('#202020');
-      } else {
-        mainWindow?.setBackgroundColor('#f3f3f3');
-      }
-      break;
-    default:
+  if (isWin32) {
+    if (nativeTheme.shouldUseDarkColors) {
+      mainWindow?.setBackgroundColor('#202020');
+    } else {
+      mainWindow?.setBackgroundColor('#f3f3f3');
+    }
   }
 });
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  // console.log('activate');
   if (mainWindow?.isVisible() === false) {
     mainWindow?.show();
   }
@@ -278,7 +266,7 @@ app.on('activate', () => {
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
-  if (process.platform !== 'darwin') {
+  if (!isDarwin) {
     app.quit();
   }
 });
@@ -293,7 +281,7 @@ if (!gotTheLock) {
       if (mainWindow.isMinimized()) {
         mainWindow.restore();
       }
-      if (mainWindow.isVisible() === false) {
+      if (!mainWindow.isVisible()) {
         mainWindow.show();
       }
       mainWindow.focus();
