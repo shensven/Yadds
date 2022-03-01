@@ -11,14 +11,14 @@ import './App.scss';
 declare global {
   interface Window {
     electron: {
+      toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
+
+      zoomWindow: () => void;
+
       store: {
         get: (key: string) => unknown;
         set: (key: string, val: unknown) => void;
       };
-
-      toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
-
-      listenPrefersColorScheme: () => void;
 
       getOS: () => string;
 

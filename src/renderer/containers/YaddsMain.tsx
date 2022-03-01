@@ -135,7 +135,11 @@ const YaddsMain: React.FC = () => {
           <img src={src} alt="" draggable="false" />
         </Icon>
       </Box>
-      <StyledAppBar sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }} elevation={0}>
+      <StyledAppBar
+        elevation={0}
+        sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }}
+        onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
+      >
         <Stack flexDirection="row" justifyContent="flex-end" sx={{ p: theme.spacing(2) }}>
           <StyledSearch sx={{ mr: theme.spacing(6), appRegion: 'no-drag' }}>
             <StyledSearchIconWrapper>

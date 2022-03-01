@@ -67,6 +67,14 @@ ipcMain.handle('dark-mode:system', async () => {
   }
 });
 
+ipcMain.handle('zoom-window', async () => {
+  if (mainWindow?.isMaximized()) {
+    mainWindow?.unmaximize();
+  } else {
+    mainWindow?.maximize();
+  }
+});
+
 ipcMain.on('get-electron-store', async (event, val) => {
   event.returnValue = store.get(val);
 });

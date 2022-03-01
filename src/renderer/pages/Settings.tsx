@@ -157,7 +157,10 @@ const Settings: React.FC = () => {
 
   return (
     <Box>
-      <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} />
+      <Box
+        sx={{ height: theme.spacing(5), appRegion: 'drag' }}
+        onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
+      />
       <Stack sx={{ px: theme.spacing(4), pb: theme.spacing(4) }}>
         <Typography variant="h3" color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
           设置

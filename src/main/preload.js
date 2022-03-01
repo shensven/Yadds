@@ -37,6 +37,10 @@ contextBridge.exposeInMainWorld('electron', {
     }
   },
 
+  zoomWindow: () => {
+    ipcRenderer.invoke('zoom-window');
+  },
+
   store: {
     get(val) {
       return ipcRenderer.sendSync('get-electron-store', val);
