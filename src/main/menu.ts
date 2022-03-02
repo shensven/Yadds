@@ -54,6 +54,7 @@ export default class MenuBuilder {
         {
           // label: 'Preferences',
           label: '偏好设置',
+          click: () => this.mainWindow.webContents.send('navigate', '/settings'),
         },
         {
           type: 'separator',
@@ -178,26 +179,32 @@ export default class MenuBuilder {
         {
           // label: 'Queue All',
           label: '全部下载项目',
+          click: () => this.mainWindow.webContents.send('navigate', '/queueAll'),
         },
         {
           // label: 'Queue Downloading',
           label: '下载中',
+          click: () => this.mainWindow.webContents.send('navigate', '/queueDownloading'),
         },
         {
           // label: 'Queue Finished',
           label: '已完成',
+          click: () => this.mainWindow.webContents.send('navigate', '/queueFinished'),
         },
         {
           // label: 'Queue Active',
           label: '进行中',
+          click: () => this.mainWindow.webContents.send('navigate', '/queueActive'),
         },
         {
           // label: 'Queue Inactive',
           label: '非进行中',
+          click: () => this.mainWindow.webContents.send('navigate', '/queueInactive'),
         },
         {
           // label: 'Queue Stoped',
           label: '停用',
+          click: () => this.mainWindow.webContents.send('navigate', '/queueStopped'),
         },
       ],
     };

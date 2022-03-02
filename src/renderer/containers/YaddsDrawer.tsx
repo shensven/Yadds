@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Drawer,
@@ -39,6 +39,10 @@ const YaddsDrawer: React.FC = () => {
   const theme = useTheme();
 
   const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
+  useEffect(() => {
+    window.electron?.navigateTo(navigate, persistYaddsDrawerCategory);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const category: Category[] = [
     {

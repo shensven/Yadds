@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { MenuItemConstructorOptions } from 'electron';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
@@ -14,6 +14,11 @@ declare global {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
 
       zoomWindow: () => void;
+
+      navigateTo: (
+        navigateViaReact: NavigateFunction,
+        persistYaddsDrawerCategory: (yaddsDrawerCategory: string) => void
+      ) => void;
 
       store: {
         get: (key: string) => unknown;

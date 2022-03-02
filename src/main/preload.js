@@ -41,6 +41,13 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('zoom-window');
   },
 
+  navigateTo: (navigateViaReact, persistYaddsDrawerCategory) => {
+    ipcRenderer.on('navigate', (event, ...arg) => {
+      navigateViaReact(...arg);
+      persistYaddsDrawerCategory(...arg);
+    });
+  },
+
   store: {
     get(val) {
       return ipcRenderer.sendSync('get-electron-store', val);
