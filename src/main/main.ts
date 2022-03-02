@@ -91,11 +91,11 @@ ipcMain.on('get-app-version', async (event) => {
   event.returnValue = app.getVersion();
 });
 
-ipcMain.on('popup-context-menu', async (_, props) => {
+ipcMain.handle('popup-context-menu', async (_, props) => {
   Menu.buildFromTemplate(props).popup();
 });
 
-ipcMain.on('open-via-broswer', async (_, url) => {
+ipcMain.handle('open-via-broswer', async (_, url) => {
   shell.openExternal(url);
 });
 

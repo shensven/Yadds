@@ -59,11 +59,11 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   popupContextMenu: (props) => {
-    ipcRenderer.send('popup-context-menu', props);
+    ipcRenderer.invoke('popup-context-menu', props);
   },
 
   openViaBrowser: (url) => {
-    ipcRenderer.send('open-via-broswer', url);
+    ipcRenderer.invoke('open-via-broswer', url);
   },
 
   net: {
