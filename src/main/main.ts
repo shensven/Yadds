@@ -42,68 +42,6 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.handle('dark-mode:light', async () => {
-  nativeTheme.themeSource = 'light';
-  if (isWin32) {
-    mainWindow?.setBackgroundColor('#f3f3f3');
-  }
-});
-ipcMain.handle('dark-mode:dark', async () => {
-  nativeTheme.themeSource = 'dark';
-  if (isWin32) {
-    mainWindow?.setBackgroundColor('#202020');
-  }
-});
-ipcMain.handle('dark-mode:system', async () => {
-  nativeTheme.themeSource = 'system';
-  if (isWin32) {
-    if (nativeTheme.shouldUseDarkColors) {
-      // dark mode
-      mainWindow?.setBackgroundColor('#202020');
-    } else {
-      // light mode
-      mainWindow?.setBackgroundColor('#f3f3f3');
-    }
-  }
-});
-
-ipcMain.handle('zoom-window', async () => {
-  if (mainWindow?.isMaximized()) {
-    mainWindow?.unmaximize();
-  } else {
-    mainWindow?.maximize();
-  }
-});
-
-ipcMain.on('get-electron-store', async (event, val) => {
-  event.returnValue = store.get(val);
-});
-
-ipcMain.on('set-electron-store', async (_, key, val) => {
-  store.set(key, val);
-});
-
-ipcMain.on('get-os-platform', async (event) => {
-  event.returnValue = process.platform;
-});
-
-ipcMain.on('get-app-version', async (event) => {
-  event.returnValue = app.getVersion();
-});
-
-ipcMain.handle('popup-context-menu', async (_, props) => {
-  Menu.buildFromTemplate(props).popup();
-});
-
-ipcMain.handle('open-via-broswer', async (_, url) => {
-  shell.openExternal(url);
-});
-
-ipcMain.on('axios-auth', async (event, quickConnectID: string, account: string, passwd: string) => {
-  const respData = await auth(quickConnectID, account, passwd);
-  event.sender.send('axios-auth-reply', respData);
-});
-
 if (isDevelopment) {
   require('electron-debug')();
 }
@@ -304,3 +242,65 @@ if (!gotTheLock) {
     })
     .catch(console.log);
 }
+
+ipcMain.handle('dark-mode:light', async () => {
+  nativeTheme.themeSource = 'light';
+  if (isWin32) {
+    mainWindow?.setBackgroundColor('#f3f3f3');
+  }
+});
+ipcMain.handle('dark-mode:dark', async () => {
+  nativeTheme.themeSource = 'dark';
+  if (isWin32) {
+    mainWindow?.setBackgroundColor('#202020');
+  }
+});
+ipcMain.handle('dark-mode:system', async () => {
+  nativeTheme.themeSource = 'system';
+  if (isWin32) {
+    if (nativeTheme.shouldUseDarkColors) {
+      // dark mode
+      mainWindow?.setBackgroundColor('#202020');
+    } else {
+      // light mode
+      mainWindow?.setBackgroundColor('#f3f3f3');
+    }
+  }
+});
+
+ipcMain.handle('zoom-window', async () => {
+  if (mainWindow?.isMaximized()) {
+    mainWindow?.unmaximize();
+  } else {
+    mainWindow?.maximize();
+  }
+});
+
+ipcMain.on('get-electron-store', async (event, val) => {
+  event.returnValue = store.get(val);
+});
+
+ipcMain.on('set-electron-store', async (_, key, val) => {
+  store.set(key, val);
+});
+
+ipcMain.on('get-os-platform', async (event) => {
+  event.returnValue = process.platform;
+});
+
+ipcMain.on('get-app-version', async (event) => {
+  event.returnValue = app.getVersion();
+});
+
+ipcMain.handle('popup-context-menu', async (_, props) => {
+  Menu.buildFromTemplate(props).popup();
+});
+
+ipcMain.handle('open-via-broswer', async (_, url) => {
+  shell.openExternal(url);
+});
+
+ipcMain.on('axios-auth', async (event, quickConnectID: string, account: string, passwd: string) => {
+  const respData = await auth(quickConnectID, account, passwd);
+  event.sender.send('axios-auth-reply', respData);
+});
