@@ -15,6 +15,8 @@ declare global {
 
       zoomWindow: () => void;
 
+      toogleSidebar: (hasYaddsDrawer: boolean, persistHasYaddsDrawer: (hasYaddsDrawer: boolean) => void) => void;
+
       navigateTo: (
         navigateViaReact: NavigateFunction,
         persistYaddsDrawerCategory: (yaddsDrawerCategory: string) => void

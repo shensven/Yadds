@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions } from 'electron';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   alpha,
   Box,
@@ -106,6 +106,11 @@ const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { yaddsDrawerCategory, hasYaddsDrawer, persistHasYaddsDrawer } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
+
+  useEffect(() => {
+    window.electron?.toogleSidebar(hasYaddsDrawer, persistHasYaddsDrawer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasYaddsDrawer]);
 
   const template: MenuItemConstructorOptions[] = [
     { label: '全部开始' },

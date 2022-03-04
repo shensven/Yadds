@@ -153,6 +153,10 @@ export default class MenuBuilder {
           type: 'separator',
         },
         {
+          label: '显示/隐藏 侧边栏',
+          click: () => this.mainWindow.webContents.send('toogle-sidebar'),
+        },
+        {
           // label: 'Toggle Full Screen',
           label: '进入全屏幕',
           accelerator: 'Ctrl+Command+F',
@@ -164,6 +168,10 @@ export default class MenuBuilder {
       // label: 'View',
       label: '显示',
       submenu: [
+        {
+          label: '显示/隐藏 侧边栏',
+          click: () => this.mainWindow.webContents.send('toogle-sidebar'),
+        },
         {
           // label: 'Toggle Full Screen',
           label: '进入全屏幕',

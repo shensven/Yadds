@@ -41,6 +41,13 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('zoom-window');
   },
 
+  toogleSidebar: (hasYaddsDrawer, persistHasYaddsDrawer) => {
+    ipcRenderer.removeAllListeners('toogle-sidebar');
+    ipcRenderer.on('toogle-sidebar', () => {
+      persistHasYaddsDrawer(!hasYaddsDrawer);
+    });
+  },
+
   navigateTo: (navigateViaReact, persistYaddsDrawerCategory) => {
     ipcRenderer.on('navigate', (event, ...arg) => {
       navigateViaReact(...arg);
