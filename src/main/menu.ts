@@ -54,6 +54,7 @@ export default class MenuBuilder {
         {
           // label: 'Preferences',
           label: '偏好设置',
+          accelerator: 'Command+,',
           click: () => this.mainWindow.webContents.send('navigate', '/settings'),
         },
         {
@@ -155,6 +156,9 @@ export default class MenuBuilder {
         {
           label: '显示/隐藏 侧边栏',
           click: () => this.mainWindow.webContents.send('toogle-sidebar'),
+        },
+        {
+          type: 'separator',
         },
         {
           // label: 'Toggle Full Screen',

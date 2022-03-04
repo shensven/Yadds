@@ -47,7 +47,7 @@ const SettingsFormItem: React.FC<SettingsFormItemProps> = (props: SettingsFormIt
   return (
     <Stack flex={1} flexDirection="row" padding={theme.spacing(2)}>
       <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ minWidth: LABEL_WIDTH, width: '20%' }}>
-        <Typography variant="subtitle2" color={theme.palette.text.primary}>
+        <Typography variant="subtitle2" fontWeight={800} color={theme.palette.text.primary}>
           {label}
         </Typography>
       </FormControl>
@@ -161,8 +161,8 @@ const Settings: React.FC = () => {
         sx={{ height: theme.spacing(5), appRegion: 'drag' }}
         onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
       />
-      <Stack sx={{ px: theme.spacing(4), pb: theme.spacing(4) }}>
-        <Typography variant="h3" color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
+      <Stack sx={{ pl: theme.spacing(2) }}>
+        <Typography variant="h3" fontWeight={500} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
           设置
         </Typography>
         {/* appearance */}

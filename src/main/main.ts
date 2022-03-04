@@ -78,11 +78,12 @@ const createWindow = async () => {
     show: false,
     x: (store.get('windowBounds.x') as number) || undefined,
     y: (store.get('windowBounds.y') as number) || undefined,
-    width: (store.get('windowBounds.width') as number) || 1024,
-    height: (store.get('windowBounds.height') as number) || 768,
-    minWidth: 1024,
-    minHeight: 768,
-    titleBarStyle: 'hiddenInset',
+    width: (store.get('windowBounds.width') as number) || 960,
+    height: (store.get('windowBounds.height') as number) || 720,
+    minWidth: 960,
+    minHeight: 720,
+    titleBarStyle: 'hidden',
+    // trafficLightPosition: { x: 19, y: 19 },
     [(isDarwin && 'vibrancy') as string]: 'sidebar',
     [(isWin32 && 'backgroundColor') as string]: '#f3f3f3',
     [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
@@ -107,13 +108,6 @@ const createWindow = async () => {
     }
   });
 
-  mainWindow.on('resized', () => {
-    if (mainWindow) {
-      const bounds = mainWindow.getBounds();
-      store.set('windowBounds', bounds);
-    }
-  });
-
   mainWindow.on('moved', () => {
     if (mainWindow) {
       const bounds = mainWindow.getBounds();
@@ -121,9 +115,15 @@ const createWindow = async () => {
     }
   });
 
-  let willQuitApp = false;
+  mainWindow.on('resized', () => {
+    if (mainWindow) {
+      const bounds = mainWindow.getBounds();
+      store.set('windowBounds', bounds);
+    }
+  });
 
-  mainWindow?.on('close', (event: Event) => {
+  let willQuitApp = false;
+  mainWindow.on('close', (event: Event) => {
     if (willQuitApp) {
       app.exit();
     } else {
@@ -187,6 +187,32 @@ const creatTray = async () => {
 
 app.commandLine.appendSwitch('force_high_performance_gpu');
 
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      if (!mainWindow.isVisible()) {
+        mainWindow.show();
+      }
+      mainWindow.focus();
+    }
+  });
+
+  app
+    .whenReady()
+    .then(() => {
+      createWindow();
+      creatTray();
+    })
+    .catch(console.log);
+}
+
 /**
  * Add event listeners...
  */
@@ -216,32 +242,6 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
-
-const gotTheLock = app.requestSingleInstanceLock();
-
-if (!gotTheLock) {
-  app.quit();
-} else {
-  app.on('second-instance', () => {
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) {
-        mainWindow.restore();
-      }
-      if (!mainWindow.isVisible()) {
-        mainWindow.show();
-      }
-      mainWindow.focus();
-    }
-  });
-
-  app
-    .whenReady()
-    .then(() => {
-      createWindow();
-      creatTray();
-    })
-    .catch(console.log);
-}
 
 ipcMain.handle('dark-mode:light', async () => {
   nativeTheme.themeSource = 'light';

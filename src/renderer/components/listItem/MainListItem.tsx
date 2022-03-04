@@ -57,7 +57,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
       >
         <ListItemText>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography noWrap sx={{ fontWeight: 600, color: theme.palette.text.secondary }}>
+            <Typography noWrap sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
               {item}
             </Typography>
             <ButtonBase
@@ -74,7 +74,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
           </Stack>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" alignItems="center">
-              <Stack direction="row" alignItems="center" sx={{ width: '320px' }}>
+              <Stack direction="row" alignItems="center" sx={{ width: '300px' }}>
                 <LinearProgress
                   sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
                   variant="determinate"

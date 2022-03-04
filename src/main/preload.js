@@ -22,19 +22,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   toggleNativeTheme: (themeSource) => {
-    switch (themeSource) {
-      case 'light':
-        ipcRenderer.invoke('dark-mode:light');
-        break;
-      case 'dark':
-        ipcRenderer.invoke('dark-mode:dark');
-        break;
-      case 'system':
-        ipcRenderer.invoke('dark-mode:system');
-        break;
-      default:
-        ipcRenderer.invoke('dark-mode:system');
-    }
+    ipcRenderer.invoke(`dark-mode:${themeSource}`);
   },
 
   zoomWindow: () => {

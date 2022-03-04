@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Drawer,
@@ -39,7 +39,7 @@ const YaddsDrawer: React.FC = () => {
   const theme = useTheme();
 
   const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.electron?.navigateTo(navigate, persistYaddsDrawerCategory);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -120,9 +120,9 @@ const YaddsDrawer: React.FC = () => {
                 primary={
                   <Typography
                     style={{
-                      fontWeight: yaddsDrawerCategory === item.path ? 600 : 400,
+                      fontWeight: 500,
                       color:
-                        yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.text.primary,
+                        yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
                     }}
                   >
                     {item.name}
@@ -139,7 +139,6 @@ const YaddsDrawer: React.FC = () => {
             dense
             disableRipple
             selected={yaddsDrawerCategory === '/settings'}
-            sx={{ width: '100%' }}
             onClick={() => {
               persistYaddsDrawerCategory('/settings');
               navigate('/settings');
@@ -153,7 +152,7 @@ const YaddsDrawer: React.FC = () => {
                 <Typography
                   noWrap
                   style={{
-                    fontWeight: yaddsDrawerCategory === '/settings' ? 600 : 400,
+                    fontWeight: 500,
                     color:
                       yaddsDrawerCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
