@@ -2,20 +2,12 @@ import { createTheme, darkScrollbar, PaletteMode } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface Palette {
-    input: {
-      default: string;
-    };
-    card: {
-      default: string;
-    };
+    input: { default: string };
+    card: { default: string };
   }
   interface PaletteOptions {
-    input?: {
-      default: string;
-    };
-    card?: {
-      default: string;
-    };
+    input?: { default: string };
+    card?: { default: string };
   }
 }
 
@@ -23,43 +15,23 @@ const designTokens = (mode: PaletteMode) => {
   return {
     palette: {
       mode,
-      [(mode === 'light' && 'primary') as string]: {
-        main: '#007fff',
-        dark: '#0059b2',
+      primary: {
+        main: mode === 'dark' ? '#007fff' : '#007fff',
+        dark: mode === 'dark' ? '#0059b2' : '#0059b2',
       },
-      [(mode === 'dark' && 'primary') as string]: {
-        main: '#007fff',
-        dark: '#0059b2',
+      text: {
+        primary: mode === 'dark' ? '#EBEBEB' : '#424242',
+        secondary: mode === 'dark' ? '#BABBBA' : '#636363',
+        disabled: mode === 'dark' ? '#747474' : '#A7A7A7',
       },
-      [(mode === 'light' && 'text') as string]: {
-        primary: '#424242',
-        secondary: '#636363',
-        disabled: '#A7A7A7',
+      background: {
+        default: mode === 'dark' ? '#282828' : 'transparent',
       },
-      [(mode === 'dark' && 'text') as string]: {
-        primary: '#EBEBEB',
-        secondary: '#BABBBA',
-        disabled: '#747474',
+      input: {
+        default: mode === 'dark' ? '#4B4B4B' : '#F5F5F5',
       },
-      [(mode === 'light' && 'background') as string]: {
-        default: 'transparent',
-        paper: '#FFFFFF',
-      },
-      [(mode === 'dark' && 'background') as string]: {
-        default: 'transparent',
-        paper: '#282828',
-      },
-      [(mode === 'light' && 'input') as string]: {
-        default: '#F5F5F5',
-      },
-      [(mode === 'dark' && 'input') as string]: {
-        default: '#4B4B4B',
-      },
-      [(mode === 'light' && 'card') as string]: {
-        default: '#F5F5F5',
-      },
-      [(mode === 'dark' && 'card') as string]: {
-        default: '#3A3A3A',
+      card: {
+        default: mode === 'dark' ? '#3A3A3A' : '#F5F5F5',
       },
     },
     shape: {
