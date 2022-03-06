@@ -136,39 +136,7 @@ export default class MenuBuilder {
         },
       ],
     };
-    const subMenuViewDev: MenuItemConstructorOptions = {
-      // label: 'View',
-      label: '显示',
-      submenu: [
-        {
-          label: 'Reload',
-          accelerator: 'Command+R',
-          click: () => this.mainWindow.webContents.reload(),
-        },
-        {
-          label: 'Toggle Developer Tools',
-          accelerator: 'Alt+Command+I',
-          click: () => this.mainWindow.webContents.toggleDevTools(),
-        },
-        {
-          type: 'separator',
-        },
-        {
-          label: '显示/隐藏 侧边栏',
-          click: () => this.mainWindow.webContents.send('toogle-sidebar'),
-        },
-        {
-          type: 'separator',
-        },
-        {
-          // label: 'Toggle Full Screen',
-          label: '进入全屏幕',
-          accelerator: 'Ctrl+Command+F',
-          click: () => this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()),
-        },
-      ],
-    };
-    const subMenuViewProd: MenuItemConstructorOptions = {
+    const subMenuView: MenuItemConstructorOptions = {
       // label: 'View',
       label: '显示',
       submenu: [
@@ -178,7 +146,7 @@ export default class MenuBuilder {
         },
         {
           // label: 'Toggle Full Screen',
-          label: '进入全屏幕',
+          label: '进入/退出 全屏幕',
           accelerator: 'Ctrl+Command+F',
           click: () => this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()),
         },
@@ -258,11 +226,26 @@ export default class MenuBuilder {
         },
       ],
     };
+    const subMenuDev: MenuItemConstructorOptions = {
+      // label: 'Dev',
+      label: '开发',
+      submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'Command+R',
+          click: () => this.mainWindow.webContents.reload(),
+        },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: 'Alt+Command+I',
+          click: () => this.mainWindow.webContents.toggleDevTools(),
+        },
+      ],
+    };
 
-    const subMenuView =
-      process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true' ? subMenuViewDev : subMenuViewProd;
-
-    return [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp];
+    return process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true'
+      ? [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp, subMenuDev]
+      : [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp];
   }
 
   buildDefaultTemplate() {
