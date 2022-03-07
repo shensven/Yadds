@@ -19,7 +19,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
 import DRAWER_WIDTH from '../context/drawerWidth';
 import IonSearch from '../components/icons/IonSearch';
-import IonAdd from '../components/icons/IonAdd';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import inactiveSvg from '../assets/YaddsDrawerSwitch/inactive.svg';
 import activeLeftSvg from '../assets/YaddsDrawerSwitch/active_left.svg';
@@ -158,18 +157,16 @@ const YaddsMain: React.FC = () => {
             />
           </StyledSearch>
           <Button
+            size="small"
             sx={{
               backgroundColor: theme.palette.input.default,
-              borderRadius: 8,
               mr: theme.spacing(2),
               appRegion: 'no-drag',
             }}
-            size="small"
           >
-            <Stack direction="row" alignItems="center">
-              <IonAdd sx={{ fontSize: 16 }} color="primary" />
-              <Typography sx={{ fontSize: 12 }}>新建</Typography>
-            </Stack>
+            <Typography fontWeight={500} sx={{ fontSize: 12 }}>
+              新建
+            </Typography>
           </Button>
           <IconButton
             color="primary"
