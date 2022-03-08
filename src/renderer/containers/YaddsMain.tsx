@@ -1,5 +1,7 @@
 import { MenuItemConstructorOptions } from 'electron';
 import React, { useContext, useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   alpha,
   Box,
@@ -14,7 +16,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { Route, Routes } from 'react-router-dom';
 import MuiAppBar from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
 import DRAWER_WIDTH from '../context/drawerWidth';
@@ -103,6 +104,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { yaddsDrawerCategory, hasYaddsDrawer, persistHasYaddsDrawer } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
@@ -152,7 +154,7 @@ const YaddsMain: React.FC = () => {
             <StyledInputBase
               spellCheck={false}
               size="small"
-              placeholder="搜索..."
+              placeholder={t('main.search')}
               sx={{ fontSize: 12, color: theme.palette.text.primary }}
             />
           </StyledSearch>
@@ -165,7 +167,7 @@ const YaddsMain: React.FC = () => {
             }}
           >
             <Typography fontWeight={500} sx={{ fontSize: 12 }}>
-              新建
+              {t('main.new')}
             </Typography>
           </Button>
           <IconButton

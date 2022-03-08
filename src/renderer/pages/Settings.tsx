@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -61,6 +62,7 @@ SettingsFormItem.defaultProps = {
 
 const Settings: React.FC = () => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
 
   const {
     yaddsAppearance,
@@ -99,19 +101,19 @@ const Settings: React.FC = () => {
   const appearanceItemArray: AppearanceItem[] = [
     {
       themeSource: 'light',
-      label: '浅色',
+      label: t('settings.light'),
       appearanceSrc: AppearanceLight,
       appearanceNoColorSrc: AppearanceLightNoColor,
     },
     {
       themeSource: 'dark',
-      label: '深色',
+      label: t('settings.dark'),
       appearanceSrc: AppearanceDark,
       appearanceNoColorSrc: AppearanceDarkNoColor,
     },
     {
       themeSource: 'system',
-      label: '跟随系统',
+      label: t('settings.follow_system'),
       appearanceSrc: AppearanceAuto,
       appearanceNoColorSrc: AppearanceAutoNoColor,
     },
@@ -123,8 +125,7 @@ const Settings: React.FC = () => {
   }
   const i18nItemArray: I18nItem[] = [
     { languageCode: 'en', label: 'English' },
-    { languageCode: 'zh-chs', label: '简体中文' },
-    { languageCode: 'zh-cht', label: '正體中文' },
+    { languageCode: 'zh-Hans', label: '简体中文' },
   ];
 
   const handleSelectOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
@@ -163,10 +164,10 @@ const Settings: React.FC = () => {
       />
       <Stack sx={{ pl: theme.spacing(2) }}>
         <Typography variant="h3" fontWeight={500} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
-          设置
+          {t('settings.settings')}
         </Typography>
         {/* appearance */}
-        <SettingsFormItem label="外观">
+        <SettingsFormItem label={t('settings.appearance')}>
           <FormGroup row>
             {appearanceItemArray.map((item: AppearanceItem) => (
               <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>
@@ -198,7 +199,7 @@ const Settings: React.FC = () => {
           </FormGroup>
         </SettingsFormItem>
         {/* QuickConnect ID or Address */}
-        <SettingsFormItem label="QuickConnect ID / 地址">
+        <SettingsFormItem label={t('settings.quickconnect_id_or_address')}>
           <FormGroup row>
             <FormControl>
               <Select
@@ -242,12 +243,12 @@ const Settings: React.FC = () => {
               </Select>
             </FormControl>
             <Button size="small" sx={{ ml: theme.spacing(1) }} onClick={() => setHasDialogAdd(true)}>
-              新增连接
+              {t('settings.new_connection')}
             </Button>
           </FormGroup>
         </SettingsFormItem>
         {/* i18n */}
-        <SettingsFormItem label="语言">
+        <SettingsFormItem label={t('settings.language')}>
           <FormGroup>
             {i18nItemArray.map((item: I18nItem) => (
               <FormControlLabel
@@ -255,45 +256,50 @@ const Settings: React.FC = () => {
                 checked={yaddsI18nCode === item.languageCode}
                 label={<Typography variant="subtitle2">{item.label}</Typography>}
                 control={<Radio size="small" checked={yaddsI18nCode === item.languageCode} />}
-                onClick={() => persistYaddsI18nCode(item.languageCode)}
+                onClick={() => {
+                  persistYaddsI18nCode(item.languageCode);
+                  i18n.changeLanguage(item.languageCode);
+                }}
               />
             ))}
           </FormGroup>
         </SettingsFormItem>
         {/* system */}
-        <SettingsFormItem label="应用程序">
+        <SettingsFormItem label={t('settings.application')}>
           <FormGroup>
             <FormControlLabel
               checked={isYaddsAutoLaunch}
-              label={<Typography variant="subtitle2">登录时启动</Typography>}
+              label={<Typography variant="subtitle2">{t('settings.launch_yadds_at_login')}</Typography>}
               control={<Checkbox size="small" checked={isYaddsAutoLaunch} />}
               onClick={() => persistIsYaddsAutoLaunch(!isYaddsAutoLaunch)}
             />
             <FormControlLabel
               checked={isYaddsAutoUpdate}
-              label={<Typography variant="subtitle2">自动更新</Typography>}
+              label={<Typography variant="subtitle2">{t('settings.automaticly_check_for_updates')}</Typography>}
               control={<Checkbox size="small" checked={isYaddsAutoUpdate} />}
               onClick={() => persistIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
             />
-            <FormHelperText>当前版本 {window.electron.getAppVersion()}</FormHelperText>
+            <FormHelperText>
+              {t('settings.current_version')} {window.electron.getAppVersion()}
+            </FormHelperText>
           </FormGroup>
         </SettingsFormItem>
         {/* About */}
-        <SettingsFormItem label="关于" hasMargin={false}>
+        <SettingsFormItem label={t('settings.about')} hasMargin={false}>
           <FormGroup>
             <Stack flexDirection="row">
-              <Typography variant="subtitle2">许可证</Typography>
+              <Typography variant="subtitle2">{t('settings.license')}</Typography>
               <Typography
                 variant="subtitle2"
                 color={theme.palette.primary.main}
                 sx={{ ml: theme.spacing(1) }}
                 onClick={() => window.electron.openViaBrowser('https://github.com/shensven/Yadds/blob/main/LICENSE')}
               >
-                本拷贝通过 GPL-3.0 协议授权
+                {t('settings.this_copy_is_licensed_under_GPL_3_0')}
               </Typography>
             </Stack>
             <Stack flexDirection="row" mt={theme.spacing(1)}>
-              <Typography variant="subtitle2">开发者</Typography>
+              <Typography variant="subtitle2">{t('settings.devoloper')}</Typography>
               <Typography
                 variant="subtitle2"
                 color={theme.palette.primary.main}
@@ -311,7 +317,7 @@ const Settings: React.FC = () => {
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
-              <Typography>新增连接</Typography>
+              <Typography>{t('settings.dialog.new_connection')}</Typography>
               <IonPersonCircle sx={{ fontSize: 22, ml: theme.spacing(0.5) }} />
             </Stack>
             <ToggleButtonGroup size="small">
@@ -349,7 +355,7 @@ const Settings: React.FC = () => {
                   })
                 }
               >
-                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>地址</Typography>
+                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>{t('settings.dialog.address')}</Typography>
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
@@ -360,7 +366,7 @@ const Settings: React.FC = () => {
               size="small"
               spellCheck={false}
               autoFocus
-              label={newConnect.isQuickConnectID ? 'QuickConnect ID' : '地址'}
+              label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog.address')}
               value={newConnect.connectAddress}
               sx={{ mt: theme.spacing(2) }}
               InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -380,7 +386,7 @@ const Settings: React.FC = () => {
             />
             <TextField
               size="small"
-              label="用户名"
+              label={t('settings.dialog.username')}
               spellCheck={false}
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -388,7 +394,7 @@ const Settings: React.FC = () => {
             />
             <TextField
               size="small"
-              label="密码"
+              label={t('settings.dialog.password')}
               spellCheck={false}
               value={newConnect.password}
               type={newConnect.showPassword ? 'text' : 'password'}
@@ -435,7 +441,7 @@ const Settings: React.FC = () => {
               window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
             }}
           >
-            新增
+            {t('settings.dialog.ok')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,5 +1,40 @@
 {
   "drawer": {
-    "queue_all": "全部下载项目"
+    "all": "全部下载项目",
+    "downloading": "下载中",
+    "finished": "已完成",
+    "active": "进行中",
+    "inactive": "非进行中",
+    "stopped": "停用",
+    "settings": "设置"
+  },
+  "main": {
+    "search": "搜索...",
+    "new": "新建"
+  },
+  "settings": {
+    "settings": "设置",
+    "appearance": "外观",
+    "light": "浅色",
+    "dark": "深色",
+    "follow_system": "跟随系统",
+    "quickconnect_id_or_address": "QuickConnect ID / 地址",
+    "new_connection": "新增连接",
+    "language": "语言",
+    "application": "应用程序",
+    "launch_yadds_at_login": "在登录时启动 Yadds",
+    "about": "关于",
+    "automaticly_check_for_updates": "自动检查更新",
+    "current_version": "当前版本",
+    "license": "许可证",
+    "this_copy_is_licensed_under_GPL_3_0": "本拷贝通过 GPL-3.0 协议授权",
+    "devoloper": "开发者",
+    "dialog": {
+      "new_connection": "新增连接",
+      "address": "地址",
+      "username": "用户名",
+      "password": "密码",
+      "ok": "新增"
+    }
   }
 }

@@ -49,37 +49,37 @@ const YaddsDrawer: React.FC = () => {
   const category: Category[] = [
     {
       path: '/queueAll',
-      name: t('drawer.queue_all'),
+      name: t('drawer.all'),
       activeIcon: <IonShapes />,
       inactiveIcon: <IonShapesOutline />,
     },
     {
       path: '/queueDownloading',
-      name: '下载中',
+      name: t('drawer.downloading'),
       activeIcon: <IonArrowDownCircle />,
       inactiveIcon: <IonArrowDownCircleOutline />,
     },
     {
       path: '/queueFinished',
-      name: '已完成',
+      name: t('drawer.finished'),
       activeIcon: <IonCheckmarkCircle />,
       inactiveIcon: <IonCheckmarkCircleOutline />,
     },
     {
       path: '/queueActive',
-      name: '进行中',
+      name: t('drawer.active'),
       activeIcon: <IonArrowUpCircle />,
       inactiveIcon: <IonArrowUpCircleOutline />,
     },
     {
       path: '/queueInactive',
-      name: '非进行中',
+      name: t('drawer.inactive'),
       activeIcon: <IonCloseCircle />,
       inactiveIcon: <IonCloseCircleOutline />,
     },
     {
       path: '/queueStopped',
-      name: '停用',
+      name: t('drawer.stopped'),
       activeIcon: <IonStopCircle />,
       inactiveIcon: <IonStopCircleOutline />,
     },
@@ -159,7 +159,7 @@ const YaddsDrawer: React.FC = () => {
                       yaddsDrawerCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
-                  设置
+                  {t('drawer.settings')}
                 </Typography>
               }
               secondary={
