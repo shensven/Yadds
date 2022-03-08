@@ -1,5 +1,6 @@
 import { useContext, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Drawer,
   List,
@@ -37,6 +38,7 @@ interface Category {
 const YaddsDrawer: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
   useLayoutEffect(() => {
@@ -47,7 +49,7 @@ const YaddsDrawer: React.FC = () => {
   const category: Category[] = [
     {
       path: '/queueAll',
-      name: '全部下载项目',
+      name: t('drawer.queue_all'),
       activeIcon: <IonShapes />,
       inactiveIcon: <IonShapesOutline />,
     },

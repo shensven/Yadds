@@ -22,7 +22,9 @@
         "@mui/material",
         "@mui/system",
         "electron-store",
-        "query-string"
+        "i18next",
+        "query-string",
+        "react-i18next"
       ]
     }
   ]

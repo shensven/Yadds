@@ -6,6 +6,7 @@ import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsDrawer from './containers/YaddsDrawer';
 import YaddsMain from './containers/YaddsMain';
+import './i18n/i18n';
 import './App.scss';
 
 declare global {
