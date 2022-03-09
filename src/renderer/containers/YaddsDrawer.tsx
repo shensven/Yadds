@@ -61,7 +61,7 @@ const YaddsDrawer: React.FC = () => {
     },
     {
       path: '/queueFinished',
-      name: t('drawer.finished'),
+      name: t('drawer.completed'),
       activeIcon: <IonCheckmarkCircle />,
       inactiveIcon: <IonCheckmarkCircleOutline />,
     },

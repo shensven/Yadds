@@ -2,7 +2,7 @@
   "drawer": {
     "all": "全部下载项目",
     "downloading": "下载中",
-    "finished": "已完成",
+    "completed": "已完成",
     "active": "进行中",
     "inactive": "非进行中",
     "stopped": "停用",

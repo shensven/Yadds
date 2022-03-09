@@ -37,7 +37,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   navigateTo: (navigateViaReact, persistYaddsDrawerCategory) => {
-    ipcRenderer.on('navigate', (event, ...arg) => {
+    ipcRenderer.on('navigate', (_, ...arg) => {
       navigateViaReact(...arg);
       persistYaddsDrawerCategory(...arg);
     });

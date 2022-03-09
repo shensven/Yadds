@@ -1,7 +1,7 @@
+import { MenuItemConstructorOptions } from 'electron';
 import { useContext } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
-import { MenuItemConstructorOptions } from 'electron';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsDrawer from './containers/YaddsDrawer';
