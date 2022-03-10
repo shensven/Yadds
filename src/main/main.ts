@@ -135,9 +135,6 @@ const createWindow = async () => {
     willQuitApp = true;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault();
@@ -206,22 +203,17 @@ app.on('window-all-closed', () => {
   }
 });
 
+ipcMain.handle('set-application-menu', async (_, args) => {
+  const menuBuilder = new MenuBuilder(mainWindow as BrowserWindow);
+  menuBuilder.buildMenu();
+});
+
 ipcMain.handle('set-tray', async (_, args) => {
   const { showMainWindow, quit } = args;
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: showMainWindow,
-      type: 'normal',
-      click: () => mainWindow?.show(),
-    },
-    {
-      type: 'separator',
-    },
-    {
-      label: quit,
-      type: 'normal',
-      click: () => app.exit(),
-    },
+    { type: 'normal', label: showMainWindow, click: () => mainWindow?.show() },
+    { type: 'separator' },
+    { type: 'normal', label: quit, click: () => app.exit() },
   ]);
 
   const trayIcon = isDevelopment
@@ -262,11 +254,9 @@ ipcMain.handle('dark-mode:system', async () => {
   nativeTheme.themeSource = 'system';
   if (isWin32) {
     if (nativeTheme.shouldUseDarkColors) {
-      // dark mode
-      mainWindow?.setBackgroundColor('#202020');
+      mainWindow?.setBackgroundColor('#202020'); // Dark background
     } else {
-      // light mode
-      mainWindow?.setBackgroundColor('#f3f3f3');
+      mainWindow?.setBackgroundColor('#f3f3f3'); // Light background
     }
   }
 });

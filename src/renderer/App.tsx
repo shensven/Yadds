@@ -15,6 +15,7 @@ declare global {
     electron: {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
 
+      setApplicationMenu: () => void;
       setTray: (t: TFunction) => void;
 
       zoomWindow: () => void;
@@ -52,8 +53,8 @@ const DesignSystem: React.FC = () => {
   const { t } = useTranslation();
 
   useLayoutEffect(() => {
-    // Init system's tary
-    window.electron?.setTray(t);
+    window.electron?.setApplicationMenu(); // Init system's menu
+    window.electron?.setTray(t); // Init system's tary
   }, []);
 
   const toogleMUITheme = (): 'light' | 'dark' => {

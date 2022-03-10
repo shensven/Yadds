@@ -20,6 +20,9 @@ contextBridge.exposeInMainWorld('electron', {
       }
     },
   },
+  setApplicationMenu: () => {
+    ipcRenderer.invoke('set-application-menu');
+  },
 
   setTray: (t) => {
     const menuItemLabel = {
