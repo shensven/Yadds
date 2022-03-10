@@ -56,13 +56,49 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
         onMouseOut={() => setHasAction(false)}
       >
         <ListItemText>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography noWrap sx={{ fontWeight: 600, color: theme.palette.text.primary }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ position: 'relative' }}>
+            <Typography
+              noWrap
+              sx={{
+                fontWeight: 600,
+                color: theme.palette.text.primary,
+                pr: 0,
+                transition: theme.transitions.create('all', {
+                  easing: 'cubic-bezier(.4,0,.6,1)',
+                  duration: theme.transitions.duration.shortest,
+                }),
+                ...(hasAction && {
+                  pr: theme.spacing(3),
+                  transition: theme.transitions.create('all', {
+                    easing: 'cubic-bezier(.4,0,.6,1)',
+                    duration: theme.transitions.duration.shortest,
+                  }),
+                }),
+              }}
+            >
               {item}
             </Typography>
             <ButtonBase
               disableRipple
-              sx={{ ml: theme.spacing(1), display: hasAction ? 'flex' : 'none' }}
+              sx={{
+                ml: theme.spacing(1),
+                position: 'absolute',
+                right: 0,
+                opacity: 0,
+                transform: 'scale(0)',
+                transition: theme.transitions.create('all', {
+                  easing: 'cubic-bezier(.4,0,.6,1)',
+                  duration: theme.transitions.duration.short,
+                }),
+                ...(hasAction && {
+                  opacity: 1,
+                  transform: 'scale(1)',
+                  transition: theme.transitions.create('all', {
+                    easing: theme.transitions.easing.easeOut,
+                    duration: theme.transitions.duration.shortest,
+                  }),
+                }),
+              }}
               onClick={() => setIsDownload(!isDownload)}
             >
               {isDownload ? (
