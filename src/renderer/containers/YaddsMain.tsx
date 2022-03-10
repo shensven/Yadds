@@ -110,7 +110,6 @@ const YaddsMain: React.FC = () => {
 
   useEffect(() => {
     window.electron?.toogleSidebar(hasYaddsDrawer, persistHasYaddsDrawer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasYaddsDrawer]);
 
   const template: MenuItemConstructorOptions[] = [

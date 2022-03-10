@@ -43,7 +43,6 @@ const YaddsDrawer: React.FC = () => {
   const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
   useLayoutEffect(() => {
     window.electron?.navigateTo(navigate, persistYaddsDrawerCategory);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const category: Category[] = [
