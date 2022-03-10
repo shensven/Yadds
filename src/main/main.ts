@@ -206,31 +206,6 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.handle('dark-mode:light', async () => {
-  nativeTheme.themeSource = 'light';
-  if (isWin32) {
-    mainWindow?.setBackgroundColor('#f3f3f3');
-  }
-});
-ipcMain.handle('dark-mode:dark', async () => {
-  nativeTheme.themeSource = 'dark';
-  if (isWin32) {
-    mainWindow?.setBackgroundColor('#202020');
-  }
-});
-ipcMain.handle('dark-mode:system', async () => {
-  nativeTheme.themeSource = 'system';
-  if (isWin32) {
-    if (nativeTheme.shouldUseDarkColors) {
-      // dark mode
-      mainWindow?.setBackgroundColor('#202020');
-    } else {
-      // light mode
-      mainWindow?.setBackgroundColor('#f3f3f3');
-    }
-  }
-});
-
 ipcMain.handle('set-tray', async (_, args) => {
   const { showMainWindow, quit } = args;
   const contextMenu = Menu.buildFromTemplate([
@@ -271,6 +246,31 @@ ipcMain.handle('set-tray', async (_, args) => {
   });
 });
 
+ipcMain.handle('dark-mode:light', async () => {
+  nativeTheme.themeSource = 'light';
+  if (isWin32) {
+    mainWindow?.setBackgroundColor('#f3f3f3');
+  }
+});
+ipcMain.handle('dark-mode:dark', async () => {
+  nativeTheme.themeSource = 'dark';
+  if (isWin32) {
+    mainWindow?.setBackgroundColor('#202020');
+  }
+});
+ipcMain.handle('dark-mode:system', async () => {
+  nativeTheme.themeSource = 'system';
+  if (isWin32) {
+    if (nativeTheme.shouldUseDarkColors) {
+      // dark mode
+      mainWindow?.setBackgroundColor('#202020');
+    } else {
+      // light mode
+      mainWindow?.setBackgroundColor('#f3f3f3');
+    }
+  }
+});
+
 ipcMain.handle('zoom-window', async () => {
   if (mainWindow?.isMaximized()) {
     mainWindow?.unmaximize();
@@ -279,11 +279,11 @@ ipcMain.handle('zoom-window', async () => {
   }
 });
 
-ipcMain.on('get-electron-store', async (event, val) => {
+ipcMain.on('electron-store:get', async (event, val) => {
   event.returnValue = store.get(val);
 });
 
-ipcMain.on('set-electron-store', async (_, key, val) => {
+ipcMain.on('electron-store:set', async (_, key, val) => {
   store.set(key, val);
 });
 

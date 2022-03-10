@@ -42,6 +42,7 @@ const YaddsDrawer: React.FC = () => {
 
   const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
   useLayoutEffect(() => {
+    // Init navigation from the top menu
     window.electron?.navigateTo(navigate, persistYaddsDrawerCategory);
   }, []);
 

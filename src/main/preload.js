@@ -21,16 +21,16 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  toggleNativeTheme: (themeSource) => {
-    ipcRenderer.invoke(`dark-mode:${themeSource}`);
-  },
-
   setTray: (t) => {
     const menuItemLabel = {
       showMainWindow: t('tray.show_main_window'),
       quit: t('tray.quit'),
     };
     ipcRenderer.invoke('set-tray', menuItemLabel);
+  },
+
+  toggleNativeTheme: (themeSource) => {
+    ipcRenderer.invoke(`dark-mode:${themeSource}`);
   },
 
   zoomWindow: () => {
@@ -53,10 +53,10 @@ contextBridge.exposeInMainWorld('electron', {
 
   store: {
     get(val) {
-      return ipcRenderer.sendSync('get-electron-store', val);
+      return ipcRenderer.sendSync('electron-store:get', val);
     },
     set(property, val) {
-      ipcRenderer.send('set-electron-store', property, val);
+      ipcRenderer.send('electron-store:set', property, val);
     },
   },
 

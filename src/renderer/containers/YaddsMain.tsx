@@ -109,6 +109,7 @@ const YaddsMain: React.FC = () => {
   const [src, setScr] = useState<string>(inactiveSvg);
 
   useEffect(() => {
+    // Sync drawer(sidebar) state with the main process in the renderer process
     window.electron?.toogleSidebar(hasYaddsDrawer, persistHasYaddsDrawer);
   }, [hasYaddsDrawer]);
 
