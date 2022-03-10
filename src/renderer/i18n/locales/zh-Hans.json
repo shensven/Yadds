@@ -37,6 +37,41 @@
       "ok": "新增"
     }
   },
+  "application_menu": {
+    "darwin": {
+      "about_yadds": "关于 Yadds",
+      "check_for_updates": "检查更新",
+      "preferences": "偏好设置",
+      "services": "服务",
+      "hide_yadds": "隐藏 Yadds",
+      "hide_others": "隐藏其他",
+      "quit_yadds": "退出 Yadds",
+      "edit": "编辑",
+      "undo": "撤销",
+      "redo": "恢复",
+      "cut": "剪切",
+      "copy": "复制",
+      "paste": "粘贴",
+      "select_all": "全选",
+      "view": "显示",
+      "show_hide_sidebar": "显示/隐藏 侧边栏",
+      "toggle_full_screen": "进入/退出 全屏幕",
+      "navigate": "导航",
+      "all": "全部下载项目",
+      "downloading": "下载中",
+      "completed": "已完成",
+      "active": "进行中",
+      "inactive": "非进行中",
+      "stopped": "停用",
+      "window": "窗口",
+      "minimize": "最小化",
+      "zoom": "缩放",
+      "help": "帮助",
+      "open_yadds_website": "访问官方网站",
+      "open_yadds_repository": "访问代码仓库",
+      "report_a_bug": "发送反馈"
+    }
+  },
   "tray": {
     "show_main_window": "显示主窗口",
     "quit": "退出"

@@ -15,7 +15,7 @@ declare global {
     electron: {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
 
-      setApplicationMenu: () => void;
+      setApplicationMenu: (t: TFunction) => void;
       setTray: (t: TFunction) => void;
 
       zoomWindow: () => void;
@@ -53,7 +53,7 @@ const DesignSystem: React.FC = () => {
   const { t } = useTranslation();
 
   useLayoutEffect(() => {
-    window.electron?.setApplicationMenu(); // Init system's menu
+    window.electron?.setApplicationMenu(t); // Init system's menu
     window.electron?.setTray(t); // Init system's tary
   }, []);
 

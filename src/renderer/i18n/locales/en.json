@@ -37,6 +37,41 @@
       "ok": "OK"
     }
   },
+  "application_menu": {
+    "darwin": {
+      "about_yadds": "About Yadds",
+      "check_for_updates": "Check for Updates",
+      "preferences": "Preferences",
+      "services": "Services",
+      "hide_yadds": "Hide Yadds",
+      "hide_others": "Hide Others",
+      "quit_yadds": "Quit Yadds",
+      "edit": "Edit",
+      "undo": "Undo",
+      "redo": "Redo",
+      "cut": "Cut",
+      "copy": "Copy",
+      "paste": "Paste",
+      "select_all": "Select All",
+      "view": "View",
+      "show_hide_sidebar": "Show/Hide Sidebar",
+      "toggle_full_screen": "Toggle Full Screen",
+      "navigate": "Navigate",
+      "all": "All",
+      "downloading": "Downloading",
+      "completed": "Completed",
+      "active": "Active",
+      "inactive": "Inactive",
+      "stopped": "Stopped",
+      "window": "Window",
+      "minimize": "Minimize",
+      "zoom": "Zoom",
+      "help": "Help",
+      "open_yadds_website": "Open Yadds Website",
+      "open_yadds_repository": "Open Yadds Repository",
+      "report_a_bug": "Report a bug"
+    }
+  },
   "tray": {
     "show_main_window": "Show Main Window",
     "quit": "Quit"

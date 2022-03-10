@@ -33,6 +33,7 @@ const isDarwin = process.platform === 'darwin';
 const isWin32 = process.platform === 'win32';
 
 let mainWindow: BrowserWindow | null = null;
+let menuBuilder: MenuBuilder | null = null;
 let tray: Tray | null = null;
 const store = new Store({ encryptionKey: 'yadds0bfs' });
 
@@ -204,7 +205,7 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.handle('set-application-menu', async (_, args) => {
-  const menuBuilder = new MenuBuilder(mainWindow as BrowserWindow);
+  menuBuilder = new MenuBuilder(mainWindow as BrowserWindow, args);
   menuBuilder.buildMenu();
 });
 

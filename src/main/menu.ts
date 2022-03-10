@@ -8,8 +8,76 @@ interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
-  constructor(mainWindow: BrowserWindow) {
+  menuItemLabel = {
+    aboutYadds: '',
+    checkForUpdates: '',
+    preferences: '',
+    services: '',
+    hideYadds: '',
+    hideOthers: '',
+    quitYadds: '',
+    edit: '',
+    undo: '',
+    redo: '',
+    cut: '',
+    copy: '',
+    paste: '',
+    selectAll: '',
+    view: '',
+    showHideSidebar: '',
+    toggleFullScreen: '',
+    navigate: '',
+    all: '',
+    downloading: '',
+    completed: '',
+    active: '',
+    inactive: '',
+    stopped: '',
+    window: '',
+    minimize: '',
+    zoom: '',
+    help: '',
+    openYaddsWebsite: '',
+    openYaddsRepository: '',
+    reportABug: '',
+  };
+
+  constructor(mainWindow: BrowserWindow, args: any) {
     this.mainWindow = mainWindow;
+
+    this.menuItemLabel = {
+      aboutYadds: args.aboutYadds,
+      checkForUpdates: args.checkForUpdates,
+      preferences: args.preferences,
+      services: args.services,
+      hideYadds: args.hideYadds,
+      hideOthers: args.hideOthers,
+      quitYadds: args.quitYadds,
+      edit: args.edit,
+      undo: args.undo,
+      redo: args.redo,
+      cut: args.cut,
+      copy: args.copy,
+      paste: args.paste,
+      selectAll: args.selectAll,
+      view: args.view,
+      showHideSidebar: args.showHideSidebar,
+      toggleFullScreen: args.toggleFullScreen,
+      navigate: args.navigate,
+      all: args.all,
+      downloading: args.downloading,
+      completed: args.completed,
+      active: args.active,
+      inactive: args.inactive,
+      stopped: args.stopped,
+      window: args.window,
+      minimize: args.minimize,
+      zoom: args.zoom,
+      help: args.help,
+      openYaddsWebsite: args.openYaddsWebsite,
+      openYaddsRepository: args.openYaddsRepository,
+      reportABug: args.reportABug,
+    };
   }
 
   buildMenu(): Menu {
@@ -43,17 +111,14 @@ export default class MenuBuilder {
       label: 'Electron',
       submenu: [
         {
-          // label: 'About ElectronReact',
-          label: '关于 Yadds',
+          label: this.menuItemLabel.aboutYadds,
           selector: 'orderFrontStandardAboutPanel:',
         },
         {
-          // label: 'Check for Updates',
-          label: '检查更新',
+          label: this.menuItemLabel.checkForUpdates,
         },
         {
-          // label: 'Preferences',
-          label: '偏好设置',
+          label: this.menuItemLabel.preferences,
           accelerator: 'Command+,',
           click: () => this.mainWindow.webContents.send('navigate', '/settings'),
         },
@@ -61,22 +126,19 @@ export default class MenuBuilder {
           type: 'separator',
         },
         {
-          // label: 'Services',
-          label: '服务',
+          label: this.menuItemLabel.services,
           submenu: [],
         },
         {
           type: 'separator',
         },
         {
-          // label: 'Hide ElectronReact',
-          label: '隐藏 Yadds',
+          label: this.menuItemLabel.hideYadds,
           accelerator: 'Command+H',
           selector: 'hide:',
         },
         {
-          // label: 'Hide Others',
-          label: '隐藏其他',
+          label: this.menuItemLabel.hideOthers,
           accelerator: 'Command+Option+H',
           selector: 'hideOtherApplications:',
         },
@@ -84,26 +146,22 @@ export default class MenuBuilder {
           type: 'separator',
         },
         {
-          // label: 'Quit',
-          label: '退出 Yadds',
+          label: this.menuItemLabel.quitYadds,
           accelerator: 'Command+Q',
           click: () => app.exit(),
         },
       ],
     };
     const subMenuEdit: DarwinMenuItemConstructorOptions = {
-      // label: 'Edit',
-      label: '编辑',
+      label: this.menuItemLabel.edit,
       submenu: [
         {
-          // label: 'Undo',
-          label: '撤销',
+          label: this.menuItemLabel.undo,
           accelerator: 'Command+Z',
           selector: 'undo:',
         },
         {
-          // label: 'Redo',
-          label: '恢复',
+          label: this.menuItemLabel.redo,
           accelerator: 'Shift+Command+Z',
           selector: 'redo:',
         },
@@ -111,124 +169,106 @@ export default class MenuBuilder {
           type: 'separator',
         },
         {
-          // label: 'Cut',
-          label: '剪切',
+          label: this.menuItemLabel.cut,
           accelerator: 'Command+X',
           selector: 'cut:',
         },
         {
-          // label: 'Copy',
-          label: '复制',
+          label: this.menuItemLabel.copy,
           accelerator: 'Command+C',
           selector: 'copy:',
         },
         {
-          // label: 'Paste',
-          label: '粘贴',
+          label: this.menuItemLabel.paste,
           accelerator: 'Command+V',
           selector: 'paste:',
         },
         {
-          // label: 'Select All',
-          label: '全选',
+          label: this.menuItemLabel.selectAll,
           accelerator: 'Command+A',
           selector: 'selectAll:',
         },
       ],
     };
     const subMenuView: MenuItemConstructorOptions = {
-      // label: 'View',
-      label: '显示',
+      label: this.menuItemLabel.view,
       submenu: [
         {
-          label: '显示/隐藏 侧边栏',
+          label: this.menuItemLabel.showHideSidebar,
           click: () => this.mainWindow.webContents.send('toogle-sidebar'),
         },
         {
-          // label: 'Toggle Full Screen',
-          label: '进入/退出 全屏幕',
+          label: this.menuItemLabel.toggleFullScreen,
           accelerator: 'Ctrl+Command+F',
           click: () => this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen()),
         },
       ],
     };
     const subMenuNavigation: MenuItemConstructorOptions = {
-      // label: 'Navigate',
-      label: '导航',
+      label: this.menuItemLabel.navigate,
       submenu: [
         {
-          // label: 'Queue All',
-          label: '全部下载项目',
+          label: this.menuItemLabel.all,
           click: () => this.mainWindow.webContents.send('navigate', '/queueAll'),
         },
         {
-          // label: 'Queue Downloading',
-          label: '下载中',
+          label: this.menuItemLabel.downloading,
           click: () => this.mainWindow.webContents.send('navigate', '/queueDownloading'),
         },
         {
-          // label: 'Queue Finished',
-          label: '已完成',
+          label: this.menuItemLabel.completed,
           click: () => this.mainWindow.webContents.send('navigate', '/queueFinished'),
         },
         {
-          // label: 'Queue Active',
-          label: '进行中',
+          label: this.menuItemLabel.active,
           click: () => this.mainWindow.webContents.send('navigate', '/queueActive'),
         },
         {
-          // label: 'Queue Inactive',
-          label: '非进行中',
+          label: this.menuItemLabel.inactive,
           click: () => this.mainWindow.webContents.send('navigate', '/queueInactive'),
         },
         {
-          // label: 'Queue Stoped',
-          label: '停用',
+          label: this.menuItemLabel.stopped,
           click: () => this.mainWindow.webContents.send('navigate', '/queueStopped'),
         },
       ],
     };
     const subMenuWindow: DarwinMenuItemConstructorOptions = {
-      // label: 'Window',
-      label: '窗口',
+      label: this.menuItemLabel.window,
       submenu: [
         {
-          // label: 'Minimize',
-          label: '最小化',
+          label: this.menuItemLabel.minimize,
           accelerator: 'Command+M',
           selector: 'performMiniaturize:',
         },
         {
-          // label: 'Zoom',
-          label: '缩放',
+          label: this.menuItemLabel.zoom,
           selector: 'performZoom:',
         },
       ],
     };
     const subMenuHelp: MenuItemConstructorOptions = {
-      // label: 'Help',
-      label: '帮助',
+      label: this.menuItemLabel.help,
       submenu: [
         {
-          label: '访问官方网站',
+          label: this.menuItemLabel.openYaddsWebsite,
           click: () => shell.openExternal('https://github.com/shensven/Yadds'),
         },
         {
           type: 'separator',
         },
         {
-          label: '访问代码仓库',
+          label: this.menuItemLabel.reportABug,
           click: () => shell.openExternal('https://github.com/shensven/Yadds'),
         },
         {
-          label: '发送反馈',
+          label: this.menuItemLabel.openYaddsRepository,
           click: () => shell.openExternal('https://github.com/shensven/Yadds/issues'),
         },
       ],
     };
     const subMenuDev: MenuItemConstructorOptions = {
-      // label: 'Dev',
-      label: '开发',
+      label: 'Dev',
       submenu: [
         {
           label: 'Reload',
