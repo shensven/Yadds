@@ -241,11 +241,11 @@ export default class MenuBuilder {
           type: 'separator',
         },
         {
-          label: this.menuItemLabel.reportABug,
+          label: this.menuItemLabel.openYaddsRepository,
           click: () => shell.openExternal('https://github.com/shensven/Yadds'),
         },
         {
-          label: this.menuItemLabel.openYaddsRepository,
+          label: this.menuItemLabel.reportABug,
           click: () => shell.openExternal('https://github.com/shensven/Yadds/issues'),
         },
       ],
