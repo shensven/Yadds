@@ -9,7 +9,23 @@
 
 Yet another DSM [Download Station](https://www.synology.com/en-us/dsm/packages/DownloadStation)
 
-## GET STARTED
+## FEATURES
+
+- [x] Free and open source
+- [x] Cross-platform support (macOS, Windows, Linux)
+- [x] Multi-language hot-switching (English, Simplified Chinese and etc.)
+- [x] Dark mode
+- [ ] Download progress visualization
+- [ ] DSM Multi-account support
+
+
+## BUILD
+
+### INTRO
+
+- Written with [Electron](https://www.electronjs.org/) & [React](https://reactjs.org/)
+- Use [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate) to keep dependencies up to date under the same major version
+- Use [Github Workflow](https://github.com/shensven/Readhubn/actions) exclusively for testing and continuous integration
 
 ### PREREQUISITES
 
