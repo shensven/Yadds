@@ -215,7 +215,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
-    "@emotion/react": "11.8.1",
+    "@emotion/react": "11.8.2",
     "@emotion/styled": "11.8.1",
     "@fontsource/barlow": "4.5.2",
     "@mui/material": "5.5.0",
