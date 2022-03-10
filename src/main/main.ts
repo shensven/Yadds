@@ -136,6 +136,18 @@ const createWindow = async () => {
     willQuitApp = true;
   });
 
+  if (isDevelopment) {
+    mainWindow.webContents.on('context-menu', (_, props) => {
+      const { x, y } = props;
+      Menu.buildFromTemplate([
+        {
+          label: 'Inspect element',
+          click: () => mainWindow?.webContents.inspectElement(x, y),
+        },
+      ]).popup({ window: mainWindow as BrowserWindow });
+    });
+  }
+
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault();
