@@ -8,7 +8,7 @@
       "groupName": "devDependencies",
       "matchDepTypes": ["devDependencies"],
       "enabled": false,
-      "excludePackageNames": []
+      "excludePackageNames": ["electron"]
     },
     {
       "groupName": "dependencies",
