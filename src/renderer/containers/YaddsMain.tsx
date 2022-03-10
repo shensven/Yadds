@@ -71,10 +71,6 @@ const StyledSearch = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
   },
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    width: 'auto',
-  },
 }));
 
 const StyledSearchIconWrapper = styled('div')(({ theme }) => ({
@@ -92,12 +88,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   '& .MuiInputBase-input': {
     padding: 0,
     transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: 120,
-      '&:focus': {
-        width: 160,
-      },
+    width: 120,
+    '&:focus': {
+      width: 160,
     },
   },
 }));
@@ -130,7 +123,7 @@ const YaddsMain: React.FC = () => {
   const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
-    <Main square hasDrawer={hasYaddsDrawer}>
+    <Main square elevation={0} hasDrawer={hasYaddsDrawer}>
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
           sx={{ height: 40 }}

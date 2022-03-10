@@ -294,7 +294,10 @@ const Settings: React.FC = () => {
               <Typography
                 variant="subtitle2"
                 color={theme.palette.primary.main}
-                sx={{ ml: theme.spacing(1) }}
+                sx={{
+                  ml: theme.spacing(1),
+                  '&:hover': { textDecoration: 'underline' },
+                }}
                 onClick={() => window.electron.openViaBrowser('https://github.com/shensven/Yadds/blob/main/LICENSE')}
               >
                 {t('settings.this_copy_is_licensed_under_GPL_3_0')}
@@ -305,7 +308,10 @@ const Settings: React.FC = () => {
               <Typography
                 variant="subtitle2"
                 color={theme.palette.primary.main}
-                sx={{ ml: theme.spacing(1) }}
+                sx={{
+                  ml: theme.spacing(1),
+                  '&:hover': { textDecoration: 'underline' },
+                }}
                 onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
               >
                 @SvenFE
