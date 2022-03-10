@@ -259,6 +259,7 @@ const Settings: React.FC = () => {
                 onClick={() => {
                   persistYaddsI18nCode(item.languageCode);
                   i18n.changeLanguage(item.languageCode);
+                  window.electron?.setTray(t);
                 }}
               />
             ))}

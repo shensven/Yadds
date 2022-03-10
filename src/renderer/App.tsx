@@ -1,6 +1,7 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { useContext } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
+import { TFunction, useTranslation } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
@@ -13,6 +14,8 @@ declare global {
   interface Window {
     electron: {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
+
+      setTray: (t: TFunction) => void;
 
       zoomWindow: () => void;
 
@@ -46,6 +49,12 @@ declare global {
 const DesignSystem: React.FC = () => {
   const { yaddsAppearance } = useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const { t } = useTranslation();
+
+  useLayoutEffect(() => {
+    // Init system's tary
+    window.electron?.setTray(t);
+  }, []);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (yaddsAppearance) {

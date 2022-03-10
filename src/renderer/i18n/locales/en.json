@@ -36,5 +36,9 @@
       "password": "password",
       "ok": "OK"
     }
+  },
+  "tray": {
+    "show_main_window": "Show Main Window",
+    "quit": "Quit"
   }
 }

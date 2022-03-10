@@ -149,42 +149,6 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-const creatTray = async () => {
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: '显示主页面',
-      type: 'normal',
-      click: () => mainWindow?.show(),
-    },
-    {
-      type: 'separator',
-    },
-    {
-      label: '退出',
-      type: 'normal',
-      click: () => app.exit(),
-    },
-  ]);
-
-  const trayIcon = isDevelopment
-    ? nativeImage.createFromPath(getAssetPath('trayDevTemplate.png'))
-    : nativeImage.createFromPath(getAssetPath('trayTemplate.png'));
-
-  tray = new Tray(trayIcon);
-
-  tray.on('click', () => {
-    if (isWin32) {
-      mainWindow?.show();
-    }
-  });
-
-  if (isWin32) {
-    tray.setToolTip('Yadds');
-  }
-
-  tray.setContextMenu(contextMenu);
-};
-
 app.commandLine.appendSwitch('force_high_performance_gpu');
 
 const gotTheLock = app.requestSingleInstanceLock();
@@ -208,7 +172,6 @@ if (!gotTheLock) {
     .whenReady()
     .then(() => {
       createWindow();
-      creatTray();
     })
     .catch(console.log);
 }
@@ -266,6 +229,46 @@ ipcMain.handle('dark-mode:system', async () => {
       mainWindow?.setBackgroundColor('#f3f3f3');
     }
   }
+});
+
+ipcMain.handle('set-tray', async (_, args) => {
+  const { showMainWindow, quit } = args;
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: showMainWindow,
+      type: 'normal',
+      click: () => mainWindow?.show(),
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: quit,
+      type: 'normal',
+      click: () => app.exit(),
+    },
+  ]);
+
+  const trayIcon = isDevelopment
+    ? nativeImage.createFromPath(getAssetPath('trayDevTemplate.png'))
+    : nativeImage.createFromPath(getAssetPath('trayTemplate.png'));
+
+  if (!tray) {
+    // Init system's tary
+    tray = new Tray(trayIcon);
+    if (isWin32) {
+      tray.setToolTip('Yadds');
+    }
+    tray.setContextMenu(contextMenu);
+  } else {
+    tray.setContextMenu(contextMenu);
+  }
+
+  tray.on('click', () => {
+    if (isWin32) {
+      mainWindow?.show();
+    }
+  });
 });
 
 ipcMain.handle('zoom-window', async () => {

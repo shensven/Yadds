@@ -25,6 +25,14 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke(`dark-mode:${themeSource}`);
   },
 
+  setTray: (t) => {
+    const menuItemLabel = {
+      showMainWindow: t('tray.show_main_window'),
+      quit: t('tray.quit'),
+    };
+    ipcRenderer.invoke('set-tray', menuItemLabel);
+  },
+
   zoomWindow: () => {
     ipcRenderer.invoke('zoom-window');
   },

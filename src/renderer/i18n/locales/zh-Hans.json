@@ -36,5 +36,9 @@
       "password": "密码",
       "ok": "新增"
     }
+  },
+  "tray": {
+    "show_main_window": "显示主窗口",
+    "quit": "退出"
   }
 }
