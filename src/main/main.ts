@@ -11,11 +11,20 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, Menu, nativeTheme, Tray, nativeImage } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  shell,
+  ipcMain,
+  Menu,
+  nativeTheme,
+  Tray,
+  nativeImage,
+  MenuItemConstructorOptions,
+} from 'electron';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import auth from './net/auth';
 
@@ -33,7 +42,7 @@ const isDarwin = process.platform === 'darwin';
 const isWin32 = process.platform === 'win32';
 
 let mainWindow: BrowserWindow | null = null;
-let menuBuilder: MenuBuilder | null = null;
+let applicationMenu: Menu | null = null;
 let tray: Tray | null = null;
 const store = new Store({ encryptionKey: 'yadds0bfs' });
 
@@ -217,8 +226,232 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.handle('set-application-menu', async (_, args) => {
-  menuBuilder = new MenuBuilder(mainWindow as BrowserWindow, args);
-  menuBuilder.buildMenu();
+  const menuItemLabel = {
+    aboutYadds: args.aboutYadds,
+    checkForUpdates: args.checkForUpdates,
+    preferences: args.preferences,
+    services: args.services,
+    hideYadds: args.hideYadds,
+    hideOthers: args.hideOthers,
+    quitYadds: args.quitYadds,
+    edit: args.edit,
+    undo: args.undo,
+    redo: args.redo,
+    cut: args.cut,
+    copy: args.copy,
+    paste: args.paste,
+    selectAll: args.selectAll,
+    view: args.view,
+    showHideSidebar: args.showHideSidebar,
+    toggleFullScreen: args.toggleFullScreen,
+    navigate: args.navigate,
+    all: args.all,
+    downloading: args.downloading,
+    completed: args.completed,
+    active: args.active,
+    inactive: args.inactive,
+    stopped: args.stopped,
+    window: args.window,
+    minimize: args.minimize,
+    zoom: args.zoom,
+    help: args.help,
+    openYaddsWebsite: args.openYaddsWebsite,
+    openYaddsRepository: args.openYaddsRepository,
+    reportABug: args.reportABug,
+  };
+
+  interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
+    selector?: string;
+    submenu?: DarwinMenuItemConstructorOptions[] | Menu;
+  }
+
+  const buildDarwinTemplate = (): MenuItemConstructorOptions[] => {
+    const subMenuAbout: DarwinMenuItemConstructorOptions = {
+      label: 'Electron',
+      submenu: [
+        {
+          label: menuItemLabel.aboutYadds,
+          selector: 'orderFrontStandardAboutPanel:',
+        },
+        {
+          label: menuItemLabel.checkForUpdates,
+        },
+        {
+          label: menuItemLabel.preferences,
+          accelerator: 'Command+,',
+          click: () => mainWindow?.webContents.send('navigate', '/settings'),
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: menuItemLabel.services,
+          submenu: [],
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: menuItemLabel.hideYadds,
+          accelerator: 'Command+H',
+          selector: 'hide:',
+        },
+        {
+          label: menuItemLabel.hideOthers,
+          accelerator: 'Command+Option+H',
+          selector: 'hideOtherApplications:',
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: menuItemLabel.quitYadds,
+          accelerator: 'Command+Q',
+          click: () => app.exit(),
+        },
+      ],
+    };
+    const subMenuEdit: DarwinMenuItemConstructorOptions = {
+      label: menuItemLabel.edit,
+      submenu: [
+        {
+          label: menuItemLabel.undo,
+          accelerator: 'Command+Z',
+          selector: 'undo:',
+        },
+        {
+          label: menuItemLabel.redo,
+          accelerator: 'Shift+Command+Z',
+          selector: 'redo:',
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: menuItemLabel.cut,
+          accelerator: 'Command+X',
+          selector: 'cut:',
+        },
+        {
+          label: menuItemLabel.copy,
+          accelerator: 'Command+C',
+          selector: 'copy:',
+        },
+        {
+          label: menuItemLabel.paste,
+          accelerator: 'Command+V',
+          selector: 'paste:',
+        },
+        {
+          label: menuItemLabel.selectAll,
+          accelerator: 'Command+A',
+          selector: 'selectAll:',
+        },
+      ],
+    };
+    const subMenuView: MenuItemConstructorOptions = {
+      label: menuItemLabel.view,
+      submenu: [
+        {
+          label: menuItemLabel.showHideSidebar,
+          click: () => mainWindow?.webContents.send('toogle-sidebar'),
+        },
+        {
+          label: menuItemLabel.toggleFullScreen,
+          accelerator: 'Ctrl+Command+F',
+          click: () => mainWindow?.setFullScreen(!mainWindow.isFullScreen()),
+        },
+      ],
+    };
+    const subMenuNavigation: MenuItemConstructorOptions = {
+      label: menuItemLabel.navigate,
+      submenu: [
+        {
+          label: menuItemLabel.all,
+          click: () => mainWindow?.webContents.send('navigate', '/queueAll'),
+        },
+        {
+          label: menuItemLabel.downloading,
+          click: () => mainWindow?.webContents.send('navigate', '/queueDownloading'),
+        },
+        {
+          label: menuItemLabel.completed,
+          click: () => mainWindow?.webContents.send('navigate', '/queueFinished'),
+        },
+        {
+          label: menuItemLabel.active,
+          click: () => mainWindow?.webContents.send('navigate', '/queueActive'),
+        },
+        {
+          label: menuItemLabel.inactive,
+          click: () => mainWindow?.webContents.send('navigate', '/queueInactive'),
+        },
+        {
+          label: menuItemLabel.stopped,
+          click: () => mainWindow?.webContents.send('navigate', '/queueStopped'),
+        },
+      ],
+    };
+    const subMenuWindow: DarwinMenuItemConstructorOptions = {
+      label: menuItemLabel.window,
+      submenu: [
+        {
+          label: menuItemLabel.minimize,
+          accelerator: 'Command+M',
+          selector: 'performMiniaturize:',
+        },
+        {
+          label: menuItemLabel.zoom,
+          selector: 'performZoom:',
+        },
+      ],
+    };
+    const subMenuHelp: MenuItemConstructorOptions = {
+      label: menuItemLabel.help,
+      submenu: [
+        {
+          label: menuItemLabel.openYaddsWebsite,
+          click: () => shell.openExternal('https://github.com/shensven/Yadds'),
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: menuItemLabel.openYaddsRepository,
+          click: () => shell.openExternal('https://github.com/shensven/Yadds'),
+        },
+        {
+          label: menuItemLabel.reportABug,
+          click: () => shell.openExternal('https://github.com/shensven/Yadds/issues'),
+        },
+      ],
+    };
+    const subMenuDev: MenuItemConstructorOptions = {
+      label: 'Dev',
+      submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'Command+R',
+          click: () => mainWindow?.webContents.reload(),
+        },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: 'Alt+Command+I',
+          click: () => mainWindow?.webContents.toggleDevTools(),
+        },
+      ],
+    };
+
+    return isDevelopment
+      ? [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp, subMenuDev]
+      : [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp];
+  };
+
+  if (isDarwin) {
+    const template = buildDarwinTemplate();
+    applicationMenu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(applicationMenu);
+  }
 });
 
 ipcMain.handle('set-tray', async (_, args) => {
