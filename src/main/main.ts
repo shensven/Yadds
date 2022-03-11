@@ -83,10 +83,10 @@ const createWindow = async () => {
     height: (store.get('windowBounds.height') as number) || 720,
     minWidth: 960,
     minHeight: 720,
-    titleBarStyle: 'hidden',
+    [(isDarwin && 'titleBarStyle') as string]: 'hidden',
     // trafficLightPosition: { x: 19, y: 19 },
     [(isDarwin && 'vibrancy') as string]: 'sidebar',
-    [(isWin32 && 'backgroundColor') as string]: '#f3f3f3',
+    [(isWin32 && 'backgroundColor') as string]: '#e6e6e6',
     [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
     [(isWin32 && 'icon') as string]: getAssetPath('icon_win32.png'),
     webPreferences: {
@@ -193,9 +193,9 @@ if (!gotTheLock) {
 nativeTheme.on('updated', () => {
   if (isWin32) {
     if (nativeTheme.shouldUseDarkColors) {
-      mainWindow?.setBackgroundColor('#202020');
+      mainWindow?.setBackgroundColor('#1f1f1f');
     } else {
-      mainWindow?.setBackgroundColor('#f3f3f3');
+      mainWindow?.setBackgroundColor('#e6e6e6');
     }
   }
 });
