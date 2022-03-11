@@ -10,7 +10,7 @@
   },
   "main": {
     "search": "Search...",
-    "new": "NEW"
+    "new_task": "NEW TASK"
   },
   "settings": {
     "settings": "Settings",
@@ -19,18 +19,18 @@
     "dark": "Dark",
     "follow_system": "FLW SYS",
     "quickconnect_id_or_address": "QuickConnect ID / Address",
-    "new_connection": "NEW CXN",
+    "new_connection": "NEW CONNECTION",
     "language": "Language",
     "application": "Application",
     "launch_yadds_at_login": "Launch Yadds at Login",
     "about": "About",
     "automaticly_check_for_updates": "Automaticly Check for Updates",
+    "check_now": "CHECk NOW",
     "current_version": "Current version",
     "license": "License",
     "this_copy_is_licensed_under_GPL_3_0": "This copy is licensed under GPL 3.0",
     "devoloper": "Devoloper",
     "dialog": {
-      "new_connection": "New CXN",
       "address": "Address",
       "username": "username",
       "password": "password",

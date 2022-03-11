@@ -2,12 +2,12 @@ import { createTheme, darkScrollbar, PaletteMode } from '@mui/material';
 
 declare module '@mui/material/styles' {
   interface Palette {
-    input: { default: string };
-    card: { default: string };
+    input: { default: string; hover: string };
+    card: { default: string; hover: string };
   }
   interface PaletteOptions {
-    input?: { default: string };
-    card?: { default: string };
+    input?: { default: string; hover: string };
+    card?: { default: string; hover: string };
   }
 }
 
@@ -28,10 +28,12 @@ const designTokens = (mode: PaletteMode) => {
         default: mode === 'dark' ? '#282828' : 'transparent',
       },
       input: {
-        default: mode === 'dark' ? '#4B4B4B' : '#F5F5F5',
+        default: mode === 'dark' ? '#282828' : '#F5F5F5',
+        hover: mode === 'dark' ? '#3A3A3A' : '#F0F0F0',
       },
       card: {
-        default: mode === 'dark' ? '#3A3A3A' : '#F5F5F5',
+        default: mode === 'dark' ? '#282828' : '#F5F5F5',
+        hover: mode === 'dark' ? '#3A3A3A' : '#F0F0F0',
       },
     },
     shape: {

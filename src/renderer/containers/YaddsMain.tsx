@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  alpha,
   Box,
   Button,
   Divider,
@@ -66,10 +65,11 @@ const StyledAppBar = styled(MuiAppBar)(() => ({
 const StyledSearch = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
+  alignSelf: 'stretch',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.input.default,
   '&:hover': {
-    backgroundColor: alpha(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+    backgroundColor: theme.palette.input.hover,
   },
 }));
 
@@ -139,8 +139,8 @@ const YaddsMain: React.FC = () => {
         sx={{ display: yaddsSidebarCategory === '/settings' ? 'none' : 'flex' }}
         onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
       >
-        <Stack flexDirection="row" justifyContent="flex-end" sx={{ p: theme.spacing(2) }}>
-          <StyledSearch sx={{ mr: theme.spacing(6), appRegion: 'no-drag' }}>
+        <Stack flexDirection="row" justifyContent="flex-end" alignItems="center" sx={{ p: theme.spacing(2) }}>
+          <StyledSearch sx={{ appRegion: 'no-drag', mr: theme.spacing(6) }}>
             <StyledSearchIconWrapper>
               <IonSearch sx={{ fontSize: 14 }} />
             </StyledSearchIconWrapper>
@@ -154,19 +154,35 @@ const YaddsMain: React.FC = () => {
           <Button
             size="small"
             sx={{
-              backgroundColor: theme.palette.input.default,
-              mr: theme.spacing(2),
               appRegion: 'no-drag',
+              backgroundColor: theme.palette.input.default,
+              '&:hover': {
+                backgroundColor: theme.palette.input.hover,
+              },
+              mr: theme.spacing(2),
             }}
           >
-            <Typography fontWeight={500} sx={{ fontSize: 12 }}>
-              {t('main.new')}
+            <Typography
+              fontWeight={500}
+              sx={{
+                fontSize: 12,
+                lineHeight: 'normal',
+                px: theme.spacing(0.5),
+              }}
+            >
+              {t('main.new_task')}
             </Typography>
           </Button>
           <IconButton
             color="primary"
             size="small"
-            sx={{ backgroundColor: theme.palette.input.default, appRegion: 'no-drag' }}
+            sx={{
+              appRegion: 'no-drag',
+              backgroundColor: theme.palette.input.default,
+              '&:hover': {
+                backgroundColor: theme.palette.input.hover,
+              },
+            }}
             onClick={() => handleContextMenu()}
           >
             <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />

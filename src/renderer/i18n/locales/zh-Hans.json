@@ -10,7 +10,7 @@
   },
   "main": {
     "search": "搜索...",
-    "new": "新建"
+    "new_task": "新建任务"
   },
   "settings": {
     "settings": "设置",
@@ -25,12 +25,12 @@
     "launch_yadds_at_login": "在登录时启动 Yadds",
     "about": "关于",
     "automaticly_check_for_updates": "自动检查更新",
+    "check_now": "立即检查",
     "current_version": "当前版本",
     "license": "许可证",
     "this_copy_is_licensed_under_GPL_3_0": "本拷贝通过 GPL-3.0 协议授权",
     "devoloper": "开发者",
     "dialog": {
-      "new_connection": "新增连接",
       "address": "地址",
       "username": "用户名",
       "password": "密码",

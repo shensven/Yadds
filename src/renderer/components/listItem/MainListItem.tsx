@@ -51,6 +51,9 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
         sx={{
           width: '100%',
           backgroundColor: index % 2 === 0 ? theme.palette.card.default : 'transparent',
+          '&:hover': {
+            backgroundColor: theme.palette.card.hover,
+          },
         }}
         onMouseOver={() => setHasAction(true)}
         onMouseOut={() => setHasAction(false)}
@@ -61,18 +64,14 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
               noWrap
               sx={{
                 fontWeight: 600,
-                color: theme.palette.text.primary,
+                color: theme.palette.mode === 'dark' ? theme.palette.text.secondary : theme.palette.text.primary,
                 pr: 0,
-                transition: theme.transitions.create('all', {
+                transition: theme.transitions.create('padding', {
                   easing: 'cubic-bezier(.4,0,.6,1)',
                   duration: theme.transitions.duration.shortest,
                 }),
                 ...(hasAction && {
                   pr: theme.spacing(3),
-                  transition: theme.transitions.create('all', {
-                    easing: 'cubic-bezier(.4,0,.6,1)',
-                    duration: theme.transitions.duration.shortest,
-                  }),
                 }),
               }}
             >

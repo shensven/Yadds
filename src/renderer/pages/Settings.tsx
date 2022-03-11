@@ -209,12 +209,12 @@ const Settings: React.FC = () => {
                 MenuProps={{
                   elevation: 0,
                   sx: {
-                    minWidth: theme.spacing(40),
-                    maxWidth: theme.spacing(40),
+                    minWidth: theme.spacing(36),
+                    maxWidth: theme.spacing(36),
                     '& .MuiPaper-root': { boxShadow: '0 0 24px rgba(0,0,0,0.08), 0 8px 8px rgba(0,0,0,0.04)' },
                   },
                 }}
-                sx={{ minWidth: theme.spacing(40), maxWidth: theme.spacing(40), fontSize: 14 }}
+                sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
                 value={[dsmConnectIndex]}
                 renderValue={() =>
                   `${dsmConnectList[dsmConnectIndex]?.host ?? 'null'} - ${
@@ -242,7 +242,11 @@ const Settings: React.FC = () => {
                 ))}
               </Select>
             </FormControl>
-            <Button size="small" sx={{ ml: theme.spacing(1) }} onClick={() => setHasDialogAdd(true)}>
+            <Button
+              size="small"
+              sx={{ ml: theme.spacing(1), px: theme.spacing(1) }}
+              onClick={() => setHasDialogAdd(true)}
+            >
               {t('settings.new_connection')}
             </Button>
           </FormGroup>
@@ -281,9 +285,26 @@ const Settings: React.FC = () => {
               control={<Checkbox size="small" checked={isYaddsAutoUpdate} />}
               onClick={() => persistIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
             />
-            <FormHelperText>
-              {t('settings.current_version')} {window.electron.getAppVersion()}
-            </FormHelperText>
+            <Stack flexDirection="row" alignItems="center">
+              <FormHelperText>
+                {t('settings.current_version')} {window.electron.getAppVersion()}
+              </FormHelperText>
+              <Button
+                size="small"
+                sx={{
+                  ml: theme.spacing(1),
+                  backgroundColor: theme.palette.input.default,
+                  '&:hover': {
+                    backgroundColor: theme.palette.input.hover,
+                  },
+                }}
+                onClick={() => {}}
+              >
+                <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
+                  {t('settings.check_now')}
+                </Typography>
+              </Button>
+            </Stack>
           </FormGroup>
         </SettingsFormItem>
         {/* About */}
@@ -325,8 +346,7 @@ const Settings: React.FC = () => {
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
-              <Typography>{t('settings.dialog.new_connection')}</Typography>
-              <IonPersonCircle sx={{ fontSize: 22, ml: theme.spacing(0.5) }} />
+              <IonPersonCircle sx={{ fontSize: 32 }} />
             </Stack>
             <ToggleButtonGroup size="small">
               <ToggleButton
