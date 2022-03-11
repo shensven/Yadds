@@ -113,6 +113,8 @@ const createWindow = async () => {
     }
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
+    } else if (store.get('isYaddsMaximized')) {
+      mainWindow.maximize();
     } else {
       mainWindow.show();
     }
@@ -129,6 +131,18 @@ const createWindow = async () => {
     if (mainWindow) {
       const bounds = mainWindow.getBounds();
       store.set('windowBounds', bounds);
+    }
+  });
+
+  mainWindow.on('maximize', () => {
+    if (mainWindow) {
+      store.set('isYaddsMaximized', true);
+    }
+  });
+
+  mainWindow.on('unmaximize', () => {
+    if (mainWindow) {
+      store.set('isYaddsMaximized', false);
     }
   });
 
