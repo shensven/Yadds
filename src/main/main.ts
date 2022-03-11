@@ -88,9 +88,11 @@ const createWindow = async () => {
     show: false,
     x: (store.get('windowBounds.x') as number) || undefined,
     y: (store.get('windowBounds.y') as number) || undefined,
-    width: (store.get('windowBounds.width') as number) || 990,
+    [(isDarwin && 'width') as string]: (store.get('windowBounds.width') as number) || 990,
+    [(isWin32 && 'width') as string]: (store.get('windowBounds.width') as number) || 990 + 16,
     height: (store.get('windowBounds.height') as number) || 720,
-    minWidth: 990,
+    [(isDarwin && 'minWidth') as string]: 990,
+    [(isWin32 && 'minWidth') as string]: 990 + 16, // The min-width will be smaller, workaround on Microsoft Buuuuuugdows platforms!!!
     minHeight: 720,
     [(isDarwin && 'titleBarStyle') as string]: 'hidden',
     // trafficLightPosition: { x: 19, y: 19 },
