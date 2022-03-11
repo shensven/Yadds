@@ -74,10 +74,10 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('zoom-window');
   },
 
-  toogleSidebar: (hasYaddsDrawer, persistHasYaddsDrawer) => {
+  toogleSidebar: (hasYaddsSidebar, persistHasYaddsSidebar) => {
     ipcRenderer.removeAllListeners('toogle-sidebar');
     ipcRenderer.on('toogle-sidebar', () => {
-      persistHasYaddsDrawer(!hasYaddsDrawer);
+      persistHasYaddsSidebar(!hasYaddsSidebar);
     });
   },
 
@@ -88,10 +88,10 @@ contextBridge.exposeInMainWorld('electron', {
     });
   },
 
-  navigateTo: (navigateViaReact, persistYaddsDrawerCategory) => {
+  navigateTo: (navigateViaReact, persistYaddsSidebarCategory) => {
     ipcRenderer.on('navigate', (_, ...arg) => {
       navigateViaReact(...arg);
-      persistYaddsDrawerCategory(...arg);
+      persistYaddsSidebarCategory(...arg);
     });
   },
 

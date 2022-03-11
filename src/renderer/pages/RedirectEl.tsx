@@ -7,7 +7,7 @@ import QueueStopped from './QueueStopped';
 import Settings from './Settings';
 
 const RedirectEl: React.FC = () => {
-  const category = window.electron?.store.get('yaddsDrawerCategory') as string;
+  const category = window.electron?.store.get('yaddsSidebarCategory') as string;
   switch (category) {
     case '/queueAll':
       return <QueueAll />;

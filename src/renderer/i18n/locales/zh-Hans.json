@@ -1,5 +1,5 @@
 {
-  "drawer": {
+  "sidebar": {
     "all": "全部下载项目",
     "downloading": "下载中",
     "completed": "已完成",

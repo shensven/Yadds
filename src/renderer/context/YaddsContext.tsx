@@ -11,11 +11,11 @@ interface CtxType {
   hasYaddsSidebarMarginTop: boolean;
   setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void;
 
-  hasYaddsDrawer: boolean;
-  persistHasYaddsDrawer: (hasYaddsDrawer: boolean) => void;
+  hasYaddsSidebar: boolean;
+  persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void;
 
-  yaddsDrawerCategory: string;
-  persistYaddsDrawerCategory: (yaddsDrawerCategory: string) => void;
+  yaddsSidebarCategory: string;
+  persistYaddsSidebarCategory: (yaddsSidebarCategory: string) => void;
 
   yaddsAppearance: string;
   persistYaddsAppearance: (yaddsAppearance: string) => void;
@@ -40,11 +40,11 @@ export const YaddsCtx = createContext<CtxType>({
   hasYaddsSidebarMarginTop: true,
   setHasYaddsSidebarMarginTop: () => {},
 
-  hasYaddsDrawer: true,
-  persistHasYaddsDrawer: () => {},
+  hasYaddsSidebar: true,
+  persistHasYaddsSidebar: () => {},
 
-  yaddsDrawerCategory: '',
-  persistYaddsDrawerCategory: () => null,
+  yaddsSidebarCategory: '',
+  persistYaddsSidebarCategory: () => null,
 
   yaddsAppearance: 'system',
   persistYaddsAppearance: () => null,
@@ -72,12 +72,12 @@ export const YaddsProvider: React.FC = (props) => {
 
   const [hasYaddsSidebarMarginTopVal, setHasYaddsSidebarMarginTopVal] = useState(true);
 
-  const [hasYaddsDrawerVal, setHasYaddsDrawerVal] = useState(
-    (window.electron?.store.get('hasYaddsDrawer') as boolean) ?? true
+  const [hasYaddsSidebarVal, setHasYaddsSidebarVal] = useState(
+    (window.electron?.store.get('hasYaddsSidebar') as boolean) ?? true
   );
 
-  const [yaddsDrawerCategoryVal, setYaddsDrawerCategoryVal] = useState<string>(
-    (window.electron?.store.get('yaddsDrawerCategory') as string) ?? '/queueAll'
+  const [yaddsSidebarCategoryVal, setYaddsSidebarCategoryVal] = useState<string>(
+    (window.electron?.store.get('yaddsSidebarCategory') as string) ?? '/queueAll'
   );
 
   const [YaddsAppearanceVal, setYaddsAppearanceVal] = useState<string>(
@@ -114,16 +114,16 @@ export const YaddsProvider: React.FC = (props) => {
       setHasYaddsSidebarMarginTopVal(bool);
     },
 
-    hasYaddsDrawer: hasYaddsDrawerVal,
-    persistHasYaddsDrawer: (bool: boolean) => {
-      setHasYaddsDrawerVal(bool);
-      window.electron.store.set('hasYaddsDrawer', bool);
+    hasYaddsSidebar: hasYaddsSidebarVal,
+    persistHasYaddsSidebar: (bool: boolean) => {
+      setHasYaddsSidebarVal(bool);
+      window.electron.store.set('hasYaddsSidebar', bool);
     },
 
-    yaddsDrawerCategory: yaddsDrawerCategoryVal,
-    persistYaddsDrawerCategory: (str: string) => {
-      setYaddsDrawerCategoryVal(str);
-      window.electron.store.set('yaddsDrawerCategory', str);
+    yaddsSidebarCategory: yaddsSidebarCategoryVal,
+    persistYaddsSidebarCategory: (str: string) => {
+      setYaddsSidebarCategoryVal(str);
+      window.electron.store.set('yaddsSidebarCategory', str);
     },
 
     yaddsAppearance: YaddsAppearanceVal,

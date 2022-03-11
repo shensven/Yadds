@@ -5,7 +5,7 @@ import { TFunction, useTranslation } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
-import YaddsDrawer from './containers/YaddsDrawer';
+import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
 import './i18n/i18n';
 import './App.scss';
@@ -20,7 +20,7 @@ declare global {
 
       zoomWindow: () => void;
 
-      toogleSidebar: (hasYaddsDrawer: boolean, persistHasYaddsDrawer: (hasYaddsDrawer: boolean) => void) => void;
+      toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
 
       toogleSidebarMarginTop: (
         hasYaddsSidebarMarginTop: boolean,
@@ -29,7 +29,7 @@ declare global {
 
       navigateTo: (
         navigateViaReact: NavigateFunction,
-        persistYaddsDrawerCategory: (yaddsDrawerCategory: string) => void
+        persistYaddsSidebarCategory: (YaddsSidebarCategory: string) => void
       ) => void;
 
       store: {
@@ -81,7 +81,7 @@ const DesignSystem: React.FC = () => {
       <StyledEngineProvider injectFirst>
         <MemoryRouter>
           <Stack direction="row">
-            <YaddsDrawer />
+            <YaddsSidebar />
             <YaddsMain />
           </Stack>
         </MemoryRouter>

@@ -18,12 +18,12 @@ import {
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
-import DRAWER_WIDTH from '../context/drawerWidth';
+import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import IonSearch from '../components/icons/IonSearch';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
-import inactiveSvg from '../assets/YaddsDrawerSwitch/inactive.svg';
-import activeLeftSvg from '../assets/YaddsDrawerSwitch/active_left.svg';
-import activeRightSvg from '../assets/YaddsDrawerSwitch/active_right.svg';
+import inactiveSvg from '../assets/YaddsSidebarSwitch/inactive.svg';
+import activeLeftSvg from '../assets/YaddsSidebarSwitch/active_left.svg';
+import activeRightSvg from '../assets/YaddsSidebarSwitch/active_right.svg';
 import RedirectEl from '../pages/RedirectEl';
 import QueueAll from '../pages/QueueAll';
 import QueueDownloading from '../pages/QueueDownloading';
@@ -33,8 +33,8 @@ import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Settings from '../pages/Settings';
 
-const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasDrawer' })<{ hasDrawer?: boolean }>(
-  ({ theme, hasDrawer }) => ({
+const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasSidebar' })<{ hasSidebar?: boolean }>(
+  ({ theme, hasSidebar }) => ({
     position: 'fixed',
     left: 0,
     right: 0,
@@ -45,9 +45,9 @@ const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasDrawer' }
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    ...(hasDrawer && {
-      width: `calc(100% - ${DRAWER_WIDTH}px)`,
-      marginLeft: `${DRAWER_WIDTH}px`,
+    ...(hasSidebar && {
+      width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
+      marginLeft: `${SIDEBAR_WIDTH}px`,
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -98,13 +98,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { yaddsDrawerCategory, hasYaddsDrawer, persistHasYaddsDrawer } = useContext(YaddsCtx);
+  const { yaddsSidebarCategory, hasYaddsSidebar, persistHasYaddsSidebar } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
   useEffect(() => {
-    // Sync drawer(sidebar) state with the main process in the renderer process
-    window.electron?.toogleSidebar(hasYaddsDrawer, persistHasYaddsDrawer);
-  }, [hasYaddsDrawer]);
+    // Sync sidebar state with the main process in the renderer process
+    window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar);
+  }, [hasYaddsSidebar]);
 
   const template: MenuItemConstructorOptions[] = [
     { label: '全部开始' },
@@ -123,20 +123,20 @@ const YaddsMain: React.FC = () => {
   const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
-    <Main square elevation={0} hasDrawer={hasYaddsDrawer}>
+    <Main square elevation={0} hasSidebar={hasYaddsSidebar}>
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
           sx={{ height: 40 }}
-          onMouseOver={() => setScr(hasYaddsDrawer ? activeLeftSvg : activeRightSvg)}
+          onMouseOver={() => setScr(hasYaddsSidebar ? activeLeftSvg : activeRightSvg)}
           onMouseOut={() => setScr(inactiveSvg)}
-          onClick={() => persistHasYaddsDrawer(!hasYaddsDrawer)}
+          onClick={() => persistHasYaddsSidebar(!hasYaddsSidebar)}
         >
           <img src={src} alt="" draggable="false" />
         </Icon>
       </Box>
       <StyledAppBar
         elevation={0}
-        sx={{ display: yaddsDrawerCategory === '/settings' ? 'none' : 'flex' }}
+        sx={{ display: yaddsSidebarCategory === '/settings' ? 'none' : 'flex' }}
         onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
       >
         <Stack flexDirection="row" justifyContent="flex-end" sx={{ p: theme.spacing(2) }}>
@@ -177,8 +177,8 @@ const YaddsMain: React.FC = () => {
       <Box
         sx={{
           px: theme.spacing(3),
-          overflowY: yaddsDrawerCategory === '/settings' ? 'hidden' : 'scroll',
-          height: yaddsDrawerCategory === '/settings' ? '100%' : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
+          overflowY: yaddsSidebarCategory === '/settings' ? 'hidden' : 'scroll',
+          height: yaddsSidebarCategory === '/settings' ? '100%' : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
         }}
       >
         <Routes>

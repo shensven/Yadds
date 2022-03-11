@@ -12,7 +12,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { YaddsCtx } from '../context/YaddsContext';
-import DRAWER_WIDTH from '../context/drawerWidth';
+import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
 import IonShapes from '../components/icons/IonShapes';
 import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
@@ -35,24 +35,24 @@ interface Category {
   inactiveIcon: JSX.Element;
 }
 
-const YaddsDrawer: React.FC = () => {
+const YaddsSidebar: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { t } = useTranslation();
 
   const {
-    hasYaddsDrawer,
+    hasYaddsSidebar,
     hasYaddsSidebarMarginTop,
     setHasYaddsSidebarMarginTop,
-    yaddsDrawerCategory,
-    persistYaddsDrawerCategory,
+    yaddsSidebarCategory,
+    persistYaddsSidebarCategory,
   } = useContext(YaddsCtx);
 
-  const isDarwin = window.electron.getOS() === 'darwin';
+  const isDarwin = window.electron?.getOS() === 'darwin';
 
   useLayoutEffect(() => {
     // Init navigation from the top menu
-    window.electron?.navigateTo(navigate, persistYaddsDrawerCategory);
+    window.electron?.navigateTo(navigate, persistYaddsSidebarCategory);
   }, []);
 
   useLayoutEffect(() => {
@@ -63,37 +63,37 @@ const YaddsDrawer: React.FC = () => {
   const category: Category[] = [
     {
       path: '/queueAll',
-      name: t('drawer.all'),
+      name: t('sidebar.all'),
       activeIcon: <IonShapes />,
       inactiveIcon: <IonShapesOutline />,
     },
     {
       path: '/queueDownloading',
-      name: t('drawer.downloading'),
+      name: t('sidebar.downloading'),
       activeIcon: <IonArrowDownCircle />,
       inactiveIcon: <IonArrowDownCircleOutline />,
     },
     {
       path: '/queueFinished',
-      name: t('drawer.completed'),
+      name: t('sidebar.completed'),
       activeIcon: <IonCheckmarkCircle />,
       inactiveIcon: <IonCheckmarkCircleOutline />,
     },
     {
       path: '/queueActive',
-      name: t('drawer.active'),
+      name: t('sidebar.active'),
       activeIcon: <IonArrowUpCircle />,
       inactiveIcon: <IonArrowUpCircleOutline />,
     },
     {
       path: '/queueInactive',
-      name: t('drawer.inactive'),
+      name: t('sidebar.inactive'),
       activeIcon: <IonCloseCircle />,
       inactiveIcon: <IonCloseCircleOutline />,
     },
     {
       path: '/queueStopped',
-      name: t('drawer.stopped'),
+      name: t('sidebar.stopped'),
       activeIcon: <IonStopCircle />,
       inactiveIcon: <IonStopCircleOutline />,
     },
@@ -104,18 +104,17 @@ const YaddsDrawer: React.FC = () => {
       anchor="left"
       variant="persistent"
       sx={{
-        width: DRAWER_WIDTH,
+        width: SIDEBAR_WIDTH,
         '& .MuiDrawer-paper': {
           backgroundColor: 'transparent',
-          width: DRAWER_WIDTH,
+          width: SIDEBAR_WIDTH,
           boxSizing: 'border-box',
         },
       }}
-      open={hasYaddsDrawer}
+      open={hasYaddsSidebar}
     >
       <List
         sx={{
-          // [(window.electron?.getOS() === 'darwin' && 'mt') as string]: hasYaddsSidebarMarginTop ? theme.spacing(4) : 0,
           [(isDarwin && 'mt') as string]: 0,
           ...(hasYaddsSidebarMarginTop && {
             [(isDarwin && 'mt') as string]: theme.spacing(3),
@@ -131,14 +130,14 @@ const YaddsDrawer: React.FC = () => {
             <ListItemButton
               dense
               disableRipple
-              selected={yaddsDrawerCategory === item.path}
+              selected={yaddsSidebarCategory === item.path}
               onClick={() => {
-                persistYaddsDrawerCategory(item.path);
+                persistYaddsSidebarCategory(item.path);
                 navigate(item.path);
               }}
             >
               <ListItemIcon sx={{ color: theme.palette.text.secondary }}>
-                {yaddsDrawerCategory === item.path ? item.activeIcon : item.inactiveIcon}
+                {yaddsSidebarCategory === item.path ? item.activeIcon : item.inactiveIcon}
               </ListItemIcon>
               <ListItemText
                 primary={
@@ -146,7 +145,7 @@ const YaddsDrawer: React.FC = () => {
                     style={{
                       fontWeight: 500,
                       color:
-                        yaddsDrawerCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
+                        yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
                     }}
                   >
                     {item.name}
@@ -162,14 +161,14 @@ const YaddsDrawer: React.FC = () => {
           <ListItemButton
             dense
             disableRipple
-            selected={yaddsDrawerCategory === '/settings'}
+            selected={yaddsSidebarCategory === '/settings'}
             onClick={() => {
-              persistYaddsDrawerCategory('/settings');
+              persistYaddsSidebarCategory('/settings');
               navigate('/settings');
             }}
           >
             <ListItemIcon sx={{ color: theme.palette.text.secondary }}>
-              {yaddsDrawerCategory === '/settings' ? <IonCog /> : <IonCogOutline />}
+              {yaddsSidebarCategory === '/settings' ? <IonCog /> : <IonCogOutline />}
             </ListItemIcon>
             <ListItemText
               primary={
@@ -178,10 +177,10 @@ const YaddsDrawer: React.FC = () => {
                   style={{
                     fontWeight: 500,
                     color:
-                      yaddsDrawerCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
+                      yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
-                  {t('drawer.settings')}
+                  {t('sidebar.settings')}
                 </Typography>
               }
               secondary={
@@ -197,4 +196,4 @@ const YaddsDrawer: React.FC = () => {
   );
 };
 
-export default YaddsDrawer;
+export default YaddsSidebar;
