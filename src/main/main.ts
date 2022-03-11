@@ -501,22 +501,22 @@ ipcMain.handle('set-tray', async (_, args) => {
 ipcMain.handle('dark-mode:light', async () => {
   nativeTheme.themeSource = 'light';
   if (isWin32) {
-    mainWindow?.setBackgroundColor('#f3f3f3');
+    mainWindow?.setBackgroundColor('#efefef');
   }
 });
 ipcMain.handle('dark-mode:dark', async () => {
   nativeTheme.themeSource = 'dark';
   if (isWin32) {
-    mainWindow?.setBackgroundColor('#202020');
+    mainWindow?.setBackgroundColor('#1f1f1f');
   }
 });
 ipcMain.handle('dark-mode:system', async () => {
   nativeTheme.themeSource = 'system';
   if (isWin32) {
     if (nativeTheme.shouldUseDarkColors) {
-      mainWindow?.setBackgroundColor('#202020'); // Dark background
+      mainWindow?.setBackgroundColor('#1f1f1f'); // Dark background
     } else {
-      mainWindow?.setBackgroundColor('#f3f3f3'); // Light background
+      mainWindow?.setBackgroundColor('#e6e6e6'); // Light background
     }
   }
 });
