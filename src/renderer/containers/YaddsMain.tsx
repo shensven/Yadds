@@ -155,6 +155,7 @@ const YaddsMain: React.FC = () => {
             size="small"
             sx={{
               appRegion: 'no-drag',
+              alignSelf: 'stretch',
               backgroundColor: theme.palette.input.default,
               '&:hover': {
                 backgroundColor: theme.palette.input.hover,
@@ -185,7 +186,7 @@ const YaddsMain: React.FC = () => {
             }}
             onClick={() => handleContextMenu()}
           >
-            <IonEllipsisHorizontal sx={{ fontSize: 16 }} color="primary" />
+            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
           </IconButton>
         </Stack>
         <Divider sx={{ opacity: 0.8 }} />
