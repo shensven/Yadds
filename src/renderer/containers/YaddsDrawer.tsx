@@ -40,11 +40,25 @@ const YaddsDrawer: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const { hasYaddsDrawer, yaddsDrawerCategory, persistYaddsDrawerCategory } = useContext(YaddsCtx);
+  const {
+    hasYaddsDrawer,
+    hasYaddsSidebarMarginTop,
+    setHasYaddsSidebarMarginTop,
+    yaddsDrawerCategory,
+    persistYaddsDrawerCategory,
+  } = useContext(YaddsCtx);
+
+  const isDarwin = window.electron.getOS() === 'darwin';
+
   useLayoutEffect(() => {
     // Init navigation from the top menu
     window.electron?.navigateTo(navigate, persistYaddsDrawerCategory);
   }, []);
+
+  useLayoutEffect(() => {
+    // handle the margin top of the sidebar
+    window.electron?.toogleSidebarMarginTop(hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop);
+  }, [hasYaddsSidebarMarginTop]);
 
   const category: Category[] = [
     {
@@ -101,7 +115,15 @@ const YaddsDrawer: React.FC = () => {
     >
       <List
         sx={{
-          [(window.electron?.getOS() === 'darwin' && 'mt') as string]: theme.spacing(4),
+          // [(window.electron?.getOS() === 'darwin' && 'mt') as string]: hasYaddsSidebarMarginTop ? theme.spacing(4) : 0,
+          [(isDarwin && 'mt') as string]: 0,
+          ...(hasYaddsSidebarMarginTop && {
+            [(isDarwin && 'mt') as string]: theme.spacing(3),
+          }),
+          transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.shortest,
+          }),
         }}
       >
         {category.map((item: Category) => (

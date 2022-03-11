@@ -81,6 +81,13 @@ contextBridge.exposeInMainWorld('electron', {
     });
   },
 
+  toogleSidebarMarginTop: (hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop) => {
+    ipcRenderer.removeAllListeners('toogle-sidebar-mt');
+    ipcRenderer.on('toogle-sidebar-mt', (_, ...arg) => {
+      setHasYaddsSidebarMarginTop(...arg);
+    });
+  },
+
   navigateTo: (navigateViaReact, persistYaddsDrawerCategory) => {
     ipcRenderer.on('navigate', (_, ...arg) => {
       navigateViaReact(...arg);

@@ -146,10 +146,27 @@ const createWindow = async () => {
     }
   });
 
+  mainWindow.on('enter-full-screen', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('toogle-sidebar-mt', false);
+      store.set('isYaddsFullScreen', true);
+    }
+  });
+
+  mainWindow.on('leave-full-screen', () => {
+    if (mainWindow) {
+      mainWindow.webContents.send('toogle-sidebar-mt', true);
+      store.set('isYaddsFullScreen', false);
+    }
+  });
+
   let willQuitApp = false;
   mainWindow.on('close', (event: Event) => {
     if (willQuitApp) {
       app.exit();
+    } else if (store.get('isYaddsFullScreen')) {
+      mainWindow?.setFullScreen(false);
+      event.preventDefault();
     } else {
       event.preventDefault();
       mainWindow?.hide();

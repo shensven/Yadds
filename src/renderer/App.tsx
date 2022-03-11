@@ -22,6 +22,11 @@ declare global {
 
       toogleSidebar: (hasYaddsDrawer: boolean, persistHasYaddsDrawer: (hasYaddsDrawer: boolean) => void) => void;
 
+      toogleSidebarMarginTop: (
+        hasYaddsSidebarMarginTop: boolean,
+        setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void
+      ) => void;
+
       navigateTo: (
         navigateViaReact: NavigateFunction,
         persistYaddsDrawerCategory: (yaddsDrawerCategory: string) => void
@@ -32,7 +37,7 @@ declare global {
         set: (key: string, val: unknown) => void;
       };
 
-      getOS: () => string;
+      getOS: () => 'darwin' | 'win32';
 
       getAppVersion: () => string;
 

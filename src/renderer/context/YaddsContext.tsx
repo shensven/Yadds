@@ -8,6 +8,9 @@ export interface DsmConnectListType {
 }
 
 interface CtxType {
+  hasYaddsSidebarMarginTop: boolean;
+  setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void;
+
   hasYaddsDrawer: boolean;
   persistHasYaddsDrawer: (hasYaddsDrawer: boolean) => void;
 
@@ -34,6 +37,9 @@ interface CtxType {
 }
 
 export const YaddsCtx = createContext<CtxType>({
+  hasYaddsSidebarMarginTop: true,
+  setHasYaddsSidebarMarginTop: () => {},
+
   hasYaddsDrawer: true,
   persistHasYaddsDrawer: () => {},
 
@@ -63,6 +69,8 @@ export const YaddsProvider: React.FC = (props) => {
   const { children } = props;
 
   // ---------------------------------------------------------------------------
+
+  const [hasYaddsSidebarMarginTopVal, setHasYaddsSidebarMarginTopVal] = useState(true);
 
   const [hasYaddsDrawerVal, setHasYaddsDrawerVal] = useState(
     (window.electron?.store.get('hasYaddsDrawer') as boolean) ?? true
@@ -101,6 +109,11 @@ export const YaddsProvider: React.FC = (props) => {
   // ---------------------------------------------------------------------------
 
   const ctxValue = {
+    hasYaddsSidebarMarginTop: hasYaddsSidebarMarginTopVal,
+    setHasYaddsSidebarMarginTop: (bool: boolean) => {
+      setHasYaddsSidebarMarginTopVal(bool);
+    },
+
     hasYaddsDrawer: hasYaddsDrawerVal,
     persistHasYaddsDrawer: (bool: boolean) => {
       setHasYaddsDrawerVal(bool);
