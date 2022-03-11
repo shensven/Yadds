@@ -487,11 +487,19 @@ ipcMain.handle('set-application-menu', async (_, args) => {
 
 ipcMain.handle('set-tray', async (_, args) => {
   const { showMainWindow, quit } = args;
-  const contextMenu = Menu.buildFromTemplate([
-    { type: 'normal', label: showMainWindow, click: () => mainWindow?.show() },
+
+  const devMenu: MenuItemConstructorOptions[] = [
+    { label: 'Reload', click: () => mainWindow?.webContents.reload() },
+    { label: 'Toggle Developer Tools', click: () => mainWindow?.webContents.toggleDevTools() },
     { type: 'separator' },
-    { type: 'normal', label: quit, click: () => app.exit() },
-  ]);
+  ];
+  const normalMenu: MenuItemConstructorOptions[] = [
+    { label: showMainWindow, click: () => mainWindow?.show() },
+    { type: 'separator' },
+    { label: quit, click: () => app.exit() },
+  ];
+
+  const contextMenu = Menu.buildFromTemplate(isDevelopment && isWin32 ? [...devMenu, ...normalMenu] : normalMenu);
 
   const trayIcon = isDevelopment
     ? nativeImage.createFromPath(getAssetPath('trayDevTemplate.png'))
@@ -518,7 +526,7 @@ ipcMain.handle('set-tray', async (_, args) => {
 ipcMain.handle('dark-mode:light', async () => {
   nativeTheme.themeSource = 'light';
   if (isWin32) {
-    mainWindow?.setBackgroundColor('#efefef');
+    mainWindow?.setBackgroundColor('#e6e6e6');
   }
 });
 ipcMain.handle('dark-mode:dark', async () => {
