@@ -14,37 +14,26 @@ declare global {
   interface Window {
     electron: {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
-
       setApplicationMenu: (t: TFunction) => void;
       setTray: (t: TFunction) => void;
-
       zoomWindow: () => void;
-
       toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
-
       toogleSidebarMarginTop: (
         hasYaddsSidebarMarginTop: boolean,
         setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void
       ) => void;
-
       navigateTo: (
         navigateViaReact: NavigateFunction,
         persistYaddsSidebarCategory: (YaddsSidebarCategory: string) => void
       ) => void;
-
       store: {
         get: (key: string) => unknown;
         set: (key: string, val: unknown) => void;
       };
-
       getOS: () => 'darwin' | 'win32';
-
       getAppVersion: () => string;
-
       popupContextMenu: (val: MenuItemConstructorOptions[]) => void;
-
       openViaBrowser: (val: string) => void;
-
       net: {
         auth: (quickConnectID: string, account: string, passwd: string) => void;
       };
