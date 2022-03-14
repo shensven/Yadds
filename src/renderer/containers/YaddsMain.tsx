@@ -103,9 +103,12 @@ const YaddsMain: React.FC = () => {
   const [src, setScr] = useState<string>(inactiveSvg);
 
   useLayoutEffect(() => {
-    // Sync sidebar state with the main process in the renderer process
-    window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar);
-    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar));
+    window.electron?.setTray(t); // Init system tary
+  }, []);
+
+  useLayoutEffect(() => {
+    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar)); // Init or update application menu
+    window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // Sync sidebar state with the main process in the renderer process
   }, [hasYaddsSidebar]);
 
   const template: MenuItemConstructorOptions[] = [

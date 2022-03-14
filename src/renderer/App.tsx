@@ -1,13 +1,12 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { useContext, useLayoutEffect } from 'react';
+import { useContext } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
-import { TFunction, useTranslation } from 'react-i18next';
+import { TFunction } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
-import menuItemLabelHandler from './utils/menuItemLabelHandler';
 import './i18n/i18n';
 import './App.scss';
 
@@ -43,16 +42,8 @@ declare global {
 }
 
 const DesignSystem: React.FC = () => {
-  const { hasYaddsSidebar, yaddsAppearance } = useContext(YaddsCtx);
+  const { yaddsAppearance } = useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const { t } = useTranslation();
-
-  const menuItemLabel = menuItemLabelHandler(t, hasYaddsSidebar);
-
-  useLayoutEffect(() => {
-    window.electron?.setApplicationMenu(menuItemLabel); // Init system's menu
-    window.electron?.setTray(t); // Init system's tary
-  }, []);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (yaddsAppearance) {

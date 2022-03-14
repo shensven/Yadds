@@ -42,15 +42,8 @@ const isDarwin = process.platform === 'darwin';
 const isWin32 = process.platform === 'win32';
 
 let mainWindow: BrowserWindow | null = null;
-let applicationMenu: Menu | null = null;
 let tray: Tray | null = null;
 const store = new Store({ encryptionKey: 'yadds0bfs' });
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
 
 if (isDevelopment) {
   require('electron-debug')();
@@ -81,8 +74,6 @@ const createWindow = async () => {
       )
       .catch(console.log);
   }
-
-  nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
 
   mainWindow = new BrowserWindow({
     show: false,
@@ -201,9 +192,17 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
+//------------------------------------------------------------------------------
+// Initialize the default configuration of this application
+
+nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
+
 app.applicationMenu = null;
 
 app.commandLine.appendSwitch('force_high_performance_gpu');
+
+//------------------------------------------------------------------------------
+// When Electron has finished initializing, create the main window.
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -230,9 +229,8 @@ if (!gotTheLock) {
     .catch(console.log);
 }
 
-/**
- * Add event listeners...
- */
+//------------------------------------------------------------------------------
+// Add event listeners
 
 nativeTheme.on('updated', () => {
   if (isWin32) {
@@ -258,6 +256,12 @@ app.on('window-all-closed', () => {
   if (!isDarwin) {
     app.quit();
   }
+});
+
+ipcMain.on('ipc-example', async (event, arg) => {
+  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+  console.log(msgTemplate(arg));
+  event.reply('ipc-example', msgTemplate('pong'));
 });
 
 ipcMain.handle('set-application-menu', async (_, args) => {
@@ -484,7 +488,7 @@ ipcMain.handle('set-application-menu', async (_, args) => {
 
   if (isDarwin) {
     const template = buildDarwinTemplate();
-    applicationMenu = Menu.buildFromTemplate(template);
+    const applicationMenu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(applicationMenu);
   }
 });
