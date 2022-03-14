@@ -513,7 +513,21 @@ ipcMain.handle('set-tray', async (_, args) => {
     { type: 'separator' },
   ];
   const normalMenu: MenuItemConstructorOptions[] = [
-    { label: showMainWindow, click: () => mainWindow?.show() },
+    {
+      label: showMainWindow,
+      click: () => {
+        if (isDarwin) {
+          mainWindow?.show();
+        }
+        if (isWin32) {
+          if (store.get('isYaddsMaximized')) {
+            mainWindow?.maximize();
+          } else {
+            mainWindow?.show();
+          }
+        }
+      },
+    },
     { type: 'separator' },
     { label: quit, click: () => app.exit() },
   ];
@@ -548,7 +562,11 @@ ipcMain.handle('set-tray', async (_, args) => {
 
   tray.on('click', () => {
     if (isWin32) {
-      mainWindow?.show();
+      if (store.get('isYaddsMaximized')) {
+        mainWindow?.maximize();
+      } else {
+        mainWindow?.show();
+      }
     }
   });
 });
