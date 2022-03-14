@@ -201,6 +201,8 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
+app.applicationMenu = null;
+
 app.commandLine.appendSwitch('force_high_performance_gpu');
 
 const gotTheLock = app.requestSingleInstanceLock();
