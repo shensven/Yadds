@@ -13,6 +13,8 @@ const menuItemLabelHandler = (
     hideYadds: t('application_menu.darwin.hide_yadds'),
     hideOthers: t('application_menu.darwin.hide_others'),
     quitYadds: t('application_menu.darwin.quit_yadds'),
+    file: t('application_menu.darwin.file'),
+    newTask: t('application_menu.darwin.new_task'),
     edit: t('application_menu.darwin.edit'),
     undo: t('application_menu.darwin.undo'),
     redo: t('application_menu.darwin.redo'),

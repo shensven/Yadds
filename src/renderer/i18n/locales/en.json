@@ -46,6 +46,8 @@
       "hide_yadds": "Hide Yadds",
       "hide_others": "Hide Others",
       "quit_yadds": "Quit Yadds",
+      "file": "File",
+      "new_task": "New Task...",
       "edit": "Edit",
       "undo": "Undo",
       "redo": "Redo",

@@ -46,6 +46,8 @@
       "hide_yadds": "隐藏 Yadds",
       "hide_others": "隐藏其他",
       "quit_yadds": "退出 Yadds",
+      "file": "文件",
+      "new_task": "新建任务...",
       "edit": "编辑",
       "undo": "撤销",
       "redo": "恢复",

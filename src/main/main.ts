@@ -273,6 +273,8 @@ ipcMain.handle('set-application-menu', async (_, args) => {
     hideYadds: args.hideYadds,
     hideOthers: args.hideOthers,
     quitYadds: args.quitYadds,
+    file: args.file,
+    newTask: args.newTask,
     edit: args.edit,
     undo: args.undo,
     redo: args.redo,
@@ -347,6 +349,15 @@ ipcMain.handle('set-application-menu', async (_, args) => {
           label: menuItemLabel.quitYadds,
           accelerator: 'Command+Q',
           click: () => app.exit(),
+        },
+      ],
+    };
+    const subMenuFile: DarwinMenuItemConstructorOptions = {
+      label: menuItemLabel.file,
+      submenu: [
+        {
+          label: menuItemLabel.newTask,
+          accelerator: 'Command+N',
         },
       ],
     };
@@ -482,8 +493,8 @@ ipcMain.handle('set-application-menu', async (_, args) => {
     };
 
     return isDevelopment
-      ? [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp, subMenuDev]
-      : [subMenuAbout, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp];
+      ? [subMenuAbout, subMenuFile, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp, subMenuDev]
+      : [subMenuAbout, subMenuFile, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp];
   };
 
   if (isDarwin) {
