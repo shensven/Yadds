@@ -31,7 +31,7 @@ import QueueActive from '../pages/QueueActive';
 import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Settings from '../pages/Settings';
-import menuItemLabelHandler from '../utils/menuItemLabelHandler';
+import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
 const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasSidebar' })<{ hasSidebar?: boolean }>(
   ({ theme, hasSidebar }) => ({
@@ -109,7 +109,8 @@ const YaddsMain: React.FC = () => {
 
   useLayoutEffect(() => {
     window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // handle the sidebar state
-    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop)); // Init or update application menu
+    const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    window.electron?.setApplicationMenu(appMenuItemLabel); // Init or update application menu
   }, [hasYaddsSidebar]);
 
   const template: MenuItemConstructorOptions[] = [
@@ -137,7 +138,8 @@ const YaddsMain: React.FC = () => {
           onMouseOut={() => setScr(inactiveSvg)}
           onClick={() => {
             persistHasYaddsSidebar(!hasYaddsSidebar);
-            window.electron?.setApplicationMenu(menuItemLabelHandler(t, !hasYaddsSidebar, hasYaddsSidebarMarginTop));
+            const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+            window.electron?.setApplicationMenu(appMenuItemLabel);
           }}
         >
           <img src={src} alt="" draggable="false" />

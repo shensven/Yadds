@@ -35,7 +35,7 @@ import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67
 import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
 import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
-import menuItemLabelHandler from '../utils/menuItemLabelHandler';
+import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
 interface SettingsFormItemProps {
   label: string;
@@ -266,9 +266,8 @@ const Settings: React.FC = () => {
                 onClick={() => {
                   persistYaddsI18nCode(item.languageCode);
                   i18n.changeLanguage(item.languageCode);
-                  window.electron?.setApplicationMenu(
-                    menuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop)
-                  );
+                  const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+                  window.electron?.setApplicationMenu(appMenuItemLabel);
                   window.electron?.setTray(t);
                 }}
               />
