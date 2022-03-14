@@ -67,6 +67,7 @@ const Settings: React.FC = () => {
 
   const {
     hasYaddsSidebar,
+    hasYaddsSidebarMarginTop,
     yaddsAppearance,
     persistYaddsAppearance,
     yaddsI18nCode,
@@ -265,7 +266,9 @@ const Settings: React.FC = () => {
                 onClick={() => {
                   persistYaddsI18nCode(item.languageCode);
                   i18n.changeLanguage(item.languageCode);
-                  window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar));
+                  window.electron?.setApplicationMenu(
+                    menuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop)
+                  );
                   window.electron?.setTray(t);
                 }}
               />

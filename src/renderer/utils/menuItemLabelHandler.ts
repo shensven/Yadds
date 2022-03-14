@@ -1,6 +1,10 @@
 import { TFunction } from 'react-i18next';
 
-const menuItemLabelHandler = (t: TFunction<'translation', undefined>, hasYaddsSidebar: boolean) => {
+const menuItemLabelHandler = (
+  t: TFunction<'translation', undefined>,
+  hasYaddsSidebar: boolean,
+  hasYaddsSidebarMarginTop: boolean
+) => {
   const menuItemLabel = {
     aboutYadds: t('application_menu.darwin.about_yadds'),
     checkForUpdates: t('application_menu.darwin.check_for_updates'),
@@ -20,7 +24,9 @@ const menuItemLabelHandler = (t: TFunction<'translation', undefined>, hasYaddsSi
     showHideSidebar: hasYaddsSidebar
       ? t('application_menu.darwin.hide_sidebar')
       : t('application_menu.darwin.show_sidebar'),
-    toggleFullScreen: t('application_menu.darwin.toggle_full_screen'),
+    toggleFullScreen: hasYaddsSidebarMarginTop
+      ? t('application_menu.darwin.enter_full_screen')
+      : t('application_menu.darwin.exit_full_screen'),
     navigate: t('application_menu.darwin.navigate'),
     all: t('application_menu.darwin.all'),
     downloading: t('application_menu.darwin.downloading'),

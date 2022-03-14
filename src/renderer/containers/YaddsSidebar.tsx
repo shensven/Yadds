@@ -27,6 +27,7 @@ import IonStopCircleOutline from '../components/icons/IonStopCircleOutline';
 import IonStopCircle from '../components/icons/IonStopCircle';
 import IonCogOutline from '../components/icons/IonCogOutline';
 import IonCog from '../components/icons/IonCog';
+import menuItemLabelHandler from '../utils/menuItemLabelHandler';
 
 interface Category {
   path: string;
@@ -51,13 +52,12 @@ const YaddsSidebar: React.FC = () => {
   const isDarwin = window.electron?.getOS() === 'darwin';
 
   useLayoutEffect(() => {
-    // Init navigation from the top menu
-    window.electron?.navigateTo(navigate, persistYaddsSidebarCategory);
+    window.electron?.navigateTo(navigate, persistYaddsSidebarCategory); // Init navigation from the top menu
   }, []);
 
   useLayoutEffect(() => {
-    // handle the margin top of the sidebar
-    window.electron?.toogleSidebarMarginTop(hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop);
+    window.electron?.toogleSidebarMarginTop(hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop); // handle the margin top of the sidebar
+    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop)); // Init or update application menu
   }, [hasYaddsSidebarMarginTop]);
 
   const category: Category[] = [

@@ -99,7 +99,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { yaddsSidebarCategory, hasYaddsSidebar, persistHasYaddsSidebar } = useContext(YaddsCtx);
+  const { yaddsSidebarCategory, hasYaddsSidebarMarginTop, hasYaddsSidebar, persistHasYaddsSidebar } =
+    useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
   useLayoutEffect(() => {
@@ -107,8 +108,8 @@ const YaddsMain: React.FC = () => {
   }, []);
 
   useLayoutEffect(() => {
-    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar)); // Init or update application menu
-    window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // Sync sidebar state with the main process in the renderer process
+    window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // handle the sidebar state
+    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop)); // Init or update application menu
   }, [hasYaddsSidebar]);
 
   const template: MenuItemConstructorOptions[] = [
@@ -136,7 +137,7 @@ const YaddsMain: React.FC = () => {
           onMouseOut={() => setScr(inactiveSvg)}
           onClick={() => {
             persistHasYaddsSidebar(!hasYaddsSidebar);
-            window.electron?.setApplicationMenu(menuItemLabelHandler(t, !hasYaddsSidebar));
+            window.electron?.setApplicationMenu(menuItemLabelHandler(t, !hasYaddsSidebar, hasYaddsSidebarMarginTop));
           }}
         >
           <img src={src} alt="" draggable="false" />
