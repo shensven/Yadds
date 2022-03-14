@@ -7,6 +7,7 @@ import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
+import menuItemLabelHandler from './utils/menuItemLabelHandler';
 import './i18n/i18n';
 import './App.scss';
 
@@ -14,7 +15,7 @@ declare global {
   interface Window {
     electron: {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
-      setApplicationMenu: (t: TFunction) => void;
+      setApplicationMenu: (menuItemLabelHandler: any) => void;
       setTray: (t: TFunction) => void;
       zoomWindow: () => void;
       toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
@@ -42,12 +43,14 @@ declare global {
 }
 
 const DesignSystem: React.FC = () => {
-  const { yaddsAppearance } = useContext(YaddsCtx);
+  const { hasYaddsSidebar, yaddsAppearance } = useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const { t } = useTranslation();
 
+  const menuItemLabel = menuItemLabelHandler(t, hasYaddsSidebar);
+
   useLayoutEffect(() => {
-    window.electron?.setApplicationMenu(t); // Init system's menu
+    window.electron?.setApplicationMenu(menuItemLabel); // Init system's menu
     window.electron?.setTray(t); // Init system's tary
   }, []);
 

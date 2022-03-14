@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions } from 'electron';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useLayoutEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -31,6 +31,7 @@ import QueueActive from '../pages/QueueActive';
 import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Settings from '../pages/Settings';
+import menuItemLabelHandler from '../utils/menuItemLabelHandler';
 
 const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasSidebar' })<{ hasSidebar?: boolean }>(
   ({ theme, hasSidebar }) => ({
@@ -101,9 +102,10 @@ const YaddsMain: React.FC = () => {
   const { yaddsSidebarCategory, hasYaddsSidebar, persistHasYaddsSidebar } = useContext(YaddsCtx);
   const [src, setScr] = useState<string>(inactiveSvg);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Sync sidebar state with the main process in the renderer process
     window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar);
+    window.electron?.setApplicationMenu(menuItemLabelHandler(t, hasYaddsSidebar));
   }, [hasYaddsSidebar]);
 
   const template: MenuItemConstructorOptions[] = [
@@ -129,7 +131,10 @@ const YaddsMain: React.FC = () => {
           sx={{ height: 40 }}
           onMouseOver={() => setScr(hasYaddsSidebar ? activeLeftSvg : activeRightSvg)}
           onMouseOut={() => setScr(inactiveSvg)}
-          onClick={() => persistHasYaddsSidebar(!hasYaddsSidebar)}
+          onClick={() => {
+            persistHasYaddsSidebar(!hasYaddsSidebar);
+            window.electron?.setApplicationMenu(menuItemLabelHandler(t, !hasYaddsSidebar));
+          }}
         >
           <img src={src} alt="" draggable="false" />
         </Icon>
