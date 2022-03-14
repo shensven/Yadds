@@ -503,13 +503,24 @@ ipcMain.handle('set-tray', async (_, args) => {
 
   const contextMenu = Menu.buildFromTemplate(isDevelopment && isWin32 ? [...devMenu, ...normalMenu] : normalMenu);
 
-  const trayIcon = isDevelopment
-    ? nativeImage.createFromPath(getAssetPath('trayDevTemplate.png'))
-    : nativeImage.createFromPath(getAssetPath('trayTemplate.png'));
+  const getTrayIcon = () => {
+    switch (process.platform) {
+      case 'darwin':
+        return isDevelopment
+          ? nativeImage.createFromPath(getAssetPath('tray/darwin/trayDevTemplate.png'))
+          : nativeImage.createFromPath(getAssetPath('tray/darwin/trayTemplate.png'));
+      case 'win32':
+        return isDevelopment
+          ? nativeImage.createFromPath(getAssetPath('tray/win32/trayDev@2x.png')).resize({ width: 16, height: 16 })
+          : nativeImage.createFromPath(getAssetPath('tray/win32/tray@2x.png')).resize({ width: 16, height: 16 });
+      default:
+        return '';
+    }
+  };
 
   if (!tray) {
     // Init system's tary
-    tray = new Tray(trayIcon);
+    tray = new Tray(getTrayIcon());
     if (isWin32) {
       tray.setToolTip('Yadds');
     }
