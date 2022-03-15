@@ -114,17 +114,25 @@ const YaddsMain: React.FC = () => {
   }, [hasYaddsSidebar]);
 
   const template: MenuItemConstructorOptions[] = [
-    { label: '全部开始' },
-    { label: '全部暂停' },
-    { label: '全部删除...' },
+    { label: t('main.resume_all') },
+    { label: t('main.pause_all') },
+    { label: t('main.delete_all') },
     { type: 'separator' },
-    { label: '按添加时间排序', type: 'radio', checked: true },
-    { label: '按下载进度排序', type: 'radio', checked: false },
-    { label: '按下载速率排序', type: 'radio', checked: false },
-    { label: '按文件名称排序', type: 'radio', checked: false },
+    { label: t('main.list_view'), type: 'radio', checked: true },
+    { label: t('main.matrix_view'), type: 'radio', checked: false },
     { type: 'separator' },
-    { label: '显示为列表', type: 'radio', checked: true },
-    { label: '显示为矩阵', type: 'radio', checked: false },
+    {
+      label: t('main.sort_by'),
+      submenu: [
+        { label: t('main.date'), type: 'radio', checked: true },
+        { label: t('main.download_progress'), type: 'radio', checked: false },
+        { label: t('main.download_speed'), type: 'radio', checked: false },
+        { label: t('main.name'), type: 'radio', checked: false },
+        { type: 'separator' },
+        { label: t('main.ascending'), type: 'radio', checked: true },
+        { label: t('main.descending'), type: 'radio', checked: false },
+      ],
+    },
   ];
 
   const handleContextMenu = () => window.electron.popupContextMenu(template);
