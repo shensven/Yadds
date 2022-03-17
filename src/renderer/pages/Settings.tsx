@@ -28,6 +28,7 @@ import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
 import IonTrashOutline from '../components/icons/IonTrashOutline';
+import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import AppearanceLight from '../assets/Settings/AppearanceLight_67x44_@2x.png';
 import AppearanceDark from '../assets/Settings/AppearanceDark_67x44_@2x.png';
 import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
@@ -84,6 +85,7 @@ const Settings: React.FC = () => {
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
+  const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
 
   const [newConnect, setNewConnect] = useState({
@@ -145,6 +147,7 @@ const Settings: React.FC = () => {
 
   const dismissDailogAdd = () => {
     setHasDialogAdd(false);
+    setLoadingInDialogAdd(false);
     setNewConnect({
       isQuickConnectID: true,
       connectAddress: '',
@@ -169,6 +172,7 @@ const Settings: React.FC = () => {
         <Typography variant="h3" fontWeight={500} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
           {t('settings.settings')}
         </Typography>
+
         {/* appearance */}
         <SettingsFormItem label={t('settings.appearance')}>
           <FormGroup row>
@@ -201,6 +205,7 @@ const Settings: React.FC = () => {
             ))}
           </FormGroup>
         </SettingsFormItem>
+
         {/* QuickConnect ID or Address */}
         <SettingsFormItem label={t('settings.quickconnect_id_or_address')}>
           <FormGroup row>
@@ -218,6 +223,7 @@ const Settings: React.FC = () => {
                   },
                 }}
                 sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
+                disabled={dsmConnectList.length === 0}
                 value={[dsmConnectIndex]}
                 renderValue={() =>
                   `${dsmConnectList[dsmConnectIndex]?.host ?? 'null'} - ${
@@ -254,6 +260,7 @@ const Settings: React.FC = () => {
             </Button>
           </FormGroup>
         </SettingsFormItem>
+
         {/* i18n */}
         <SettingsFormItem label={t('settings.language')}>
           <FormGroup>
@@ -274,6 +281,7 @@ const Settings: React.FC = () => {
             ))}
           </FormGroup>
         </SettingsFormItem>
+
         {/* system */}
         <SettingsFormItem label={t('settings.application')}>
           <FormGroup>
@@ -311,6 +319,7 @@ const Settings: React.FC = () => {
             </Stack>
           </FormGroup>
         </SettingsFormItem>
+
         {/* About */}
         <SettingsFormItem label={t('settings.about')} hasMargin={false}>
           <FormGroup>
@@ -346,6 +355,8 @@ const Settings: React.FC = () => {
           </FormGroup>
         </SettingsFormItem>
       </Stack>
+
+      {/* Add Connection */}
       <Dialog open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
@@ -387,7 +398,7 @@ const Settings: React.FC = () => {
                   })
                 }
               >
-                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>{t('settings.dialog.address')}</Typography>
+                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>{t('settings.dialog_add.address')}</Typography>
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
@@ -398,7 +409,7 @@ const Settings: React.FC = () => {
               size="small"
               spellCheck={false}
               autoFocus
-              label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog.address')}
+              label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
               value={newConnect.connectAddress}
               sx={{ mt: theme.spacing(2) }}
               InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -418,7 +429,7 @@ const Settings: React.FC = () => {
             />
             <TextField
               size="small"
-              label={t('settings.dialog.username')}
+              label={t('settings.dialog_add.username')}
               spellCheck={false}
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -426,7 +437,7 @@ const Settings: React.FC = () => {
             />
             <TextField
               size="small"
-              label={t('settings.dialog.password')}
+              label={t('settings.dialog_add.password')}
               spellCheck={false}
               value={newConnect.password}
               type={newConnect.showPassword ? 'text' : 'password'}
@@ -454,47 +465,63 @@ const Settings: React.FC = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button color="inherit" onClick={() => console.log(dsmConnectList)}>
+          <Button color="inherit" onClick={() => console.log(newConnect)}>
             打印
           </Button>
           <Button color="inherit" onClick={() => persistDsmConnectList([])}>
             清空
           </Button>
+          <Button color="inherit" onClick={() => dismissDailogAdd()}>
+            {t('settings.dialog_add.cancel')}
+          </Button>
           <Button
+            sx={{
+              transition: theme.transitions.create(['background-color'], {
+                easing: theme.transitions.easing.easeIn,
+                duration: theme.transitions.duration.standard,
+              }),
+              ...(loadingInDialogAdd && {
+                backgroundColor: theme.palette.action.disabledBackground,
+              }),
+            }}
+            disabled={loadingInDialogAdd}
             onClick={() => {
-              // const arr = [...dsmConnectList];
-              // arr.push({
-              //   host: `10.10.10.${dsmConnectList.length + 1}`,
-              //   username: `root${dsmConnectList.length + 1}`,
-              //   did: '123456789',
-              //   id: new Date().getTime().toString(),
-              // });
-              // setDsmConnectList(arr);
-              window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
+              const arr = [...dsmConnectList];
+              arr.push({
+                host: `10.10.10.${dsmConnectList.length + 1}`,
+                username: `root${dsmConnectList.length + 1}`,
+                did: '123456789',
+                id: new Date().getTime().toString(),
+              });
+              persistDsmConnectList(arr);
+              setLoadingInDialogAdd(true);
+              // window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
             }}
           >
-            {t('settings.dialog.ok')}
+            {loadingInDialogAdd ? <EosIconsThreeDotsLoading /> : t('settings.dialog_add.ok')}
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Confirm Remove */}
       <Dialog open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
-            <Typography>确认删除</Typography>
+            <Typography>{t('settings.dialog_remove.confirm_remove')}</Typography>
             <IonTrashOutline sx={{ fontSize: 17, ml: theme.spacing(1) }} />
           </Stack>
         </DialogTitle>
         <DialogContent>
-          <Typography color={theme.palette.text.secondary} sx={{ fontSize: 12, width: theme.spacing(28) }}>
-            登出并删除连接？
+          <Typography color={theme.palette.text.secondary} sx={{ fontSize: 14, width: theme.spacing(28) }}>
+            {t('settings.dialog_remove.are_you_sure')}
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button color="inherit" onClick={() => dismissDaialogDelete()}>
-            取消
+            {t('settings.dialog_remove.cancel')}
           </Button>
           <Button color="error" onClick={() => {}}>
-            确定
+            {t('settings.dialog_remove.yes')}
           </Button>
         </DialogActions>
       </Dialog>

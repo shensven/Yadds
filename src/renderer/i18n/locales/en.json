@@ -42,11 +42,18 @@
     "license": "License",
     "this_copy_is_licensed_under_GPL_3_0": "This copy is licensed under GPL-3.0",
     "devoloper": "Devoloper",
-    "dialog": {
+    "dialog_add": {
       "address": "Address",
-      "username": "username",
-      "password": "password",
+      "username": "Username",
+      "password": "Password",
+      "cancel": "CANCEL",
       "ok": "OK"
+    },
+    "dialog_remove": {
+      "confirm_remove": "Confirm Remove",
+      "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
+      "cancel": "CANCEL",
+      "yes": "YES"
     }
   },
   "application_menu": {

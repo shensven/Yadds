@@ -42,11 +42,18 @@
     "license": "许可证",
     "this_copy_is_licensed_under_GPL_3_0": "本拷贝通过 GPL-3.0 协议授权",
     "devoloper": "开发者",
-    "dialog": {
+    "dialog_add": {
       "address": "地址",
-      "username": "用户名",
+      "username": "用户帐号",
       "password": "密码",
+      "cancel": "取消",
       "ok": "新增"
+    },
+    "dialog_remove": {
+      "confirm_remove": "确认移除",
+      "are_you_sure": " 您确定登出并断开与 DSM 的连接？",
+      "cancel": "取消",
+      "yes": "确定"
     }
   },
   "application_menu": {
