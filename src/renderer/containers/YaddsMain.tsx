@@ -20,9 +20,9 @@ import { YaddsCtx } from '../context/YaddsContext';
 import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import IonSearch from '../components/icons/IonSearch';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
-import inactiveSvg from '../assets/yaddsSidebarIndicator/inactive.svg';
-import activeLeftSvg from '../assets/yaddsSidebarIndicator/active_left.svg';
-import activeRightSvg from '../assets/yaddsSidebarIndicator/active_right.svg';
+import greyInactiveSvg from '../assets/yaddsSidebarIndicator/grey_inactive.svg';
+import greyActiveLeftSvg from '../assets/yaddsSidebarIndicator/grey_active_left.svg';
+import greyActiveRightSvg from '../assets/yaddsSidebarIndicator/grey_active_right.svg';
 import RedirectEl from '../pages/RedirectEl';
 import QueueAll from '../pages/QueueAll';
 import QueueDownloading from '../pages/QueueDownloading';
@@ -101,7 +101,8 @@ const YaddsMain: React.FC = () => {
   const { t } = useTranslation();
   const { yaddsSidebarCategory, hasYaddsSidebarMarginTop, hasYaddsSidebar, persistHasYaddsSidebar } =
     useContext(YaddsCtx);
-  const [indicatorSrc, setIndicatorScr] = useState<string>(inactiveSvg);
+
+  const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useLayoutEffect(() => {
     window.electron?.setTray(t); // Init system tary
@@ -142,8 +143,8 @@ const YaddsMain: React.FC = () => {
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
           sx={{ height: 40 }}
-          onMouseOver={() => setIndicatorScr(hasYaddsSidebar ? activeLeftSvg : activeRightSvg)}
-          onMouseOut={() => setIndicatorScr(inactiveSvg)}
+          onMouseOver={() => setIndicatorScr(hasYaddsSidebar ? greyActiveLeftSvg : greyActiveRightSvg)}
+          onMouseOut={() => setIndicatorScr(greyInactiveSvg)}
           onClick={() => {
             persistHasYaddsSidebar(!hasYaddsSidebar);
             const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
