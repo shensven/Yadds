@@ -20,9 +20,9 @@ import { YaddsCtx } from '../context/YaddsContext';
 import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import IonSearch from '../components/icons/IonSearch';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
-import inactiveSvg from '../assets/YaddsSidebarSwitch/inactive.svg';
-import activeLeftSvg from '../assets/YaddsSidebarSwitch/active_left.svg';
-import activeRightSvg from '../assets/YaddsSidebarSwitch/active_right.svg';
+import inactiveSvg from '../assets/yaddsSidebarIndicator/inactive.svg';
+import activeLeftSvg from '../assets/yaddsSidebarIndicator/active_left.svg';
+import activeRightSvg from '../assets/yaddsSidebarIndicator/active_right.svg';
 import RedirectEl from '../pages/RedirectEl';
 import QueueAll from '../pages/QueueAll';
 import QueueDownloading from '../pages/QueueDownloading';
@@ -101,7 +101,7 @@ const YaddsMain: React.FC = () => {
   const { t } = useTranslation();
   const { yaddsSidebarCategory, hasYaddsSidebarMarginTop, hasYaddsSidebar, persistHasYaddsSidebar } =
     useContext(YaddsCtx);
-  const [src, setScr] = useState<string>(inactiveSvg);
+  const [indicatorSrc, setIndicatorScr] = useState<string>(inactiveSvg);
 
   useLayoutEffect(() => {
     window.electron?.setTray(t); // Init system tary
@@ -142,15 +142,15 @@ const YaddsMain: React.FC = () => {
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
           sx={{ height: 40 }}
-          onMouseOver={() => setScr(hasYaddsSidebar ? activeLeftSvg : activeRightSvg)}
-          onMouseOut={() => setScr(inactiveSvg)}
+          onMouseOver={() => setIndicatorScr(hasYaddsSidebar ? activeLeftSvg : activeRightSvg)}
+          onMouseOut={() => setIndicatorScr(inactiveSvg)}
           onClick={() => {
             persistHasYaddsSidebar(!hasYaddsSidebar);
             const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
             window.electron?.setApplicationMenu(appMenuItemLabel);
           }}
         >
-          <img src={src} alt="" draggable="false" />
+          <img src={indicatorSrc} alt="" draggable="false" />
         </Icon>
       </Box>
       <StyledAppBar
