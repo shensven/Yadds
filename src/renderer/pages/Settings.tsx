@@ -38,8 +38,10 @@ import win32_appearance_follow_system from '../assets/Settings/win32_appearance_
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
+const OS_PLATFORM = window.electron?.getOS();
+
 const getAppearanceLight = () => {
-  switch (window.electron?.getOS()) {
+  switch (OS_PLATFORM) {
     case 'darwin':
       return darwin_appearance_light;
     case 'win32':
@@ -50,7 +52,7 @@ const getAppearanceLight = () => {
 };
 
 const getAppearanceDark = () => {
-  switch (window.electron?.getOS()) {
+  switch (OS_PLATFORM) {
     case 'darwin':
       return darwin_appearance_dark;
     case 'win32':
@@ -61,7 +63,7 @@ const getAppearanceDark = () => {
 };
 
 const getAppearanceFollowSystem = () => {
-  switch (window.electron?.getOS()) {
+  switch (OS_PLATFORM) {
     case 'darwin':
       return darwin_appearance_follow_system;
     case 'win32':
