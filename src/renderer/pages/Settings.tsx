@@ -29,12 +29,12 @@ import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
 import IonTrashOutline from '../components/icons/IonTrashOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
-import AppearanceLight from '../assets/Settings/AppearanceLight_67x44_@2x.png';
-import AppearanceDark from '../assets/Settings/AppearanceDark_67x44_@2x.png';
-import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
-import AppearanceLightNoColor from '../assets/Settings/AppearanceLightNoColor_67x44_@2x.png';
-import AppearanceDarkNoColor from '../assets/Settings/AppearanceDarkNoColor_67x44_@2x.png';
-import AppearanceAutoNoColor from '../assets/Settings/AppearanceAutoNoColor_67x44_@2x.png';
+// import AppearanceLight from '../assets/Settings/AppearanceLight_67x44_@2x.png';
+// import AppearanceDark from '../assets/Settings/AppearanceDark_67x44_@2x.png';
+// import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
+import win32_appearance_light from '../assets/Settings/win32_appearance_light.png';
+import win32_appearance_dark from '../assets/Settings/win32_appearance_dark.png';
+import win32_appearance_follow_system from '../assets/Settings/win32_appearance_follow_system.png';
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
@@ -101,26 +101,22 @@ const Settings: React.FC = () => {
     themeSource: 'system' | 'light' | 'dark';
     label: string;
     appearanceSrc: string;
-    appearanceNoColorSrc: string;
   }
   const appearanceItemArray: AppearanceItem[] = [
     {
       themeSource: 'light',
       label: t('settings.light'),
-      appearanceSrc: AppearanceLight,
-      appearanceNoColorSrc: AppearanceLightNoColor,
+      appearanceSrc: win32_appearance_light,
     },
     {
       themeSource: 'dark',
       label: t('settings.dark'),
-      appearanceSrc: AppearanceDark,
-      appearanceNoColorSrc: AppearanceDarkNoColor,
+      appearanceSrc: win32_appearance_dark,
     },
     {
       themeSource: 'system',
       label: t('settings.follow_system'),
-      appearanceSrc: AppearanceAuto,
-      appearanceNoColorSrc: AppearanceAutoNoColor,
+      appearanceSrc: win32_appearance_follow_system,
     },
   ];
 
@@ -179,19 +175,19 @@ const Settings: React.FC = () => {
             {appearanceItemArray.map((item: AppearanceItem) => (
               <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>
                 <Box
-                  sx={{ filter: yaddsAppearance === item.themeSource ? 'brightness(100%)' : 'brightness(75%)' }}
+                  sx={{
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(100%)',
+                    height: 44,
+                    width: 67,
+                  }}
                   onClick={() => {
                     persistYaddsAppearance(item.themeSource);
                     window.electron.toggleNativeTheme(item.themeSource);
                   }}
                 >
-                  <img
-                    src={yaddsAppearance === item.themeSource ? item.appearanceSrc : item.appearanceNoColorSrc}
-                    alt=""
-                    draggable="false"
-                    width={67}
-                    height={44}
-                  />
+                  <img src={item.appearanceSrc} alt="" draggable="false" width={67} height={44} />
                 </Box>
                 <Typography
                   variant="overline"
