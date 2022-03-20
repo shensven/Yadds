@@ -29,14 +29,47 @@ import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
 import IonTrashOutline from '../components/icons/IonTrashOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
-// import AppearanceLight from '../assets/Settings/AppearanceLight_67x44_@2x.png';
-// import AppearanceDark from '../assets/Settings/AppearanceDark_67x44_@2x.png';
-// import AppearanceAuto from '../assets/Settings/AppearanceAuto_67x44_@2x.png';
-import win32_appearance_light from '../assets/Settings/win32_appearance_light.png';
+import darwin_appearance_light from '../assets/Settings/darwin_appearance_light.png';
+import darwin_appearance_dark from '../assets/Settings/darwin_appearance_dark.png';
+import darwin_appearance_follow_system from '../assets/Settings/darwin_appearance_follow_system.png';
 import win32_appearance_dark from '../assets/Settings/win32_appearance_dark.png';
+import win32_appearance_light from '../assets/Settings/win32_appearance_light.png';
 import win32_appearance_follow_system from '../assets/Settings/win32_appearance_follow_system.png';
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
+
+const getAppearanceLight = () => {
+  switch (window.electron?.getOS()) {
+    case 'darwin':
+      return darwin_appearance_light;
+    case 'win32':
+      return win32_appearance_light;
+    default:
+      return darwin_appearance_light;
+  }
+};
+
+const getAppearanceDark = () => {
+  switch (window.electron?.getOS()) {
+    case 'darwin':
+      return darwin_appearance_dark;
+    case 'win32':
+      return win32_appearance_dark;
+    default:
+      return darwin_appearance_dark;
+  }
+};
+
+const getAppearanceFollowSystem = () => {
+  switch (window.electron?.getOS()) {
+    case 'darwin':
+      return darwin_appearance_follow_system;
+    case 'win32':
+      return win32_appearance_follow_system;
+    default:
+      return darwin_appearance_follow_system;
+  }
+};
 
 interface SettingsFormItemProps {
   label: string;
@@ -106,17 +139,17 @@ const Settings: React.FC = () => {
     {
       themeSource: 'light',
       label: t('settings.light'),
-      appearanceSrc: win32_appearance_light,
+      appearanceSrc: getAppearanceLight(),
     },
     {
       themeSource: 'dark',
       label: t('settings.dark'),
-      appearanceSrc: win32_appearance_dark,
+      appearanceSrc: getAppearanceDark(),
     },
     {
       themeSource: 'system',
       label: t('settings.follow_system'),
-      appearanceSrc: win32_appearance_follow_system,
+      appearanceSrc: getAppearanceFollowSystem(),
     },
   ];
 
@@ -178,7 +211,7 @@ const Settings: React.FC = () => {
                   sx={{
                     borderRadius: 1,
                     overflow: 'hidden',
-                    filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(100%)',
+                    filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
                     height: 44,
                     width: 67,
                   }}
