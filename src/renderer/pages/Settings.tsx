@@ -214,6 +214,9 @@ const Settings: React.FC = () => {
                     filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
                     height: 44,
                     width: 67,
+                    '&:hover': {
+                      filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
+                    },
                   }}
                   onClick={() => {
                     persistYaddsAppearance(item.themeSource);
