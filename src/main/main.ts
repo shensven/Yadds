@@ -89,7 +89,7 @@ const createWindow = async () => {
     [(isDarwin && 'titleBarStyle') as string]: 'hidden',
     // trafficLightPosition: { x: 19, y: 19 },
     [(isDarwin && 'vibrancy') as string]: 'sidebar',
-    [((isWin32 || isLinux)&& 'backgroundColor') as string]: '#e6e6e6',
+    [((isWin32 || isLinux) && 'backgroundColor') as string]: '#e6e6e6',
     [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
     [(isWin32 && 'icon') as string]: getAssetPath('icon_win32.png'),
     webPreferences: {
@@ -545,8 +545,14 @@ ipcMain.handle('set-tray', async (_, args) => {
         return isDevelopment
           ? nativeImage.createFromPath(getAssetPath('tray/win32/trayDev@2x.png')).resize({ width: 16, height: 16 })
           : nativeImage.createFromPath(getAssetPath('tray/win32/tray@2x.png')).resize({ width: 16, height: 16 });
+      case 'linux':
+        return isDevelopment
+          ? nativeImage.createFromPath(getAssetPath('tray/linux/trayDev@2x.png')).resize({ width: 16, height: 16 })
+          : nativeImage.createFromPath(getAssetPath('tray/linux/tray@2x.png')).resize({ width: 16, height: 16 });
       default:
-        return '';
+        return isDevelopment
+          ? nativeImage.createFromPath(getAssetPath('tray/linux/trayDev@2x.png')).resize({ width: 16, height: 16 })
+          : nativeImage.createFromPath(getAssetPath('tray/linux/tray@2x.png')).resize({ width: 16, height: 16 });
     }
   };
 
