@@ -30,7 +30,7 @@ declare global {
         get: (key: string) => unknown;
         set: (key: string, val: unknown) => void;
       };
-      getOS: () => 'darwin' | 'win32';
+      getOS: () => 'darwin' | 'win32' | 'linux';
       getAppVersion: () => string;
       popupContextMenu: (val: MenuItemConstructorOptions[]) => void;
       openViaBrowser: (val: string) => void;

@@ -32,9 +32,15 @@ import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoadi
 import darwin_appearance_light from '../assets/Settings/darwin_appearance_light.png';
 import darwin_appearance_dark from '../assets/Settings/darwin_appearance_dark.png';
 import darwin_appearance_follow_system from '../assets/Settings/darwin_appearance_follow_system.png';
-import win32_appearance_dark from '../assets/Settings/win32_appearance_dark.png';
 import win32_appearance_light from '../assets/Settings/win32_appearance_light.png';
+import win32_appearance_dark from '../assets/Settings/win32_appearance_dark.png';
 import win32_appearance_follow_system from '../assets/Settings/win32_appearance_follow_system.png';
+import linux_appearance_light from '../assets/Settings/linux_appearance_light.png';
+import linux_appearance_dark from '../assets/Settings/linux_appearance_dark.png';
+import linux_appearance_follow_system from '../assets/Settings/linux_appearance_follow_system.png';
+import gnome_appearance_light from '../assets/Settings/gnome_appearance_light.png';
+import gnome_appearance_dark from '../assets/Settings/gnome_appearance_dark.png';
+import gnome_appearance_follow_system from '../assets/Settings/gnome_appearance_follow_system.png';
 import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
@@ -46,8 +52,10 @@ const getAppearanceLight = () => {
       return darwin_appearance_light;
     case 'win32':
       return win32_appearance_light;
+    case 'linux':
+      return linux_appearance_light;
     default:
-      return darwin_appearance_light;
+      return gnome_appearance_light;
   }
 };
 
@@ -57,8 +65,10 @@ const getAppearanceDark = () => {
       return darwin_appearance_dark;
     case 'win32':
       return win32_appearance_dark;
+    case 'linux':
+      return linux_appearance_dark;
     default:
-      return darwin_appearance_dark;
+      return gnome_appearance_dark;
   }
 };
 
@@ -68,8 +78,10 @@ const getAppearanceFollowSystem = () => {
       return darwin_appearance_follow_system;
     case 'win32':
       return win32_appearance_follow_system;
+    case 'linux':
+      return linux_appearance_follow_system;
     default:
-      return darwin_appearance_follow_system;
+      return gnome_appearance_follow_system;
   }
 };
 
