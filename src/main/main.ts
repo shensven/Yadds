@@ -520,7 +520,7 @@ ipcMain.handle('set-tray', async (_, args) => {
         if (isDarwin) {
           mainWindow?.show();
         }
-        if (isWin32) {
+        if (isWin32 || isLinux) {
           if (store.get('isYaddsMaximized')) {
             mainWindow?.maximize();
           } else {
@@ -533,7 +533,9 @@ ipcMain.handle('set-tray', async (_, args) => {
     { label: quit, click: () => app.exit() },
   ];
 
-  const contextMenu = Menu.buildFromTemplate(isDevelopment && isWin32 ? [...devMenu, ...normalMenu] : normalMenu);
+  const contextMenu = Menu.buildFromTemplate(
+    isDevelopment && (isWin32 || isLinux) ? [...devMenu, ...normalMenu] : normalMenu
+  );
 
   const getTrayIcon = () => {
     switch (process.platform) {
