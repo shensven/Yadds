@@ -40,6 +40,7 @@ const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBU
 const isProduction = process.env.NODE_ENV === 'production';
 const isDarwin = process.platform === 'darwin';
 const isWin32 = process.platform === 'win32';
+const isLinux = process.platform === 'linux';
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -79,16 +80,16 @@ const createWindow = async () => {
     show: false,
     x: (store.get('windowBounds.x') as number) || undefined,
     y: (store.get('windowBounds.y') as number) || undefined,
-    [(isDarwin && 'width') as string]: (store.get('windowBounds.width') as number) || 990,
+    [((isDarwin || isLinux) && 'width') as string]: (store.get('windowBounds.width') as number) || 990,
     [(isWin32 && 'width') as string]: (store.get('windowBounds.width') as number) || 990 + 16,
     height: (store.get('windowBounds.height') as number) || 720,
-    [(isDarwin && 'minWidth') as string]: 990,
+    [((isDarwin || isLinux) && 'minWidth') as string]: 990,
     [(isWin32 && 'minWidth') as string]: 990 + 16, // The min-width will be smaller, workaround on Microsoft Buuuuuugdows platforms!!!
     minHeight: 720,
     [(isDarwin && 'titleBarStyle') as string]: 'hidden',
     // trafficLightPosition: { x: 19, y: 19 },
     [(isDarwin && 'vibrancy') as string]: 'sidebar',
-    [(isWin32 && 'backgroundColor') as string]: '#e6e6e6',
+    [((isWin32 || isLinux)&& 'backgroundColor') as string]: '#e6e6e6',
     [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
     [(isWin32 && 'icon') as string]: getAssetPath('icon_win32.png'),
     webPreferences: {
