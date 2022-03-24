@@ -2,19 +2,7 @@ import { MenuItemConstructorOptions } from 'electron';
 import React, { useContext, useLayoutEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  Box,
-  Button,
-  Divider,
-  Icon,
-  IconButton,
-  InputBase,
-  Paper,
-  Stack,
-  styled,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Button, Icon, IconButton, InputBase, Paper, Stack, styled, Typography, useTheme } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import { YaddsCtx } from '../context/YaddsContext';
 import SIDEBAR_WIDTH from '../context/sidebarWidth';
@@ -209,7 +197,6 @@ const YaddsMain: React.FC = () => {
             <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
           </IconButton>
         </Stack>
-        <Divider sx={{ opacity: 0.8 }} />
       </StyledAppBar>
       <Box
         sx={{
