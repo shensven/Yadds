@@ -25,7 +25,7 @@ const designTokens = (mode: PaletteMode) => {
         disabled: mode === 'dark' ? '#747474' : '#A7A7A7',
       },
       background: {
-        default: mode === 'dark' ? '#282828' : 'transparent',
+        default: mode === 'dark' ? '#282828' : 'rgba(0,0,0,0)',
       },
       input: {
         default: mode === 'dark' ? '#282828' : '#F5F5F5',

@@ -54,6 +54,14 @@
       "are_you_sure": " 您确定登出并断开与 DSM 的连接？",
       "cancel": "取消",
       "yes": "确定"
+    },
+    "snackbar": {
+      "access_denied": "登录失败",
+      "request_timeout": "请求超时",
+      "invalid_quickconnect_id": "无效的 QuickConnect ID",
+      "unable_to_connect_to_quickconnect_coordinator": "无法连接到 QuickConnect 协调服务器",
+      "unable_to_connect_to": "无法连接到",
+      "wrong_account_or_password": "帐号或密码错误"
     }
   },
   "application_menu": {

@@ -4,7 +4,7 @@ export interface DsmConnectListType {
   host: string;
   username: string;
   did: string;
-  id: string;
+  sid: string;
 }
 
 interface CtxType {

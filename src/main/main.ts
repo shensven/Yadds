@@ -635,7 +635,6 @@ ipcMain.handle('open-via-broswer', async (_, url) => {
   shell.openExternal(url);
 });
 
-ipcMain.on('axios-auth', async (event, quickConnectID: string, account: string, passwd: string) => {
-  const respData = await auth(quickConnectID, account, passwd);
-  event.sender.send('axios-auth-reply', respData);
+ipcMain.handle('axios-auth', async (_, quickConnectID: string, account: string, passwd: string) => {
+  return auth(quickConnectID, account, passwd);
 });

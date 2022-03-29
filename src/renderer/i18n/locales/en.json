@@ -54,6 +54,14 @@
       "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
       "cancel": "CANCEL",
       "yes": "YES"
+    },
+    "snackbar": {
+      "access_denied": "Access Denied",
+      "request_timeout": "Request Timeout",
+      "invalid_quickconnect_id": "Invalid QuickConnect ID",
+      "unable_to_connect_to_quickconnect_coordinator": "Unable to connect to QuickConnect coordinator",
+      "unable_to_connect_to": "unable to connect to",
+      "wrong_account_or_password": "Wrong account or password"
     }
   },
   "application_menu": {

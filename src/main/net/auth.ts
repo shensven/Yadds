@@ -41,10 +41,10 @@ interface ServerInfo {
 }
 
 interface PingpongInfo {
-  ezid: string;
   success: boolean;
   hostname: string;
   port: number;
+  ezid?: string;
 }
 
 interface LoginInfo {
@@ -139,6 +139,11 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
     return new Promise<PingpongInfo>((resolve, reject) => {
       const request = net.request(options);
 
+      setTimeout(() => {
+        request.abort();
+        resolve({ success: false, hostname, port });
+      }, 5000);
+
       request.on('response', (response: Electron.IncomingMessage) => {
         response.on('data', (chunk: Buffer) => {
           const parsed: PingpongInfo = JSON.parse(chunk.toString());
@@ -224,22 +229,53 @@ async function requestLogin(pingpongInfo: PingpongInfo, account: string, passwd:
 
 export default async function auth(quickConnectID: string, account: string, passwd: string) {
   if (quickConnectID.length === 0) {
-    return 'QuickConnect ID is empty';
+    return {
+      msg: 'QuickConnect ID is incorrect or does not exist',
+      errCode: '01',
+      success: false,
+    };
   }
   const serverInfo = await requestCoordinator(quickConnectID);
 
   if (serverInfo.errno !== 0) {
-    return 'bad request https://global.quickconnect.to/Serv.php';
+    switch (serverInfo.errno) {
+      case 4:
+        return {
+          msg: `${quickConnectID} is not a valid QuickConnect ID`,
+          errCode: '024',
+          success: false,
+        };
+      case 9:
+        return {
+          msg: 'QuickConnect ID is incorrect or does not exist',
+          errCode: '01',
+          success: false,
+        };
+      default:
+        return {
+          msg: 'Unable to connect to QuickConnect coordinator',
+          errCode: '02',
+          success: false,
+        };
+    }
   }
   const pingpongInfo = await requestPingPong(quickConnectID, serverInfo);
 
   if (pingpongInfo.success === false) {
-    return `ban request https://${pingpongInfo.hostname}:${pingpongInfo.port}`;
+    return {
+      msg: `unable to connect to https://${pingpongInfo.hostname}:${pingpongInfo.port}`,
+      errCode: '03',
+      success: false,
+    };
   }
   const loginInfo = await requestLogin(pingpongInfo, account, passwd);
 
   if (loginInfo.success === false) {
-    return 'access denied';
+    return {
+      msg: 'Wrong account or password',
+      errCode: '04',
+      success: false,
+    };
   }
   return loginInfo;
 }

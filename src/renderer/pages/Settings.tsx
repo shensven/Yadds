@@ -1,6 +1,8 @@
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
   Checkbox,
@@ -17,6 +19,8 @@ import {
   MenuItem,
   Radio,
   Select,
+  Slide,
+  Snackbar,
   Stack,
   TextField,
   ToggleButton,
@@ -134,6 +138,10 @@ const Settings: React.FC = () => {
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
   const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
+  const [snackbar, setSnackbar] = useState({
+    show: false,
+    errCode: 'x0',
+  });
 
   const [newConnect, setNewConnect] = useState({
     isQuickConnectID: true,
@@ -203,6 +211,83 @@ const Settings: React.FC = () => {
 
   const dismissDaialogDelete = () => {
     setHasDialogDelete(false);
+  };
+
+  const dismissSnackbar = () => {
+    setSnackbar({ show: false, errCode: 'x0' });
+  };
+
+  const handleAuthErrTitle = () => {
+    if (newConnect.isQuickConnectID) {
+      switch (snackbar.errCode) {
+        case '01':
+          return t('settings.snackbar.access_denied');
+        case '02':
+          return t('settings.snackbar.access_denied');
+        case '024':
+          return t('settings.snackbar.access_denied');
+        case '03':
+          return t('settings.snackbar.request_timeout');
+        case '04':
+          return t('settings.snackbar.access_denied');
+        default:
+          return t('settings.snackbar.access_denied');
+      }
+    } else {
+      return t('settings.snackbar.access_denied');
+    }
+  };
+
+  const handleAuthErrDesc = () => {
+    if (newConnect.isQuickConnectID) {
+      switch (snackbar.errCode) {
+        case '01':
+          return t('settings.snackbar.invalid_quickconnect_id');
+        case '02':
+          return t('settings.snackbar.unable_to_connect_to_quickconnect_coordinator');
+        case '024':
+          return t('settings.snackbar.invalid_quickconnect_id');
+        case '03':
+          return `${t('settings.snackbar.unable_to_connect_to')} ${newConnect.connectAddress}`;
+        case '04':
+          return t('settings.snackbar.wrong_account_or_password');
+        default:
+          return '';
+      }
+    } else {
+      return '';
+    }
+  };
+
+  const handleAuth = async () => {
+    if (newConnect.connectAddress.length === 0) {
+      setSnackbar({ show: true, errCode: '01' });
+      return;
+    }
+    if (newConnect.username.length === 0 || newConnect.password.length === 0) {
+      setSnackbar({ show: true, errCode: '04' });
+      return;
+    }
+
+    setLoadingInDialogAdd(true);
+
+    const resp = await window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
+
+    if (resp.success) {
+      const arr = [...dsmConnectList];
+      arr.push({
+        host: newConnect.connectAddress,
+        username: newConnect.username,
+        did: resp.data.did,
+        sid: resp.data.sid,
+      });
+      persistDsmConnectList(arr);
+      dismissDailogAdd();
+    } else {
+      setSnackbar({ show: true, errCode: resp.errCode });
+      setLoadingInDialogAdd(false);
+      console.log(resp);
+    }
   };
 
   return (
@@ -281,7 +366,7 @@ const Settings: React.FC = () => {
                 onClose={() => setIsSelectOpen(false)}
               >
                 {dsmConnectList.map((item: DsmConnectListType, index: number) => (
-                  <MenuItem key={item.id} dense disableRipple value={item.id}>
+                  <MenuItem key={item.sid} dense disableRipple value={item.sid}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
@@ -455,6 +540,7 @@ const Settings: React.FC = () => {
               size="small"
               spellCheck={false}
               autoFocus
+              error={snackbar.errCode === '01' || snackbar.errCode === '024'}
               label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
               value={newConnect.connectAddress}
               sx={{ mt: theme.spacing(2) }}
@@ -477,6 +563,7 @@ const Settings: React.FC = () => {
               size="small"
               label={t('settings.dialog_add.username')}
               spellCheck={false}
+              error={snackbar.errCode === '04'}
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
               onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value })}
@@ -485,6 +572,7 @@ const Settings: React.FC = () => {
               size="small"
               label={t('settings.dialog_add.password')}
               spellCheck={false}
+              error={snackbar.errCode === '04'}
               value={newConnect.password}
               type={newConnect.showPassword ? 'text' : 'password'}
               sx={{ mt: theme.spacing(2) }}
@@ -511,12 +599,6 @@ const Settings: React.FC = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button color="inherit" onClick={() => console.log(newConnect)}>
-            打印
-          </Button>
-          <Button color="inherit" onClick={() => persistDsmConnectList([])}>
-            清空
-          </Button>
           <Button color="inherit" onClick={() => dismissDailogAdd()}>
             {t('settings.dialog_add.cancel')}
           </Button>
@@ -531,22 +613,22 @@ const Settings: React.FC = () => {
               }),
             }}
             disabled={loadingInDialogAdd}
-            onClick={() => {
-              // const arr = [...dsmConnectList];
-              // arr.push({
-              //   host: `10.10.10.${dsmConnectList.length + 1}`,
-              //   username: `root${dsmConnectList.length + 1}`,
-              //   did: '123456789',
-              //   id: new Date().getTime().toString(),
-              // });
-              // persistDsmConnectList(arr);
-              setLoadingInDialogAdd(true);
-              window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
-            }}
+            onClick={() => handleAuth()}
           >
             {loadingInDialogAdd ? <EosIconsThreeDotsLoading /> : t('settings.dialog_add.ok')}
           </Button>
         </DialogActions>
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={snackbar.show}
+          TransitionComponent={Slide}
+          onClose={() => dismissSnackbar()}
+        >
+          <Alert severity="error" sx={{ width: theme.spacing(40) }} onClose={() => dismissSnackbar()}>
+            <AlertTitle>{handleAuthErrTitle()}</AlertTitle>
+            {handleAuthErrDesc()}
+          </Alert>
+        </Snackbar>
       </Dialog>
 
       {/* Confirm Remove */}
@@ -566,7 +648,7 @@ const Settings: React.FC = () => {
           <Button color="inherit" onClick={() => dismissDaialogDelete()}>
             {t('settings.dialog_remove.cancel')}
           </Button>
-          <Button color="error" onClick={() => {}}>
+          <Button color="error" onClick={() => persistDsmConnectList([])}>
             {t('settings.dialog_remove.yes')}
           </Button>
         </DialogActions>

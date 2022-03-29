@@ -35,7 +35,23 @@ declare global {
       popupContextMenu: (val: MenuItemConstructorOptions[]) => void;
       openViaBrowser: (val: string) => void;
       net: {
-        auth: (quickConnectID: string, account: string, passwd: string) => void;
+        auth: (
+          quickConnectID: string,
+          account: string,
+          passwd: string
+        ) => Promise<
+          | {
+              data: { did: string; sid: string };
+              hostname: string;
+              port: number;
+              success: true;
+            }
+          | {
+              msg: string;
+              errCode: '01' | '02' | '024' | '03' | '04';
+              success: false;
+            }
+        >;
       };
     };
   }

@@ -89,11 +89,7 @@ contextBridge.exposeInMainWorld('electron', {
 
   net: {
     auth(quickConnectID, account, passwd) {
-      ipcRenderer.send('axios-auth', quickConnectID, account, passwd);
-      ipcRenderer.once('axios-auth-reply', (event, arg) => {
-        console.log(arg);
-        return arg;
-      });
+      return ipcRenderer.invoke('axios-auth', quickConnectID, account, passwd);
     },
   },
 });
