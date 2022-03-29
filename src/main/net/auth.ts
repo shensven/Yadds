@@ -32,7 +32,12 @@ interface ServerInfo {
     https_ip: string;
     https_port: number;
   };
-  smartdns?: { host: string; lan: string[]; hole_punch: string };
+  smartdns?: {
+    host: string;
+    lan: string[];
+    lanv6: string[];
+    hole_punch: string;
+  };
 }
 
 interface PingpongInfo {
@@ -101,20 +106,23 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   // /webman/pingpong.cgi?action=cors&quickconnect=true
   const PINGPONG_PATH = serverInfo.server?.pingpong_path as string;
 
-  // 192.168.x.xxx
-  // const LAN_IP = serverInfo.server?.interface[0].ip as string;
+  // 192-168-x-xxx.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
+  const SMART_LAN = serverInfo.smartdns?.lan as string[];
 
-  // 192-168-x-xxx.Your-QuickConnect-ID.direct.quickconnect.to
-  const SMARTDNS_LAN = serverInfo.smartdns?.lan[0] as string;
+  // syn6-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
+  const SMART_LAN_V6 = serverInfo.smartdns?.lanv6 as string[];
 
-  // Your-QuickConnect-ID.direct.quickconnect.to
-  const SMARTDNS_HOST = serverInfo.smartdns?.host as string;
-
-  // 221.213.xxx.xxx
-  const WAN_IP = serverInfo.server?.external.ip as string;
+  // YOUR-QUICKCONNECT-ID.direct.quickconnect.to
+  const SMART_HOST = serverInfo.smartdns?.host as string;
 
   // cn3.quickconnect.cn
   const RELAY_HOST = `${serverInfo.env?.relay_region}.${serverInfo.env?.control_host.split('.').slice(-2).join('.')}`;
+
+  // 192.168.x.xxx
+  // const LAN_IP = serverInfo.server?.interface[0].ip as string;
+
+  // 221.213.xxx.xxx
+  // const WAN_IP = serverInfo.server?.external.ip as string;
 
   const newInstance = async (hostname: string, port: number) => {
     const options = {
@@ -148,14 +156,28 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
     });
   };
 
-  return Promise.race([
-    newInstance(SMARTDNS_LAN, PORT),
-    newInstance(SMARTDNS_HOST, PORT),
-    newInstance(SMARTDNS_HOST, EXT_PORT),
-    newInstance(WAN_IP, PORT),
-    newInstance(WAN_IP, EXT_PORT),
-    newInstance(`${quickConnectID}.${RELAY_HOST}`, 443),
-  ]);
+  const ADDRESS_SETS: { url: string; port: number }[] = [];
+
+  if (SMART_LAN.length > 0) {
+    SMART_LAN.forEach((lan: string) => {
+      ADDRESS_SETS.push({ url: lan, port: PORT });
+    });
+  }
+
+  if (SMART_LAN_V6.length > 0) {
+    SMART_LAN_V6.forEach((lanv6: string) => {
+      ADDRESS_SETS.push({ url: lanv6, port: PORT });
+      ADDRESS_SETS.push({ url: lanv6, port: EXT_PORT });
+    });
+  }
+
+  ADDRESS_SETS.push({ url: SMART_HOST, port: PORT });
+  ADDRESS_SETS.push({ url: SMART_HOST, port: EXT_PORT });
+  ADDRESS_SETS.push({ url: `${quickConnectID}.${RELAY_HOST}`, port: 443 });
+
+  const INSTANCE_SETS = ADDRESS_SETS.map(({ url, port }) => newInstance(url, port));
+
+  return Promise.race(INSTANCE_SETS);
 }
 
 async function requestLogin(pingpongInfo: PingpongInfo, account: string, passwd: string) {

@@ -532,16 +532,16 @@ const Settings: React.FC = () => {
             }}
             disabled={loadingInDialogAdd}
             onClick={() => {
-              const arr = [...dsmConnectList];
-              arr.push({
-                host: `10.10.10.${dsmConnectList.length + 1}`,
-                username: `root${dsmConnectList.length + 1}`,
-                did: '123456789',
-                id: new Date().getTime().toString(),
-              });
-              persistDsmConnectList(arr);
+              // const arr = [...dsmConnectList];
+              // arr.push({
+              //   host: `10.10.10.${dsmConnectList.length + 1}`,
+              //   username: `root${dsmConnectList.length + 1}`,
+              //   did: '123456789',
+              //   id: new Date().getTime().toString(),
+              // });
+              // persistDsmConnectList(arr);
               setLoadingInDialogAdd(true);
-              // window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
+              window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
             }}
           >
             {loadingInDialogAdd ? <EosIconsThreeDotsLoading /> : t('settings.dialog_add.ok')}
