@@ -2,12 +2,14 @@ import { useContext, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
+  Divider,
   Drawer,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -26,6 +28,9 @@ import IonCloseCircle from '../components/icons/IonCloseCircle';
 import IonStopCircleOutline from '../components/icons/IonStopCircleOutline';
 import IonStopCircle from '../components/icons/IonStopCircle';
 import IonCogOutline from '../components/icons/IonCogOutline';
+import IcRoundLink from '../components/icons/IcRoundLink';
+// import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
+// import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import IonCog from '../components/icons/IonCog';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
@@ -47,6 +52,8 @@ const YaddsSidebar: React.FC = () => {
     setHasYaddsSidebarMarginTop,
     yaddsSidebarCategory,
     persistYaddsSidebarCategory,
+    dsmConnectList,
+    dsmConnectIndex,
   } = useContext(YaddsCtx);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
@@ -133,19 +140,24 @@ const YaddsSidebar: React.FC = () => {
               dense
               disableRipple
               selected={yaddsSidebarCategory === item.path}
+              sx={{ width: '100%' }}
               onClick={() => {
                 persistYaddsSidebarCategory(item.path);
                 navigate(item.path);
               }}
             >
-              <ListItemIcon sx={{ color: theme.palette.text.secondary }}>
+              <ListItemIcon sx={{ minWidth: theme.spacing(5), color: theme.palette.text.secondary }}>
                 {yaddsSidebarCategory === item.path ? item.activeIcon : item.inactiveIcon}
               </ListItemIcon>
               <ListItemText
                 primary={
                   <Typography
-                    style={{
-                      fontWeight: 500,
+                    noWrap
+                    variant="button"
+                    component="p"
+                    fontWeight={600}
+                    sx={{
+                      mr: theme.spacing(0.5),
                       color:
                         yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
                     }}
@@ -154,40 +166,83 @@ const YaddsSidebar: React.FC = () => {
                   </Typography>
                 }
               />
+              <Typography
+                variant="caption"
+                fontWeight={500}
+                sx={{
+                  color: theme.palette.card.default,
+                  backgroundColor:
+                    yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.disabled,
+                  px: theme.spacing(0.5),
+                  borderRadius: 0.6,
+                }}
+              >
+                99+
+              </Typography>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <List>
         <ListItem>
+          <Stack flexDirection="row" width="100%" pl={theme.spacing(2.5)} pr={theme.spacing(2)}>
+            <ListItemText
+              primary={
+                <Stack flexDirection="row" justifyContent="space-between">
+                  <Typography
+                    noWrap
+                    variant="button"
+                    component="p"
+                    fontWeight={600}
+                    color={theme.palette.text.secondary}
+                  >
+                    {dsmConnectList[dsmConnectIndex]?.host ?? 'null'}
+                  </Typography>
+                  <IcRoundLink color="success" />
+                  {/* <IcRoundLinkOff color="warning" /> */}
+                  {/* <EosIconsThreeDotsLoading /> */}
+                </Stack>
+              }
+              secondary={
+                <Typography
+                  noWrap
+                  variant="overline"
+                  component="p"
+                  fontWeight={600}
+                  color={theme.palette.text.secondary}
+                >
+                  {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
+                </Typography>
+              }
+            />
+          </Stack>
+        </ListItem>
+        <Divider light sx={{ mb: theme.spacing(1) }} />
+        <ListItem>
           <ListItemButton
-            dense
             disableRipple
             selected={yaddsSidebarCategory === '/settings'}
+            sx={{ width: '100%' }}
             onClick={() => {
               persistYaddsSidebarCategory('/settings');
               navigate('/settings');
             }}
           >
-            <ListItemIcon sx={{ color: theme.palette.text.secondary }}>
+            <ListItemIcon sx={{ minWidth: theme.spacing(5), color: theme.palette.text.secondary }}>
               {yaddsSidebarCategory === '/settings' ? <IonCog /> : <IonCogOutline />}
             </ListItemIcon>
             <ListItemText
               primary={
                 <Typography
                   noWrap
+                  variant="button"
+                  fontWeight={600}
                   style={{
-                    fontWeight: 500,
                     color:
                       yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
                   }}
                 >
                   {t('sidebar.settings')}
-                </Typography>
-              }
-              secondary={
-                <Typography noWrap sx={{ fontSize: 12, color: theme.palette.text.secondary }}>
-                  192.168.100.2 - Lina
                 </Typography>
               }
             />
