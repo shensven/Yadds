@@ -186,12 +186,10 @@ const Settings: React.FC = () => {
 
   const handleSelectOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
     if (isDelete) {
-      // console.log(isDelete);
       setHasDialogDelete(true);
       setIsSelectOpen(false);
       return;
     }
-    // console.log(isDelete);
     persistDsmConnectIndex(menuItemAddressIndex);
     setIsSelectOpen(false);
   };
