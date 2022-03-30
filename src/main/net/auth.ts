@@ -153,10 +153,6 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
         });
       });
 
-      request.on('error', (error: Error) => {
-        reject(error);
-      });
-
       request.end();
     });
   };
