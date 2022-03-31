@@ -24,7 +24,8 @@
         "electron-store",
         "i18next",
         "query-string",
-        "react-i18next"
+        "react-i18next",
+        "react-router-dom"
       ]
     }
   ]
