@@ -3,7 +3,7 @@
     <img src="./assets/icon_darwin.png" width="180px" height="180px"/>
     <p>Yadds</p>
   </h1>
-  <p>高颜值 <a href="https://www.synology.com/en-us/dsm/packages/DownloadStation">Download Station</a> 客户端</p>
+  <p>优雅的 <a href="https://www.synology.cn/zh-cn/dsm/packages/DownloadStation">Download Station</a> 仪表盘</p>
   <img src="./screenshots/hero_early_preview_zh_hans.png" />
 </div>
 
@@ -62,7 +62,7 @@ npm run package
 ## 👍 致谢
 
 - [electron-react-boilerplate/electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
-- [3dicons - Open source 3D icon library ](https://3dicons.co/)
+- [3dicons - Open source 3D icon library](https://3dicons.co/)
 
 ## 📜 许可证合规性
 
