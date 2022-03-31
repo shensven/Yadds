@@ -1,4 +1,11 @@
-# Yadds
+<div align="center">
+  <h1>
+    <img src="./assets/icon_darwin.png" width="180px" height="180px"/>
+    <p>Yadds</p>
+  </h1>
+  <p>Yet another DSM <a href="https://www.synology.com/en-us/dsm/packages/DownloadStation">Download Station</a></p>
+  <img src="./screenshots/hero_early_preview.png" />
+</div>
 
 [![GitHub](https://img.shields.io/github/license/shensven/Yadds)](./LICENSE)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/dev/electron)](./package.json)
@@ -7,9 +14,7 @@
 [![Publish](https://github.com/shensven/Yadds/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/shensven/Yadds/actions/workflows/publish.yml)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
 
-Yet another DSM [Download Station](https://www.synology.com/en-us/dsm/packages/DownloadStation)
-
-## FEATURES
+## ✨ FEATURES
 
 - [x] Free and open source
 - [x] Cross-platform support (macOS, Windows, Linux)
@@ -18,8 +23,11 @@ Yet another DSM [Download Station](https://www.synology.com/en-us/dsm/packages/D
 - [ ] Download progress visualization
 - [ ] DSM Multi-account support
 
+## 📦 INSTALLATION
 
-## BUILD
+Not ready yet
+
+## 🔨 BUILD
 
 ### INTRO
 
@@ -48,10 +56,11 @@ To package apps for the local platform:
 npm run package
 ```
 
-## CREDITS
+## 👍 CREDITS
 
 - [electron-react-boilerplate/electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
+- [3dicons - Open source 3D icon library ](https://3dicons.co/)
 
-## LICENSE
+## 📜 LICENSE
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fshensven%2FYadds.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fshensven%2FYadds?ref=badge_large)
