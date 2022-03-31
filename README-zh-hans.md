@@ -3,8 +3,8 @@
     <img src="./assets/icon_darwin.png" width="180px" height="180px"/>
     <p>Yadds</p>
   </h1>
-  <p>Yet another DSM <a href="https://www.synology.com/en-us/dsm/packages/DownloadStation">Download Station</a></p>
-  <img src="./screenshots/hero_early_preview.png" />
+  <p>高颜值 <a href="https://www.synology.com/en-us/dsm/packages/DownloadStation">Download Station</a> 客户端</p>
+  <img src="./screenshots/hero_early_preview_zh_hans.png" />
 </div>
 
 [![GitHub](https://img.shields.io/github/license/shensven/Yadds)](./LICENSE)
@@ -14,56 +14,56 @@
 [![Publish](https://github.com/shensven/Yadds/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/shensven/Yadds/actions/workflows/publish.yml)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
 
-English | [简体中文](./README-zh-hans.md)
+[English](./README.md) | 简体中文
 
-## ✨ FEATURES
+## ✨ 特性
 
-- [x] NOT only free also open source
-- [x] Does NOT collect any information from users
-- [x] Cross-platform support (macOS, Windows, Linux)
-- [x] Multi-language hot-switching (English, 简体中文, 日本語 and etc.)
-- [x] Dark mode
-- [ ] Download progress visualization
-- [ ] Multi-account switching
+- [x] 不但免费、还开源
+- [x] 不收集用户的任何信息
+- [x] 跨平台支持 （macOS、Windows、Linux）
+- [x] 多语言热切换 （简体中文、English、日本語等）
+- [x] 暗黑模式
+- [ ] 下载进度可视化
+- [ ] 多用户切换
 
-## 📦 INSTALLATION
+## 📦 安装方式
 
-Not release yet
+尚未发布
 
-## 🔨 BUILD
+## 🔨 编译
 
-### INTRO
+### 简介
 
-- Written with [Electron](https://www.electronjs.org/) & [React](https://reactjs.org/)
-- Use [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate) to keep dependencies up to date under the same major version
-- Use [Github Actions](https://github.com/shensven/Readhubn/actions) exclusively for testing and continuous integration
+- 使用 [Electron](https://www.electronjs.org/) 和 [React](https://reactjs.org/) 编写
+- 使用 [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate) 保持依赖在同一个大版本下始终最新
+- 使用 [Github Actions](https://github.com/shensven/Readhubn/actions) 进行测试和持续集成
 
-### PREREQUISITES
+### 先决条件
 
-- [Node 14](https://nodejs.org) or higher, [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows) is recommended for installation
-- [npm 8](https://www.npmjs.com/package/npm) or higher
+- [Node 14](https://nodejs.org) 或更高版本，推荐使用 [nvm](https://github.com/nvm-sh/nvm) 或 [nvm-windows](https://github.com/coreybutler/nvm-windows) 进行安装
+- [npm 8](https://www.npmjs.com/package/npm) 或更高版本
 
-### STARTING DEVELOPMENT
+### 起步
 
-Start the app in the `dev` mode:
+在 `dev` 模式运行：
 
 ```bash
 npm run start
 ```
 
-### PACKAGING FOR PRODUCTION
+### 打包
 
-To package apps for the local platform:
+为当前操作系统编译安装包程序：
 
 ```bash
 npm run package
 ```
 
-## 👍 CREDITS
+## 👍 致谢
 
 - [electron-react-boilerplate/electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 - [3dicons - Open source 3D icon library ](https://3dicons.co/)
 
-## 📜 LICENSE
+## 📜 许可证合规性
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fshensven%2FYadds.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fshensven%2FYadds?ref=badge_large)
