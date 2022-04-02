@@ -89,7 +89,10 @@ contextBridge.exposeInMainWorld('electron', {
 
   net: {
     auth(quickConnectID, account, passwd) {
-      return ipcRenderer.invoke('axios-auth', quickConnectID, account, passwd);
+      return ipcRenderer.invoke('net-auth', quickConnectID, account, passwd);
+    },
+    poll(hostname, port, sid) {
+      return ipcRenderer.invoke('net-poll', hostname, port, sid);
     },
   },
 });

@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { useContext } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
@@ -52,14 +52,29 @@ declare global {
               success: false;
             }
         >;
+
+        poll: (host: string, port: number, sid: string) => void;
       };
     };
   }
 }
 
 const DesignSystem: React.FC = () => {
-  const { yaddsAppearance } = useContext(YaddsCtx);
+  const { yaddsAppearance, dsmConnectList, dsmConnectIndex } = useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const handleTask = async () => {
+    const resp = await window.electron?.net.poll(
+      dsmConnectList[dsmConnectIndex]?.host,
+      dsmConnectList[dsmConnectIndex]?.port,
+      dsmConnectList[dsmConnectIndex]?.sid
+    );
+    console.log(resp);
+  };
+
+  useLayoutEffect(() => {
+    handleTask();
+  }, []);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (yaddsAppearance) {

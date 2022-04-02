@@ -215,6 +215,7 @@ async function requestLogin(pingpongInfo: PingpongInfo, account: string, passwd:
         const parsed: LoginInfo = JSON.parse(chunk.toString());
         parsed.hostname = pingpongInfo.hostname;
         parsed.port = pingpongInfo.port;
+        console.log(parsed);
         resolve(parsed);
       });
     });

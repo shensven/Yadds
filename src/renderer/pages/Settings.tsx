@@ -275,7 +275,9 @@ const Settings: React.FC = () => {
     if (resp.success) {
       const arr = [...dsmConnectList];
       arr.push({
-        host: newConnect.connectAddress,
+        host: resp.hostname,
+        port: resp.port,
+        quickConnectID: newConnect.connectAddress,
         username: newConnect.username,
         did: resp.data.did,
         sid: resp.data.sid,
@@ -356,7 +358,7 @@ const Settings: React.FC = () => {
                 disabled={dsmConnectList.length === 0}
                 value={[dsmConnectIndex]}
                 renderValue={() =>
-                  `${dsmConnectList[dsmConnectIndex]?.host ?? 'null'} - ${
+                  `${dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'} - ${
                     dsmConnectList[dsmConnectIndex]?.username ?? 'null'
                   }`
                 }
@@ -371,7 +373,7 @@ const Settings: React.FC = () => {
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
                         onClick={() => handleSelectOnChange(index, false)}
                       >
-                        {item.host} - {item.username}
+                        {item.quickConnectID} - {item.username}
                       </Typography>
                       <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectOnChange(index, true)}>
                         <IonTrashOutline sx={{ fontSize: 14 }} />
@@ -548,6 +550,7 @@ const Settings: React.FC = () => {
                 ),
               }}
               onChange={(evt) => setNewConnect({ ...newConnect, connectAddress: evt.target.value })}
+              onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
             />
             <FormControlLabel
               sx={{ alignSelf: 'flex-end', visibility: newConnect.isQuickConnectID ? 'hidden' : 'visible' }}
@@ -564,6 +567,7 @@ const Settings: React.FC = () => {
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
               onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value })}
+              onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
             />
             <TextField
               size="small"
@@ -592,6 +596,7 @@ const Settings: React.FC = () => {
                 ),
               }}
               onChange={(evt) => setNewConnect({ ...newConnect, password: evt.target.value })}
+              onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
             />
           </Stack>
         </DialogContent>
@@ -645,7 +650,13 @@ const Settings: React.FC = () => {
           <Button color="inherit" onClick={() => dismissDaialogDelete()}>
             {t('settings.dialog_remove.cancel')}
           </Button>
-          <Button color="error" onClick={() => persistDsmConnectList([])}>
+          <Button
+            color="error"
+            onClick={() => {
+              persistDsmConnectList([]);
+              persistDsmConnectIndex(0);
+            }}
+          >
             {t('settings.dialog_remove.yes')}
           </Button>
         </DialogActions>

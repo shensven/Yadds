@@ -27,6 +27,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 import auth from './net/auth';
+import poll from './net/poll';
 
 export default class AppUpdater {
   constructor() {
@@ -635,6 +636,10 @@ ipcMain.handle('open-via-broswer', async (_, url) => {
   shell.openExternal(url);
 });
 
-ipcMain.handle('axios-auth', async (_, quickConnectID: string, account: string, passwd: string) => {
+ipcMain.handle('net-auth', async (_, quickConnectID: string, account: string, passwd: string) => {
   return auth(quickConnectID, account, passwd);
+});
+
+ipcMain.handle('net-poll', async (_, hostname: string, port: number, sid: string) => {
+  return poll(hostname, port, sid);
 });

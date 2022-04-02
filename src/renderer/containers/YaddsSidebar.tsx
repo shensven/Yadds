@@ -196,7 +196,7 @@ const YaddsSidebar: React.FC = () => {
                     fontWeight={600}
                     color={theme.palette.text.secondary}
                   >
-                    {dsmConnectList[dsmConnectIndex]?.host ?? 'null'}
+                    {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
                   </Typography>
                   <IcRoundLink color="success" />
                   {/* <IcRoundLinkOff color="warning" /> */}

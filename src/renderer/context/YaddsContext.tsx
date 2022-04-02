@@ -2,6 +2,8 @@ import React, { createContext, useState } from 'react';
 
 export interface DsmConnectListType {
   host: string;
+  port: number;
+  quickConnectID: string;
   username: string;
   did: string;
   sid: string;
