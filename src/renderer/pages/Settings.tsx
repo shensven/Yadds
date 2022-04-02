@@ -49,6 +49,7 @@ import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
 const OS_PLATFORM = window.electron?.getOS();
+const APP_VERSION = window.electron?.getAppVersion();
 
 const getAppearanceLight = () => {
   switch (OS_PLATFORM) {
@@ -292,7 +293,7 @@ const Settings: React.FC = () => {
     <Box>
       <Box
         sx={{ height: theme.spacing(5), appRegion: 'drag' }}
-        onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
+        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.zoomWindow()}
       />
       <Stack sx={{ pl: theme.spacing(2) }}>
         <Typography variant="h3" fontWeight={500} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
@@ -427,9 +428,7 @@ const Settings: React.FC = () => {
               onClick={() => persistIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
             />
             <Stack flexDirection="row" alignItems="center">
-              <FormHelperText>
-                {t('settings.current_version')} {window.electron.getAppVersion()}
-              </FormHelperText>
+              <FormHelperText>{`${t('settings.current_version')} ${APP_VERSION}`}</FormHelperText>
               <Button
                 size="small"
                 sx={{
