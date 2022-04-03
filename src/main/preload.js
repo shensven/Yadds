@@ -79,8 +79,8 @@ contextBridge.exposeInMainWorld('electron', {
     return ipcRenderer.sendSync('get-app-version');
   },
 
-  popupContextMenu: (props) => {
-    ipcRenderer.invoke('popup-context-menu', props);
+  popupContextMenu: (args) => {
+    ipcRenderer.invoke('popup-context-menu', args);
   },
 
   openViaBrowser: (url) => {
@@ -88,11 +88,11 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   net: {
-    auth(quickConnectID, account, passwd) {
-      return ipcRenderer.invoke('net-auth', quickConnectID, account, passwd);
+    auth(args) {
+      return ipcRenderer.invoke('net-auth', args);
     },
-    poll(hostname, port, sid) {
-      return ipcRenderer.invoke('net-poll', hostname, port, sid);
+    poll(args) {
+      return ipcRenderer.invoke('net-poll', args);
     },
   },
 });

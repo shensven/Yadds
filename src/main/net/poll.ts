@@ -55,10 +55,11 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
   });
 }
 
-export default async function poll(host: string, port: number, sid: string) {
+export default async function poll(args: { host: string; port: number; sid: string }) {
+  const { host, port, sid } = args;
   if (!(host || port || sid)) {
     return { success: false };
   }
-  const tasks = await requestTasks({ host, port, sid });
+  const tasks = await requestTasks(args);
   return tasks;
 }

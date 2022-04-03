@@ -35,11 +35,7 @@ declare global {
       popupContextMenu: (val: MenuItemConstructorOptions[]) => void;
       openViaBrowser: (val: string) => void;
       net: {
-        auth: (
-          quickConnectID: string,
-          account: string,
-          passwd: string
-        ) => Promise<
+        auth: (props: { quickConnectID: string; account: string; passwd: string }) => Promise<
           | {
               data: { did: string; sid: string };
               hostname: string;
@@ -53,7 +49,7 @@ declare global {
             }
         >;
 
-        poll: (host: string, port: number, sid: string) => void;
+        poll: (props: { host: string; port: number; sid: string }) => void;
       };
     };
   }
@@ -64,11 +60,11 @@ const DesignSystem: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const handleTask = async () => {
-    const resp = await window.electron?.net.poll(
-      dsmConnectList[dsmConnectIndex]?.host,
-      dsmConnectList[dsmConnectIndex]?.port,
-      dsmConnectList[dsmConnectIndex]?.sid
-    );
+    const resp = await window.electron?.net.poll({
+      host: dsmConnectList[dsmConnectIndex]?.host,
+      port: dsmConnectList[dsmConnectIndex]?.port,
+      sid: dsmConnectList[dsmConnectIndex]?.sid,
+    });
     console.log(resp);
   };
 

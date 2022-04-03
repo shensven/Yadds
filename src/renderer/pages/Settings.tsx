@@ -270,7 +270,11 @@ const Settings: React.FC = () => {
 
     setLoadingInDialogAdd(true);
 
-    const resp = await window.electron.net.auth(newConnect.connectAddress, newConnect.username, newConnect.password);
+    const resp = await window.electron.net.auth({
+      quickConnectID: newConnect.connectAddress,
+      account: newConnect.username,
+      passwd: newConnect.password,
+    });
 
     if (resp.success) {
       const arr = [...dsmConnectList];

@@ -96,7 +96,9 @@ async function requestCoordinator(quickConnectID: string) {
   });
 }
 
-async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
+async function requestPingPong(args: { quickConnectID: string; serverInfo: ServerInfo }) {
+  const { quickConnectID, serverInfo } = args;
+
   // 5001
   const PORT = serverInfo.service?.port as number;
 
@@ -185,7 +187,9 @@ async function requestPingPong(quickConnectID: string, serverInfo: ServerInfo) {
   return Promise.race(INSTANCE_SETS);
 }
 
-async function requestLogin(pingpongInfo: PingpongInfo, account: string, passwd: string) {
+async function requestLogin(args: { pingpongInfo: PingpongInfo; account: string; passwd: string }) {
+  const { pingpongInfo, account, passwd } = args;
+
   const params = {
     api: 'SYNO.API.Auth',
     version: 3,
@@ -228,7 +232,9 @@ async function requestLogin(pingpongInfo: PingpongInfo, account: string, passwd:
   });
 }
 
-export default async function auth(quickConnectID: string, account: string, passwd: string) {
+export default async function auth(args: { quickConnectID: string; account: string; passwd: string }) {
+  const { quickConnectID, account, passwd } = args;
+
   if (quickConnectID.length === 0) {
     return {
       msg: 'QuickConnect ID is incorrect or does not exist',
@@ -260,7 +266,7 @@ export default async function auth(quickConnectID: string, account: string, pass
         };
     }
   }
-  const pingpongInfo = await requestPingPong(quickConnectID, serverInfo);
+  const pingpongInfo = await requestPingPong({ quickConnectID, serverInfo });
 
   if (pingpongInfo.success === false) {
     return {
@@ -269,7 +275,7 @@ export default async function auth(quickConnectID: string, account: string, pass
       success: false,
     };
   }
-  const loginInfo = await requestLogin(pingpongInfo, account, passwd);
+  const loginInfo = await requestLogin({ pingpongInfo, account, passwd });
 
   if (loginInfo.success === false) {
     return {
