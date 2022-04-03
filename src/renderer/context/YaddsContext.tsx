@@ -9,6 +9,15 @@ export interface DsmConnectListType {
   sid: string;
 }
 
+export interface DSTasks {
+  id: string;
+  size: number;
+  status: string;
+  title: string;
+  type: string;
+  username?: string;
+}
+
 interface CtxType {
   hasYaddsSidebarMarginTop: boolean;
   setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void;
@@ -36,6 +45,9 @@ interface CtxType {
 
   dsmConnectIndex: number;
   persistDsmConnectIndex: (index: number) => void;
+
+  tasks: DSTasks[];
+  setTasks: (tasks: DSTasks[]) => void;
 }
 
 export const YaddsCtx = createContext<CtxType>({
@@ -65,6 +77,9 @@ export const YaddsCtx = createContext<CtxType>({
 
   dsmConnectIndex: 0,
   persistDsmConnectIndex: () => null,
+
+  tasks: [],
+  setTasks: () => null,
 });
 
 export const YaddsProvider: React.FC = (props) => {
@@ -107,6 +122,10 @@ export const YaddsProvider: React.FC = (props) => {
   const [dsmConnectIndexVal, setDsmConnectIndexVal] = useState<number>(
     (window.electron?.store.get('dsmConnectIndex') as number) ?? 0
   );
+
+  // ---------------------------------------------------------------------------
+
+  const [tasksVal, setTasksVal] = useState<DSTasks[]>([]);
 
   // ---------------------------------------------------------------------------
 
@@ -164,6 +183,13 @@ export const YaddsProvider: React.FC = (props) => {
     persistDsmConnectIndex: (index: number) => {
       setDsmConnectIndexVal(index);
       window.electron.store.set('dsmConnectIndex', index);
+    },
+
+    // ---------------------------------------------------------------------------
+
+    tasks: tasksVal,
+    setTasks: (tasks: DSTasks[]) => {
+      setTasksVal(tasks);
     },
   };
 

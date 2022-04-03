@@ -3,7 +3,7 @@ import { useContext, useLayoutEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
-import { YaddsCtx, YaddsProvider } from './context/YaddsContext';
+import { DSTasks, YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -49,14 +49,20 @@ declare global {
             }
         >;
 
-        poll: (props: { host: string; port: number; sid: string }) => void;
+        poll: (props: { host: string; port: number; sid: string }) => Promise<{
+          success: boolean;
+          data: {
+            tasks: DSTasks[];
+            total: number;
+          };
+        }>;
       };
     };
   }
 }
 
 const DesignSystem: React.FC = () => {
-  const { yaddsAppearance, dsmConnectList, dsmConnectIndex } = useContext(YaddsCtx);
+  const { yaddsAppearance, dsmConnectList, dsmConnectIndex, setTasks } = useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const handleTask = async () => {
@@ -65,7 +71,10 @@ const DesignSystem: React.FC = () => {
       port: dsmConnectList[dsmConnectIndex]?.port,
       sid: dsmConnectList[dsmConnectIndex]?.sid,
     });
-    console.log(resp);
+    if (resp?.success) {
+      console.log(resp);
+      setTasks(resp.data.tasks);
+    }
   };
 
   useLayoutEffect(() => {

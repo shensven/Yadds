@@ -12,9 +12,10 @@ import {
 import IonPlay from '../icons/IonPlay';
 import IonPause from '../icons/IonPause';
 import IonArrowDownC from '../icons/IonArrowDownC';
+import { DSTasks } from '../../context/YaddsContext';
 
 interface MainListItemProps {
-  item: string;
+  item: DSTasks;
   index: number;
 }
 
@@ -75,7 +76,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                 }),
               }}
             >
-              {item}
+              {item.title}
             </Typography>
             <ButtonBase
               disableRipple
