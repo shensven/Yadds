@@ -8,7 +8,7 @@
       "groupName": "devDependencies",
       "matchDepTypes": ["devDependencies"],
       "enabled": false,
-      "excludePackageNames": ["electron"]
+      "excludePackageNames": ["@types/byte-size", "electron"]
     },
     {
       "groupName": "dependencies",
@@ -21,6 +21,7 @@
         "@mui/icons-material",
         "@mui/material",
         "@mui/system",
+        "byte-size",
         "electron-store",
         "i18next",
         "query-string",
