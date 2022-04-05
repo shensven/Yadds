@@ -2,7 +2,8 @@ import { net } from 'electron';
 import queryString from 'query-string';
 
 interface TasksInfo {
-  data: {
+  success: boolean;
+  data?: {
     offset: number;
     tasks: {
       id: string;
@@ -14,11 +15,11 @@ interface TasksInfo {
     }[];
     total: number;
   };
-  success: boolean;
 }
 
 interface TasksDetailInfo {
-  data: {
+  success: boolean;
+  data?: {
     tasks: {
       id: string;
       size: number;
@@ -56,7 +57,6 @@ interface TasksDetailInfo {
       };
     }[];
   };
-  success: boolean;
 }
 
 async function requestTasks(args: { host: string; port: number; sid: string }) {
@@ -84,8 +84,12 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
-        const parsed: TasksInfo = JSON.parse(chunk.toString());
-        resolve(parsed);
+        try {
+          const parsed: TasksInfo = JSON.parse(chunk.toString());
+          resolve(parsed);
+        } catch {
+          resolve({ success: false });
+        }
       });
     });
 
@@ -124,16 +128,19 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
-        const parsed: TasksDetailInfo = JSON.parse(chunk.toString());
-        console.log(parsed);
+        try {
+          const parsed: TasksDetailInfo = JSON.parse(chunk.toString('utf8'));
 
-        parsed.data.tasks.forEach((task) => {
-          const SIZE_LEFT = task.size - task.additional.transfer.size_downloaded;
-          const SECENDS_LEFT = SIZE_LEFT / task.additional.transfer.speed_download;
-          task.additional.seconds_left = Math.round(SECENDS_LEFT) ?? 0;
-        });
+          parsed.data?.tasks.forEach((task) => {
+            const SIZE_LEFT = task.size - task.additional.transfer.size_downloaded;
+            const SECENDS_LEFT = SIZE_LEFT / task.additional.transfer.speed_download;
+            task.additional.seconds_left = Math.round(SECENDS_LEFT) ?? 0;
+          });
 
-        resolve(parsed);
+          resolve(parsed);
+        } catch {
+          resolve({ success: false });
+        }
       });
     });
 
@@ -153,9 +160,13 @@ export default async function poll(args: { host: string; port: number; sid: stri
 
   const tasks = await requestTasks(args);
 
+  if (!tasks.success) {
+    return { success: false };
+  }
+
   const getIDs = () => {
     const ids: string[] = [];
-    tasks.data.tasks.forEach((task) => {
+    tasks.data?.tasks.forEach((task) => {
       ids.push(task.id);
     });
     return ids.toString();
@@ -167,6 +178,10 @@ export default async function poll(args: { host: string; port: number; sid: stri
     sid,
     taskID: getIDs(),
   });
+
+  if (!taskDetail.success) {
+    return { success: false };
+  }
 
   return taskDetail;
 }
