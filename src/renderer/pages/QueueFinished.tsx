@@ -12,8 +12,8 @@ const QueueFinished: React.FC = () => {
     <List>
       {tasks
         .filter((task) => task.status === 'finished' || task.status === 5)
-        .map((item: DSTasks, index: number) => (
-          <MainListItem key={item.id} item={item} index={index} />
+        .map((item: DSTasks) => (
+          <MainListItem key={item.id} item={item} />
         ))}
     </List>
   );

@@ -11,8 +11,8 @@ const QueueAll: React.FC = () => {
     <QueueEmpty />
   ) : (
     <List>
-      {tasks.map((item: DSTasks, index: number) => (
-        <MainListItem key={item.id} item={item} index={index} />
+      {tasks.map((item: DSTasks) => (
+        <MainListItem key={item.id} item={item} />
       ))}
     </List>
   );

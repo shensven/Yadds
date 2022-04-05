@@ -17,11 +17,10 @@ import { DSTasks } from '../../context/YaddsContext';
 
 interface MainListItemProps {
   item: DSTasks;
-  index: number;
 }
 
 const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => {
-  const { item, index } = props;
+  const { item } = props;
 
   const SIZE = byteSize(item.size, { units: 'iec', precision: 2 });
   const SIZE_DOWNLOADED = byteSize(item.additional?.transfer.size_downloaded as number, { units: 'iec', precision: 2 });
@@ -38,7 +37,6 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
         disableRipple
         sx={{
           width: '100%',
-          // backgroundColor: index % 2 === 0 ? theme.palette.card.default : 'transparent',
           backgroundColor: theme.palette.card.default,
           '&:hover': {
             backgroundColor: theme.palette.card.hover,
