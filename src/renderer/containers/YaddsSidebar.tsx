@@ -109,7 +109,7 @@ const YaddsSidebar: React.FC = () => {
     },
     {
       path: '/queueStopped',
-      tasksLength: 0,
+      tasksLength: tasks.filter((task) => task.status === 3).length,
       name: t('sidebar.stopped'),
       activeIcon: <IonStopCircle />,
       inactiveIcon: <IonStopCircleOutline />,
@@ -179,14 +179,17 @@ const YaddsSidebar: React.FC = () => {
                   variant="caption"
                   fontWeight={500}
                   sx={{
+                    fontVariantNumeric: 'tabular-nums',
                     color: theme.palette.card.default,
                     backgroundColor:
                       yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.disabled,
                     px: theme.spacing(0.5),
+                    minWidth: theme.spacing(3),
+                    textAlign: 'center',
                     borderRadius: 0.6,
                   }}
                 >
-                  {item.tasksLength}
+                  {item.tasksLength >= 100 ? '99+' : item.tasksLength}
                 </Typography>
               )}
             </ListItemButton>

@@ -1,7 +1,22 @@
-import { Typography } from '@mui/material';
+import { useContext } from 'react';
+import { List } from '@mui/material';
+import QueueEmpty from '../components/QueueEmpty/QueueEmpty';
+import MainListItem from '../components/listItem/MainListItem';
+import { DSTasks, YaddsCtx } from '../context/YaddsContext';
 
 const QueueFinished: React.FC = () => {
-  return <Typography>QueueFinished</Typography>;
+  const { tasks } = useContext(YaddsCtx);
+  return tasks.filter((task) => task.status === 'finished' || task.status === 5).length === 0 ? (
+    <QueueEmpty />
+  ) : (
+    <List>
+      {tasks
+        .filter((task) => task.status === 'finished' || task.status === 5)
+        .map((item: DSTasks, index: number) => (
+          <MainListItem key={item.id} item={item} index={index} />
+        ))}
+    </List>
+  );
 };
 
 export default QueueFinished;

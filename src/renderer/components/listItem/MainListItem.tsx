@@ -104,18 +104,22 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                   variant="determinate"
                   value={(Number(SIZE_DOWNLOADED.value) / Number(SIZE.value)) * 100}
                 />
-                <Typography sx={{ fontSize: 12, ml: 1, color: theme.palette.text.disabled }}>
+                <Typography
+                  sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, ml: 1, color: theme.palette.text.disabled }}
+                >
                   {SIZE_DOWNLOADED.value} {SIZE_DOWNLOADED.unit} / {SIZE.value} {SIZE.unit}
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center">
                 <IonArrowDownC sx={{ fontSize: 12 }} color="warning" />
-                <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>
+                <Typography
+                  sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}
+                >
                   {SPEED_DOWNLOAD.value} {SPEED_DOWNLOAD.unit}/s
                 </Typography>
               </Stack>
             </Stack>
-            <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>
+            <Typography sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}>
               00:00:{item.additional?.seconds_left.toString()}
             </Typography>
           </Stack>
