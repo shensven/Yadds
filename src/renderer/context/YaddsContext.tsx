@@ -12,7 +12,7 @@ export interface DsmConnectListType {
 export interface DSTasks {
   id: string;
   size: number;
-  status: string;
+  status: string | number;
   title: string;
   type: string;
   username?: string;
@@ -42,7 +42,7 @@ export interface DSTasks {
       speed_download: number;
       speed_upload: number;
     };
-    seconds_left: number;
+    seconds_left: string;
   };
 }
 

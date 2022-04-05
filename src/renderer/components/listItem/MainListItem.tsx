@@ -116,7 +116,7 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
               </Stack>
             </Stack>
             <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>
-              {item.additional?.seconds_left}
+              00:00:{item.additional?.seconds_left.toString()}
             </Typography>
           </Stack>
         </ListItemText>

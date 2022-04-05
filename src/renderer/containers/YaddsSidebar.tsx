@@ -36,6 +36,7 @@ import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
 interface Category {
   path: string;
+  tasksLength: number;
   name: string;
   activeIcon: JSX.Element;
   inactiveIcon: JSX.Element;
@@ -54,6 +55,7 @@ const YaddsSidebar: React.FC = () => {
     persistYaddsSidebarCategory,
     dsmConnectList,
     dsmConnectIndex,
+    tasks,
   } = useContext(YaddsCtx);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
@@ -72,36 +74,42 @@ const YaddsSidebar: React.FC = () => {
   const category: Category[] = [
     {
       path: '/queueAll',
+      tasksLength: tasks.length,
       name: t('sidebar.all'),
       activeIcon: <IonShapes />,
       inactiveIcon: <IonShapesOutline />,
     },
     {
       path: '/queueDownloading',
+      tasksLength: tasks.filter((task) => task.status === 2).length,
       name: t('sidebar.downloading'),
       activeIcon: <IonArrowDownCircle />,
       inactiveIcon: <IonArrowDownCircleOutline />,
     },
     {
       path: '/queueFinished',
+      tasksLength: tasks.filter((task) => task.status === 'finished' || task.status === 5).length,
       name: t('sidebar.completed'),
       activeIcon: <IonCheckmarkCircle />,
       inactiveIcon: <IonCheckmarkCircleOutline />,
     },
     {
       path: '/queueActive',
+      tasksLength: tasks.filter((task) => task.status === 2 || task.status === 8).length,
       name: t('sidebar.active'),
       activeIcon: <IonArrowUpCircle />,
       inactiveIcon: <IonArrowUpCircleOutline />,
     },
     {
       path: '/queueInactive',
+      tasksLength: tasks.filter((task) => task.status === 3).length,
       name: t('sidebar.inactive'),
       activeIcon: <IonCloseCircle />,
       inactiveIcon: <IonCloseCircleOutline />,
     },
     {
       path: '/queueStopped',
+      tasksLength: 0,
       name: t('sidebar.stopped'),
       activeIcon: <IonStopCircle />,
       inactiveIcon: <IonStopCircleOutline />,
@@ -166,19 +174,21 @@ const YaddsSidebar: React.FC = () => {
                   </Typography>
                 }
               />
-              <Typography
-                variant="caption"
-                fontWeight={500}
-                sx={{
-                  color: theme.palette.card.default,
-                  backgroundColor:
-                    yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.disabled,
-                  px: theme.spacing(0.5),
-                  borderRadius: 0.6,
-                }}
-              >
-                99+
-              </Typography>
+              {item.tasksLength > 0 && (
+                <Typography
+                  variant="caption"
+                  fontWeight={500}
+                  sx={{
+                    color: theme.palette.card.default,
+                    backgroundColor:
+                      yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.disabled,
+                    px: theme.spacing(0.5),
+                    borderRadius: 0.6,
+                  }}
+                >
+                  {item.tasksLength}
+                </Typography>
+              )}
             </ListItemButton>
           </ListItem>
         ))}

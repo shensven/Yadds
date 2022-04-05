@@ -52,7 +52,7 @@ interface TasksDetailInfo {
           speed_download: number;
           speed_upload: number;
         };
-        seconds_left: number;
+        seconds_left: number | unknown;
       };
     }[];
   };
@@ -125,11 +125,12 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
         const parsed: TasksDetailInfo = JSON.parse(chunk.toString());
+        console.log(parsed);
 
         parsed.data.tasks.forEach((task) => {
           const SIZE_LEFT = task.size - task.additional.transfer.size_downloaded;
           const SECENDS_LEFT = SIZE_LEFT / task.additional.transfer.speed_download;
-          task.additional.seconds_left = Math.round(SECENDS_LEFT);
+          task.additional.seconds_left = Math.round(SECENDS_LEFT) ?? 0;
         });
 
         resolve(parsed);
