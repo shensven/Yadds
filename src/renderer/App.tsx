@@ -71,6 +71,7 @@ const DesignSystem: React.FC = () => {
       port: dsmConnectList[dsmConnectIndex]?.port,
       sid: dsmConnectList[dsmConnectIndex]?.sid,
     });
+
     if (resp.success) {
       console.log(resp);
       setTasks(resp.data.tasks);
@@ -78,6 +79,11 @@ const DesignSystem: React.FC = () => {
   };
 
   useLayoutEffect(() => {
+    if (!dsmConnectList[dsmConnectIndex]) {
+      setTasks([]);
+      return undefined;
+    }
+
     const timer = setInterval(() => {
       handleTasks();
     }, 1000);
@@ -85,7 +91,7 @@ const DesignSystem: React.FC = () => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [dsmConnectList[dsmConnectIndex]]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (yaddsAppearance) {
