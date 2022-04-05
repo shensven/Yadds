@@ -164,7 +164,6 @@ export default async function poll(args: { host: string; port: number; sid: stri
     host,
     port,
     sid,
-    // taskID: tasks.data.tasks[0].id,
     taskID: getIDs(),
   });
 

@@ -17,7 +17,6 @@ export interface DSTasks {
   type: string;
   username?: string;
   additional?: {
-    seconds_left: number;
     detail: {
       completed_time: number;
       connected_leechers: number;
@@ -43,6 +42,7 @@ export interface DSTasks {
       speed_download: number;
       speed_upload: number;
     };
+    seconds_left: number;
   };
 }
 

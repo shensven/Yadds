@@ -50,11 +50,11 @@ declare global {
         >;
 
         poll: (props: { host: string; port: number; sid: string }) => Promise<{
+          success: boolean;
           data: {
             tasks: DSTasks[];
             total?: number;
           };
-          success?: boolean;
         }>;
       };
     };
@@ -71,7 +71,7 @@ const DesignSystem: React.FC = () => {
       port: dsmConnectList[dsmConnectIndex]?.port,
       sid: dsmConnectList[dsmConnectIndex]?.sid,
     });
-    if (resp?.success) {
+    if (resp.success) {
       console.log(resp);
       setTasks(resp.data.tasks);
     }
