@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ButtonBase,
   LinearProgress,
@@ -9,6 +9,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import byteSize from 'byte-size';
 import IonPlay from '../icons/IonPlay';
 import IonPause from '../icons/IonPause';
 import IonArrowDownC from '../icons/IonArrowDownC';
@@ -22,28 +23,14 @@ interface MainListItemProps {
 const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => {
   const { item, index } = props;
 
+  const SIZE = byteSize(item.size, { units: 'iec', precision: 2 });
+  const SIZE_DOWNLOADED = byteSize(item.additional?.transfer.size_downloaded as number, { units: 'iec', precision: 2 });
+  const SPEED_DOWNLOAD = byteSize(item.additional?.transfer.speed_download as number, { units: 'iec', precision: 2 });
+
   const theme = useTheme();
 
   const [hasAction, setHasAction] = useState<boolean>(false);
   const [isDownload, setIsDownload] = useState<boolean>(true);
-
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress: number) => {
-        if (oldProgress === 100) {
-          return 0;
-        }
-        const diff = Math.floor(Math.random() * 10);
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 1000);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
 
   return (
     <ListItem>
@@ -51,7 +38,8 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
         disableRipple
         sx={{
           width: '100%',
-          backgroundColor: index % 2 === 0 ? theme.palette.card.default : 'transparent',
+          // backgroundColor: index % 2 === 0 ? theme.palette.card.default : 'transparent',
+          backgroundColor: theme.palette.card.default,
           '&:hover': {
             backgroundColor: theme.palette.card.hover,
           },
@@ -114,18 +102,22 @@ const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => 
                 <LinearProgress
                   sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
                   variant="determinate"
-                  value={progress}
+                  value={(Number(SIZE_DOWNLOADED.value) / Number(SIZE.value)) * 100}
                 />
                 <Typography sx={{ fontSize: 12, ml: 1, color: theme.palette.text.disabled }}>
-                  {progress}MB / 100MB
+                  {SIZE_DOWNLOADED.value} {SIZE_DOWNLOADED.unit} / {SIZE.value} {SIZE.unit}
                 </Typography>
               </Stack>
               <Stack direction="row" alignItems="center">
                 <IonArrowDownC sx={{ fontSize: 12 }} color="warning" />
-                <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>{progress}MB/s</Typography>
+                <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>
+                  {SPEED_DOWNLOAD.value} {SPEED_DOWNLOAD.unit}/s
+                </Typography>
               </Stack>
             </Stack>
-            <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>00:{progress}:00</Typography>
+            <Typography sx={{ fontSize: 12, color: theme.palette.text.disabled }}>
+              {item.additional?.seconds_left}
+            </Typography>
           </Stack>
         </ListItemText>
       </ListItemButton>

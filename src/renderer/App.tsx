@@ -50,11 +50,11 @@ declare global {
         >;
 
         poll: (props: { host: string; port: number; sid: string }) => Promise<{
-          success: boolean;
           data: {
             tasks: DSTasks[];
-            total: number;
+            total?: number;
           };
+          success?: boolean;
         }>;
       };
     };
@@ -65,7 +65,7 @@ const DesignSystem: React.FC = () => {
   const { yaddsAppearance, dsmConnectList, dsmConnectIndex, setTasks } = useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const handleTask = async () => {
+  const handleTasks = async () => {
     const resp = await window.electron?.net.poll({
       host: dsmConnectList[dsmConnectIndex]?.host,
       port: dsmConnectList[dsmConnectIndex]?.port,
@@ -78,7 +78,13 @@ const DesignSystem: React.FC = () => {
   };
 
   useLayoutEffect(() => {
-    handleTask();
+    const timer = setInterval(() => {
+      handleTasks();
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
