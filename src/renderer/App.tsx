@@ -4,6 +4,7 @@ import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
 import { DSTasks, YaddsCtx, YaddsProvider } from './context/YaddsContext';
+import TASKS_RETRY from './context/tasksRetry';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -62,7 +63,8 @@ declare global {
 }
 
 const DesignSystem: React.FC = () => {
-  const { yaddsAppearance, dsmConnectList, dsmConnectIndex, setTasks } = useContext(YaddsCtx);
+  const { yaddsAppearance, dsmConnectList, dsmConnectIndex, setTasks, tasksStatus, setTasksStatus } =
+    useContext(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const handleTasks = async () => {
@@ -72,8 +74,22 @@ const DesignSystem: React.FC = () => {
       sid: dsmConnectList[dsmConnectIndex]?.sid,
     });
 
+    console.log('tasksStatus.retry', tasksStatus.retry);
+
+    if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
+      console.log('bad tasks request');
+
+      setTasksStatus((old) => {
+        if (old.retry >= TASKS_RETRY) {
+          return { ...old, isLoading: false };
+        }
+        return { isLoading: true, retry: old.retry + 1 };
+      });
+    }
+
     if (resp.success) {
-      console.log(resp);
+      console.log('good tasks request');
+      setTasksStatus({ isLoading: false, retry: 0 });
       setTasks(resp.data.tasks);
     }
   };
@@ -85,13 +101,20 @@ const DesignSystem: React.FC = () => {
     }
 
     const timer = setInterval(() => {
-      handleTasks();
+      console.log('retry', tasksStatus.retry);
+
+      if (tasksStatus.retry < TASKS_RETRY) {
+        handleTasks();
+      } else {
+        console.log('request done');
+        clearInterval(timer);
+      }
     }, 1000);
 
     return () => {
       clearInterval(timer);
     };
-  }, [dsmConnectList[dsmConnectIndex]]);
+  }, [dsmConnectList[dsmConnectIndex], tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (yaddsAppearance) {

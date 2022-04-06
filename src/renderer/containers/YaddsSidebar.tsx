@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Divider,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -15,6 +16,7 @@ import {
 } from '@mui/material';
 import { YaddsCtx } from '../context/YaddsContext';
 import SIDEBAR_WIDTH from '../context/sidebarWidth';
+import TASKS_RETRY from '../context/tasksRetry';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
 import IonShapes from '../components/icons/IonShapes';
 import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
@@ -28,9 +30,9 @@ import IonCloseCircle from '../components/icons/IonCloseCircle';
 import IonStopCircleOutline from '../components/icons/IonStopCircleOutline';
 import IonStopCircle from '../components/icons/IonStopCircle';
 import IonCogOutline from '../components/icons/IonCogOutline';
+import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import IcRoundLink from '../components/icons/IcRoundLink';
-// import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
-// import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
+import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
 import IonCog from '../components/icons/IonCog';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
@@ -56,6 +58,8 @@ const YaddsSidebar: React.FC = () => {
     dsmConnectList,
     dsmConnectIndex,
     tasks,
+    tasksStatus,
+    setTasksStatus,
   } = useContext(YaddsCtx);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
@@ -198,10 +202,10 @@ const YaddsSidebar: React.FC = () => {
       </List>
       <List>
         <ListItem>
-          <Stack flexDirection="row" width="100%" pl={theme.spacing(2.5)} pr={theme.spacing(2)}>
+          <Stack flexDirection="row" width="100%" pl={theme.spacing(2)}>
             <ListItemText
               primary={
-                <Stack flexDirection="row" justifyContent="space-between">
+                <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
                   <Typography
                     noWrap
                     variant="button"
@@ -210,10 +214,16 @@ const YaddsSidebar: React.FC = () => {
                     color={theme.palette.text.secondary}
                   >
                     {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
+                    {tasksStatus.isLoading.toString()}
                   </Typography>
-                  <IcRoundLink color="success" />
-                  {/* <IcRoundLinkOff color="warning" /> */}
-                  {/* <EosIconsThreeDotsLoading /> */}
+                  <IconButton
+                    size="small"
+                    onClick={() => setTasksStatus({ ...tasksStatus, isLoading: true, retry: 0 })}
+                  >
+                    {tasksStatus.isLoading && <EosIconsThreeDotsLoading />}
+                    {!tasksStatus.isLoading && tasksStatus.retry === 0 && <IcRoundLink color="success" />}
+                    {!tasksStatus.isLoading && tasksStatus.retry >= TASKS_RETRY && <IcRoundLinkOff color="warning" />}
+                  </IconButton>
                 </Stack>
               }
               secondary={

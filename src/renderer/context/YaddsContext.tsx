@@ -76,6 +76,9 @@ interface CtxType {
 
   tasks: DSTasks[];
   setTasks: (tasks: DSTasks[]) => void;
+
+  tasksStatus: { isLoading: boolean; retry: number };
+  setTasksStatus: (tasksStatus: { isLoading: boolean; retry: number }) => void;
 }
 
 export const YaddsCtx = createContext<CtxType>({
@@ -108,6 +111,9 @@ export const YaddsCtx = createContext<CtxType>({
 
   tasks: [],
   setTasks: () => null,
+
+  tasksStatus: { isLoading: true, retry: 0 },
+  setTasksStatus: () => null,
 });
 
 export const YaddsProvider: React.FC = (props) => {
@@ -154,6 +160,11 @@ export const YaddsProvider: React.FC = (props) => {
   // ---------------------------------------------------------------------------
 
   const [tasksVal, setTasksVal] = useState<DSTasks[]>([]);
+
+  const [tasksStatusVal, setTasksStatusVal] = useState({
+    isLoading: true,
+    retry: 0,
+  });
 
   // ---------------------------------------------------------------------------
 
@@ -218,6 +229,11 @@ export const YaddsProvider: React.FC = (props) => {
     tasks: tasksVal,
     setTasks: (tasks: DSTasks[]) => {
       setTasksVal(tasks);
+    },
+
+    tasksStatus: tasksStatusVal,
+    setTasksStatus: (tasksStatus: { isLoading: boolean; retry: number }) => {
+      setTasksStatusVal(tasksStatus);
     },
   };
 

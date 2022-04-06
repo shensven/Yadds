@@ -85,7 +85,7 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
     setTimeout(() => {
       request.abort();
       resolve({ success: false });
-    }, 5000);
+    }, 3000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
@@ -132,9 +132,8 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
     const request = net.request(options);
 
     setTimeout(() => {
-      request.abort();
       resolve({ success: false });
-    }, 5000);
+    }, 3000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
