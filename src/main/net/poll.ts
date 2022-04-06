@@ -79,8 +79,13 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
     },
   };
 
-  return new Promise<TasksInfo>((resolve, reject) => {
+  return new Promise<TasksInfo>((resolve) => {
     const request = net.request(options);
+
+    setTimeout(() => {
+      request.abort();
+      resolve({ success: false });
+    }, 5000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
@@ -93,8 +98,8 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
       });
     });
 
-    request.on('error', (error: Error) => {
-      reject(error);
+    request.on('error', () => {
+      resolve({ success: false });
     });
 
     request.end();
@@ -123,8 +128,13 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
     },
   };
 
-  return new Promise<TasksDetailInfo>((resolve, reject) => {
+  return new Promise<TasksDetailInfo>((resolve) => {
     const request = net.request(options);
+
+    setTimeout(() => {
+      request.abort();
+      resolve({ success: false });
+    }, 5000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
@@ -144,8 +154,8 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
       });
     });
 
-    request.on('error', (error: Error) => {
-      reject(error);
+    request.on('error', () => {
+      resolve({ success: false });
     });
 
     request.end();
