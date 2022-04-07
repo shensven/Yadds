@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, Dispatch, SetStateAction, useState } from 'react';
 
 export interface DsmConnectListType {
   host: string;
@@ -46,9 +46,9 @@ export interface DSTasks {
   };
 }
 
-interface CtxType {
+export interface CtxType {
   hasYaddsSidebarMarginTop: boolean;
-  setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void;
+  setHasYaddsSidebarMarginTop: Dispatch<SetStateAction<boolean>>;
 
   hasYaddsSidebar: boolean;
   persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void;
@@ -75,10 +75,10 @@ interface CtxType {
   persistDsmConnectIndex: (index: number) => void;
 
   tasks: DSTasks[];
-  setTasks: (tasks: DSTasks[]) => void;
+  setTasks: Dispatch<SetStateAction<DSTasks[]>>;
 
   tasksStatus: { isLoading: boolean; retry: number };
-  setTasksStatus: (tasksStatus: { isLoading: boolean; retry: number }) => void;
+  setTasksStatus: Dispatch<SetStateAction<{ isLoading: boolean; retry: number }>>;
 }
 
 export const YaddsCtx = createContext<CtxType>({
@@ -89,31 +89,31 @@ export const YaddsCtx = createContext<CtxType>({
   persistHasYaddsSidebar: () => {},
 
   yaddsSidebarCategory: '',
-  persistYaddsSidebarCategory: () => null,
+  persistYaddsSidebarCategory: () => {},
 
   yaddsAppearance: 'system',
-  persistYaddsAppearance: () => null,
+  persistYaddsAppearance: () => {},
 
   yaddsI18nCode: 'en',
-  persistYaddsI18nCode: () => null,
+  persistYaddsI18nCode: () => {},
 
   isYaddsAutoLaunch: false,
-  persistIsYaddsAutoLaunch: () => null,
+  persistIsYaddsAutoLaunch: () => {},
 
   isYaddsAutoUpdate: false,
-  persistIsYaddsAutoUpdate: () => null,
+  persistIsYaddsAutoUpdate: () => {},
 
   dsmConnectList: [],
-  persistDsmConnectList: () => null,
+  persistDsmConnectList: () => {},
 
   dsmConnectIndex: 0,
-  persistDsmConnectIndex: () => null,
+  persistDsmConnectIndex: () => {},
 
   tasks: [],
-  setTasks: () => null,
+  setTasks: () => {},
 
   tasksStatus: { isLoading: true, retry: 0 },
-  setTasksStatus: () => null,
+  setTasksStatus: () => {},
 });
 
 export const YaddsProvider: React.FC = (props) => {
@@ -161,7 +161,7 @@ export const YaddsProvider: React.FC = (props) => {
 
   const [tasksVal, setTasksVal] = useState<DSTasks[]>([]);
 
-  const [tasksStatusVal, setTasksStatusVal] = useState({
+  const [tasksStatusVal, setTasksStatusVal] = useState<{ isLoading: boolean; retry: number }>({
     isLoading: true,
     retry: 0,
   });
@@ -170,9 +170,7 @@ export const YaddsProvider: React.FC = (props) => {
 
   const ctxValue = {
     hasYaddsSidebarMarginTop: hasYaddsSidebarMarginTopVal,
-    setHasYaddsSidebarMarginTop: (bool: boolean) => {
-      setHasYaddsSidebarMarginTopVal(bool);
-    },
+    setHasYaddsSidebarMarginTop: setHasYaddsSidebarMarginTopVal,
 
     hasYaddsSidebar: hasYaddsSidebarVal,
     persistHasYaddsSidebar: (bool: boolean) => {
@@ -227,14 +225,10 @@ export const YaddsProvider: React.FC = (props) => {
     // ---------------------------------------------------------------------------
 
     tasks: tasksVal,
-    setTasks: (tasks: DSTasks[]) => {
-      setTasksVal(tasks);
-    },
+    setTasks: setTasksVal,
 
     tasksStatus: tasksStatusVal,
-    setTasksStatus: (tasksStatus: { isLoading: boolean; retry: number }) => {
-      setTasksStatusVal(tasksStatus);
-    },
+    setTasksStatus: setTasksStatusVal,
   };
 
   return <YaddsCtx.Provider value={ctxValue}>{children}</YaddsCtx.Provider>;

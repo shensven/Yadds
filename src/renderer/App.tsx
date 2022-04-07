@@ -3,7 +3,7 @@ import { useContext, useLayoutEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
-import { DSTasks, YaddsCtx, YaddsProvider } from './context/YaddsContext';
+import { CtxType, DSTasks, YaddsCtx, YaddsProvider } from './context/YaddsContext';
 import TASKS_RETRY from './context/tasksRetry';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
@@ -64,7 +64,7 @@ declare global {
 
 const DesignSystem: React.FC = () => {
   const { yaddsAppearance, dsmConnectList, dsmConnectIndex, setTasks, tasksStatus, setTasksStatus } =
-    useContext(YaddsCtx);
+    useContext<CtxType>(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const handleTasks = async () => {
