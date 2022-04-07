@@ -214,15 +214,19 @@ const YaddsSidebar: React.FC = () => {
                     color={theme.palette.text.secondary}
                   >
                     {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
-                    {tasksStatus.isLoading.toString()}
                   </Typography>
                   <IconButton
                     size="small"
+                    disabled={tasksStatus.isLoading || tasksStatus.retry === 0}
                     onClick={() => setTasksStatus({ ...tasksStatus, isLoading: true, retry: 0 })}
                   >
-                    {tasksStatus.isLoading && <EosIconsThreeDotsLoading />}
-                    {!tasksStatus.isLoading && tasksStatus.retry === 0 && <IcRoundLink color="success" />}
-                    {!tasksStatus.isLoading && tasksStatus.retry >= TASKS_RETRY && <IcRoundLinkOff color="warning" />}
+                    {tasksStatus.isLoading && <EosIconsThreeDotsLoading sx={{ fontSize: 20 }} />}
+                    {!tasksStatus.isLoading && tasksStatus.retry === 0 && (
+                      <IcRoundLink color="success" sx={{ fontSize: 20 }} />
+                    )}
+                    {!tasksStatus.isLoading && tasksStatus.retry >= TASKS_RETRY && (
+                      <IcRoundLinkOff color="warning" sx={{ fontSize: 20 }} />
+                    )}
                   </IconButton>
                 </Stack>
               }

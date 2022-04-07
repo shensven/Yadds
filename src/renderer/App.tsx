@@ -74,8 +74,6 @@ const DesignSystem: React.FC = () => {
       sid: dsmConnectList[dsmConnectIndex]?.sid,
     });
 
-    console.log('tasksStatus.retry', tasksStatus.retry);
-
     if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
       console.log('bad tasks request');
 
@@ -96,6 +94,7 @@ const DesignSystem: React.FC = () => {
 
   useLayoutEffect(() => {
     if (!dsmConnectList[dsmConnectIndex]) {
+      setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
       return undefined;
     }

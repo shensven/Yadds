@@ -2,9 +2,9 @@ import { net } from 'electron';
 import queryString from 'query-string';
 
 interface ServerInfo {
-  command: string;
-  version: number;
   errno: number;
+  command?: string;
+  version?: number;
   errinfo?: string;
   env?: { control_host: string; relay_region: string };
   server?: {
@@ -76,10 +76,15 @@ async function requestCoordinator(quickConnectID: string) {
     is_gofile: false,
   });
 
-  return new Promise<ServerInfo>((resolve, reject) => {
+  return new Promise<ServerInfo>((resolve) => {
     const request = net.request(options);
 
     request.write(body);
+
+    setTimeout(() => {
+      request.abort();
+      resolve({ errno: -1 });
+    }, 5000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
@@ -88,8 +93,8 @@ async function requestCoordinator(quickConnectID: string) {
       });
     });
 
-    request.on('error', (error: Error) => {
-      reject(error);
+    request.on('error', () => {
+      resolve({ errno: -1 });
     });
 
     request.end();
@@ -138,7 +143,7 @@ async function requestPingPong(args: { quickConnectID: string; serverInfo: Serve
       },
     };
 
-    return new Promise<PingpongInfo>((resolve, reject) => {
+    return new Promise<PingpongInfo>((resolve) => {
       const request = net.request(options);
 
       setTimeout(() => {
@@ -155,8 +160,8 @@ async function requestPingPong(args: { quickConnectID: string; serverInfo: Serve
         });
       });
 
-      request.on('error', (error: Error) => {
-        reject(error);
+      request.on('error', () => {
+        resolve({ success: false, hostname, port });
       });
 
       request.end();
@@ -242,6 +247,7 @@ export default async function auth(args: { quickConnectID: string; account: stri
       success: false,
     };
   }
+
   const serverInfo = await requestCoordinator(quickConnectID);
 
   if (serverInfo.errno !== 0) {
@@ -266,6 +272,7 @@ export default async function auth(args: { quickConnectID: string; account: stri
         };
     }
   }
+
   const pingpongInfo = await requestPingPong({ quickConnectID, serverInfo });
 
   if (pingpongInfo.success === false) {
@@ -275,6 +282,7 @@ export default async function auth(args: { quickConnectID: string; account: stri
       success: false,
     };
   }
+
   const loginInfo = await requestLogin({ pingpongInfo, account, passwd });
 
   if (loginInfo.success === false) {
@@ -284,5 +292,6 @@ export default async function auth(args: { quickConnectID: string; account: stri
       success: false,
     };
   }
+
   return loginInfo;
 }

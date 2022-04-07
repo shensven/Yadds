@@ -133,6 +133,7 @@ const Settings: React.FC = () => {
     persistDsmConnectList,
     dsmConnectIndex,
     persistDsmConnectIndex,
+    setTasksStatus,
   } = useContext(YaddsCtx);
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
@@ -288,6 +289,7 @@ const Settings: React.FC = () => {
       });
       persistDsmConnectList(arr);
       dismissDailogAdd();
+      setTasksStatus({ isLoading: false, retry: 0 });
     } else {
       setSnackbar({ show: true, errCode: resp.errCode });
       setLoadingInDialogAdd(false);
@@ -542,6 +544,7 @@ const Settings: React.FC = () => {
             <TextField
               size="small"
               spellCheck={false}
+              disabled={loadingInDialogAdd}
               autoFocus
               error={snackbar.errCode === '01' || snackbar.errCode === '024'}
               label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
@@ -565,9 +568,10 @@ const Settings: React.FC = () => {
             />
             <TextField
               size="small"
-              label={t('settings.dialog_add.username')}
               spellCheck={false}
+              disabled={loadingInDialogAdd}
               error={snackbar.errCode === '04'}
+              label={t('settings.dialog_add.username')}
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
               onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value })}
@@ -575,9 +579,10 @@ const Settings: React.FC = () => {
             />
             <TextField
               size="small"
-              label={t('settings.dialog_add.password')}
               spellCheck={false}
+              disabled={loadingInDialogAdd}
               error={snackbar.errCode === '04'}
+              label={t('settings.dialog_add.password')}
               value={newConnect.password}
               type={newConnect.showPassword ? 'text' : 'password'}
               sx={{ mt: theme.spacing(2) }}
@@ -659,6 +664,7 @@ const Settings: React.FC = () => {
             onClick={() => {
               persistDsmConnectList([]);
               persistDsmConnectIndex(0);
+              dismissDaialogDelete();
             }}
           >
             {t('settings.dialog_remove.yes')}
