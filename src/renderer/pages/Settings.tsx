@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -28,6 +28,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
+import { useAtom } from 'jotai';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
@@ -45,7 +46,17 @@ import linux_appearance_follow_system from '../assets/Settings/linux_appearance_
 import gnome_appearance_light from '../assets/Settings/gnome_appearance_light.png';
 import gnome_appearance_dark from '../assets/Settings/gnome_appearance_dark.png';
 import gnome_appearance_follow_system from '../assets/Settings/gnome_appearance_follow_system.png';
-import { DsmConnectListType, YaddsCtx } from '../context/YaddsContext';
+import {
+  dsmConnectIndexAtomWithPersistence,
+  dsmConnectListAtomWithPersistence,
+  hasYaddsSidebarAtomWithPersistence,
+  hasYaddsSidebarMarginTopAtom,
+  isYaddsAutoLaunchAtomWithPersistence,
+  isYaddsAutoUpdateAtomWithPersistence,
+  tasksStatusAtom,
+  yaddsAppearanceAtomWithPersistence,
+  yaddsI18nCodeAtomWithPersistence,
+} from '../atoms/yaddsAtoms';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
 const OS_PLATFORM = window.electron?.getOS();
@@ -118,23 +129,15 @@ const Settings: React.FC = () => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
 
-  const {
-    hasYaddsSidebar,
-    hasYaddsSidebarMarginTop,
-    yaddsAppearance,
-    persistYaddsAppearance,
-    yaddsI18nCode,
-    persistYaddsI18nCode,
-    isYaddsAutoLaunch,
-    persistIsYaddsAutoLaunch,
-    isYaddsAutoUpdate,
-    persistIsYaddsAutoUpdate,
-    dsmConnectList,
-    persistDsmConnectList,
-    dsmConnectIndex,
-    persistDsmConnectIndex,
-    setTasksStatus,
-  } = useContext(YaddsCtx);
+  const [hasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
+  const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
+  const [yaddsAppearance, persistYaddsAppearance] = useAtom(yaddsAppearanceAtomWithPersistence);
+  const [yaddsI18nCode, persistYaddsI18nCode] = useAtom(yaddsI18nCodeAtomWithPersistence);
+  const [isYaddsAutoLaunch, persistIsYaddsAutoLaunch] = useAtom(isYaddsAutoLaunchAtomWithPersistence);
+  const [isYaddsAutoUpdate, persistIsYaddsAutoUpdate] = useAtom(isYaddsAutoUpdateAtomWithPersistence);
+  const [dsmConnectList, persistDsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
+  const [dsmConnectIndex, persistDsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [, setTasksStatus] = useAtom(tasksStatusAtom);
 
   const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
@@ -372,7 +375,7 @@ const Settings: React.FC = () => {
                 onOpen={() => setIsSelectOpen(true)}
                 onClose={() => setIsSelectOpen(false)}
               >
-                {dsmConnectList.map((item: DsmConnectListType, index: number) => (
+                {dsmConnectList.map((item, index) => (
                   <MenuItem key={item.sid} dense disableRipple value={item.sid}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography

@@ -1,10 +1,15 @@
 import { MenuItemConstructorOptions } from 'electron';
-import React, { useContext, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Icon, IconButton, InputBase, Paper, Stack, styled, Typography, useTheme } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
-import { YaddsCtx } from '../context/YaddsContext';
+import { useAtom } from 'jotai';
+import {
+  hasYaddsSidebarAtomWithPersistence,
+  hasYaddsSidebarMarginTopAtom,
+  yaddsSidebarCategoryAtomWithPersistence,
+} from '../atoms/yaddsAtoms';
 import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import IonSearch from '../components/icons/IonSearch';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
@@ -87,8 +92,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { yaddsSidebarCategory, hasYaddsSidebarMarginTop, hasYaddsSidebar, persistHasYaddsSidebar } =
-    useContext(YaddsCtx);
+
+  const [yaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
+  const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
+  const [hasYaddsSidebar, persistHasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 

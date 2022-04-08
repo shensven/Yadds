@@ -1,9 +1,17 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { useContext, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
-import { CtxType, DSTasks, YaddsCtx, YaddsProvider } from './context/YaddsContext';
+import { Provider, useAtom } from 'jotai';
+import {
+  dsmConnectIndexAtomWithPersistence,
+  dsmConnectListAtomWithPersistence,
+  DSTasks,
+  tasksAtom,
+  tasksStatusAtom,
+  yaddsAppearanceAtomWithPersistence,
+} from './atoms/yaddsAtoms';
 import TASKS_RETRY from './context/tasksRetry';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
@@ -63,9 +71,13 @@ declare global {
 }
 
 const DesignSystem: React.FC = () => {
-  const { yaddsAppearance, dsmConnectList, dsmConnectIndex, setTasks, tasksStatus, setTasksStatus } =
-    useContext<CtxType>(YaddsCtx);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const [yaddsAppearance] = useAtom(yaddsAppearanceAtomWithPersistence);
+  const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
+  const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [, setTasks] = useAtom(tasksAtom);
+  const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
 
   const handleTasks = async () => {
     const resp = await window.electron?.net.poll({
@@ -145,9 +157,9 @@ const DesignSystem: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <YaddsProvider>
+    <Provider>
       <DesignSystem />
-    </YaddsProvider>
+    </Provider>
   );
 };
 

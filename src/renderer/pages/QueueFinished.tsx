@@ -1,18 +1,19 @@
-import { useContext } from 'react';
+import { useAtom } from 'jotai';
 import { List } from '@mui/material';
+import { tasksAtom } from '../atoms/yaddsAtoms';
 import QueueEmpty from '../components/QueueEmpty/QueueEmpty';
 import MainListItem from '../components/listItem/MainListItem';
-import { DSTasks, YaddsCtx } from '../context/YaddsContext';
 
 const QueueFinished: React.FC = () => {
-  const { tasks } = useContext(YaddsCtx);
+  const [tasks] = useAtom(tasksAtom);
+
   return tasks.filter((task) => task.status === 'finished' || task.status === 5).length === 0 ? (
     <QueueEmpty />
   ) : (
     <List>
       {tasks
         .filter((task) => task.status === 'finished' || task.status === 5)
-        .map((item: DSTasks) => (
+        .map((item) => (
           <MainListItem key={item.id} item={item} />
         ))}
     </List>

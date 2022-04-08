@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -14,7 +14,16 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { YaddsCtx } from '../context/YaddsContext';
+import { useAtom } from 'jotai';
+import {
+  dsmConnectIndexAtomWithPersistence,
+  dsmConnectListAtomWithPersistence,
+  hasYaddsSidebarAtomWithPersistence,
+  hasYaddsSidebarMarginTopAtom,
+  tasksAtom,
+  tasksStatusAtom,
+  yaddsSidebarCategoryAtomWithPersistence,
+} from '../atoms/yaddsAtoms';
 import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import TASKS_RETRY from '../context/tasksRetry';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
@@ -49,18 +58,13 @@ const YaddsSidebar: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const {
-    hasYaddsSidebar,
-    hasYaddsSidebarMarginTop,
-    setHasYaddsSidebarMarginTop,
-    yaddsSidebarCategory,
-    persistYaddsSidebarCategory,
-    dsmConnectList,
-    dsmConnectIndex,
-    tasks,
-    tasksStatus,
-    setTasksStatus,
-  } = useContext(YaddsCtx);
+  const [hasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
+  const [hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
+  const [yaddsSidebarCategory, persistYaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
+  const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
+  const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [tasks] = useAtom(tasksAtom);
+  const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
 
