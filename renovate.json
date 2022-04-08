@@ -24,6 +24,7 @@
         "byte-size",
         "electron-store",
         "i18next",
+        "jotai",
         "query-string",
         "react-i18next",
         "react-router-dom"
