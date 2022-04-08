@@ -8,9 +8,9 @@ import { useAtom } from 'jotai';
 import {
   hasYaddsSidebarAtomWithPersistence,
   hasYaddsSidebarMarginTopAtom,
+  sidebarWidth,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
-import SIDEBAR_WIDTH from '../context/sidebarWidth';
 import IonSearch from '../components/icons/IonSearch';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import greyInactiveSvg from '../assets/yaddsSidebarIndicator/grey_inactive.svg';
@@ -27,26 +27,30 @@ import Settings from '../pages/Settings';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
 const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasSidebar' })<{ hasSidebar?: boolean }>(
-  ({ theme, hasSidebar }) => ({
-    position: 'fixed',
-    left: 0,
-    right: 0,
-    width: '100%',
-    height: '100%',
-    marginLeft: 0,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(hasSidebar && {
-      width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
-      marginLeft: `${SIDEBAR_WIDTH}px`,
+  ({ theme, hasSidebar }) => {
+    const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
+
+    return {
+      position: 'fixed',
+      left: 0,
+      right: 0,
+      width: '100%',
+      height: '100%',
+      marginLeft: 0,
       transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
       }),
-    }),
-  })
+      ...(hasSidebar && {
+        width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
+        marginLeft: `${SIDEBAR_WIDTH}px`,
+        transition: theme.transitions.create(['margin', 'width'], {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+      }),
+    };
+  }
 );
 
 const StyledAppBar = styled(MuiAppBar)(() => ({

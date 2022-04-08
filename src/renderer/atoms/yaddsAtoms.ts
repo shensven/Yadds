@@ -46,6 +46,12 @@ export interface DSTasks {
   };
 }
 
+export const sidebarWidth = atom<number>(240);
+
+export const tasksRetry = atom<number>(3);
+
+// -----------------------------------------------------------------------------
+
 export const hasYaddsSidebarMarginTopAtom = atom<boolean>(true);
 
 const hasYaddsSidebarAtom = atom<boolean>((window.electron?.store.get('hasYaddsSidebar') as boolean) ?? true);

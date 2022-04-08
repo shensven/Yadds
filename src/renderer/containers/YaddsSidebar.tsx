@@ -20,12 +20,12 @@ import {
   dsmConnectListAtomWithPersistence,
   hasYaddsSidebarAtomWithPersistence,
   hasYaddsSidebarMarginTopAtom,
+  sidebarWidth,
   tasksAtom,
+  tasksRetry,
   tasksStatusAtom,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
-import SIDEBAR_WIDTH from '../context/sidebarWidth';
-import TASKS_RETRY from '../context/tasksRetry';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
 import IonShapes from '../components/icons/IonShapes';
 import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
@@ -58,6 +58,8 @@ const YaddsSidebar: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
+  const [TASKS_RETRY] = useAtom(tasksRetry);
   const [hasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
   const [hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
   const [yaddsSidebarCategory, persistYaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);

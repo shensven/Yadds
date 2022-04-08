@@ -13,13 +13,9 @@ import byteSize from 'byte-size';
 import IonPlay from '../icons/IonPlay';
 import IonPause from '../icons/IonPause';
 import IonArrowDownC from '../icons/IonArrowDownC';
-import { DSTasks } from '../../context/YaddsContext';
+import { DSTasks } from '../../atoms/yaddsAtoms';
 
-interface MainListItemProps {
-  item: DSTasks;
-}
-
-const MainListItem: React.FC<MainListItemProps> = (props: MainListItemProps) => {
+const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => {
   const { item } = props;
 
   const SIZE = byteSize(item.size, { units: 'iec', precision: 2 });

@@ -9,10 +9,10 @@ import {
   dsmConnectListAtomWithPersistence,
   DSTasks,
   tasksAtom,
+  tasksRetry,
   tasksStatusAtom,
   yaddsAppearanceAtomWithPersistence,
 } from './atoms/yaddsAtoms';
-import TASKS_RETRY from './context/tasksRetry';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -73,6 +73,7 @@ declare global {
 const DesignSystem: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
+  const [TASKS_RETRY] = useAtom(tasksRetry);
   const [yaddsAppearance] = useAtom(yaddsAppearanceAtomWithPersistence);
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
   const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
