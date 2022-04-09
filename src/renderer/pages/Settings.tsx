@@ -494,7 +494,7 @@ const Settings: React.FC = () => {
       </Stack>
 
       {/* Add Connection */}
-      <Dialog open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
+      <Dialog keepMounted open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
