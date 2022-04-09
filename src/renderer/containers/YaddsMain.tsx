@@ -166,7 +166,7 @@ const YaddsMain: React.FC = () => {
             <StyledInputBase
               spellCheck={false}
               size="small"
-              placeholder={t('main.search')}
+              placeholder={t('main.filter')}
               sx={{ fontSize: 12, color: theme.palette.text.primary }}
             />
           </StyledSearch>
@@ -176,20 +176,11 @@ const YaddsMain: React.FC = () => {
               appRegion: 'no-drag',
               alignSelf: 'stretch',
               backgroundColor: theme.palette.input.default,
-              '&:hover': {
-                backgroundColor: theme.palette.input.hover,
-              },
+              '&:hover': { backgroundColor: theme.palette.input.hover },
               mr: theme.spacing(2),
             }}
           >
-            <Typography
-              fontWeight={500}
-              sx={{
-                fontSize: 12,
-                lineHeight: 'normal',
-                px: theme.spacing(0.5),
-              }}
-            >
+            <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
               {t('main.new_task')}
             </Typography>
           </Button>
@@ -199,9 +190,7 @@ const YaddsMain: React.FC = () => {
             sx={{
               appRegion: 'no-drag',
               backgroundColor: theme.palette.input.default,
-              '&:hover': {
-                backgroundColor: theme.palette.input.hover,
-              },
+              '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
             onClick={() => handleContextMenu()}
           >

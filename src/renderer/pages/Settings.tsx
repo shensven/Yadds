@@ -445,9 +445,7 @@ const Settings: React.FC = () => {
                 sx={{
                   ml: theme.spacing(1),
                   backgroundColor: theme.palette.input.default,
-                  '&:hover': {
-                    backgroundColor: theme.palette.input.hover,
-                  },
+                  '&:hover': { backgroundColor: theme.palette.input.hover },
                 }}
                 onClick={() => {}}
               >
@@ -469,7 +467,7 @@ const Settings: React.FC = () => {
                 color={theme.palette.primary.main}
                 sx={{
                   ml: theme.spacing(1),
-                  '&:hover': { textDecoration: 'underline' },
+                  '&:hover': { opacity: 0.5 },
                 }}
                 onClick={() => window.electron.openViaBrowser('https://github.com/shensven/Yadds/blob/main/LICENSE')}
               >
@@ -483,7 +481,7 @@ const Settings: React.FC = () => {
                 color={theme.palette.primary.main}
                 sx={{
                   ml: theme.spacing(1),
-                  '&:hover': { textDecoration: 'underline' },
+                  '&:hover': { opacity: 0.5 },
                 }}
                 onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
               >

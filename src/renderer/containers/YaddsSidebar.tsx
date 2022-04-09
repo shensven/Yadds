@@ -86,43 +86,43 @@ const YaddsSidebar: React.FC = () => {
       path: '/queueAll',
       tasksLength: tasks.length,
       name: t('sidebar.all'),
-      activeIcon: <IonShapes />,
-      inactiveIcon: <IonShapesOutline />,
+      activeIcon: <IonShapes sx={{ fontSize: 20 }} />,
+      inactiveIcon: <IonShapesOutline sx={{ fontSize: 20 }} />,
     },
     {
       path: '/queueDownloading',
       tasksLength: tasks.filter((task) => task.status === 2).length,
       name: t('sidebar.downloading'),
-      activeIcon: <IonArrowDownCircle />,
-      inactiveIcon: <IonArrowDownCircleOutline />,
+      activeIcon: <IonArrowDownCircle sx={{ fontSize: 20 }} />,
+      inactiveIcon: <IonArrowDownCircleOutline sx={{ fontSize: 20 }} />,
     },
     {
       path: '/queueFinished',
       tasksLength: tasks.filter((task) => task.status === 'finished' || task.status === 5).length,
       name: t('sidebar.completed'),
-      activeIcon: <IonCheckmarkCircle />,
-      inactiveIcon: <IonCheckmarkCircleOutline />,
+      activeIcon: <IonCheckmarkCircle sx={{ fontSize: 20 }} />,
+      inactiveIcon: <IonCheckmarkCircleOutline sx={{ fontSize: 20 }} />,
     },
     {
       path: '/queueActive',
       tasksLength: tasks.filter((task) => task.status === 2 || task.status === 8).length,
       name: t('sidebar.active'),
-      activeIcon: <IonArrowUpCircle />,
-      inactiveIcon: <IonArrowUpCircleOutline />,
+      activeIcon: <IonArrowUpCircle sx={{ fontSize: 20 }} />,
+      inactiveIcon: <IonArrowUpCircleOutline sx={{ fontSize: 20 }} />,
     },
     {
       path: '/queueInactive',
       tasksLength: tasks.filter((task) => task.status === 3).length,
       name: t('sidebar.inactive'),
-      activeIcon: <IonCloseCircle />,
-      inactiveIcon: <IonCloseCircleOutline />,
+      activeIcon: <IonCloseCircle sx={{ fontSize: 20 }} />,
+      inactiveIcon: <IonCloseCircleOutline sx={{ fontSize: 20 }} />,
     },
     {
       path: '/queueStopped',
       tasksLength: tasks.filter((task) => task.status === 3).length,
       name: t('sidebar.stopped'),
-      activeIcon: <IonStopCircle />,
-      inactiveIcon: <IonStopCircleOutline />,
+      activeIcon: <IonStopCircle sx={{ fontSize: 20 }} />,
+      inactiveIcon: <IonStopCircleOutline sx={{ fontSize: 20 }} />,
     },
   ];
 
@@ -132,19 +132,16 @@ const YaddsSidebar: React.FC = () => {
       variant="persistent"
       sx={{
         width: SIDEBAR_WIDTH,
-        '& .MuiDrawer-paper': {
-          backgroundColor: 'transparent',
-          width: SIDEBAR_WIDTH,
-          boxSizing: 'border-box',
-        },
+        '& .MuiDrawer-paper': { backgroundColor: 'transparent', width: SIDEBAR_WIDTH, boxSizing: 'border-box' },
       }}
       open={hasYaddsSidebar}
     >
       <List
+        dense
         sx={{
           [(isDarwin && 'mt') as string]: 0,
           ...(hasYaddsSidebarMarginTop && {
-            [(isDarwin && 'mt') as string]: theme.spacing(3),
+            [(isDarwin && 'mt') as string]: theme.spacing(4),
           }),
           transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.easeOut,
@@ -155,16 +152,19 @@ const YaddsSidebar: React.FC = () => {
         {category.map((item: Category) => (
           <ListItem key={item.path}>
             <ListItemButton
-              dense
               disableRipple
               selected={yaddsSidebarCategory === item.path}
-              sx={{ width: '100%' }}
               onClick={() => {
                 persistYaddsSidebarCategory(item.path);
                 navigate(item.path);
               }}
             >
-              <ListItemIcon sx={{ minWidth: theme.spacing(5), color: theme.palette.text.secondary }}>
+              <ListItemIcon
+                sx={{
+                  minWidth: theme.spacing(4),
+                  color: yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
+                }}
+              >
                 {yaddsSidebarCategory === item.path ? item.activeIcon : item.inactiveIcon}
               </ListItemIcon>
               <ListItemText
@@ -173,12 +173,11 @@ const YaddsSidebar: React.FC = () => {
                     noWrap
                     variant="button"
                     component="p"
+                    color={
+                      yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary
+                    }
                     fontWeight={600}
-                    sx={{
-                      mr: theme.spacing(0.5),
-                      color:
-                        yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
-                    }}
+                    sx={{ mr: theme.spacing(0.5) }}
                   >
                     {item.name}
                   </Typography>
@@ -188,11 +187,10 @@ const YaddsSidebar: React.FC = () => {
                 <Typography
                   variant="caption"
                   fontWeight={500}
+                  color={theme.palette.card.default}
                   sx={{
                     fontVariantNumeric: 'tabular-nums',
-                    color: theme.palette.card.default,
-                    backgroundColor:
-                      yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.disabled,
+                    backgroundColor: theme.palette.text.disabled,
                     px: theme.spacing(0.5),
                     minWidth: theme.spacing(3),
                     textAlign: 'center',
@@ -261,19 +259,25 @@ const YaddsSidebar: React.FC = () => {
               navigate('/settings');
             }}
           >
-            <ListItemIcon sx={{ minWidth: theme.spacing(5), color: theme.palette.text.secondary }}>
-              {yaddsSidebarCategory === '/settings' ? <IonCog /> : <IonCogOutline />}
+            <ListItemIcon
+              sx={{
+                minWidth: theme.spacing(4),
+                color: yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
+              }}
+            >
+              {yaddsSidebarCategory === '/settings' ? (
+                <IonCog sx={{ fontSize: 20 }} />
+              ) : (
+                <IonCogOutline sx={{ fontSize: 20 }} />
+              )}
             </ListItemIcon>
             <ListItemText
               primary={
                 <Typography
                   noWrap
                   variant="button"
+                  color={yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary}
                   fontWeight={600}
-                  style={{
-                    color:
-                      yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
-                  }}
                 >
                   {t('sidebar.settings')}
                 </Typography>

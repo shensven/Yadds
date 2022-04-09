@@ -9,7 +9,7 @@
     "settings": "设置"
   },
   "main": {
-    "search": "搜索...",
+    "filter": "过滤...",
     "new_task": "新建任务",
     "resume_all": "全部开始",
     "pause_all": "全部暂停",

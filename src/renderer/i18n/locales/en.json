@@ -9,7 +9,7 @@
     "settings": "Settings"
   },
   "main": {
-    "search": "Search...",
+    "filter": "Filter...",
     "new_task": "NEW TASK",
     "resume_all": "Resume All",
     "pause_all": "Pause All",
