@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Icon, IconButton, InputBase, Paper, Stack, styled, Typography, useTheme } from '@mui/material';
@@ -103,11 +103,11 @@ const YaddsMain: React.FC = () => {
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.electron?.setTray(t); // Init system tary
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // handle the sidebar state
     const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
     window.electron?.setApplicationMenu(appMenuItemLabel); // Init or update application menu
@@ -182,6 +182,20 @@ const YaddsMain: React.FC = () => {
           >
             <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
               {t('main.new_task')}
+            </Typography>
+          </Button>
+          <Button
+            size="small"
+            sx={{
+              appRegion: 'no-drag',
+              alignSelf: 'stretch',
+              backgroundColor: theme.palette.input.default,
+              '&:hover': { backgroundColor: theme.palette.input.hover },
+              mr: theme.spacing(2),
+            }}
+          >
+            <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
+              {t('main.network_diagnosis')}
             </Typography>
           </Button>
           <IconButton

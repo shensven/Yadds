@@ -11,6 +11,7 @@
   "main": {
     "filter": "过滤...",
     "new_task": "新建任务",
+    "network_diagnosis": "网络诊断",
     "resume_all": "全部开始",
     "pause_all": "全部暂停",
     "delete_all": "全部删除...",

@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -70,11 +70,11 @@ const YaddsSidebar: React.FC = () => {
 
   const isDarwin = window.electron?.getOS() === 'darwin';
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.electron?.navigateTo(navigate, persistYaddsSidebarCategory); // Init navigation from the top menu
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     window.electron?.toogleSidebarMarginTop(hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop); // handle the margin top of the sidebar
 
     const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);

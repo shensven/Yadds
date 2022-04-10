@@ -11,6 +11,7 @@
   "main": {
     "filter": "Filter...",
     "new_task": "NEW TASK",
+    "network_diagnosis": "NETWORK DIAGNOSIS",
     "resume_all": "Resume All",
     "pause_all": "Pause All",
     "delete_all": "Delete All...",
