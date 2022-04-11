@@ -171,7 +171,7 @@ const YaddsSidebar: React.FC = () => {
                 primary={
                   <Typography
                     noWrap
-                    variant="button"
+                    variant="subtitle2"
                     component="p"
                     color={
                       yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary
@@ -212,10 +212,10 @@ const YaddsSidebar: React.FC = () => {
                 <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
                   <Typography
                     noWrap
-                    variant="button"
+                    variant="overline"
                     component="p"
                     fontWeight={600}
-                    color={theme.palette.text.secondary}
+                    color={theme.palette.text.primary}
                   >
                     {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
                   </Typography>
@@ -234,17 +234,17 @@ const YaddsSidebar: React.FC = () => {
                   </IconButton>
                 </Stack>
               }
-              secondary={
-                <Typography
-                  noWrap
-                  variant="overline"
-                  component="p"
-                  fontWeight={600}
-                  color={theme.palette.text.secondary}
-                >
-                  {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
-                </Typography>
-              }
+              // secondary={
+              //   <Typography
+              //     noWrap
+              //     variant="overline"
+              //     component="p"
+              //     fontWeight={600}
+              //     color={theme.palette.text.secondary}
+              //   >
+              //     {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
+              //   </Typography>
+              // }
             />
           </Stack>
         </ListItem>
@@ -275,7 +275,7 @@ const YaddsSidebar: React.FC = () => {
               primary={
                 <Typography
                   noWrap
-                  variant="button"
+                  variant="subtitle2"
                   color={yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary}
                   fontWeight={600}
                 >
