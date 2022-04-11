@@ -61,7 +61,7 @@ npm run package
 
 ## 👍 CREDITS
 
-- [electron-react-boilerplate/electron-react-boilerplate](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
+- [Electron React Boilerplate - A Foundation for Scalable Cross-Platform Apps](https://github.com/electron-react-boilerplate/electron-react-boilerplate)
 - [3dicons - Open source 3D icon library](https://3dicons.co/)
 
 ## 📜 LICENSE
