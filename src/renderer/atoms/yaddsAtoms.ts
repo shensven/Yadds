@@ -50,7 +50,7 @@ export const sidebarWidth = atom<number>(240);
 
 export const tasksRetry = atom<number>(3);
 
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 export const hasYaddsSidebarMarginTopAtom = atom<boolean>(true);
 
@@ -110,7 +110,7 @@ export const isYaddsAutoUpdateAtomWithPersistence = atom(
   }
 );
 
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 const dsmConnectListAtom = atom<DsmConnectListType[]>(
   (window.electron?.store.get('dsmConnectList') as DsmConnectListType[]) ?? []
@@ -132,7 +132,7 @@ export const dsmConnectIndexAtomWithPersistence = atom(
   }
 );
 
-// -----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 export const tasksAtom = atom<DSTasks[]>([]);
 

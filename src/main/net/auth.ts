@@ -58,6 +58,8 @@ interface LoginInfo {
   port: number;
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 async function requestCoordinator(quickConnectID: string) {
   const options = {
     method: 'POST',
@@ -94,12 +96,15 @@ async function requestCoordinator(quickConnectID: string) {
     });
 
     request.on('error', () => {
+      console.log(`main: bad request https://global.quickconnect.to/Serv.php`);
       resolve({ errno: -1 });
     });
 
     request.end();
   });
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 async function requestPingPong(args: { quickConnectID: string; serverInfo: ServerInfo }) {
   const { quickConnectID, serverInfo } = args;
@@ -192,6 +197,8 @@ async function requestPingPong(args: { quickConnectID: string; serverInfo: Serve
   return Promise.race(INSTANCE_SETS);
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 async function requestLogin(args: { pingpongInfo: PingpongInfo; account: string; passwd: string }) {
   const { pingpongInfo, account, passwd } = args;
 
@@ -230,12 +237,19 @@ async function requestLogin(args: { pingpongInfo: PingpongInfo; account: string;
     });
 
     request.on('error', (error: Error) => {
+      console.log(
+        `main: bad request https://${pingpongInfo.hostname}:${
+          pingpongInfo.port
+        }/webapi/auth.cgi?${queryString.stringify(params)}`
+      );
       reject(error);
     });
 
     request.end();
   });
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export default async function auth(args: { quickConnectID: string; account: string; passwd: string }) {
   const { quickConnectID, account, passwd } = args;

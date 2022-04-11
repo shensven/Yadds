@@ -88,7 +88,7 @@ const DesignSystem: React.FC = () => {
     });
 
     if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
-      console.log('bad tasks request');
+      console.log('renderer: bad tasks request');
 
       setTasksStatus((old) => {
         if (old.retry >= TASKS_RETRY) {
@@ -99,7 +99,7 @@ const DesignSystem: React.FC = () => {
     }
 
     if (resp.success) {
-      console.log('good tasks request');
+      console.log('renderer: good tasks request');
       setTasksStatus({ isLoading: false, retry: 0 });
       setTasks(resp.data.tasks);
     }
@@ -107,18 +107,19 @@ const DesignSystem: React.FC = () => {
 
   useEffect(() => {
     if (!dsmConnectList[dsmConnectIndex]) {
+      console.log('renderer: undefined dsmConnectList[dsmConnectIndex]');
       setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
       return undefined;
     }
 
     const timer = setInterval(() => {
-      console.log('retry', tasksStatus.retry);
+      console.log('renderer: retry', tasksStatus.retry);
 
       if (tasksStatus.retry < TASKS_RETRY) {
         handleTasks();
       } else {
-        console.log('request done');
+        console.log('renderer: interval done');
         clearInterval(timer);
       }
     }, 1000);

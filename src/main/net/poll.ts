@@ -59,6 +59,8 @@ interface TasksDetailInfo {
   };
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
 async function requestTasks(args: { host: string; port: number; sid: string }) {
   const { host, port, sid } = args;
 
@@ -99,12 +101,15 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
     });
 
     request.on('error', () => {
+      console.log(`main: bad request https://${host}/webapi/DownloadStation/task.cgi?${queryString.stringify(params)}`);
       resolve({ success: false });
     });
 
     request.end();
   });
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 async function requestTasksDetail(args: { host: string; port: number; sid: string; taskID: string }) {
   const { host, port, sid, taskID } = args;
@@ -154,12 +159,15 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
     });
 
     request.on('error', () => {
+      console.log(`main: bad request https://${host}/webapi/DownloadStation/task.cgi?${queryString.stringify(params)}`);
       resolve({ success: false });
     });
 
     request.end();
   });
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
 
 export default async function poll(args: { host: string; port: number; sid: string }) {
   const { host, port, sid } = args;
