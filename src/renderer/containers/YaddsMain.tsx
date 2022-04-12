@@ -144,11 +144,7 @@ const YaddsMain: React.FC = () => {
           sx={{ height: 40 }}
           onMouseOver={() => setIndicatorScr(hasYaddsSidebar ? greyActiveLeftSvg : greyActiveRightSvg)}
           onMouseOut={() => setIndicatorScr(greyInactiveSvg)}
-          onClick={() => {
-            persistHasYaddsSidebar(!hasYaddsSidebar);
-            const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
-            window.electron?.setApplicationMenu(appMenuItemLabel);
-          }}
+          onClick={() => persistHasYaddsSidebar(!hasYaddsSidebar)}
         >
           <img src={indicatorSrc} alt="" draggable="false" />
         </Icon>
