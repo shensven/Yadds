@@ -644,7 +644,7 @@ const Settings: React.FC = () => {
       </Dialog>
 
       {/* Confirm Remove */}
-      <Dialog open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
+      <Dialog keepMounted open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
             <Typography>{t('settings.dialog_remove.confirm_remove')}</Typography>

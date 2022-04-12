@@ -130,11 +130,12 @@ const YaddsSidebar: React.FC = () => {
     <Drawer
       anchor="left"
       variant="persistent"
+      open={hasYaddsSidebar}
+      ModalProps={{ keepMounted: true }}
       sx={{
         width: SIDEBAR_WIDTH,
         '& .MuiDrawer-paper': { backgroundColor: 'transparent', width: SIDEBAR_WIDTH, boxSizing: 'border-box' },
       }}
-      open={hasYaddsSidebar}
     >
       <List
         dense
