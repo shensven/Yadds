@@ -112,7 +112,7 @@ const SettingsFormItem: React.FC<SettingsFormItemProps> = (props: SettingsFormIt
   const LABEL_WIDTH: string = theme.spacing(28);
   return (
     <Stack flex={1} flexDirection="row" padding={theme.spacing(2)}>
-      <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ minWidth: LABEL_WIDTH, width: '20%' }}>
+      <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ width: LABEL_WIDTH }}>
         <Typography variant="subtitle2" fontWeight={800} color={theme.palette.text.primary}>
           {label}
         </Typography>
