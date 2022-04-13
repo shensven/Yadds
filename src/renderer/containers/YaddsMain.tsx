@@ -2,8 +2,7 @@ import { MenuItemConstructorOptions } from 'electron';
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Icon, IconButton, InputBase, Paper, Stack, styled, Typography, useTheme } from '@mui/material';
-import MuiAppBar from '@mui/material/AppBar';
+import { AppBar, Box, Button, Icon, IconButton, InputBase, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { useAtom } from 'jotai';
 import {
   hasYaddsSidebarAtomWithPersistence,
@@ -26,77 +25,11 @@ import QueueStopped from '../pages/QueueStopped';
 import Settings from '../pages/Settings';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
-const Main = styled(Paper, { shouldForwardProp: (prop) => prop !== 'hasSidebar' })<{ hasSidebar?: boolean }>(
-  ({ theme, hasSidebar }) => {
-    const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
-
-    return {
-      position: 'fixed',
-      left: 0,
-      right: 0,
-      width: '100%',
-      height: '100%',
-      marginLeft: 0,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      ...(hasSidebar && {
-        width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
-        marginLeft: `${SIDEBAR_WIDTH}px`,
-        transition: theme.transitions.create(['margin', 'width'], {
-          easing: theme.transitions.easing.easeOut,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-      }),
-    };
-  }
-);
-
-const StyledAppBar = styled(MuiAppBar)(() => ({
-  appRegion: 'drag',
-  position: 'sticky',
-  flexDirection: 'column',
-  backgroundColor: 'transparent',
-}));
-
-const StyledSearch = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  alignSelf: 'stretch',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.input.default,
-  '&:hover': {
-    backgroundColor: theme.palette.input.hover,
-  },
-}));
-
-const StyledSearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 1),
-  height: '100%',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.grey[500],
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'primary',
-  '& .MuiInputBase-input': {
-    padding: 0,
-    transition: theme.transitions.create('width'),
-    width: 120,
-    '&:focus': {
-      width: 160,
-    },
-  },
-}));
-
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
   const [yaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
   const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
   const [hasYaddsSidebar, persistHasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
@@ -138,7 +71,30 @@ const YaddsMain: React.FC = () => {
   const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
-    <Main square elevation={0} hasSidebar={hasYaddsSidebar}>
+    <Paper
+      square
+      elevation={0}
+      sx={{
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        width: '100%',
+        height: '100%',
+        marginLeft: 0,
+        transition: theme.transitions.create(['margin', 'width'], {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen,
+        }),
+        ...(hasYaddsSidebar && {
+          width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
+          marginLeft: `${SIDEBAR_WIDTH}px`,
+          transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
+        }),
+      }}
+    >
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
           sx={{ height: 40 }}
@@ -149,23 +105,47 @@ const YaddsMain: React.FC = () => {
           <img src={indicatorSrc} alt="" draggable="false" />
         </Icon>
       </Box>
-      <StyledAppBar
+      <AppBar
         elevation={0}
-        sx={{ display: yaddsSidebarCategory === '/settings' ? 'none' : 'flex' }}
+        sx={{
+          appRegion: 'drag',
+          position: 'sticky',
+          flexDirection: 'column',
+          backgroundColor: 'transparent',
+          display: yaddsSidebarCategory === '/settings' ? 'none' : 'flex',
+        }}
         onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
       >
         <Stack flexDirection="row" justifyContent="flex-end" alignItems="center" sx={{ p: theme.spacing(2) }}>
-          <StyledSearch sx={{ appRegion: 'no-drag', mr: theme.spacing(6) }}>
-            <StyledSearchIconWrapper>
-              <IonSearch sx={{ fontSize: 14 }} />
-            </StyledSearchIconWrapper>
-            <StyledInputBase
+          <Stack
+            flexDirection="row"
+            alignItems="center"
+            alignSelf="stretch"
+            sx={{
+              appRegion: 'no-drag',
+              mr: theme.spacing(6),
+              borderRadius: 1,
+              backgroundColor: theme.palette.input.default,
+              '&:hover': { backgroundColor: theme.palette.input.hover },
+            }}
+          >
+            <IonSearch sx={{ fontSize: 14, color: theme.palette.grey[500], mx: theme.spacing(1) }} />
+            <InputBase
               spellCheck={false}
               size="small"
               placeholder={t('main.filter')}
-              sx={{ fontSize: 12, color: theme.palette.text.primary }}
+              sx={{
+                fontSize: 12,
+                color: theme.palette.text.primary,
+                '& .MuiInputBase-input': {
+                  padding: 0,
+                  transition: theme.transitions.create('width'),
+                  width: 120,
+                  '&:focus': { width: 160 },
+                },
+              }}
             />
-          </StyledSearch>
+          </Stack>
           <Button
             size="small"
             sx={{
@@ -207,7 +187,7 @@ const YaddsMain: React.FC = () => {
             <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
           </IconButton>
         </Stack>
-      </StyledAppBar>
+      </AppBar>
       <Box
         sx={{
           px: theme.spacing(3),
@@ -226,7 +206,7 @@ const YaddsMain: React.FC = () => {
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Box>
-    </Main>
+    </Paper>
   );
 };
 

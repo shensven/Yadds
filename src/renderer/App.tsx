@@ -2,7 +2,7 @@ import { MenuItemConstructorOptions } from 'electron';
 import { useEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
-import { CssBaseline, Stack, StyledEngineProvider, ThemeProvider, useMediaQuery } from '@mui/material';
+import { CssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
 import { Provider, useAtom } from 'jotai';
 import {
   dsmConnectIndexAtomWithPersistence,
@@ -145,14 +145,12 @@ const DesignSystem: React.FC = () => {
   return (
     <ThemeProvider theme={initMUITheme(toogleMUITheme())}>
       <CssBaseline />
-      <StyledEngineProvider injectFirst>
-        <MemoryRouter>
-          <Stack direction="row">
-            <YaddsSidebar />
-            <YaddsMain />
-          </Stack>
-        </MemoryRouter>
-      </StyledEngineProvider>
+      <MemoryRouter>
+        <Stack direction="row">
+          <YaddsSidebar />
+          <YaddsMain />
+        </Stack>
+      </MemoryRouter>
     </ThemeProvider>
   );
 };
