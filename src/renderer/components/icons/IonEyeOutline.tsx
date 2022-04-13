@@ -1,5 +1,5 @@
 import React from 'react';
-import { SvgIcon, SvgIconProps } from '@mui/material';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
 const IonEyeOutline: React.FC<SvgIconProps> = (props) => {
   return (

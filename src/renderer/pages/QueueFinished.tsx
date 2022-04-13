@@ -1,5 +1,5 @@
+import List from '@mui/material/List';
 import { useAtom } from 'jotai';
-import { List } from '@mui/material';
 import { tasksAtom } from '../atoms/yaddsAtoms';
 import QueueEmpty from '../components/QueueEmpty/QueueEmpty';
 import MainListItem from '../components/listItem/MainListItem';

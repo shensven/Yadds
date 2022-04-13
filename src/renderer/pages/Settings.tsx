@@ -1,33 +1,31 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  IconButton,
-  InputAdornment,
-  MenuItem,
-  Radio,
-  Select,
-  Slide,
-  Snackbar,
-  Stack,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import FormGroup from '@mui/material/FormGroup';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import Checkbox from '@mui/material/Checkbox';
+import FormHelperText from '@mui/material/FormHelperText';
+import Dialog from '@mui/material/Dialog';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import DialogTitle from '@mui/material/DialogTitle';
+import ToggleButton from '@mui/material/ToggleButton';
+import DialogContent from '@mui/material/DialogContent';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import DialogActions from '@mui/material/DialogActions';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import AlertTitle from '@mui/material/AlertTitle';
+import Slide from '@mui/material/Slide';
 import { useAtom } from 'jotai';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';

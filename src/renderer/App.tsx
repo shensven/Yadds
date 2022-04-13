@@ -2,7 +2,10 @@ import { MenuItemConstructorOptions } from 'electron';
 import { useEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
-import { CssBaseline, Stack, ThemeProvider, useMediaQuery } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import CssBaseline from '@mui/material/CssBaseline';
+import Stack from '@mui/material/Stack';
 import { Provider, useAtom } from 'jotai';
 import {
   dsmConnectIndexAtomWithPersistence,

@@ -1,4 +1,4 @@
-import { List } from '@mui/material';
+import List from '@mui/material/List';
 import { useAtom } from 'jotai';
 import { tasksAtom } from '../atoms/yaddsAtoms';
 import QueueEmpty from '../components/QueueEmpty/QueueEmpty';

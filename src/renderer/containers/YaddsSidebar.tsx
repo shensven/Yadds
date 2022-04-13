@@ -1,19 +1,17 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
 import { useAtom } from 'jotai';
 import {
   dsmConnectIndexAtomWithPersistence,
@@ -44,6 +42,7 @@ import IcRoundLink from '../components/icons/IcRoundLink';
 import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
 import IonCog from '../components/icons/IonCog';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
+
 
 interface Category {
   path: string;

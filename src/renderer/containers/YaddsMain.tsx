@@ -2,7 +2,16 @@ import { MenuItemConstructorOptions } from 'electron';
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AppBar, Box, Button, Icon, IconButton, InputBase, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Icon from '@mui/material/Icon';
+import AppBar from '@mui/material/AppBar';
+import Stack from '@mui/material/Stack';
+import InputBase from '@mui/material/InputBase';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
 import {
   hasYaddsSidebarAtomWithPersistence,

@@ -1,14 +1,12 @@
 import { useState } from 'react';
-import {
-  ButtonBase,
-  LinearProgress,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import ButtonBase from '@mui/material/ButtonBase';
+import LinearProgress from '@mui/material/LinearProgress';
 import byteSize from 'byte-size';
 import IonPlay from '../icons/IonPlay';
 import IonPause from '../icons/IonPause';
@@ -34,9 +32,7 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
         sx={{
           width: '100%',
           backgroundColor: theme.palette.card.default,
-          '&:hover': {
-            backgroundColor: theme.palette.card.hover,
-          },
+          '&:hover': { backgroundColor: theme.palette.card.hover },
         }}
         onMouseOver={() => setHasAction(true)}
         onMouseOut={() => setHasAction(false)}
