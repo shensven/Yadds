@@ -43,7 +43,6 @@ import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
 import IonCog from '../components/icons/IonCog';
 import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
 
-
 interface Category {
   path: string;
   tasksLength: number;
@@ -131,8 +130,10 @@ const YaddsSidebar: React.FC = () => {
       variant="persistent"
       open={hasYaddsSidebar}
       sx={{
-        width: SIDEBAR_WIDTH,
-        '& .MuiDrawer-paper': { backgroundColor: 'transparent', width: SIDEBAR_WIDTH, boxSizing: 'border-box' },
+        '& .MuiDrawer-paper': {
+          backgroundColor: 'transparent',
+          width: SIDEBAR_WIDTH,
+        },
       }}
     >
       <List

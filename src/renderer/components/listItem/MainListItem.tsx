@@ -64,14 +64,14 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
                 right: 0,
                 opacity: 0,
                 transform: 'scale(0)',
-                transition: theme.transitions.create('all', {
+                transition: theme.transitions.create(['opacity', 'transform'], {
                   easing: 'cubic-bezier(.4,0,.6,1)',
                   duration: theme.transitions.duration.short,
                 }),
                 ...(hasAction && {
                   opacity: 1,
                   transform: 'scale(1)',
-                  transition: theme.transitions.create('all', {
+                  transition: theme.transitions.create(['opacity', 'transform'], {
                     easing: theme.transitions.easing.easeOut,
                     duration: theme.transitions.duration.shortest,
                   }),

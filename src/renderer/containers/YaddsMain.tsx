@@ -85,24 +85,22 @@ const YaddsMain: React.FC = () => {
       elevation={0}
       sx={{
         position: 'fixed',
-        left: 0,
         right: 0,
         width: '100%',
         height: '100%',
-        marginLeft: 0,
-        transition: theme.transitions.create(['margin', 'width'], {
+        transition: theme.transitions.create('width', {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
         ...(hasYaddsSidebar && {
           width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
-          marginLeft: `${SIDEBAR_WIDTH}px`,
-          transition: theme.transitions.create(['margin', 'width'], {
+          transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
           }),
         }),
       }}
+      onTransitionEnd={() => {}}
     >
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
