@@ -18,6 +18,7 @@
         "@types/react-dom",
         "@types/react-test-renderer",
         "electron",
+        "electron-builder",
         "jest",
         "react-test-renderer",
         "ts-jest"
