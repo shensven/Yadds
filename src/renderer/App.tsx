@@ -1,5 +1,5 @@
 import { MenuItemConstructorOptions } from 'electron';
-import { useEffect } from 'react';
+import { startTransition, useEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { ThemeProvider } from '@mui/material/styles';
@@ -104,7 +104,7 @@ const App: React.FC = () => {
     if (resp.success) {
       console.log('renderer: good tasks request');
       setTasksStatus({ isLoading: false, retry: 0 });
-      setTasks(resp.data.tasks);
+      startTransition(() => setTasks(resp.data.tasks));
     }
   };
 
