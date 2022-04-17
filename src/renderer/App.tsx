@@ -6,7 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import { Provider, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import {
   dsmConnectIndexAtomWithPersistence,
   dsmConnectListAtomWithPersistence,
@@ -73,7 +73,7 @@ declare global {
   }
 }
 
-const DesignSystem: React.FC = () => {
+const App: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const [TASKS_RETRY] = useAtom(tasksRetry);
@@ -155,14 +155,6 @@ const DesignSystem: React.FC = () => {
         </Stack>
       </MemoryRouter>
     </ThemeProvider>
-  );
-};
-
-const App: React.FC = () => {
-  return (
-    <Provider>
-      <DesignSystem />
-    </Provider>
   );
 };
 

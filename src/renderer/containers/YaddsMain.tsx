@@ -100,7 +100,6 @@ const YaddsMain: React.FC = () => {
           }),
         }),
       }}
-      onTransitionEnd={() => {}}
     >
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
