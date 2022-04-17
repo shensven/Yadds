@@ -8,7 +8,20 @@
       "groupName": "devDependencies",
       "matchDepTypes": ["devDependencies"],
       "enabled": false,
-      "excludePackageNames": ["@types/byte-size", "electron"]
+      "excludePackageNames": [
+        "@testing-library/jest-dom",
+        "@testing-library/react",
+        "@types/byte-size",
+        "@types/jest",
+        "@types/node",
+        "@types/react",
+        "@types/react-dom",
+        "@types/react-test-renderer",
+        "electron",
+        "jest",
+        "react-test-renderer",
+        "ts-jest"
+      ]
     },
     {
       "groupName": "dependencies",
@@ -26,6 +39,8 @@
         "i18next",
         "jotai",
         "query-string",
+        "react",
+        "react-dom",
         "react-i18next",
         "react-router-dom"
       ]
