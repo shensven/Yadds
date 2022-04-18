@@ -1,6 +1,6 @@
 import { TFunction } from 'react-i18next';
 
-const menuItemLabelHandler = (
+const menuItemHandler = (
   t: TFunction<'translation', undefined>,
   hasYaddsSidebar: boolean,
   hasYaddsSidebarMarginTop: boolean
@@ -48,4 +48,4 @@ const menuItemLabelHandler = (
   return menuItemLabel;
 };
 
-export default menuItemLabelHandler;
+export default menuItemHandler;

@@ -55,7 +55,7 @@ import {
   yaddsAppearanceAtomWithPersistence,
   yaddsI18nCodeAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
-import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
+import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 const OS_PLATFORM = window.electron?.getOS();
 const APP_VERSION = window.electron?.getAppVersion();
@@ -141,10 +141,7 @@ const Settings: React.FC = () => {
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
   const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
-  const [snackbar, setSnackbar] = useState({
-    show: false,
-    errCode: 'x0',
-  });
+  const [snackbar, setSnackbar] = useState({ show: false, errCode: 'x0' });
 
   const [newConnect, setNewConnect] = useState({
     isQuickConnectID: true,
@@ -412,7 +409,7 @@ const Settings: React.FC = () => {
                 onClick={() => {
                   persistYaddsI18nCode(item.languageCode);
                   i18n.changeLanguage(item.languageCode);
-                  const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+                  const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
                   window.electron?.setApplicationMenu(appMenuItemLabel);
                   window.electron?.setTray(t);
                 }}

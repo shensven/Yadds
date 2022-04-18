@@ -1,4 +1,3 @@
-import { MenuItemConstructorOptions } from 'electron';
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +16,7 @@ import {
   hasYaddsSidebarAtomWithPersistence,
   hasYaddsSidebarMarginTopAtom,
   sidebarWidth,
+  yaddsMainSortByAtomWithPersistence,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
 import IonSearch from '../components/icons/IonSearch';
@@ -32,7 +32,8 @@ import QueueActive from '../pages/QueueActive';
 import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Settings from '../pages/Settings';
-import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
+import appMenuItemHandler from '../utils/appMenuItemHandler';
+import contextMenuItemHandler from '../utils/contextMenuItemHandler';
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
@@ -42,42 +43,20 @@ const YaddsMain: React.FC = () => {
   const [yaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
   const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
   const [hasYaddsSidebar, persistHasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
+  const [yaddsMainSortBy, persistYaddsMainSortBy] = useAtom(yaddsMainSortByAtomWithPersistence);
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
     window.electron?.setTray(t); // Init system tary
+    window.electron?.sortBy(persistYaddsMainSortBy); // Init main sort by
   }, []);
 
   useEffect(() => {
     window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // handle the sidebar state
-    const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
     window.electron?.setApplicationMenu(appMenuItemLabel); // Init or update application menu
   }, [hasYaddsSidebar]);
-
-  const template: MenuItemConstructorOptions[] = [
-    { label: t('main.resume_all') },
-    { label: t('main.pause_all') },
-    { label: t('main.delete_all') },
-    { type: 'separator' },
-    { label: t('main.list_view'), type: 'radio', checked: true },
-    { label: t('main.matrix_view'), type: 'radio', checked: false },
-    { type: 'separator' },
-    {
-      label: t('main.sort_by'),
-      submenu: [
-        { label: t('main.date'), type: 'radio', checked: true },
-        { label: t('main.download_progress'), type: 'radio', checked: false },
-        { label: t('main.download_speed'), type: 'radio', checked: false },
-        { label: t('main.name'), type: 'radio', checked: false },
-        { type: 'separator' },
-        { label: t('main.ascending'), type: 'radio', checked: true },
-        { label: t('main.descending'), type: 'radio', checked: false },
-      ],
-    },
-  ];
-
-  const handleContextMenu = () => window.electron.popupContextMenu(template);
 
   return (
     <Paper
@@ -188,7 +167,10 @@ const YaddsMain: React.FC = () => {
               backgroundColor: theme.palette.input.default,
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
-            onClick={() => handleContextMenu()}
+            onClick={() => {
+              const contextMenuItemLabel = contextMenuItemHandler(t, yaddsMainSortBy);
+              window.electron?.setContextMenu(contextMenuItemLabel);
+            }}
           >
             <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
           </IconButton>

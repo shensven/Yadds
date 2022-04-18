@@ -74,6 +74,15 @@ export const yaddsSidebarCategoryAtomWithPersistence = atom(
   }
 );
 
+const yaddsMainSortByAtom = atom<string>((window.electron?.store.get('yaddsMainSortBy') as string) ?? 'date');
+export const yaddsMainSortByAtomWithPersistence = atom(
+  (get) => get(yaddsMainSortByAtom),
+  (_get, set, newStr: string) => {
+    set(yaddsMainSortByAtom, newStr);
+    window.electron.store.set('yaddsMainSortBy', newStr);
+  }
+);
+
 const yaddsAppearanceAtom = atom<string>((window.electron?.store.get('yaddsAppearance') as string) ?? 'system');
 export const yaddsAppearanceAtomWithPersistence = atom(
   (get) => get(yaddsAppearanceAtom),

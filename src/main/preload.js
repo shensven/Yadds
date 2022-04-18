@@ -33,6 +33,16 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('set-tray', menuItemLabel);
   },
 
+  setContextMenu: (args) => {
+    ipcRenderer.invoke('set-context-menu', args);
+  },
+
+  sortBy: (persistYaddsMainSortBy) => {
+    ipcRenderer.on('sortby', (_, ...arg) => {
+      persistYaddsMainSortBy(...arg);
+    });
+  },
+
   toggleNativeTheme: (themeSource) => {
     ipcRenderer.invoke(`dark-mode:${themeSource}`);
   },
@@ -77,10 +87,6 @@ contextBridge.exposeInMainWorld('electron', {
 
   getAppVersion: () => {
     return ipcRenderer.sendSync('get-app-version');
-  },
-
-  popupContextMenu: (args) => {
-    ipcRenderer.invoke('popup-context-menu', args);
   },
 
   openViaBrowser: (url) => {

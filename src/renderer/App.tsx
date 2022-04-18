@@ -1,4 +1,3 @@
-import { MenuItemConstructorOptions } from 'electron';
 import { startTransition, useEffect } from 'react';
 import { MemoryRouter, NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
@@ -26,8 +25,10 @@ declare global {
   interface Window {
     electron: {
       toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
-      setApplicationMenu: (menuItemLabelHandler: any) => void;
+      setApplicationMenu: (menuItemHandler: any) => void;
       setTray: (t: TFunction) => void;
+      setContextMenu: (menuItemHandler: any) => void;
+      sortBy: (persistYaddsMainSortBy: (yaddsMainSortBy: string) => void) => void;
       zoomWindow: () => void;
       toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
       toogleSidebarMarginTop: (
@@ -44,7 +45,6 @@ declare global {
       };
       getOS: () => 'darwin' | 'win32' | 'linux';
       getAppVersion: () => string;
-      popupContextMenu: (val: MenuItemConstructorOptions[]) => void;
       openViaBrowser: (val: string) => void;
       net: {
         auth: (props: { quickConnectID: string; account: string; passwd: string }) => Promise<

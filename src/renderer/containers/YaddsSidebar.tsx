@@ -41,7 +41,7 @@ import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoadi
 import IcRoundLink from '../components/icons/IcRoundLink';
 import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
 import IonCog from '../components/icons/IonCog';
-import appMenuItemLabelHandler from '../utils/appMenuItemLabelHandler';
+import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 interface Category {
   path: string;
@@ -75,7 +75,7 @@ const YaddsSidebar: React.FC = () => {
   useEffect(() => {
     window.electron?.toogleSidebarMarginTop(hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop); // handle the margin top of the sidebar
 
-    const appMenuItemLabel = appMenuItemLabelHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
     window.electron?.setApplicationMenu(appMenuItemLabel); // Init or update application menu
   }, [hasYaddsSidebarMarginTop]);
 
