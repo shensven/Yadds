@@ -54,7 +54,9 @@ export const tasksRetry = atom<number>(3);
 
 export const hasYaddsSidebarMarginTopAtom = atom<boolean>(true);
 
-const hasYaddsSidebarAtom = atom<boolean>((window.electron?.store.get('hasYaddsSidebar') as boolean) ?? true);
+const hasYaddsSidebarAtom = atom<boolean>(
+  (window.electron?.store.get('hasYaddsSidebar') as boolean | undefined) ?? true
+);
 export const hasYaddsSidebarAtomWithPersistence = atom(
   (get) => get(hasYaddsSidebarAtom),
   (_get, set, newBool: boolean) => {
@@ -64,18 +66,36 @@ export const hasYaddsSidebarAtomWithPersistence = atom(
 );
 
 const yaddsSidebarCategoryAtom = atom<string>(
-  (window.electron?.store.get('yaddsSidebarCategory') as string) ?? '/queueAll'
+  (window.electron?.store.get('yaddsSidebarCategory') as
+    | '/queueAll'
+    | '/queueDownloading'
+    | '/queueFinished'
+    | '/queueActive'
+    | '/queueInactive'
+    | '/queueStopped'
+    | '/settings') ?? '/queueAll'
 );
 export const yaddsSidebarCategoryAtomWithPersistence = atom(
   (get) => get(yaddsSidebarCategoryAtom),
-  (_get, set, newStr: string) => {
+  (
+    _get,
+    set,
+    newStr:
+      | '/queueAll'
+      | '/queueDownloading'
+      | '/queueFinished'
+      | '/queueActive'
+      | '/queueInactive'
+      | '/queueStopped'
+      | '/settings'
+  ) => {
     set(yaddsSidebarCategoryAtom, newStr);
     window.electron.store.set('yaddsSidebarCategory', newStr);
   }
 );
 
 const yaddsMainOrderIteraterAtom = atom<string>(
-  (window.electron?.store.get('yaddsMainOrderIterater') as string) ?? 'date'
+  (window.electron?.store.get('yaddsMainOrderIterater') as string | undefined) ?? 'date'
 );
 export const yaddsMainOrderIteraterAtomWithPersistence = atom(
   (get) => get(yaddsMainOrderIteraterAtom),
@@ -86,7 +106,7 @@ export const yaddsMainOrderIteraterAtomWithPersistence = atom(
 );
 
 const yaddsMainOrderIsAscendAtom = atom<boolean>(
-  (window.electron?.store.get('yaddsMainOrderIsAscend') as boolean) ?? true
+  (window.electron?.store.get('yaddsMainOrderIsAscend') as boolean | undefined) ?? true
 );
 export const yaddsMainOrderIsAscendAtomWithPersistence = atom(
   (get) => get(yaddsMainOrderIsAscendAtom),
@@ -96,7 +116,9 @@ export const yaddsMainOrderIsAscendAtomWithPersistence = atom(
   }
 );
 
-const yaddsAppearanceAtom = atom<string>((window.electron?.store.get('yaddsAppearance') as string) ?? 'system');
+const yaddsAppearanceAtom = atom<string>(
+  (window.electron?.store.get('yaddsAppearance') as string | undefined) ?? 'system'
+);
 export const yaddsAppearanceAtomWithPersistence = atom(
   (get) => get(yaddsAppearanceAtom),
   (_get, set, newStr: string) => {
@@ -105,7 +127,7 @@ export const yaddsAppearanceAtomWithPersistence = atom(
   }
 );
 
-const yaddsI18nCodeAtom = atom<string>((window.electron?.store.get('yaddsI18nCode') as string) ?? 'en');
+const yaddsI18nCodeAtom = atom<string>((window.electron?.store.get('yaddsI18nCode') as string | undefined) ?? 'en');
 export const yaddsI18nCodeAtomWithPersistence = atom(
   (get) => get(yaddsI18nCodeAtom),
   (_get, set, newStr: string) => {
@@ -114,7 +136,9 @@ export const yaddsI18nCodeAtomWithPersistence = atom(
   }
 );
 
-const isYaddsAutoLaunchAtom = atom<boolean>((window.electron?.store.get('isYaddsAutoLaunch') as boolean) ?? false);
+const isYaddsAutoLaunchAtom = atom<boolean>(
+  (window.electron?.store.get('isYaddsAutoLaunch') as boolean | undefined) ?? false
+);
 export const isYaddsAutoLaunchAtomWithPersistence = atom(
   (get) => get(isYaddsAutoLaunchAtom),
   (_get, set, newBool: boolean) => {
@@ -123,7 +147,9 @@ export const isYaddsAutoLaunchAtomWithPersistence = atom(
   }
 );
 
-const isYaddsAutoUpdateAtom = atom<boolean>((window.electron?.store.get('isYaddsAutoUpdate') as boolean) ?? true);
+const isYaddsAutoUpdateAtom = atom<boolean>(
+  (window.electron?.store.get('isYaddsAutoUpdate') as boolean | undefined) ?? true
+);
 export const isYaddsAutoUpdateAtomWithPersistence = atom(
   (get) => get(isYaddsAutoUpdateAtom),
   (_get, set, newBool: boolean) => {
@@ -135,7 +161,7 @@ export const isYaddsAutoUpdateAtomWithPersistence = atom(
 // ---------------------------------------------------------------------------------------------------------------------
 
 const dsmConnectListAtom = atom<DsmConnectListType[]>(
-  (window.electron?.store.get('dsmConnectList') as DsmConnectListType[]) ?? []
+  (window.electron?.store.get('dsmConnectList') as DsmConnectListType[] | undefined) ?? []
 );
 export const dsmConnectListAtomWithPersistence = atom(
   (get) => get(dsmConnectListAtom),

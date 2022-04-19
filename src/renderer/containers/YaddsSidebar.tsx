@@ -44,7 +44,14 @@ import IonCog from '../components/icons/IonCog';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 interface Category {
-  path: string;
+  path:
+    | '/queueAll'
+    | '/queueDownloading'
+    | '/queueFinished'
+    | '/queueActive'
+    | '/queueInactive'
+    | '/queueStopped'
+    | '/settings';
   tasksLength: number;
   name: string;
   activeIcon: JSX.Element;

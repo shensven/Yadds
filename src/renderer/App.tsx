@@ -40,7 +40,16 @@ declare global {
       ) => void;
       navigateTo: (
         navigateViaReact: NavigateFunction,
-        persistYaddsSidebarCategory: (YaddsSidebarCategory: string) => void
+        persistYaddsSidebarCategory: (
+          YaddsSidebarCategory:
+            | '/queueAll'
+            | '/queueDownloading'
+            | '/queueFinished'
+            | '/queueActive'
+            | '/queueInactive'
+            | '/queueStopped'
+            | '/settings'
+        ) => void
       ) => void;
       store: {
         get: (key: string) => unknown;
