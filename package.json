@@ -223,7 +223,7 @@
     "query-string": "7.1.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-i18next": "11.16.6",
+    "react-i18next": "11.16.7",
     "react-router-dom": "6.3.0",
     "regenerator-runtime": "^0.13.9"
   },
