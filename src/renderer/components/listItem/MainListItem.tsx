@@ -90,17 +90,24 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
             <Stack direction="row" alignItems="center">
               <Stack direction="row" alignItems="center" sx={{ width: '300px' }}>
                 <LinearProgress
-                  sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
                   variant="determinate"
+                  color={(item.additional?.transfer.size_downloaded as number) === item.size ? 'inherit' : 'primary'}
                   value={((item.additional?.transfer.size_downloaded as number) / item.size) * 100}
+                  sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
                 />
                 <Typography
                   sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, ml: 1, color: theme.palette.text.disabled }}
                 >
-                  {SIZE_DOWNLOADED.value} {SIZE_DOWNLOADED.unit} / {SIZE.value} {SIZE.unit}
+                  {(item.additional?.transfer.size_downloaded as number) !== item.size &&
+                    `${SIZE_DOWNLOADED.value} ${SIZE_DOWNLOADED.unit} / `}
+                  {SIZE.value} {SIZE.unit}
                 </Typography>
               </Stack>
-              <Stack direction="row" alignItems="center">
+              <Stack
+                direction="row"
+                alignItems="center"
+                visibility={(item.additional?.transfer.size_downloaded as number) === item.size ? 'hidden' : 'visible'}
+              >
                 <IonArrowDownC sx={{ fontSize: 12 }} color="warning" />
                 <Typography
                   sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}
@@ -110,7 +117,9 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
               </Stack>
             </Stack>
             <Typography sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}>
-              00:00:{item.additional?.seconds_left.toString()}
+              {(item.additional?.transfer.size_downloaded as number) === item.size
+                ? '已完成'
+                : `00:00:${item.additional?.seconds_left.toString()}`}
             </Typography>
           </Stack>
         </ListItemText>
