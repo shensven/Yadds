@@ -16,7 +16,8 @@ import {
   hasYaddsSidebarAtomWithPersistence,
   hasYaddsSidebarMarginTopAtom,
   sidebarWidth,
-  yaddsMainSortByAtomWithPersistence,
+  yaddsMainOrderIsAscendAtomWithPersistence,
+  yaddsMainOrderIteraterAtomWithPersistence,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
 import IonSearch from '../components/icons/IonSearch';
@@ -43,13 +44,15 @@ const YaddsMain: React.FC = () => {
   const [yaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
   const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
   const [hasYaddsSidebar, persistHasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
-  const [yaddsMainSortBy, persistYaddsMainSortBy] = useAtom(yaddsMainSortByAtomWithPersistence);
+  const [orderIterater, persistOrderIterater] = useAtom(yaddsMainOrderIteraterAtomWithPersistence);
+  const [orderIsAscend, persistOrderIsAscend] = useAtom(yaddsMainOrderIsAscendAtomWithPersistence);
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
     window.electron?.setTray(t); // Init system tary
-    window.electron?.sortBy(persistYaddsMainSortBy); // Init main sort by
+    window.electron?.order.byIterater(persistOrderIterater); // Init the sorting iterater of the main page list
+    window.electron?.order.isAscend(persistOrderIsAscend);   // Init the ascend/descend of the main page list
   }, []);
 
   useEffect(() => {
@@ -168,7 +171,7 @@ const YaddsMain: React.FC = () => {
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
             onClick={() => {
-              const contextMenuItemLabel = contextMenuItemHandler(t, yaddsMainSortBy);
+              const contextMenuItemLabel = contextMenuItemHandler(t, orderIterater, orderIsAscend);
               window.electron?.setContextMenu(contextMenuItemLabel);
             }}
           >

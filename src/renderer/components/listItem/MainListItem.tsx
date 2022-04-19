@@ -92,7 +92,7 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
                 <LinearProgress
                   sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
                   variant="determinate"
-                  value={(Number(SIZE_DOWNLOADED.value) / Number(SIZE.value)) * 100}
+                  value={((item.additional?.transfer.size_downloaded as number) / item.size) * 100}
                 />
                 <Typography
                   sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, ml: 1, color: theme.palette.text.disabled }}

@@ -28,7 +28,10 @@ declare global {
       setApplicationMenu: (menuItemHandler: any) => void;
       setTray: (t: TFunction) => void;
       setContextMenu: (menuItemHandler: any) => void;
-      sortBy: (persistYaddsMainSortBy: (yaddsMainSortBy: string) => void) => void;
+      order: {
+        byIterater: (persistYaddsMainOrderIterater: (yaddsMainOrderIterater: string) => void) => void;
+        isAscend: (persistYaddsMainOrderIsAscend: (yaddsMainOrderIsAscend: boolean) => void) => void;
+      };
       zoomWindow: () => void;
       toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
       toogleSidebarMarginTop: (

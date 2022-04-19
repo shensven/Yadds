@@ -123,6 +123,7 @@ async function requestPingPong(args: { quickConnectID: string; serverInfo: Serve
 
   // syn6-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
   const SMART_LAN_V6 = serverInfo.smartdns?.lanv6 as string[];
+  // const SMART_LAN_V6 = [] as string[];
 
   // YOUR-QUICKCONNECT-ID.direct.quickconnect.to
   const SMART_HOST = serverInfo.smartdns?.host as string;

@@ -37,10 +37,17 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('set-context-menu', args);
   },
 
-  sortBy: (persistYaddsMainSortBy) => {
-    ipcRenderer.on('sortby', (_, ...arg) => {
-      persistYaddsMainSortBy(...arg);
-    });
+  order: {
+    byIterater: (persistYaddsMainOrderIterater) => {
+      ipcRenderer.on('order-by-iterater', (_, ...args) => {
+        persistYaddsMainOrderIterater(...args);
+      });
+    },
+    isAscend: (persistYaddsMainOrderIsAscend) => {
+      ipcRenderer.on('order-is-ascend', (_, ...arg) => {
+        persistYaddsMainOrderIsAscend(...arg);
+      });
+    },
   },
 
   toggleNativeTheme: (themeSource) => {

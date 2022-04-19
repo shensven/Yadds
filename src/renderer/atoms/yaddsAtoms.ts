@@ -74,12 +74,25 @@ export const yaddsSidebarCategoryAtomWithPersistence = atom(
   }
 );
 
-const yaddsMainSortByAtom = atom<string>((window.electron?.store.get('yaddsMainSortBy') as string) ?? 'date');
-export const yaddsMainSortByAtomWithPersistence = atom(
-  (get) => get(yaddsMainSortByAtom),
+const yaddsMainOrderIteraterAtom = atom<string>(
+  (window.electron?.store.get('yaddsMainOrderIterater') as string) ?? 'date'
+);
+export const yaddsMainOrderIteraterAtomWithPersistence = atom(
+  (get) => get(yaddsMainOrderIteraterAtom),
   (_get, set, newStr: string) => {
-    set(yaddsMainSortByAtom, newStr);
-    window.electron.store.set('yaddsMainSortBy', newStr);
+    set(yaddsMainOrderIteraterAtom, newStr);
+    window.electron.store.set('yaddsMainOrderIterater', newStr);
+  }
+);
+
+const yaddsMainOrderIsAscendAtom = atom<boolean>(
+  (window.electron?.store.get('yaddsMainOrderIsAscend') as boolean) ?? true
+);
+export const yaddsMainOrderIsAscendAtomWithPersistence = atom(
+  (get) => get(yaddsMainOrderIsAscendAtom),
+  (_get, set, newBool: boolean) => {
+    set(yaddsMainOrderIsAscendAtom, newBool);
+    window.electron.store.set('yaddsMainOrderIsAscend', newBool);
   }
 );
 

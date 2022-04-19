@@ -8,6 +8,7 @@ import Settings from './Settings';
 
 const RedirectEl: React.FC = () => {
   const category = window.electron?.store.get('yaddsSidebarCategory') as string;
+
   switch (category) {
     case '/queueAll':
       return <QueueAll />;
