@@ -23,7 +23,8 @@
     "ascending": "Ascending",
     "descending": "Descending",
     "list_view": "List View",
-    "matrix_view": "Matrix View"
+    "matrix_view": "Matrix View",
+    "completed": "Completed"
   },
   "settings": {
     "settings": "Settings",

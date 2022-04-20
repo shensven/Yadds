@@ -7,18 +7,23 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import ButtonBase from '@mui/material/ButtonBase';
 import LinearProgress from '@mui/material/LinearProgress';
+import { useTranslation } from 'react-i18next';
 import byteSize from 'byte-size';
 import IonPlay from '../icons/IonPlay';
 import IonPause from '../icons/IonPause';
-import IonArrowDownC from '../icons/IonArrowDownC';
+import TablerArrowNarrowUp from '../icons/TablerArrowNarrowUp';
+import TablerArrowNarrowDown from '../icons/TablerArrowNarrowDown';
 import { DSTasks } from '../../atoms/yaddsAtoms';
 
 const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => {
+  const { t } = useTranslation();
+
   const { item } = props;
 
   const SIZE = byteSize(item.size, { units: 'iec', precision: 2 });
   const SIZE_DOWNLOADED = byteSize(item.additional?.transfer.size_downloaded as number, { units: 'iec', precision: 2 });
   const SPEED_DOWNLOAD = byteSize(item.additional?.transfer.speed_download as number, { units: 'iec', precision: 2 });
+  const SPEED_UPLOAD = byteSize(item.additional?.transfer.speed_upload as number, { units: 'iec', precision: 2 });
 
   const theme = useTheme();
 
@@ -88,37 +93,46 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
           </Stack>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Stack direction="row" alignItems="center">
-              <Stack direction="row" alignItems="center" sx={{ width: '300px' }}>
-                <LinearProgress
-                  variant="determinate"
-                  color={(item.additional?.transfer.size_downloaded as number) === item.size ? 'inherit' : 'primary'}
-                  value={((item.additional?.transfer.size_downloaded as number) / item.size) * 100}
-                  sx={{ width: 96, borderRadius: theme.shape.borderRadius }}
-                />
+              <Stack direction="row" alignItems="center" sx={{ width: 240 }}>
+                {(item.additional?.transfer.size_downloaded as number) !== item.size && (
+                  <LinearProgress
+                    variant="determinate"
+                    value={((item.additional?.transfer.size_downloaded as number) / item.size) * 100}
+                    sx={{ width: 80, borderRadius: theme.shape.borderRadius, mr: 1 }}
+                  />
+                )}
                 <Typography
-                  sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, ml: 1, color: theme.palette.text.disabled }}
+                  sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}
                 >
                   {(item.additional?.transfer.size_downloaded as number) !== item.size &&
                     `${SIZE_DOWNLOADED.value} ${SIZE_DOWNLOADED.unit} / `}
                   {SIZE.value} {SIZE.unit}
                 </Typography>
               </Stack>
-              <Stack
-                direction="row"
-                alignItems="center"
-                visibility={(item.additional?.transfer.size_downloaded as number) === item.size ? 'hidden' : 'visible'}
-              >
-                <IonArrowDownC sx={{ fontSize: 12 }} color="warning" />
-                <Typography
-                  sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}
-                >
-                  {SPEED_DOWNLOAD.value} {SPEED_DOWNLOAD.unit}/s
-                </Typography>
-              </Stack>
+              {(item.additional?.transfer.size_downloaded as number) !== item.size && (
+                <Stack direction="row" alignItems="center" width={100}>
+                  <TablerArrowNarrowDown sx={{ fontSize: 14 }} color="info" />
+                  <Typography
+                    sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}
+                  >
+                    {SPEED_DOWNLOAD.value} {SPEED_DOWNLOAD.unit}/s
+                  </Typography>
+                </Stack>
+              )}
+              {(item.status === 2 || item.status === 8) && (
+                <Stack direction="row" alignItems="center" width={100}>
+                  <TablerArrowNarrowUp sx={{ fontSize: 14 }} color="info" />
+                  <Typography
+                    sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}
+                  >
+                    {SPEED_UPLOAD.value} {SPEED_UPLOAD.unit}/s
+                  </Typography>
+                </Stack>
+              )}
             </Stack>
             <Typography sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}>
               {(item.additional?.transfer.size_downloaded as number) === item.size
-                ? '已完成'
+                ? t('main.completed')
                 : `00:00:${item.additional?.seconds_left.toString()}`}
             </Typography>
           </Stack>

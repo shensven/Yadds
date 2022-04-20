@@ -489,7 +489,7 @@ const Settings: React.FC = () => {
       </Stack>
 
       {/* Add Connection */}
-      <Dialog keepMounted open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
+      <Dialog open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
@@ -639,7 +639,7 @@ const Settings: React.FC = () => {
       </Dialog>
 
       {/* Confirm Remove */}
-      <Dialog keepMounted open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
+      <Dialog open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
             <Typography>{t('settings.dialog_remove.confirm_remove')}</Typography>

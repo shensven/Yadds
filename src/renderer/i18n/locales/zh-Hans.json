@@ -23,7 +23,8 @@
     "ascending": "升序",
     "descending": "降序",
     "list_view": "列表视图",
-    "matrix_view": "矩阵视图"
+    "matrix_view": "矩阵视图",
+    "completed": "已完成"
   },
   "settings": {
     "settings": "设置",
