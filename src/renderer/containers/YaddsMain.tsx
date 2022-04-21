@@ -20,7 +20,7 @@ import {
   yaddsMainOrderIteraterAtomWithPersistence,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
-import IonSearch from '../components/icons/IonSearch';
+import IcRoundFilterList from '../components/icons/IcRoundFilterList';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import greyInactiveSvg from '../assets/yaddsSidebarIndicator/grey_inactive.svg';
 import greyActiveLeftSvg from '../assets/yaddsSidebarIndicator/grey_active_left.svg';
@@ -32,6 +32,7 @@ import QueueFinished from '../pages/QueueFinished';
 import QueueActive from '../pages/QueueActive';
 import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
+import Server from '../pages/Server';
 import Settings from '../pages/Settings';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 import contextMenuItemHandler from '../utils/contextMenuItemHandler';
@@ -52,7 +53,7 @@ const YaddsMain: React.FC = () => {
   useEffect(() => {
     window.electron?.setTray(t); // Init system tary
     window.electron?.order.byIterater(persistOrderIterater); // Init the sorting iterater of the main page list
-    window.electron?.order.isAscend(persistOrderIsAscend);   // Init the ascend/descend of the main page list
+    window.electron?.order.isAscend(persistOrderIsAscend); // Init the ascend/descend of the main page list
   }, []);
 
   useEffect(() => {
@@ -100,7 +101,7 @@ const YaddsMain: React.FC = () => {
           position: 'sticky',
           flexDirection: 'column',
           backgroundColor: 'transparent',
-          display: yaddsSidebarCategory === '/settings' ? 'none' : 'flex',
+          display: yaddsSidebarCategory === '/server' || yaddsSidebarCategory === '/settings' ? 'none' : 'flex',
         }}
         onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
       >
@@ -117,7 +118,7 @@ const YaddsMain: React.FC = () => {
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
           >
-            <IonSearch sx={{ fontSize: 14, color: theme.palette.grey[500], mx: theme.spacing(1) }} />
+            <IcRoundFilterList sx={{ fontSize: 14, color: theme.palette.grey[500], mx: theme.spacing(1) }} />
             <InputBase
               spellCheck={false}
               size="small"
@@ -182,8 +183,11 @@ const YaddsMain: React.FC = () => {
       <Box
         sx={{
           px: theme.spacing(3),
-          overflowY: yaddsSidebarCategory === '/settings' ? 'hidden' : 'scroll',
-          height: yaddsSidebarCategory === '/settings' ? '100%' : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
+          overflowY: yaddsSidebarCategory === '/settings' || yaddsSidebarCategory === '/server' ? 'hidden' : 'scroll',
+          height:
+            yaddsSidebarCategory === '/settings' || yaddsSidebarCategory === '/server'
+              ? '100%'
+              : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
         }}
       >
         <Routes>
@@ -195,6 +199,7 @@ const YaddsMain: React.FC = () => {
           <Route path="/queueInactive" element={<QueueInactive />} />
           <Route path="/queueStopped" element={<QueueStopped />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/server" element={<Server />} />
         </Routes>
       </Box>
     </Paper>

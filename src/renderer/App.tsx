@@ -49,6 +49,7 @@ declare global {
             | '/queueInactive'
             | '/queueStopped'
             | '/settings'
+            | '/server'
         ) => void
       ) => void;
       store: {

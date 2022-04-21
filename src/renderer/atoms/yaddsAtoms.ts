@@ -73,7 +73,8 @@ const yaddsSidebarCategoryAtom = atom<string>(
     | '/queueActive'
     | '/queueInactive'
     | '/queueStopped'
-    | '/settings') ?? '/queueAll'
+    | '/settings'
+    | '/server') ?? '/queueAll'
 );
 export const yaddsSidebarCategoryAtomWithPersistence = atom(
   (get) => get(yaddsSidebarCategoryAtom),
@@ -88,6 +89,7 @@ export const yaddsSidebarCategoryAtomWithPersistence = atom(
       | '/queueInactive'
       | '/queueStopped'
       | '/settings'
+      | '/server'
   ) => {
     set(yaddsSidebarCategoryAtom, newStr);
     window.electron.store.set('yaddsSidebarCategory', newStr);

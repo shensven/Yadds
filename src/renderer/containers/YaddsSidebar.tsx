@@ -36,6 +36,8 @@ import IonCloseCircleOutline from '../components/icons/IonCloseCircleOutline';
 import IonCloseCircle from '../components/icons/IonCloseCircle';
 import IonStopCircleOutline from '../components/icons/IonStopCircleOutline';
 import IonStopCircle from '../components/icons/IonStopCircle';
+import IonServerOutline from '../components/icons/IonServerOutline';
+import IonServer from '../components/icons/IonServer';
 import IonCogOutline from '../components/icons/IonCogOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import IcRoundLink from '../components/icons/IcRoundLink';
@@ -210,6 +212,43 @@ const YaddsSidebar: React.FC = () => {
             </ListItemButton>
           </ListItem>
         ))}
+        <Divider light sx={{ mx: theme.spacing(2), my: theme.spacing(1) }} />
+        <ListItem>
+          <ListItemButton
+            disableRipple
+            selected={yaddsSidebarCategory === '/server'}
+            sx={{ width: '100%' }}
+            onClick={() => {
+              persistYaddsSidebarCategory('/server');
+              navigate('/server');
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: theme.spacing(4),
+                color: yaddsSidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary,
+              }}
+            >
+              {yaddsSidebarCategory === '/server' ? (
+                <IonServer sx={{ fontSize: 20 }} />
+              ) : (
+                <IonServerOutline sx={{ fontSize: 20 }} />
+              )}
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography
+                  // noWrap
+                  variant="subtitle2"
+                  color={yaddsSidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary}
+                  fontWeight={600}
+                >
+                  {t('sidebar.server')}
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        </ListItem>
       </List>
       <List>
         <ListItem>

@@ -6,6 +6,7 @@
     "active": "进行中",
     "inactive": "非进行中",
     "stopped": "停用",
+    "server": "服务器",
     "settings": "设置"
   },
   "main": {

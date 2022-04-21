@@ -6,6 +6,7 @@
     "active": "Active",
     "inactive": "Inactive",
     "stopped": "Stopped",
+    "server": "Server",
     "settings": "Settings"
   },
   "main": {
