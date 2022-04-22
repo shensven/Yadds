@@ -4,10 +4,19 @@ import QueueDownloading from './QueueDownloading';
 import QueueFinished from './QueueFinished';
 import QueueInactive from './QueueInactive';
 import QueueStopped from './QueueStopped';
+import Server from './Server';
 import Settings from './Settings';
 
 const RedirectEl: React.FC = () => {
-  const category = window.electron?.store.get('yaddsSidebarCategory') as string;
+  const category = window.electron?.store.get('yaddsSidebarCategory') as
+    | '/queueAll'
+    | '/queueDownloading'
+    | '/queueFinished'
+    | '/queueActive'
+    | '/queueInactive'
+    | '/queueStopped'
+    | '/server'
+    | '/settings';
 
   switch (category) {
     case '/queueAll':
@@ -22,6 +31,8 @@ const RedirectEl: React.FC = () => {
       return <QueueInactive />;
     case '/queueStopped':
       return <QueueStopped />;
+    case '/server':
+      return <Server />;
     case '/settings':
       return <Settings />;
     default:
