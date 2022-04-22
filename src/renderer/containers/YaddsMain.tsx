@@ -198,8 +198,8 @@ const YaddsMain: React.FC = () => {
           <Route path="/queueActive" element={<QueueActive />} />
           <Route path="/queueInactive" element={<QueueInactive />} />
           <Route path="/queueStopped" element={<QueueStopped />} />
-          <Route path="/settings" element={<Settings />} />
           <Route path="/server" element={<Server />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Box>
     </Paper>
