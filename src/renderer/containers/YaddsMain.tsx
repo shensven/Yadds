@@ -127,7 +127,7 @@ const YaddsMain: React.FC = () => {
                 fontSize: 12,
                 color: theme.palette.text.primary,
                 '& .MuiInputBase-input': {
-                  padding: 0,
+                  p: 0,
                   transition: theme.transitions.create('width'),
                   width: 120,
                   '&:focus': { width: 160 },
@@ -147,20 +147,6 @@ const YaddsMain: React.FC = () => {
           >
             <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
               {t('main.new_task')}
-            </Typography>
-          </Button>
-          <Button
-            size="small"
-            sx={{
-              appRegion: 'no-drag',
-              alignSelf: 'stretch',
-              backgroundColor: theme.palette.input.default,
-              '&:hover': { backgroundColor: theme.palette.input.hover },
-              mr: theme.spacing(2),
-            }}
-          >
-            <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
-              {t('main.network_diagnosis')}
             </Typography>
           </Button>
           <IconButton

@@ -12,7 +12,6 @@
   "main": {
     "filter": "过滤...",
     "new_task": "新建任务",
-    "network_diagnosis": "网络诊断",
     "resume_all": "全部开始",
     "pause_all": "全部暂停",
     "delete_all": "全部删除...",
@@ -26,6 +25,18 @@
     "list_view": "列表视图",
     "matrix_view": "矩阵视图",
     "completed": "已完成"
+  },
+  "server": {
+    "server": "服务器",
+    "basic_information": "基本信息",
+    "responsiveness": "网络延迟",
+    "interface": "接口",
+    "refresh": "刷新",
+    "network_diagnosis": "网络诊断",
+    "synology_nas": "Synology NAS",
+    "dsm_version": "DSM 版本",
+    "quota": "空间配额",
+    "available_capacity": "可用空间"
   },
   "settings": {
     "settings": "设置",

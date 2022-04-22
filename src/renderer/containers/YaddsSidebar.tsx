@@ -148,7 +148,7 @@ const YaddsSidebar: React.FC = () => {
       <List
         dense
         sx={{
-          [(isDarwin && 'mt') as string]: 0,
+          mt: theme.spacing(1),
           ...(hasYaddsSidebarMarginTop && {
             [(isDarwin && 'mt') as string]: theme.spacing(4),
           }),

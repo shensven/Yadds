@@ -12,7 +12,6 @@
   "main": {
     "filter": "Filter...",
     "new_task": "NEW TASK",
-    "network_diagnosis": "NETWORK DIAGNOSIS",
     "resume_all": "Resume All",
     "pause_all": "Pause All",
     "delete_all": "Delete All...",
@@ -26,6 +25,18 @@
     "list_view": "List View",
     "matrix_view": "Matrix View",
     "completed": "Completed"
+  },
+  "server": {
+    "server": "Server",
+    "basic_information": "Basic Information",
+    "responsiveness": "Responsiveness",
+    "interface": "Interface",
+    "refresh": "Refresh",
+    "network_diagnosis": "Network Diagnosis",
+    "synology_nas": "Synology NAS",
+    "dsm_version": "DSM version",
+    "quota": "Quota",
+    "available_capacity": "Available capacity"
   },
   "settings": {
     "settings": "Settings",

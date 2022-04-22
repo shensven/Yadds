@@ -109,7 +109,7 @@ const SettingsFormItem: React.FC<SettingsFormItemProps> = (props: SettingsFormIt
   const theme = useTheme();
   const LABEL_WIDTH: string = theme.spacing(28);
   return (
-    <Stack flex={1} flexDirection="row" padding={theme.spacing(2)}>
+    <Stack flex={1} flexDirection="row" px={theme.spacing(1)} py={theme.spacing(2)}>
       <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ width: LABEL_WIDTH }}>
         <Typography variant="subtitle2" fontWeight={800} color={theme.palette.text.primary}>
           {label}
@@ -302,7 +302,7 @@ const Settings: React.FC = () => {
         onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.zoomWindow()}
       />
       <Stack sx={{ pl: theme.spacing(2) }}>
-        <Typography variant="h3" fontWeight={500} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
+        <Typography variant="h4" fontWeight={600} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
           {t('settings.settings')}
         </Typography>
 
@@ -491,7 +491,7 @@ const Settings: React.FC = () => {
       {/* Add Connection */}
       <Dialog open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
         <DialogTitle>
-          <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+          <Stack flexDirection="row" alignItems="stretch" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
               <IonPersonCircle sx={{ fontSize: 32 }} />
             </Stack>
@@ -500,6 +500,7 @@ const Settings: React.FC = () => {
                 value="left"
                 disableRipple
                 selected={newConnect.isQuickConnectID}
+                sx={{ px: theme.spacing(2), py: 0 }}
                 onClick={() =>
                   setNewConnect({
                     ...newConnect,
@@ -512,12 +513,15 @@ const Settings: React.FC = () => {
                   })
                 }
               >
-                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>QuickConnect ID</Typography>
+                <Typography variant="button" fontSize={11} fontWeight={600}>
+                  QuickConnect ID
+                </Typography>
               </ToggleButton>
               <ToggleButton
                 value="right"
                 disableRipple
                 selected={!newConnect.isQuickConnectID}
+                sx={{ px: theme.spacing(2), py: 0 }}
                 onClick={() =>
                   setNewConnect({
                     ...newConnect,
@@ -530,7 +534,9 @@ const Settings: React.FC = () => {
                   })
                 }
               >
-                <Typography sx={{ fontSize: 10, fontWeight: 500 }}>{t('settings.dialog_add.address')}</Typography>
+                <Typography variant="button" fontSize={11} fontWeight={600}>
+                  {t('settings.dialog_add.address')}
+                </Typography>
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
