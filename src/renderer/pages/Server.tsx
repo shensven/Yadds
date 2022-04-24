@@ -12,10 +12,14 @@ import Icon from '@mui/material/Icon';
 import IcRoundCalendarViewWeek from '../components/icons/IcRoundCalendarViewWeek';
 import IcOutlineInfo from '../components/icons/IcOutlineInfo';
 import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
+import IcOutlineExplore from '../components/icons/IcOutlineExplore';
+import IcOutlineCable from '../components/icons/IcOutlineCable';
+import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
 
 const OS_PLATFORM = window.electron?.getOS();
 
 interface CardUnitProps {
+  hasMarginRight: boolean;
   icon: JSX.Element;
   title: string;
   value: string;
@@ -23,7 +27,7 @@ interface CardUnitProps {
 }
 
 const CardUnit: React.FC<CardUnitProps> = (props: CardUnitProps) => {
-  const { icon, title, value, unit } = props;
+  const { hasMarginRight, icon, title, value, unit } = props;
   const theme = useTheme();
 
   return (
@@ -31,8 +35,10 @@ const CardUnit: React.FC<CardUnitProps> = (props: CardUnitProps) => {
       elevation={0}
       sx={{
         backgroundColor: theme.palette.card.default,
-        mr: theme.spacing(2),
-        p: theme.spacing(1),
+        mr: hasMarginRight ? 0 : theme.spacing(2),
+        py: theme.spacing(1),
+        pl: theme.spacing(1),
+        pr: theme.spacing(2),
         minWidth: theme.spacing(19),
       }}
     >
@@ -64,7 +70,7 @@ const Server: React.FC = () => {
 
   const [select, setSelect] = useState(0);
 
-  const baseInfo = [
+  const serverBaseInfo = [
     {
       title: t('server.synology_nas'),
       value: 'DS920+',
@@ -88,6 +94,26 @@ const Server: React.FC = () => {
       value: '133.02',
       unit: 'GB',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
+    },
+  ];
+  const serverRoute = [
+    {
+      title: t('server.quickconnect_coordinator'),
+      value: 'global.quickconnect.to',
+      icon: <IcOutlineExplore sx={{ fontSize: 20 }} />,
+    },
+    {
+      title: t('server.host_address'),
+      value: 'your-nas.cn3.quickconnect.cn',
+      icon: <IcOutlineCable sx={{ fontSize: 20 }} />,
+    },
+  ];
+  const serverResponsiveness = [
+    {
+      title: 'DS920+',
+      value: '32',
+      unit: 'ms',
+      icon: <IcRoundSwapHoriz sx={{ fontSize: 20 }} />,
     },
   ];
 
@@ -122,7 +148,7 @@ const Server: React.FC = () => {
               onClick={() => setSelect(1)}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
-                {t('server.responsiveness')}
+                {t('server.route')}
               </Typography>
             </ToggleButton>
             <ToggleButton
@@ -133,41 +159,96 @@ const Server: React.FC = () => {
               onClick={() => setSelect(2)}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
-                {t('server.interface')}
+                {t('server.responsiveness')}
               </Typography>
             </ToggleButton>
           </ToggleButtonGroup>
           <Stack flexDirection="row">
-            <Button
-              size="small"
-              sx={{
-                backgroundColor: theme.palette.input.default,
-                '&:hover': { backgroundColor: theme.palette.input.hover },
-                mr: theme.spacing(1),
-              }}
-            >
-              <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
-                {t('server.refresh')}
-              </Typography>
-            </Button>
-            <Button
-              size="small"
-              sx={{
-                backgroundColor: theme.palette.input.default,
-                '&:hover': { backgroundColor: theme.palette.input.hover },
-              }}
-            >
-              <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
-                {t('server.network_diagnosis')}
-              </Typography>
-            </Button>
+            {select === 0 && (
+              <Button
+                size="small"
+                sx={{
+                  backgroundColor: theme.palette.input.default,
+                  '&:hover': { backgroundColor: theme.palette.input.hover },
+                  ml: theme.spacing(1),
+                }}
+              >
+                <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
+                  {t('server.refresh')}
+                </Typography>
+              </Button>
+            )}
+            {select === 1 && (
+              <Button
+                size="small"
+                sx={{
+                  backgroundColor: theme.palette.input.default,
+                  '&:hover': { backgroundColor: theme.palette.input.hover },
+                  ml: theme.spacing(1),
+                }}
+              >
+                <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
+                  {t('server.network_diagnosis')}
+                </Typography>
+              </Button>
+            )}
+            {select === 2 && (
+              <Button
+                size="small"
+                sx={{
+                  backgroundColor: theme.palette.input.default,
+                  '&:hover': { backgroundColor: theme.palette.input.hover },
+                  ml: theme.spacing(1),
+                }}
+              >
+                <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
+                  {t('server.ping_test')}
+                </Typography>
+              </Button>
+            )}
           </Stack>
         </Stack>
-        <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
-          {baseInfo.map((item) => (
-            <CardUnit title={item.title} value={item.value} unit={item.unit} icon={item.icon} />
-          ))}
-        </Stack>
+        {select === 0 && (
+          <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
+            {serverBaseInfo.map((item, index) => (
+              <CardUnit
+                hasMarginRight={serverBaseInfo.length - 1 === index}
+                title={item.title}
+                value={item.value}
+                unit={item.unit}
+                icon={item.icon}
+                key={item.title}
+              />
+            ))}
+          </Stack>
+        )}
+        {select === 1 && (
+          <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
+            {serverRoute.map((item, index) => (
+              <CardUnit
+                hasMarginRight={serverRoute.length - 1 === index}
+                title={item.title}
+                value={item.value}
+                icon={item.icon}
+                key={item.title}
+              />
+            ))}
+          </Stack>
+        )}
+        {select === 2 && (
+          <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
+            {serverResponsiveness.map((item, index) => (
+              <CardUnit
+                hasMarginRight={serverResponsiveness.length - 1 === index}
+                title={item.title}
+                value={item.value}
+                unit={item.unit}
+                icon={item.icon}
+                key={item.title}
+              />
+            ))}
+          </Stack>
+        )}
       </Stack>
     </Box>
   );

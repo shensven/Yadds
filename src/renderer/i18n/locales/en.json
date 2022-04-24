@@ -29,14 +29,17 @@
   "server": {
     "server": "Server",
     "basic_information": "Basic Information",
+    "route": "Route",
     "responsiveness": "Responsiveness",
-    "interface": "Interface",
     "refresh": "Refresh",
     "network_diagnosis": "Network Diagnosis",
+    "ping_test": "Ping Test",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM version",
     "quota": "Quota",
-    "available_capacity": "Available capacity"
+    "available_capacity": "Available capacity",
+    "quickconnect_coordinator": "QuickConnent coordinator",
+    "host_address": "Host address"
   },
   "settings": {
     "settings": "Settings",
