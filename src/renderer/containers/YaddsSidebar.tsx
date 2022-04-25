@@ -9,19 +9,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import { useAtom } from 'jotai';
 import {
-  dsmConnectIndexAtomWithPersistence,
-  dsmConnectListAtomWithPersistence,
   hasYaddsSidebarAtomWithPersistence,
   hasYaddsSidebarMarginTopAtom,
   sidebarWidth,
   tasksAtom,
-  tasksRetry,
-  tasksStatusAtom,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
@@ -39,9 +33,6 @@ import IonStopCircle from '../components/icons/IonStopCircle';
 import IonServerOutline from '../components/icons/IonServerOutline';
 import IonServer from '../components/icons/IonServer';
 import IonCogOutline from '../components/icons/IonCogOutline';
-import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
-import IcRoundLink from '../components/icons/IcRoundLink';
-import IcRoundLinkOff from '../components/icons/IcRoundLinkOff';
 import IonCog from '../components/icons/IonCog';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 
@@ -66,14 +57,10 @@ const YaddsSidebar: React.FC = () => {
   const { t } = useTranslation();
 
   const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
-  const [TASKS_RETRY] = useAtom(tasksRetry);
   const [hasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
   const [hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
   const [yaddsSidebarCategory, persistYaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
-  const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
   const [tasks] = useAtom(tasksAtom);
-  const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
 
@@ -251,50 +238,6 @@ const YaddsSidebar: React.FC = () => {
         </ListItem>
       </List>
       <List>
-        <ListItem>
-          <Stack flexDirection="row" width="100%" pl={theme.spacing(2)}>
-            <ListItemText
-              primary={
-                <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    noWrap
-                    variant="overline"
-                    component="p"
-                    fontWeight={600}
-                    color={theme.palette.text.primary}
-                  >
-                    {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
-                  </Typography>
-                  <IconButton
-                    size="small"
-                    disabled={tasksStatus.isLoading || tasksStatus.retry === 0}
-                    onClick={() => setTasksStatus({ ...tasksStatus, isLoading: true, retry: 0 })}
-                  >
-                    {tasksStatus.isLoading && <EosIconsThreeDotsLoading sx={{ fontSize: 20 }} />}
-                    {!tasksStatus.isLoading && tasksStatus.retry === 0 && (
-                      <IcRoundLink color="success" sx={{ fontSize: 20 }} />
-                    )}
-                    {!tasksStatus.isLoading && tasksStatus.retry >= TASKS_RETRY && (
-                      <IcRoundLinkOff color="warning" sx={{ fontSize: 20 }} />
-                    )}
-                  </IconButton>
-                </Stack>
-              }
-              // secondary={
-              //   <Typography
-              //     noWrap
-              //     variant="overline"
-              //     component="p"
-              //     fontWeight={600}
-              //     color={theme.palette.text.secondary}
-              //   >
-              //     {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
-              //   </Typography>
-              // }
-            />
-          </Stack>
-        </ListItem>
-        <Divider light sx={{ mb: theme.spacing(1) }} />
         <ListItem>
           <ListItemButton
             disableRipple
