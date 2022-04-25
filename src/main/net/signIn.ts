@@ -1,6 +1,6 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { PingPongInfo } from './pingpong';
+import { PingPongInfo } from './pingPong';
 
 export interface SignInInfo {
   success: boolean;

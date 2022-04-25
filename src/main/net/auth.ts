@@ -1,5 +1,5 @@
 import getServerInfo from './getServerInfo';
-import pingPong from './pingpong';
+import pingPong from './pingPong';
 import signIn from './signIn';
 
 const auth = async (args: { quickConnectID: string; account: string; passwd: string }) => {
