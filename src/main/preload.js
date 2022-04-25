@@ -107,5 +107,8 @@ contextBridge.exposeInMainWorld('electron', {
     poll(args) {
       return ipcRenderer.invoke('net-poll', args);
     },
+    getDsmInfo(args) {
+      return ipcRenderer.invoke('net-get-info', args);
+    },
   },
 });

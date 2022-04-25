@@ -9,6 +9,7 @@ import { useAtom } from 'jotai';
 import {
   dsmConnectIndexAtomWithPersistence,
   dsmConnectListAtomWithPersistence,
+  dsmInfoAtom,
   DSTasks,
   tasksAtom,
   tasksRetry,
@@ -81,6 +82,22 @@ declare global {
             total?: number;
           };
         }>;
+
+        getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<{
+          success: boolean;
+          data?: {
+            codepage: string;
+            model: string;
+            ram: number;
+            serial: string;
+            temperature: number;
+            temperature_warn: boolean;
+            time: string;
+            uptime: number;
+            version: string;
+            version_string: string;
+          };
+        }>;
       };
     };
   }
@@ -95,6 +112,7 @@ const App: React.FC = () => {
   const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
   const [, setTasks] = useAtom(tasksAtom);
   const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
+  const [, setDsmInfo] = useAtom(dsmInfoAtom);
 
   const handleTasks = async () => {
     const resp = await window.electron?.net.poll({
@@ -121,6 +139,29 @@ const App: React.FC = () => {
     }
   };
 
+  const getDsmInfo = async () => {
+    const resp = await window.electron.net.getDsmInfo({
+      host: dsmConnectList[dsmConnectIndex]?.host,
+      port: dsmConnectList[dsmConnectIndex]?.port,
+      sid: dsmConnectList[dsmConnectIndex]?.sid,
+    });
+
+    if (!resp.success) {
+      setDsmInfo({
+        model: '-',
+        version: '-',
+      });
+    }
+
+    if (resp.success) {
+      const version = resp.data?.version_string.split(' ')[1] as string;
+      setDsmInfo({
+        model: resp.data?.model as string,
+        version,
+      });
+    }
+  };
+
   useEffect(() => {
     if (!dsmConnectList[dsmConnectIndex]) {
       console.log('renderer: undefined dsmConnectList[dsmConnectIndex]');
@@ -128,6 +169,8 @@ const App: React.FC = () => {
       setTasks([]);
       return undefined;
     }
+
+    getDsmInfo();
 
     const timer = setInterval(() => {
       console.log('renderer: retry', tasksStatus.retry);

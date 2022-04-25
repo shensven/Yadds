@@ -190,3 +190,8 @@ export const tasksStatusAtom = atom({
   isLoading: true,
   retry: 0,
 });
+
+export const dsmInfoAtom = atom({
+  model: '-',
+  version: '-',
+});

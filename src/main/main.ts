@@ -28,6 +28,7 @@ import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 import auth from './net/auth';
 import poll from './net/poll';
+import getDsmInfo from './net/getDsmInfo';
 
 export default class AppUpdater {
   constructor() {
@@ -555,4 +556,8 @@ ipcMain.handle('net-auth', async (_, args) => {
 
 ipcMain.handle('net-poll', async (_, args) => {
   return poll(args);
+});
+
+ipcMain.handle('net-get-info', async (_, args) => {
+  return getDsmInfo(args);
 });

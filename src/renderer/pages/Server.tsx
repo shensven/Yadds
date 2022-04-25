@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAtom } from 'jotai';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -15,6 +16,11 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
+import {
+  dsmConnectIndexAtomWithPersistence,
+  dsmConnectListAtomWithPersistence,
+  dsmInfoAtom,
+} from '../atoms/yaddsAtoms';
 
 const OS_PLATFORM = window.electron?.getOS();
 
@@ -68,30 +74,34 @@ const Server: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
+  const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [dsmInfo, setDsmInfo] = useAtom(dsmInfoAtom);
+
   const [select, setSelect] = useState(0);
 
   const serverBaseInfo = [
     {
       title: t('server.synology_nas'),
-      value: 'DS920+',
+      value: dsmInfo.model,
       unit: '',
       icon: <IcRoundCalendarViewWeek sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.dsm_version'),
-      value: '7.1-42661',
+      value: dsmInfo.version,
       unit: '',
       icon: <IcOutlineInfo sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.quota'),
-      value: '256.00',
+      value: '0',
       unit: 'GB',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.available_capacity'),
-      value: '133.02',
+      value: '0',
       unit: 'GB',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
@@ -116,6 +126,33 @@ const Server: React.FC = () => {
       icon: <IcRoundSwapHoriz sx={{ fontSize: 20 }} />,
     },
   ];
+
+  const getDsmInfo = async () => {
+    const resp = await window.electron.net.getDsmInfo({
+      host: dsmConnectList[dsmConnectIndex]?.host,
+      port: dsmConnectList[dsmConnectIndex]?.port,
+      sid: dsmConnectList[dsmConnectIndex]?.sid,
+    });
+
+    if (!resp.success) {
+      setDsmInfo({
+        model: '-',
+        version: '-',
+      });
+    }
+
+    if (resp.success) {
+      const version = resp.data?.version_string.split(' ')[1] as string;
+      setDsmInfo({
+        model: resp.data?.model as string,
+        version,
+      });
+    }
+  };
+
+  useEffect(() => {
+    getDsmInfo();
+  }, []);
 
   return (
     <Box>
@@ -172,6 +209,7 @@ const Server: React.FC = () => {
                   '&:hover': { backgroundColor: theme.palette.input.hover },
                   ml: theme.spacing(1),
                 }}
+                onClick={() => getDsmInfo()}
               >
                 <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
                   {t('server.refresh')}
