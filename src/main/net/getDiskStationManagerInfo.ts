@@ -1,7 +1,7 @@
 import { net } from 'electron';
 import queryString from 'query-string';
 
-interface DsmInfo {
+interface DiskStationManagerInfo {
   success: boolean;
   data?: {
     codepage: string;
@@ -17,7 +17,7 @@ interface DsmInfo {
   };
 }
 
-export default async function getDsmInfo(args: { host: string; port: number; sid: string }) {
+const getDiskStationManagerInfo = (args: { host: string; port: number; sid: string }) => {
   const { host, port, sid } = args;
   if (!(host || port || sid)) {
     return { success: false };
@@ -40,7 +40,7 @@ export default async function getDsmInfo(args: { host: string; port: number; sid
     },
   };
 
-  return new Promise<DsmInfo>((resolve) => {
+  return new Promise<DiskStationManagerInfo>((resolve) => {
     const request = net.request(options);
 
     setTimeout(() => {
@@ -51,7 +51,7 @@ export default async function getDsmInfo(args: { host: string; port: number; sid
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
         try {
-          const parsed: DsmInfo = JSON.parse(chunk.toString());
+          const parsed: DiskStationManagerInfo = JSON.parse(chunk.toString());
           resolve(parsed);
         } catch {
           resolve({ success: false });
@@ -66,4 +66,6 @@ export default async function getDsmInfo(args: { host: string; port: number; sid
 
     request.end();
   });
-}
+};
+
+export default getDiskStationManagerInfo;

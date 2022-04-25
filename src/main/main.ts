@@ -28,7 +28,7 @@ import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 import auth from './net/auth';
 import poll from './net/poll';
-import getDsmInfo from './net/getDsmInfo';
+import getDiskStationManagerInfo from './net/getDiskStationManagerInfo';
 
 export default class AppUpdater {
   constructor() {
@@ -559,5 +559,5 @@ ipcMain.handle('net-poll', async (_, args) => {
 });
 
 ipcMain.handle('net-get-info', async (_, args) => {
-  return getDsmInfo(args);
+  return getDiskStationManagerInfo(args);
 });
