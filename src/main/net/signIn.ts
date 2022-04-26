@@ -2,61 +2,115 @@ import { net } from 'electron';
 import queryString from 'query-string';
 import { PingPongInfo } from './pingPong';
 
-export interface SignInInfo {
-  success: boolean;
-  data: {
-    did?: string;
-    sid?: string;
-    code?: number;
+export interface SignInError {
+  success: false;
+  quickConnectID: string;
+  errorInfoSummary: string;
+  errorInfoDetail: string;
+}
+
+export interface SignInWrongAccountOrPasswd {
+  success: false;
+  error: {
+    code: 400;
   };
+}
+export interface SignInInfo {
+  success: true;
+  data: {
+    did: string;
+    sid: string;
+    is_portal_port?: boolean;
+  };
+  quickConnectID: string;
   hostname: string;
   port: number;
 }
 
-const signIn = (args: { pingpongInfo: PingPongInfo; account: string; passwd: string }) => {
-  const { pingpongInfo, account, passwd } = args;
+const signIn = (quickConnectID: string, pingPongInfo: PingPongInfo, account: string, passwd: string) => {
+  const { hostname, port } = pingPongInfo;
 
   const params = {
     api: 'SYNO.API.Auth',
-    version: 3,
+    version: 6,
     method: 'login',
     account,
     passwd,
-    session: 'DownloadStation',
-    format: 'cookie',
   };
 
   const options = {
     method: 'GET',
     protocol: 'https:',
-    hostname: pingpongInfo.hostname,
-    port: pingpongInfo.port,
-    path: `webapi/auth.cgi?${queryString.stringify(params)}`,
+    hostname,
+    port,
+    path: `webapi/entry.cgi?${queryString.stringify(params)}`,
     headers: {
       cookie: 'type=tunnel; Path=/',
     },
   };
 
-  return new Promise<SignInInfo>((resolve, reject) => {
+  return new Promise<SignInInfo | SignInError>((resolve) => {
     const request = net.request(options);
+
+    setTimeout(() => {
+      request.abort();
+      resolve({
+        success: false,
+        quickConnectID,
+        errorInfoSummary: 'timeout',
+        errorInfoDetail: `[SYNO.API.Auth] [Timeout] https://${hostname}:${port}`,
+      });
+    }, 10000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
-        const parsed: SignInInfo = JSON.parse(chunk.toString());
-        parsed.hostname = pingpongInfo.hostname;
-        parsed.port = pingpongInfo.port;
-        console.log(parsed);
-        resolve(parsed);
+        try {
+          const parsed = JSON.parse(chunk.toString());
+
+          if (
+            (parsed as SignInWrongAccountOrPasswd).success === false &&
+            (parsed as SignInWrongAccountOrPasswd).error.code === 400
+          ) {
+            resolve({
+              success: false,
+              quickConnectID,
+              errorInfoSummary: 'wrong_account_or_password',
+              errorInfoDetail: `[SYNO.API.Auth] [Wrong Account or Password] https://${hostname}:${port}`,
+            });
+          }
+
+          parsed.hostname = hostname;
+          parsed.port = port;
+          parsed.port = port;
+
+          resolve({
+            success: true,
+            data: {
+              did: parsed.data.did,
+              sid: parsed.data.sid,
+            },
+            quickConnectID,
+            hostname,
+            port,
+          });
+        } catch {
+          resolve({
+            success: false,
+            quickConnectID,
+            errorInfoSummary: 'invalid_request',
+            errorInfoDetail: `[SYNO.API.Auth] [Invalid Request] https://${hostname}:${port}`,
+          });
+        }
       });
     });
 
-    request.on('error', (error: Error) => {
-      console.log(
-        `main: bad request https://${pingpongInfo.hostname}:${
-          pingpongInfo.port
-        }/webapi/auth.cgi?${queryString.stringify(params)}`
-      );
-      reject(error);
+    request.on('error', () => {
+      resolve({
+        success: false,
+        quickConnectID,
+        errorInfoSummary: 'invalid_request',
+        errorInfoDetail: `[SYNO.API.Auth] [Invalid Request] https://${hostname}:${port}`,
+      });
     });
 
     request.end();

@@ -73,12 +73,12 @@
       "yes": "YES"
     },
     "snackbar": {
-      "access_denied": "Access Denied",
-      "request_timeout": "Request Timeout",
       "invalid_quickconnect_id": "Invalid QuickConnect ID",
-      "unable_to_connect_to_quickconnect_coordinator": "Unable to connect to QuickConnect coordinator",
-      "unable_to_connect_to": "unable to connect to",
-      "wrong_account_or_password": "Wrong account or password"
+      "wrong_account_or_password": "Wrong account or password",
+      "timeout": "Timeout",
+      "invalid_request": "Invalid request",
+      "unknown_error": "Unknown error",
+      "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist"
     }
   },
   "application_menu": {

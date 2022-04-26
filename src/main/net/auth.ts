@@ -1,5 +1,5 @@
-import getServerInfo from './getServerInfo';
-import pingPong from './pingPong';
+import getServerInfo, { ServerError, ServerInfo } from './getServerInfo';
+import pingPong, { PingPongError, PingPongInfo } from './pingPong';
 import signIn from './signIn';
 
 const auth = async (args: { quickConnectID: string; account: string; passwd: string }) => {
@@ -7,48 +7,17 @@ const auth = async (args: { quickConnectID: string; account: string; passwd: str
 
   const serverInfo = await getServerInfo(quickConnectID);
 
-  if (serverInfo.errno !== 0) {
-    switch (serverInfo.errno) {
-      case 4:
-        return {
-          msg: `${quickConnectID} is not a valid QuickConnect ID`,
-          errCode: '024',
-          success: false,
-        };
-      case 9:
-        return {
-          msg: 'QuickConnect ID is incorrect or does not exist',
-          errCode: '01',
-          success: false,
-        };
-      default:
-        return {
-          msg: 'Unable to connect to QuickConnect coordinator',
-          errCode: '02',
-          success: false,
-        };
-    }
+  if ((serverInfo as ServerError).success === false) {
+    return serverInfo;
   }
 
-  const pingpongInfo = await pingPong({ quickConnectID, serverInfo });
+  const pingPongInfo = await pingPong(quickConnectID, serverInfo as ServerInfo);
 
-  if (pingpongInfo.success === false) {
-    return {
-      msg: `unable to connect to https://${pingpongInfo.hostname}:${pingpongInfo.port}`,
-      errCode: '03',
-      success: false,
-    };
+  if ((pingPongInfo as PingPongError).success === false) {
+    return pingPongInfo;
   }
 
-  const signInInfo = await signIn({ pingpongInfo, account, passwd });
-
-  if (signInInfo.success === false) {
-    return {
-      msg: 'Wrong account or password',
-      errCode: '04',
-      success: false,
-    };
-  }
+  const signInInfo = await signIn(quickConnectID, pingPongInfo as PingPongInfo, account, passwd);
 
   return signInInfo;
 };

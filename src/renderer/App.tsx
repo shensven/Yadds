@@ -21,6 +21,9 @@ import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
 import './i18n/i18n';
 import './App.scss';
+import { ServerError } from '../main/net/getServerInfo';
+import { PingPongError } from '../main/net/pingPong';
+import { SignInError, SignInInfo } from '../main/net/signIn';
 
 declare global {
   interface Window {
@@ -61,19 +64,11 @@ declare global {
       getAppVersion: () => string;
       openViaBrowser: (val: string) => void;
       net: {
-        auth: (props: { quickConnectID: string; account: string; passwd: string }) => Promise<
-          | {
-              data: { did: string; sid: string };
-              hostname: string;
-              port: number;
-              success: true;
-            }
-          | {
-              msg: string;
-              errCode: '01' | '02' | '024' | '03' | '04';
-              success: false;
-            }
-        >;
+        auth: (props: {
+          quickConnectID: string;
+          account: string;
+          passwd: string;
+        }) => Promise<ServerError | PingPongError | SignInError | SignInInfo>;
 
         poll: (props: { host: string; port: number; sid: string }) => Promise<{
           success: boolean;

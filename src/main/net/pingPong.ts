@@ -8,28 +8,31 @@ export interface PingPongInfo {
   ezid?: string;
 }
 
-const pingPong = (args: { quickConnectID: string; serverInfo: ServerInfo }) => {
-  const { quickConnectID, serverInfo } = args;
+export interface PingPongError {
+  success: false;
+  quickConnectID: string;
+  errorInfoSummary: string;
+  errorInfoDetail: string;
+}
 
+const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
   // 5001
-  const PORT = serverInfo.service?.port as number;
+  // const PORT = serverInfo.service?.port as number;
 
   // 65500
-  const EXT_PORT = serverInfo.service?.ext_port as number;
+  // const EXT_PORT = serverInfo.service?.ext_port as number;
 
   // /webman/pingpong.cgi?action=cors&quickconnect=true
   const PINGPONG_PATH = serverInfo.server?.pingpong_path as string;
 
   // 192-168-x-xxx.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
-  const SMART_LAN = serverInfo.smartdns?.lan as string[];
-  // const SMART_LAN = [] as string[];
+  // const SMART_LAN = serverInfo.smartdns?.lan as string[];
 
   // syn6-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
-  const SMART_LAN_V6 = serverInfo.smartdns?.lanv6 as string[];
-  // const SMART_LAN_V6 = [] as string[];
+  // const SMART_LAN_V6 = serverInfo.smartdns?.lanv6 as string[];
 
   // YOUR-QUICKCONNECT-ID.direct.quickconnect.to
-  const SMART_HOST = serverInfo.smartdns?.host as string;
+  // const SMART_HOST = serverInfo.smartdns?.host as string;
 
   // cn3.quickconnect.cn
   const RELAY_HOST = `${serverInfo.env?.relay_region}.${serverInfo.env?.control_host.split('.').slice(-2).join('.')}`;
@@ -52,51 +55,82 @@ const pingPong = (args: { quickConnectID: string; serverInfo: ServerInfo }) => {
       },
     };
 
-    return new Promise<PingPongInfo>((resolve) => {
+    return new Promise<PingPongInfo | PingPongError>((resolve) => {
       const request = net.request(options);
 
       setTimeout(() => {
         request.abort();
-        resolve({ success: false, hostname, port });
+        resolve({
+          success: false,
+          quickConnectID,
+          errorInfoSummary: 'timeout',
+          errorInfoDetail: `[PingPong] [Timeout] https://${hostname}:${port}`,
+        });
       }, 5000);
 
       request.on('response', (response: Electron.IncomingMessage) => {
         response.on('data', (chunk: Buffer) => {
-          const parsed: PingPongInfo = JSON.parse(chunk.toString());
-          parsed.hostname = hostname;
-          parsed.port = port;
-          resolve(parsed);
+          try {
+            const parsed: PingPongInfo = JSON.parse(chunk.toString());
+            parsed.hostname = hostname;
+            parsed.port = port;
+            resolve(parsed);
+          } catch {
+            resolve({
+              success: false,
+              quickConnectID,
+              errorInfoSummary: 'invalid_request',
+              errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
+            });
+          }
         });
       });
 
       request.on('error', () => {
-        resolve({ success: false, hostname, port });
+        resolve({
+          success: false,
+          quickConnectID,
+          errorInfoSummary: 'invalid_request',
+          errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
+        });
       });
 
       request.end();
     });
   };
 
-  const ADDRESS_SETS: { url: string; port: number }[] = [];
+  const ADDRESS_SETS: {
+    url: string;
+    port: number;
+  }[] = [];
 
-  if (SMART_LAN.length > 0) {
-    SMART_LAN.forEach((lan: string) => {
-      ADDRESS_SETS.push({ url: lan, port: PORT });
-    });
-  }
+  // if (SMART_LAN.length > 0) {
+  //   SMART_LAN.forEach((lan: string) => {
+  //     ADDRESS_SETS.push({ url: lan, port: PORT });
+  //   });
+  // }
 
-  if (SMART_LAN_V6.length > 0) {
-    SMART_LAN_V6.forEach((lanv6: string) => {
-      ADDRESS_SETS.push({ url: lanv6, port: PORT });
-      ADDRESS_SETS.push({ url: lanv6, port: EXT_PORT });
-    });
-  }
+  // if (SMART_LAN_V6.length > 0) {
+  //   SMART_LAN_V6.forEach((lanv6: string) => {
+  //     ADDRESS_SETS.push({
+  //       url: lanv6,
+  //       port: PORT,
+  //     });
 
-  ADDRESS_SETS.push({ url: SMART_HOST, port: PORT });
-  ADDRESS_SETS.push({ url: SMART_HOST, port: EXT_PORT });
+  //     ADDRESS_SETS.push({
+  //       url: lanv6,
+  //       port: EXT_PORT,
+  //     });
+  //   });
+  // }
+
+  // ADDRESS_SETS.push({ url: SMART_HOST, port: PORT });
+  // ADDRESS_SETS.push({ url: SMART_HOST, port: EXT_PORT });
   ADDRESS_SETS.push({ url: `${quickConnectID}.${RELAY_HOST}`, port: 443 });
 
-  const INSTANCE_SETS = ADDRESS_SETS.map(({ url, port }) => newInstance(url, port));
+  const INSTANCE_SETS = ADDRESS_SETS.map(({ url, port }) => {
+    return newInstance(url, port);
+  });
 
   return Promise.race(INSTANCE_SETS);
 };

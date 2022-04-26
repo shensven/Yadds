@@ -1,18 +1,36 @@
 import { net } from 'electron';
 
 export interface ServerInfo {
+  version: number;
+  command: string;
   errno: number;
-  command?: string;
-  version?: number;
+  suberrno?: number;
   errinfo?: string;
-  env?: { control_host: string; relay_region: string };
+  sites?: string[];
+  env?: {
+    control_host: string;
+    relay_region: string;
+  };
   server?: {
     ddns: string;
     ds_state: string;
-    external: { ip: string; ipv6: string };
+    external: {
+      ip: string;
+      ipv6: string;
+    };
     fqdn: string;
     gateway: string;
-    interface: { ip: string; ipv6: any[]; mask: string; name: string }[];
+    interface: {
+      ip: string;
+      ipv6: {
+        addr_type: number;
+        address: string;
+        prefix_length: number;
+        scope: string;
+      }[];
+      mask: string;
+      name: string;
+    }[];
     ipv6_tunnel: any[];
     pingpong_path: string;
     redirect_prefix: string;
@@ -39,11 +57,22 @@ export interface ServerInfo {
   };
 }
 
-const getServerInfo = async (quickConnectID: string) => {
+export interface ServerError {
+  success: false;
+  quickConnectID: string;
+  errorInfoSummary: string;
+  errorInfoDetail: string;
+}
+
+/**
+ * @param quickConnectID your-quickconnect-id
+ * @param controlHost cnc.quickconnect.cn
+ */
+const queryCoordinator = async (quickConnectID: string, controlHost?: string) => {
   const options = {
     method: 'POST',
     protocol: 'https:',
-    hostname: 'global.quickconnect.to',
+    hostname: controlHost ?? 'global.quickconnect.to',
     path: '/Serv.php',
   };
 
@@ -57,30 +86,105 @@ const getServerInfo = async (quickConnectID: string) => {
     is_gofile: false,
   });
 
-  return new Promise<ServerInfo>((resolve) => {
+  return new Promise<ServerInfo | ServerError>((resolve) => {
     const request = net.request(options);
 
     request.write(body);
 
     setTimeout(() => {
       request.abort();
-      resolve({ errno: -1 });
+      resolve({
+        success: false,
+        quickConnectID,
+        errorInfoSummary: 'timeout',
+        errorInfoDetail: `[Get Server Info] [Timeout] https://${controlHost ?? 'global.quickconnect.to'}/Serv.php`,
+      });
     }, 5000);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
-        const parsed: ServerInfo = JSON.parse(chunk.toString());
-        resolve(parsed);
+        try {
+          const respParsed: ServerInfo = JSON.parse(chunk.toString());
+          resolve(respParsed);
+        } catch {
+          resolve({
+            success: false,
+            quickConnectID,
+            errorInfoSummary: 'invalid_request',
+            errorInfoDetail: `[Get Server Info] [Invalid Request] https://${
+              controlHost ?? 'global.quickconnect.to'
+            }/Serv.php`,
+          });
+        }
       });
     });
 
     request.on('error', () => {
-      console.log(`main: bad request https://global.quickconnect.to/Serv.php`);
-      resolve({ errno: -1 });
+      resolve({
+        success: false,
+        quickConnectID,
+        errorInfoSummary: 'invalid_request',
+        errorInfoDetail: `[Get Server Info] [Invalid Request] https://${
+          controlHost ?? 'global.quickconnect.to'
+        }/Serv.php`,
+      });
     });
 
     request.end();
   });
+};
+
+const getServerInfo = async (quickConnectID: string) => {
+  const respViaGlobal = await queryCoordinator(quickConnectID);
+
+  // When any errors are returned
+  if ((respViaGlobal as ServerError).success === false) {
+    return respViaGlobal;
+  }
+
+  // When error info 'get_server_info.go:69[Alias not found]' is returned
+  if ((respViaGlobal as ServerInfo).errno === 4 && (respViaGlobal as ServerInfo).suberrno === 1) {
+    return {
+      success: false,
+      quickConnectID,
+      errorInfoSummary: 'quickconnect_id_is_incorrect_or_does_not_exist',
+      errorInfoDetail: '[Get Server Info via Global] QuickConnect ID is incorrect or does not exist',
+    };
+  }
+
+  // When error info 'get_server_info.go:88[Ds info not found]' is returned
+  if ((respViaGlobal as ServerInfo).errno === 4 && (respViaGlobal as ServerInfo).suberrno === 2) {
+    const respViaControlHost = await queryCoordinator(quickConnectID, (respViaGlobal as ServerInfo).sites![0]);
+
+    if ((respViaControlHost as ServerError).success === false) {
+      return respViaControlHost;
+    }
+
+    if ((respViaControlHost as ServerInfo).errno === 4 && (respViaControlHost as ServerInfo).suberrno === 1) {
+      return {
+        success: false,
+        quickConnectID,
+        errorInfoSummary: 'quickconnect_id_is_incorrect_or_does_not_exist',
+        errorInfoDetail: '[Get Server Info via Control Host] QuickConnect ID is incorrect or does not exist',
+      };
+    }
+
+    if ((respViaControlHost as ServerInfo).errno === 0) {
+      return respViaControlHost;
+    }
+  }
+
+  // When the correct info is returned
+  if ((respViaGlobal as ServerInfo).errno === 0) {
+    return respViaGlobal;
+  }
+
+  return {
+    success: false,
+    quickConnectID,
+    errorInfoSummary: 'unknown_error',
+    errorInfoDetail: '[Get Server Info] [Unknown Error]',
+  };
 };
 
 export default getServerInfo;

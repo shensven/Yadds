@@ -24,7 +24,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import DialogActions from '@mui/material/DialogActions';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import AlertTitle from '@mui/material/AlertTitle';
 import Slide from '@mui/material/Slide';
 import { useAtom } from 'jotai';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
@@ -141,7 +140,12 @@ const Settings: React.FC = () => {
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
   const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
-  const [snackbar, setSnackbar] = useState({ show: false, errCode: 'x0' });
+  const [snackbar, setSnackbar] = useState({ show: false, errorInfo: '' });
+  const [formErr] = useState({
+    address: false,
+    username: false,
+    password: false,
+  });
 
   const [newConnect, setNewConnect] = useState({
     isQuickConnectID: true,
@@ -212,58 +216,65 @@ const Settings: React.FC = () => {
   };
 
   const dismissSnackbar = () => {
-    setSnackbar({ show: false, errCode: 'x0' });
+    setSnackbar({ show: false, errorInfo: '' });
   };
 
-  const handleAuthErrTitle = () => {
-    if (newConnect.isQuickConnectID) {
-      switch (snackbar.errCode) {
-        case '01':
-          return t('settings.snackbar.access_denied');
-        case '02':
-          return t('settings.snackbar.access_denied');
-        case '024':
-          return t('settings.snackbar.access_denied');
-        case '03':
-          return t('settings.snackbar.request_timeout');
-        case '04':
-          return t('settings.snackbar.access_denied');
-        default:
-          return t('settings.snackbar.access_denied');
-      }
-    } else {
-      return t('settings.snackbar.access_denied');
-    }
-  };
+  // const handleAuthErrTitle = () => {
+  //   if (newConnect.isQuickConnectID) {
+  //     switch (snackbar.errCode) {
+  //       case '01':
+  //         return t('settings.snackbar.access_denied');
+  //       case '02':
+  //         return t('settings.snackbar.access_denied');
+  //       case '024':
+  //         return t('settings.snackbar.access_denied');
+  //       case '03':
+  //         return t('settings.snackbar.request_timeout');
+  //       case '04':
+  //         return t('settings.snackbar.access_denied');
+  //       default:
+  //         return t('settings.snackbar.access_denied');
+  //     }
+  //   } else {
+  //     return t('settings.snackbar.access_denied');
+  //   }
+  // };
 
-  const handleAuthErrDesc = () => {
-    if (newConnect.isQuickConnectID) {
-      switch (snackbar.errCode) {
-        case '01':
-          return t('settings.snackbar.invalid_quickconnect_id');
-        case '02':
-          return t('settings.snackbar.unable_to_connect_to_quickconnect_coordinator');
-        case '024':
-          return t('settings.snackbar.invalid_quickconnect_id');
-        case '03':
-          return `${t('settings.snackbar.unable_to_connect_to')} ${newConnect.connectAddress}`;
-        case '04':
-          return t('settings.snackbar.wrong_account_or_password');
-        default:
-          return '';
-      }
-    } else {
-      return '';
-    }
-  };
+  // const handleAuthErrDesc = () => {
+  //   if (newConnect.isQuickConnectID) {
+  //     switch (snackbar.errCode) {
+  //       case '01':
+  //         return t('settings.snackbar.invalid_quickconnect_id');
+  //       case '02':
+  //         return t('settings.snackbar.unable_to_connect_to_quickconnect_coordinator');
+  //       case '024':
+  //         return t('settings.snackbar.invalid_quickconnect_id');
+  //       case '03':
+  //         return `${t('settings.snackbar.unable_to_connect_to')} ${newConnect.connectAddress}`;
+  //       case '04':
+  //         return t('settings.snackbar.wrong_account_or_password');
+  //       default:
+  //         return '';
+  //     }
+  //   } else {
+  //     return '';
+  //   }
+  // };
 
   const handleAuth = async () => {
     if (newConnect.connectAddress.length === 0) {
-      setSnackbar({ show: true, errCode: '01' });
+      setSnackbar({
+        show: true,
+        errorInfo: t('settings.snackbar.invalid_quickconnect_id'),
+      });
       return;
     }
+
     if (newConnect.username.length === 0 || newConnect.password.length === 0) {
-      setSnackbar({ show: true, errCode: '04' });
+      setSnackbar({
+        show: true,
+        errorInfo: t('settings.snackbar.wrong_account_or_password'),
+      });
       return;
     }
 
@@ -275,23 +286,30 @@ const Settings: React.FC = () => {
       passwd: newConnect.password,
     });
 
-    if (resp.success) {
+    console.log('auth', resp);
+
+    if (!resp.success) {
+      setSnackbar({
+        show: true,
+        errorInfo: t(`settings.snackbar.${resp.errorInfoSummary}`),
+      });
+      setLoadingInDialogAdd(false);
+    } else {
       const arr = [...dsmConnectList];
       arr.push({
         host: resp.hostname,
         port: resp.port,
-        quickConnectID: newConnect.connectAddress,
+        quickConnectID: resp.quickConnectID,
         username: newConnect.username,
         did: resp.data.did,
         sid: resp.data.sid,
       });
       persistDsmConnectList(arr);
       dismissDailogAdd();
-      setTasksStatus({ isLoading: false, retry: 0 });
-    } else {
-      setSnackbar({ show: true, errCode: resp.errCode });
-      setLoadingInDialogAdd(false);
-      console.log(resp);
+      setTasksStatus({
+        isLoading: false,
+        retry: 0,
+      });
     }
   };
 
@@ -548,7 +566,7 @@ const Settings: React.FC = () => {
               spellCheck={false}
               disabled={loadingInDialogAdd}
               autoFocus
-              error={snackbar.errCode === '01' || snackbar.errCode === '024'}
+              error={formErr.address === true}
               label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
               value={newConnect.connectAddress}
               sx={{ mt: theme.spacing(2) }}
@@ -572,7 +590,7 @@ const Settings: React.FC = () => {
               size="small"
               spellCheck={false}
               disabled={loadingInDialogAdd}
-              error={snackbar.errCode === '04'}
+              error={formErr.username === true}
               label={t('settings.dialog_add.username')}
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -583,7 +601,7 @@ const Settings: React.FC = () => {
               size="small"
               spellCheck={false}
               disabled={loadingInDialogAdd}
-              error={snackbar.errCode === '04'}
+              error={formErr.password === true}
               label={t('settings.dialog_add.password')}
               value={newConnect.password}
               type={newConnect.showPassword ? 'text' : 'password'}
@@ -638,8 +656,7 @@ const Settings: React.FC = () => {
           onClose={() => dismissSnackbar()}
         >
           <Alert severity="error" sx={{ width: theme.spacing(40) }} onClose={() => dismissSnackbar()}>
-            <AlertTitle>{handleAuthErrTitle()}</AlertTitle>
-            {handleAuthErrDesc()}
+            {snackbar.errorInfo}
           </Alert>
         </Snackbar>
       </Dialog>
