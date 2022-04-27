@@ -202,8 +202,6 @@ nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 
 
 app.applicationMenu = null;
 
-app.commandLine.appendSwitch('force_high_performance_gpu');
-
 //------------------------------------------------------------------------------
 // When Electron has finished initializing, create the main window.
 
