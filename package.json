@@ -218,7 +218,7 @@
     "electron-updater": "^4.6.4",
     "history": "^5.2.0",
     "i18next": "21.6.16",
-    "jotai": "1.6.4",
+    "jotai": "1.6.5",
     "lodash": "4.17.21",
     "query-string": "7.1.1",
     "react": "18.1.0",
