@@ -1,31 +1,28 @@
-const { contextBridge, ipcRenderer } = require('electron');
+import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+
+export type Channels = 'ipc-example';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {
-    myPing() {
-      ipcRenderer.send('ipc-example', 'ping');
+    sendMessage(channel: Channels, args: unknown[]) {
+      ipcRenderer.send(channel, args);
     },
-    on(channel, func) {
-      const validChannels = ['ipc-example'];
-      if (validChannels.includes(channel)) {
-        // Deliberately strip event as it includes `sender`
-        ipcRenderer.on(channel, (event, ...args) => func(...args));
-      }
+    on(channel: Channels, func: (...args: unknown[]) => void) {
+      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) => func(...args);
+      ipcRenderer.on(channel, subscription);
+
+      return () => ipcRenderer.removeListener(channel, subscription);
     },
-    once(channel, func) {
-      const validChannels = ['ipc-example'];
-      if (validChannels.includes(channel)) {
-        // Deliberately strip event as it includes `sender`
-        ipcRenderer.once(channel, (event, ...args) => func(...args));
-      }
+    once(channel: Channels, func: (...args: unknown[]) => void) {
+      ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
 
-  setApplicationMenu: (args) => {
+  setApplicationMenu: (args: any) => {
     ipcRenderer.invoke('set-application-menu', args);
   },
 
-  setTray: (t) => {
+  setTray: (t: any) => {
     const menuItemLabel = {
       showMainWindow: t('tray.show_main_window'),
       quit: t('tray.quit'),
@@ -33,24 +30,24 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('set-tray', menuItemLabel);
   },
 
-  setContextMenu: (args) => {
+  setContextMenu: (args: any) => {
     ipcRenderer.invoke('set-context-menu', args);
   },
 
   order: {
-    byIterater: (persistYaddsMainOrderIterater) => {
+    byIterater: (persistYaddsMainOrderIterater: any) => {
       ipcRenderer.on('order-by-iterater', (_, ...args) => {
         persistYaddsMainOrderIterater(...args);
       });
     },
-    isAscend: (persistYaddsMainOrderIsAscend) => {
+    isAscend: (persistYaddsMainOrderIsAscend: any) => {
       ipcRenderer.on('order-is-ascend', (_, ...arg) => {
         persistYaddsMainOrderIsAscend(...arg);
       });
     },
   },
 
-  toggleNativeTheme: (themeSource) => {
+  toggleNativeTheme: (themeSource: any) => {
     ipcRenderer.invoke(`dark-mode:${themeSource}`);
   },
 
@@ -58,21 +55,21 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('zoom-window');
   },
 
-  toogleSidebar: (hasYaddsSidebar, persistHasYaddsSidebar) => {
+  toogleSidebar: (hasYaddsSidebar: any, persistHasYaddsSidebar: any) => {
     ipcRenderer.removeAllListeners('toogle-sidebar');
     ipcRenderer.on('toogle-sidebar', () => {
       persistHasYaddsSidebar(!hasYaddsSidebar);
     });
   },
 
-  toogleSidebarMarginTop: (hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop) => {
+  toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: any) => {
     ipcRenderer.removeAllListeners('toogle-sidebar-mt');
     ipcRenderer.on('toogle-sidebar-mt', (_, ...arg) => {
       setHasYaddsSidebarMarginTop(...arg);
     });
   },
 
-  navigateTo: (navigateViaReact, persistYaddsSidebarCategory) => {
+  navigateTo: (navigateViaReact: any, persistYaddsSidebarCategory: any) => {
     ipcRenderer.on('navigate', (_, ...arg) => {
       navigateViaReact(...arg);
       persistYaddsSidebarCategory(...arg);
@@ -80,10 +77,10 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   store: {
-    get(val) {
+    get(val: any) {
       return ipcRenderer.sendSync('electron-store:get', val);
     },
-    set(property, val) {
+    set(property: any, val: any) {
       ipcRenderer.send('electron-store:set', property, val);
     },
   },
@@ -96,18 +93,18 @@ contextBridge.exposeInMainWorld('electron', {
     return ipcRenderer.sendSync('get-app-version');
   },
 
-  openViaBrowser: (url) => {
+  openViaBrowser: (url: any) => {
     ipcRenderer.invoke('open-via-broswer', url);
   },
 
   net: {
-    auth(args) {
+    auth(args: any) {
       return ipcRenderer.invoke('net-auth', args);
     },
-    poll(args) {
+    poll(args: any) {
       return ipcRenderer.invoke('net-poll', args);
     },
-    getDsmInfo(args) {
+    getDsmInfo(args: any) {
       return ipcRenderer.invoke('net-get-info', args);
     },
   },

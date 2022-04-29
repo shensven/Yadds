@@ -8,8 +8,6 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 import path from 'path';
 import {
   app,
@@ -38,7 +36,7 @@ export default class AppUpdater {
   }
 }
 
-const isDevelopment = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 const isProduction = process.env.NODE_ENV === 'production';
 const isDarwin = process.platform === 'darwin';
 const isWin32 = process.platform === 'win32';
@@ -48,7 +46,7 @@ let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 const store = new Store({ encryptionKey: 'yadds0bfs' });
 
-if (isDevelopment) {
+if (isDebug) {
   require('electron-debug')();
 }
 
@@ -65,17 +63,22 @@ const getAssetPath = (...paths: string[]): string => {
   return path.join(RESOURCES_PATH, ...paths);
 };
 
+const installExtensions = async () => {
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
+
+  return installer
+    .default(
+      extensions.map((name) => installer[name]),
+      forceDownload
+    )
+    .catch(console.log);
+};
+
 const createWindow = async () => {
-  if (isDevelopment) {
-    const installer = require('electron-devtools-installer');
-    const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    const extensions = ['REACT_DEVELOPER_TOOLS'];
-    await installer
-      .default(
-        extensions.map((name) => installer[name]),
-        forceDownload
-      )
-      .catch(console.log);
+  if (isDebug) {
+    await installExtensions();
   }
 
   mainWindow = new BrowserWindow({
@@ -95,7 +98,7 @@ const createWindow = async () => {
     [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
     [(isWin32 && 'icon') as string]: getAssetPath('icon_win32.png'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
   });
 
@@ -172,7 +175,7 @@ const createWindow = async () => {
     willQuitApp = true;
   });
 
-  if (isDevelopment) {
+  if (isDebug) {
     mainWindow.webContents.on('context-menu', (_, props) => {
       const { x, y } = props;
       Menu.buildFromTemplate([
@@ -355,7 +358,7 @@ ipcMain.handle('set-application-menu', async (_, args) => {
       ],
     };
 
-    return isDevelopment
+    return isDebug
       ? [subMenuAbout, subMenuFile, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp, subMenuDev]
       : [subMenuAbout, subMenuFile, subMenuEdit, subMenuView, subMenuNavigation, subMenuWindow, subMenuHelp];
   };
@@ -451,25 +454,25 @@ ipcMain.handle('set-tray', async (_, args) => {
   ];
 
   const contextMenu = Menu.buildFromTemplate(
-    isDevelopment && (isWin32 || isLinux) ? [...devMenu, ...normalMenu] : normalMenu
+    isDebug && (isWin32 || isLinux) ? [...devMenu, ...normalMenu] : normalMenu
   );
 
   const getTrayIcon = () => {
     switch (process.platform) {
       case 'darwin':
-        return isDevelopment
+        return isDebug
           ? nativeImage.createFromPath(getAssetPath('tray/darwin/trayDevTemplate.png'))
           : nativeImage.createFromPath(getAssetPath('tray/darwin/trayTemplate.png'));
       case 'win32':
-        return isDevelopment
+        return isDebug
           ? nativeImage.createFromPath(getAssetPath('tray/win32/trayDev@2x.png')).resize({ width: 16, height: 16 })
           : nativeImage.createFromPath(getAssetPath('tray/win32/tray@2x.png')).resize({ width: 16, height: 16 });
       case 'linux':
-        return isDevelopment
+        return isDebug
           ? nativeImage.createFromPath(getAssetPath('tray/linux/trayDev@2x.png')).resize({ width: 16, height: 16 })
           : nativeImage.createFromPath(getAssetPath('tray/linux/tray@2x.png')).resize({ width: 16, height: 16 });
       default:
-        return isDevelopment
+        return isDebug
           ? nativeImage.createFromPath(getAssetPath('tray/linux/trayDev@2x.png')).resize({ width: 16, height: 16 })
           : nativeImage.createFromPath(getAssetPath('tray/linux/tray@2x.png')).resize({ width: 16, height: 16 });
     }

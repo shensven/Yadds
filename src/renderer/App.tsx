@@ -1,6 +1,5 @@
 import { startTransition, useEffect } from 'react';
-import { MemoryRouter, NavigateFunction } from 'react-router-dom';
-import { TFunction } from 'react-i18next';
+import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +9,6 @@ import {
   dsmConnectIndexAtomWithPersistence,
   dsmConnectListAtomWithPersistence,
   dsmInfoAtom,
-  DSTasks,
   tasksAtom,
   tasksRetry,
   tasksStatusAtom,
@@ -21,82 +19,6 @@ import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
 import './i18n/i18n';
 import './App.scss';
-import { ServerError } from '../main/net/getServerInfo';
-import { PingPongError } from '../main/net/pingPong';
-import { SignInError, SignInInfo } from '../main/net/signIn';
-
-declare global {
-  interface Window {
-    electron: {
-      toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
-      setApplicationMenu: (menuItemHandler: any) => void;
-      setTray: (t: TFunction) => void;
-      setContextMenu: (menuItemHandler: any) => void;
-      order: {
-        byIterater: (persistYaddsMainOrderIterater: (yaddsMainOrderIterater: string) => void) => void;
-        isAscend: (persistYaddsMainOrderIsAscend: (yaddsMainOrderIsAscend: boolean) => void) => void;
-      };
-      zoomWindow: () => void;
-      toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
-      toogleSidebarMarginTop: (
-        hasYaddsSidebarMarginTop: boolean,
-        setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void
-      ) => void;
-      navigateTo: (
-        navigateViaReact: NavigateFunction,
-        persistYaddsSidebarCategory: (
-          YaddsSidebarCategory:
-            | '/queueAll'
-            | '/queueDownloading'
-            | '/queueFinished'
-            | '/queueActive'
-            | '/queueInactive'
-            | '/queueStopped'
-            | '/server'
-            | '/settings'
-        ) => void
-      ) => void;
-      store: {
-        get: (key: string) => unknown;
-        set: (key: string, val: unknown) => void;
-      };
-      getOS: () => 'darwin' | 'win32' | 'linux';
-      getAppVersion: () => string;
-      openViaBrowser: (val: string) => void;
-      net: {
-        auth: (props: {
-          quickConnectID: string;
-          account: string;
-          passwd: string;
-        }) => Promise<ServerError | PingPongError | SignInError | SignInInfo>;
-
-        poll: (props: { host: string; port: number; sid: string }) => Promise<{
-          success: boolean;
-          data: {
-            tasks: DSTasks[];
-            total?: number;
-          };
-        }>;
-
-        getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<{
-          success: boolean;
-          data?: {
-            codepage: string;
-            model: string;
-            ram: number;
-            serial: string;
-            temperature: number;
-            temperature_warn: boolean;
-            time: string;
-            uptime: number;
-            version: string;
-            version_string: string;
-          };
-        }>;
-      };
-    };
-  }
-}
 
 const App: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
