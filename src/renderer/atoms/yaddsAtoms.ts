@@ -1,5 +1,17 @@
 import { atom } from 'jotai';
 
+export type YaddsCategoryPath =
+  | '/queueAll'
+  | '/queueDownloading'
+  | '/queueFinished'
+  | '/queueActive'
+  | '/queueInactive'
+  | '/queueStopped'
+  | '/server'
+  | '/settings';
+
+export type YaddsAppearance = 'light' | 'dark' | 'system';
+
 export interface DsmConnectListType {
   host: string;
   port: number;
@@ -8,6 +20,8 @@ export interface DsmConnectListType {
   did: string;
   sid: string;
 }
+
+export type YaddsI18nCode = 'en' | 'zh-Hans';
 
 export interface DSTasks {
   id: string;
@@ -66,31 +80,11 @@ export const hasYaddsSidebarAtomWithPersistence = atom(
 );
 
 const yaddsSidebarCategoryAtom = atom<string>(
-  (window.electron?.store.get('yaddsSidebarCategory') as
-    | '/queueAll'
-    | '/queueDownloading'
-    | '/queueFinished'
-    | '/queueActive'
-    | '/queueInactive'
-    | '/queueStopped'
-    | '/settings'
-    | '/server') ?? '/queueAll'
+  (window.electron?.store.get('yaddsSidebarCategory') as YaddsCategoryPath | undefined) ?? '/queueAll'
 );
 export const yaddsSidebarCategoryAtomWithPersistence = atom(
   (get) => get(yaddsSidebarCategoryAtom),
-  (
-    _get,
-    set,
-    newStr:
-      | '/queueAll'
-      | '/queueDownloading'
-      | '/queueFinished'
-      | '/queueActive'
-      | '/queueInactive'
-      | '/queueStopped'
-      | '/settings'
-      | '/server'
-  ) => {
+  (_get, set, newStr: YaddsCategoryPath) => {
     set(yaddsSidebarCategoryAtom, newStr);
     window.electron.store.set('yaddsSidebarCategory', newStr);
   }
@@ -119,20 +113,22 @@ export const yaddsMainOrderIsAscendAtomWithPersistence = atom(
 );
 
 const yaddsAppearanceAtom = atom<string>(
-  (window.electron?.store.get('yaddsAppearance') as string | undefined) ?? 'system'
+  (window.electron?.store.get('yaddsAppearance') as YaddsAppearance | undefined) ?? 'system'
 );
 export const yaddsAppearanceAtomWithPersistence = atom(
   (get) => get(yaddsAppearanceAtom),
-  (_get, set, newStr: string) => {
+  (_get, set, newStr: YaddsAppearance) => {
     set(yaddsAppearanceAtom, newStr);
     window.electron.store.set('yaddsAppearance', newStr);
   }
 );
 
-const yaddsI18nCodeAtom = atom<string>((window.electron?.store.get('yaddsI18nCode') as string | undefined) ?? 'en');
+const yaddsI18nCodeAtom = atom<string>(
+  (window.electron?.store.get('yaddsI18nCode') as YaddsI18nCode | undefined) ?? 'en'
+);
 export const yaddsI18nCodeAtomWithPersistence = atom(
   (get) => get(yaddsI18nCodeAtom),
-  (_get, set, newStr: string) => {
+  (_get, set, newStr: YaddsI18nCode) => {
     set(yaddsI18nCodeAtom, newStr);
     window.electron.store.set('yaddsI18nCode', newStr);
   }

@@ -49,3 +49,5 @@ const menuItemHandler = (
 };
 
 export default menuItemHandler;
+
+export type AppMenuItem = ReturnType<typeof menuItemHandler>;

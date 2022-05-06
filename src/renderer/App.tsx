@@ -32,7 +32,7 @@ const App: React.FC = () => {
   const [, setDsmInfo] = useAtom(dsmInfoAtom);
 
   const handleTasks = async () => {
-    const resp = await window.electron?.net.poll({
+    const resp = await window.electron.net.poll({
       host: dsmConnectList[dsmConnectIndex]?.host,
       port: dsmConnectList[dsmConnectIndex]?.port,
       sid: dsmConnectList[dsmConnectIndex]?.sid,

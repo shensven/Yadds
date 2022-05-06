@@ -4,7 +4,9 @@ import { Channels } from 'main/preload';
 import { ServerError } from 'main/net/getServerInfo';
 import { PingPongError } from 'main/net/pingPong';
 import { SignInError, SignInInfo } from 'main/net/signIn';
-import { DSTasks } from './atoms/yaddsAtoms';
+import { DSTasks, YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
+import { AppMenuItem } from './utils/appMenuItemHandler';
+import { ContextMenuItem } from './utils/contextMenuItemHandler';
 
 declare global {
   interface Window {
@@ -14,38 +16,41 @@ declare global {
         on(channel: string, func: (...args: unknown[]) => void): (() => void) | undefined;
         once(channel: string, func: (...args: unknown[]) => void): void;
       };
-      toggleNativeTheme: (themeSource: 'system' | 'light' | 'dark') => void;
-      setApplicationMenu: (menuItemHandler: any) => void;
+      toggleNativeTheme: (update: YaddsAppearance) => void;
+
+      setAppMenu: (update: AppMenuItem) => void;
+
       setTray: (t: TFunction) => void;
-      setContextMenu: (menuItemHandler: any) => void;
+
+      setContextMenu: (update: ContextMenuItem) => void;
+
       order: {
-        byIterater: (persistYaddsMainOrderIterater: (yaddsMainOrderIterater: string) => void) => void;
-        isAscend: (persistYaddsMainOrderIsAscend: (yaddsMainOrderIsAscend: boolean) => void) => void;
+        byIterater: (persistOrderIterater: (update: string) => void) => void;
+        isAscend: (persistOrderIsAscend: (updaet: boolean) => void) => void;
       };
+
       zoomWindow: () => void;
+
       toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
-      toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: (hasYaddsSidebarMarginTop: boolean) => void) => void;
+
+      toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: (update: boolean) => void) => void;
+
       navigateTo: (
         navigateViaReact: NavigateFunction,
-        persistYaddsSidebarCategory: (
-          YaddsSidebarCategory:
-            | '/queueAll'
-            | '/queueDownloading'
-            | '/queueFinished'
-            | '/queueActive'
-            | '/queueInactive'
-            | '/queueStopped'
-            | '/server'
-            | '/settings'
-        ) => void
+        persistYaddsSidebarCategory: (update: YaddsCategoryPath) => void
       ) => void;
+
       store: {
         get: (key: string) => unknown;
         set: (key: string, val: unknown) => void;
       };
+
       getOS: () => 'darwin' | 'win32' | 'linux';
+
       getAppVersion: () => string;
-      openViaBrowser: (val: string) => void;
+
+      openViaBrowser: (url: string) => void;
+
       net: {
         auth: (props: {
           quickConnectID: string;

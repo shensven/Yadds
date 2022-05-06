@@ -1,4 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { NavigateFunction } from 'react-router-dom';
+import { TFunction } from 'react-i18next';
+import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
+import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
+import { YaddsAppearance, YaddsCategoryPath } from '../renderer/atoms/yaddsAtoms';
 
 export type Channels = 'ipc-example';
 
@@ -18,11 +23,11 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  setApplicationMenu: (args: any) => {
+  setAppMenu: (args: AppMenuItem) => {
     ipcRenderer.invoke('set-application-menu', args);
   },
 
-  setTray: (t: any) => {
+  setTray: (t: TFunction) => {
     const menuItemLabel = {
       showMainWindow: t('tray.show_main_window'),
       quit: t('tray.quit'),
@@ -30,58 +35,61 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('set-tray', menuItemLabel);
   },
 
-  setContextMenu: (args: any) => {
+  setContextMenu: (args: ContextMenuItem) => {
     ipcRenderer.invoke('set-context-menu', args);
   },
 
   order: {
-    byIterater: (persistYaddsMainOrderIterater: any) => {
-      ipcRenderer.on('order-by-iterater', (_, ...args) => {
-        persistYaddsMainOrderIterater(...args);
+    byIterater: (persistYaddsMainOrderIterater: (update: string) => void) => {
+      ipcRenderer.on('order-by-iterater', (_, arg: string) => {
+        persistYaddsMainOrderIterater(arg);
       });
     },
-    isAscend: (persistYaddsMainOrderIsAscend: any) => {
-      ipcRenderer.on('order-is-ascend', (_, ...arg) => {
-        persistYaddsMainOrderIsAscend(...arg);
+    isAscend: (persistYaddsMainOrderIsAscend: (update: boolean) => void) => {
+      ipcRenderer.on('order-is-ascend', (_, arg: boolean) => {
+        persistYaddsMainOrderIsAscend(arg);
       });
     },
   },
 
-  toggleNativeTheme: (themeSource: any) => {
-    ipcRenderer.invoke(`dark-mode:${themeSource}`);
+  toggleNativeTheme: (yaddsAppearance: YaddsAppearance) => {
+    ipcRenderer.invoke(`dark-mode:${yaddsAppearance}`);
   },
 
   zoomWindow: () => {
     ipcRenderer.invoke('zoom-window');
   },
 
-  toogleSidebar: (hasYaddsSidebar: any, persistHasYaddsSidebar: any) => {
+  toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (update: boolean) => void) => {
     ipcRenderer.removeAllListeners('toogle-sidebar');
     ipcRenderer.on('toogle-sidebar', () => {
       persistHasYaddsSidebar(!hasYaddsSidebar);
     });
   },
 
-  toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: any) => {
+  toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: (update: boolean) => void) => {
     ipcRenderer.removeAllListeners('toogle-sidebar-mt');
-    ipcRenderer.on('toogle-sidebar-mt', (_, ...arg) => {
-      setHasYaddsSidebarMarginTop(...arg);
+    ipcRenderer.on('toogle-sidebar-mt', (_, arg: boolean) => {
+      setHasYaddsSidebarMarginTop(arg);
     });
   },
 
-  navigateTo: (navigateViaReact: any, persistYaddsSidebarCategory: any) => {
-    ipcRenderer.on('navigate', (_, ...arg) => {
-      navigateViaReact(...arg);
-      persistYaddsSidebarCategory(...arg);
+  navigateTo: (
+    navigateViaReact: NavigateFunction,
+    persistYaddsSidebarCategory: (update: YaddsCategoryPath) => void
+  ) => {
+    ipcRenderer.on('navigate', (_, arg: YaddsCategoryPath) => {
+      navigateViaReact(arg);
+      persistYaddsSidebarCategory(arg);
     });
   },
 
   store: {
-    get(val: any) {
-      return ipcRenderer.sendSync('electron-store:get', val);
+    get(key: string) {
+      return ipcRenderer.sendSync('electron-store:get', key);
     },
-    set(property: any, val: any) {
-      ipcRenderer.send('electron-store:set', property, val);
+    set(key: string, val: unknown) {
+      ipcRenderer.send('electron-store:set', key, val);
     },
   },
 
@@ -93,7 +101,7 @@ contextBridge.exposeInMainWorld('electron', {
     return ipcRenderer.sendSync('get-app-version');
   },
 
-  openViaBrowser: (url: any) => {
+  openViaBrowser: (url: string) => {
     ipcRenderer.invoke('open-via-broswer', url);
   },
 

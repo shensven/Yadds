@@ -1,3 +1,4 @@
+import { YaddsCategoryPath } from '../atoms/yaddsAtoms';
 import QueueActive from './QueueActive';
 import QueueAll from './QueueAll';
 import QueueDownloading from './QueueDownloading';
@@ -8,15 +9,7 @@ import Server from './Server';
 import Settings from './Settings';
 
 const RedirectEl: React.FC = () => {
-  const category = window.electron?.store.get('yaddsSidebarCategory') as
-    | '/queueAll'
-    | '/queueDownloading'
-    | '/queueFinished'
-    | '/queueActive'
-    | '/queueInactive'
-    | '/queueStopped'
-    | '/server'
-    | '/settings';
+  const category = window.electron?.store.get('yaddsSidebarCategory') as YaddsCategoryPath | undefined;
 
   switch (category) {
     case '/queueAll':

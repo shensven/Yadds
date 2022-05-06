@@ -27,6 +27,9 @@ import { resolveHtmlPath } from './util';
 import auth from './net/auth';
 import poll from './net/poll';
 import getDiskStationManagerInfo from './net/getDiskStationManagerInfo';
+import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
+import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
+import { YaddsAppearance } from '../renderer/atoms/yaddsAtoms';
 
 export default class AppUpdater {
   constructor() {
@@ -112,7 +115,7 @@ const createWindow = async () => {
     }
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
-    } else if (store.get('isYaddsMaximized')) {
+    } else if (store.get('isYaddsMaximized') as boolean | undefined) {
       mainWindow.maximize();
     } else {
       mainWindow.show();
@@ -160,14 +163,14 @@ const createWindow = async () => {
   });
 
   let willQuitApp = false;
-  mainWindow.on('close', (event: Event) => {
+  mainWindow.on('close', (evt) => {
     if (willQuitApp) {
       app.exit();
     } else if (store.get('isYaddsFullScreen')) {
       mainWindow?.setFullScreen(false);
-      event.preventDefault();
+      evt.preventDefault();
     } else {
-      event.preventDefault();
+      evt.preventDefault();
       mainWindow?.hide();
     }
   });
@@ -188,8 +191,8 @@ const createWindow = async () => {
   }
 
   // Open urls in the user's browser
-  mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
+  mainWindow.webContents.on('new-window', (evt, url) => {
+    evt.preventDefault();
     shell.openExternal(url);
   });
 
@@ -201,7 +204,7 @@ const createWindow = async () => {
 //------------------------------------------------------------------------------
 // Initialize the default configuration of this application
 
-nativeTheme.themeSource = (store.get('yaddsAppearance') as 'system' | 'light' | 'dark') ?? 'system';
+nativeTheme.themeSource = (store.get('yaddsAppearance') as YaddsAppearance | undefined) ?? 'system';
 
 app.applicationMenu = null;
 
@@ -260,13 +263,13 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.on('ipc-example', async (event, arg) => {
+ipcMain.on('ipc-example', async (evt, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+  evt.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.handle('set-application-menu', async (_, args) => {
+ipcMain.handle('set-application-menu', async (_, args: AppMenuItem) => {
   interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
     submenu?: DarwinMenuItemConstructorOptions[] | Menu;
@@ -370,7 +373,7 @@ ipcMain.handle('set-application-menu', async (_, args) => {
   }
 });
 
-ipcMain.handle('set-context-menu', async (_, args) => {
+ipcMain.handle('set-context-menu', async (_, args: ContextMenuItem) => {
   const template: MenuItemConstructorOptions[] = [
     { label: args.resumeAll },
     { label: args.pauseAll },
@@ -425,9 +428,7 @@ ipcMain.handle('set-context-menu', async (_, args) => {
   Menu.buildFromTemplate(template).popup();
 });
 
-ipcMain.handle('set-tray', async (_, args) => {
-  const { showMainWindow, quit } = args;
-
+ipcMain.handle('set-tray', async (_, args: { showMainWindow: string; quit: string }) => {
   const devMenu: MenuItemConstructorOptions[] = [
     { label: 'Reload', click: () => mainWindow?.webContents.reload() },
     { label: 'Toggle Developer Tools', click: () => mainWindow?.webContents.toggleDevTools() },
@@ -435,7 +436,7 @@ ipcMain.handle('set-tray', async (_, args) => {
   ];
   const normalMenu: MenuItemConstructorOptions[] = [
     {
-      label: showMainWindow,
+      label: args.showMainWindow,
       click: () => {
         if (isDarwin) {
           mainWindow?.show();
@@ -450,7 +451,7 @@ ipcMain.handle('set-tray', async (_, args) => {
       },
     },
     { type: 'separator' },
-    { label: quit, click: () => app.exit() },
+    { label: args.quit, click: () => app.exit() },
   ];
 
   const contextMenu = Menu.buildFromTemplate(
@@ -531,23 +532,23 @@ ipcMain.handle('zoom-window', async () => {
   }
 });
 
-ipcMain.on('electron-store:get', async (event, val) => {
-  event.returnValue = store.get(val);
+ipcMain.on('electron-store:get', async (evt, key: string) => {
+  evt.returnValue = store.get(key);
 });
 
-ipcMain.on('electron-store:set', async (_, key, val) => {
+ipcMain.on('electron-store:set', async (_, key: string, val: unknown) => {
   store.set(key, val);
 });
 
-ipcMain.on('get-os-platform', async (event) => {
-  event.returnValue = process.platform;
+ipcMain.on('get-os-platform', async (evt) => {
+  evt.returnValue = process.platform;
 });
 
-ipcMain.on('get-app-version', async (event) => {
-  event.returnValue = app.getVersion();
+ipcMain.on('get-app-version', async (evt) => {
+  evt.returnValue = app.getVersion();
 });
 
-ipcMain.handle('open-via-broswer', async (_, url) => {
+ipcMain.handle('open-via-broswer', async (_, url: string) => {
   shell.openExternal(url);
 });
 

@@ -59,7 +59,7 @@ const YaddsMain: React.FC = () => {
   useEffect(() => {
     window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // handle the sidebar state
     const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
-    window.electron?.setApplicationMenu(appMenuItemLabel); // Init or update application menu
+    window.electron?.setAppMenu(appMenuItemLabel); // Init or update application menu
   }, [hasYaddsSidebar]);
 
   return (
@@ -159,7 +159,7 @@ const YaddsMain: React.FC = () => {
             }}
             onClick={() => {
               const contextMenuItemLabel = contextMenuItemHandler(t, orderIterater, orderIsAscend);
-              window.electron?.setContextMenu(contextMenuItemLabel);
+              window.electron.setContextMenu(contextMenuItemLabel);
             }}
           >
             <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />

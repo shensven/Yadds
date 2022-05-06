@@ -51,7 +51,9 @@ import {
   isYaddsAutoLaunchAtomWithPersistence,
   isYaddsAutoUpdateAtomWithPersistence,
   tasksStatusAtom,
+  YaddsAppearance,
   yaddsAppearanceAtomWithPersistence,
+  YaddsI18nCode,
   yaddsI18nCodeAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
@@ -156,34 +158,34 @@ const Settings: React.FC = () => {
     showPassword: false,
   });
 
-  interface AppearanceItem {
-    themeSource: 'system' | 'light' | 'dark';
+  interface YaddsAppearanceObj {
+    yaddsAppearance: YaddsAppearance;
     label: string;
-    appearanceSrc: string;
+    src: string;
   }
-  const appearanceItemArray: AppearanceItem[] = [
+  const appearanceList: YaddsAppearanceObj[] = [
     {
-      themeSource: 'light',
+      yaddsAppearance: 'light',
       label: t('settings.light'),
-      appearanceSrc: getAppearanceLight(),
+      src: getAppearanceLight(),
     },
     {
-      themeSource: 'dark',
+      yaddsAppearance: 'dark',
       label: t('settings.dark'),
-      appearanceSrc: getAppearanceDark(),
+      src: getAppearanceDark(),
     },
     {
-      themeSource: 'system',
+      yaddsAppearance: 'system',
       label: t('settings.follow_system'),
-      appearanceSrc: getAppearanceFollowSystem(),
+      src: getAppearanceFollowSystem(),
     },
   ];
 
-  interface I18nItem {
-    languageCode: string;
+  interface YaddsI18n {
+    languageCode: YaddsI18nCode;
     label: string;
   }
-  const i18nItemArray: I18nItem[] = [
+  const i18nList: YaddsI18n[] = [
     { languageCode: 'en', label: 'English' },
     { languageCode: 'zh-Hans', label: '简体中文' },
   ];
@@ -327,30 +329,32 @@ const Settings: React.FC = () => {
         {/* appearance */}
         <SettingsFormItem label={t('settings.appearance')}>
           <FormGroup row>
-            {appearanceItemArray.map((item: AppearanceItem) => (
+            {appearanceList.map((item) => (
               <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>
                 <Box
                   sx={{
                     borderRadius: 1,
                     overflow: 'hidden',
-                    filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
+                    filter: yaddsAppearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
                     height: 44,
                     width: 67,
                     '&:hover': {
-                      filter: yaddsAppearance === item.themeSource ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
+                      filter: yaddsAppearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
                     },
                   }}
                   onClick={() => {
-                    persistYaddsAppearance(item.themeSource);
-                    window.electron.toggleNativeTheme(item.themeSource);
+                    persistYaddsAppearance(item.yaddsAppearance);
+                    window.electron.toggleNativeTheme(item.yaddsAppearance);
                   }}
                 >
-                  <img src={item.appearanceSrc} alt="" draggable="false" width={67} height={44} />
+                  <img src={item.src} alt="" draggable="false" width={67} height={44} />
                 </Box>
                 <Typography
                   variant="overline"
                   color={
-                    yaddsAppearance === item.themeSource ? theme.palette.text.secondary : theme.palette.text.disabled
+                    yaddsAppearance === item.yaddsAppearance
+                      ? theme.palette.text.secondary
+                      : theme.palette.text.disabled
                   }
                 >
                   {item.label}
@@ -418,7 +422,7 @@ const Settings: React.FC = () => {
         {/* i18n */}
         <SettingsFormItem label={t('settings.language')}>
           <FormGroup>
-            {i18nItemArray.map((item: I18nItem) => (
+            {i18nList.map((item) => (
               <FormControlLabel
                 key={item.languageCode}
                 checked={yaddsI18nCode === item.languageCode}
@@ -428,8 +432,8 @@ const Settings: React.FC = () => {
                   persistYaddsI18nCode(item.languageCode);
                   i18n.changeLanguage(item.languageCode);
                   const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
-                  window.electron?.setApplicationMenu(appMenuItemLabel);
-                  window.electron?.setTray(t);
+                  window.electron.setAppMenu(appMenuItemLabel);
+                  window.electron.setTray(t);
                 }}
               />
             ))}

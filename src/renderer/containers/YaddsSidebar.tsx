@@ -16,6 +16,7 @@ import {
   hasYaddsSidebarMarginTopAtom,
   sidebarWidth,
   tasksAtom,
+  YaddsCategoryPath,
   yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
@@ -36,15 +37,8 @@ import IonCogOutline from '../components/icons/IonCogOutline';
 import IonCog from '../components/icons/IonCog';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 
-interface Category {
-  path:
-    | '/queueAll'
-    | '/queueDownloading'
-    | '/queueFinished'
-    | '/queueActive'
-    | '/queueInactive'
-    | '/queueStopped'
-    | '/settings';
+interface YaddsCategoryObj {
+  path: YaddsCategoryPath;
   tasksLength: number;
   name: string;
   activeIcon: JSX.Element;
@@ -72,10 +66,10 @@ const YaddsSidebar: React.FC = () => {
     window.electron?.toogleSidebarMarginTop(setHasYaddsSidebarMarginTop); // handle the margin top of the sidebar
 
     const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
-    window.electron?.setApplicationMenu(appMenuItemLabel); // Init or update application menu
+    window.electron?.setAppMenu(appMenuItemLabel); // Init or update application menu
   }, [hasYaddsSidebarMarginTop]);
 
-  const category: Category[] = [
+  const categoryList: YaddsCategoryObj[] = [
     {
       path: '/queueAll',
       tasksLength: tasks.length,
@@ -145,7 +139,7 @@ const YaddsSidebar: React.FC = () => {
           }),
         }}
       >
-        {category.map((item: Category) => (
+        {categoryList.map((item) => (
           <ListItem key={item.path}>
             <ListItemButton
               disableRipple
