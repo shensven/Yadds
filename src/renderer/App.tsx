@@ -1,4 +1,4 @@
-import { startTransition, useEffect } from 'react';
+import React, { startTransition, useEffect } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';

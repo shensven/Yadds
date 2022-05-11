@@ -1,3 +1,4 @@
+import React from 'react';
 import { YaddsCategoryPath } from '../atoms/yaddsAtoms';
 import QueueActive from './QueueActive';
 import QueueAll from './QueueAll';

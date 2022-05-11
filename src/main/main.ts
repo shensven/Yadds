@@ -413,13 +413,13 @@ ipcMain.handle('set-context-menu', async (_, args: ContextMenuItem) => {
         {
           label: args.ascending,
           type: 'radio',
-          checked: args.yaddsMainOrderIsAcsend === true,
+          checked: args.yaddsMainOrderIsAcsend,
           click: () => mainWindow?.webContents.send('order-is-ascend', true),
         },
         {
           label: args.descending,
           type: 'radio',
-          checked: args.yaddsMainOrderIsAcsend === false,
+          checked: !args.yaddsMainOrderIsAcsend,
           click: () => mainWindow?.webContents.send('order-is-ascend', false),
         },
       ],
@@ -549,7 +549,7 @@ ipcMain.on('get-app-version', async (evt) => {
 });
 
 ipcMain.handle('open-via-broswer', async (_, url: string) => {
-  shell.openExternal(url);
+  await shell.openExternal(url);
 });
 
 ipcMain.handle('net-auth', async (_, args) => {
