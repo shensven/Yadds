@@ -1,0 +1,6 @@
+append_commit_message: false
+commit_message: 'fix: new translations %three_letters_code% from Crowdin'
+
+files:
+  - source: /src/renderer/i18n/locales/en.json
+    translation: /src/renderer/i18n/locales/%three_letters_code%.json
