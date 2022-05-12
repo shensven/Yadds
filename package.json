@@ -252,5 +252,13 @@
     ],
     "singleQuote": true,
     "printWidth": 120
+  },
+  "electronmon": {
+    "patterns": [
+      "!src/__tests__/**",
+      "!src/renderer/**",
+      "!release/**"
+    ],
+    "logLevel": "quiet"
   }
 }
