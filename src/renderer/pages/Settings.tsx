@@ -11,7 +11,6 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
 import Checkbox from '@mui/material/Checkbox';
 import FormHelperText from '@mui/material/FormHelperText';
 import Dialog from '@mui/material/Dialog';
@@ -138,7 +137,8 @@ const Settings: React.FC = () => {
   const [dsmConnectIndex, persistDsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
   const [, setTasksStatus] = useAtom(tasksStatusAtom);
 
-  const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
+  const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
+  const [isSelectI18nOpen, setIsSelectI18nOpen] = useState<boolean>(false);
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
   const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
@@ -190,14 +190,23 @@ const Settings: React.FC = () => {
     { languageCode: 'zho', label: '简体中文' },
   ];
 
-  const handleSelectOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
+  const handleSelectQcOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
     if (isDelete) {
       setHasDialogDelete(true);
-      setIsSelectOpen(false);
+      setIsSelectQcOpen(false);
       return;
     }
     persistDsmConnectIndex(menuItemAddressIndex);
-    setIsSelectOpen(false);
+    setIsSelectQcOpen(false);
+  };
+
+  const handleSelectI18nOnChange = (languageCode: YaddsI18nCode) => {
+    persistYaddsI18nCode(languageCode);
+    i18n.changeLanguage(languageCode);
+    const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    window.electron.setAppMenu(appMenuItemLabel);
+    window.electron.setTray(t);
+    setIsSelectI18nOpen(false);
   };
 
   const dismissDailogAdd = () => {
@@ -388,20 +397,20 @@ const Settings: React.FC = () => {
                     dsmConnectList[dsmConnectIndex]?.username ?? 'null'
                   }`
                 }
-                open={isSelectOpen}
-                onOpen={() => setIsSelectOpen(true)}
-                onClose={() => setIsSelectOpen(false)}
+                open={isSelectQcOpen}
+                onOpen={() => setIsSelectQcOpen(true)}
+                onClose={() => setIsSelectQcOpen(false)}
               >
                 {dsmConnectList.map((item, index) => (
                   <MenuItem key={item.sid} dense disableRipple value={item.sid}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectOnChange(index, false)}
+                        onClick={() => handleSelectQcOnChange(index, false)}
                       >
                         {item.quickConnectID} - {item.username}
                       </Typography>
-                      <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectOnChange(index, true)}>
+                      <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectQcOnChange(index, true)}>
                         <IonTrashOutline sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Stack>
@@ -422,21 +431,31 @@ const Settings: React.FC = () => {
         {/* i18n */}
         <SettingsFormItem label={t('settings.language')}>
           <FormGroup>
-            {i18nList.map((item) => (
-              <FormControlLabel
-                key={item.languageCode}
-                checked={yaddsI18nCode === item.languageCode}
-                label={<Typography variant="subtitle2">{item.label}</Typography>}
-                control={<Radio size="small" checked={yaddsI18nCode === item.languageCode} />}
-                onClick={() => {
-                  persistYaddsI18nCode(item.languageCode);
-                  i18n.changeLanguage(item.languageCode);
-                  const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
-                  window.electron.setAppMenu(appMenuItemLabel);
-                  window.electron.setTray(t);
-                }}
-              />
-            ))}
+            <FormControl>
+              <Select
+                size="small"
+                sx={{ minWidth: theme.spacing(24), maxWidth: theme.spacing(24), fontSize: 14 }}
+                value={yaddsI18nCode}
+                open={isSelectI18nOpen}
+                onOpen={() => setIsSelectI18nOpen(true)}
+                onClose={() => setIsSelectI18nOpen(false)}
+              >
+                {i18nList.map((item) => (
+                  <MenuItem key={item.languageCode} dense disableRipple value={item.languageCode}>
+                    <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
+                      <Typography
+                        sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
+                        onClick={() => {
+                          handleSelectI18nOnChange(item.languageCode);
+                        }}
+                      >
+                        {item.label}
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </FormGroup>
         </SettingsFormItem>
 
