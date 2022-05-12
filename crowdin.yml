@@ -1,0 +1,3 @@
+files:
+  - source: /src/renderer/i18n/locales/en.json
+    translation: /src/renderer/i18n/locales/%three_letters_code%.json
