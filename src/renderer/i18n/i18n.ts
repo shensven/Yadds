@@ -3,14 +3,14 @@ import { initReactI18next } from 'react-i18next';
 import { YaddsI18nCode } from '../atoms/yaddsAtoms';
 
 const LOCAL_EN = require('./locales/en.json');
-const LOCAL_ZH_HANS = require('./locales/zh-Hans.json');
+const LOCAL_ZHO = require('./locales/zho.json');
 
 const resources = {
   en: {
     translation: LOCAL_EN,
   },
-  'zh-Hans': {
-    translation: LOCAL_ZH_HANS,
+  zho: {
+    translation: LOCAL_ZHO,
   },
 };
 

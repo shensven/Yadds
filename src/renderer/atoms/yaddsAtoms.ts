@@ -21,7 +21,7 @@ export interface DsmConnectListType {
   sid: string;
 }
 
-export type YaddsI18nCode = 'en' | 'zh-Hans';
+export type YaddsI18nCode = 'en' | 'zho';
 
 export interface DSTasks {
   id: string;
