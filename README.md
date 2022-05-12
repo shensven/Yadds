@@ -13,6 +13,7 @@
 [![Test](https://github.com/shensven/Yadds/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/shensven/Yadds/actions/workflows/test.yml)
 [![Publish](https://github.com/shensven/Yadds/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/shensven/Yadds/actions/workflows/publish.yml)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
+[![Crowdin](https://badges.crowdin.net/yadds/localized.svg)](https://crowdin.com/project/yadds)
 
 English | [简体中文](./README-zh-hans.md)
 
@@ -21,7 +22,7 @@ English | [简体中文](./README-zh-hans.md)
 - [x] NOT only free also open source
 - [x] Does NOT collect any information from users
 - [x] Cross-platform support (macOS, Windows, Linux)
-- [x] Multi-language hot-switching (English, 简体中文, 日本語 and etc.)
+- [x] Multi-language hot-switching (English, 简体中文, 繁體中文, 日本語 and etc.)
 - [x] Dark mode
 - [ ] Download progress visualization
 - [ ] Multi-account switching

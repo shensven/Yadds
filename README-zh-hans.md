@@ -13,6 +13,7 @@
 [![Test](https://github.com/shensven/Yadds/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/shensven/Yadds/actions/workflows/test.yml)
 [![Publish](https://github.com/shensven/Yadds/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/shensven/Yadds/actions/workflows/publish.yml)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
+[![Crowdin](https://badges.crowdin.net/yadds/localized.svg)](https://crowdin.com/project/yadds)
 
 [English](./README.md) | 简体中文
 
@@ -21,7 +22,7 @@
 - [x] 不但免费、还开源
 - [x] 不收集用户的任何信息
 - [x] 跨平台支持 （macOS、Windows、Linux）
-- [x] 多语言热切换 （简体中文、English、日本語等）
+- [x] 多语言热切换 （English、简体中文、繁體中文、日本語等）
 - [x] 暗黑模式
 - [ ] 下载进度可视化
 - [ ] 多用户切换
