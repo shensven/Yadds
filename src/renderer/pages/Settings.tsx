@@ -188,6 +188,8 @@ const Settings: React.FC = () => {
   const i18nList: YaddsI18n[] = [
     { languageCode: 'en', label: 'English' },
     { languageCode: 'zh_CN', label: '简体中文' },
+    { languageCode: 'zh_TW', label: '繁體中文' },
+    { languageCode: 'ja_JP', label: '日本語' },
   ];
 
   const handleSelectQcOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {

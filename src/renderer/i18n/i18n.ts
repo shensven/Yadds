@@ -4,14 +4,14 @@ import { YaddsI18nCode } from '../atoms/yaddsAtoms';
 
 const LOCAL_EN = require('./locales/en.json');
 const LOCAL_ZH_CN = require('./locales/zh_CN.json');
+const LOCAL_ZH_TW = require('./locales/zh_TW.json');
+const LOCAL_JA_JP = require('./locales/ja_JP.json');
 
 const resources = {
-  en: {
-    translation: LOCAL_EN,
-  },
-  zh_CN: {
-    translation: LOCAL_ZH_CN,
-  },
+  en: { translation: LOCAL_EN },
+  zh_CN: { translation: LOCAL_ZH_CN },
+  zh_TW: { translation: LOCAL_ZH_TW },
+  ja_JP: { translation: LOCAL_JA_JP },
 };
 
 i18n
