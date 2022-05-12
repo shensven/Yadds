@@ -187,7 +187,7 @@ const Settings: React.FC = () => {
   }
   const i18nList: YaddsI18n[] = [
     { languageCode: 'en', label: 'English' },
-    { languageCode: 'zho', label: '简体中文' },
+    { languageCode: 'zh_CN', label: '简体中文' },
   ];
 
   const handleSelectQcOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
