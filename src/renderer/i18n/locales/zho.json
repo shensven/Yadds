@@ -68,7 +68,7 @@
     },
     "dialog_remove": {
       "confirm_remove": "确认移除",
-      "are_you_sure": " 您确定登出并断开与 DSM 的连接？",
+      "are_you_sure": "您确定登出并断开与 DSM 的连接？",
       "cancel": "取消",
       "yes": "确定"
     },
