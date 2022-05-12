@@ -3,4 +3,4 @@ commit_message: 'fix: new translations %language% from Crowdin'
 
 files:
   - source: /src/renderer/i18n/locales/en.json
-    translation: /src/renderer/i18n/locales/%three_letters_code%.json
+    translation: /src/renderer/i18n/locales/%locale_with_underscore%.json
