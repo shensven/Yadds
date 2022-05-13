@@ -60,9 +60,9 @@ export interface DSTasks {
   };
 }
 
-export const sidebarWidth = atom<number>(240);
+export const sidebarWidth = atom<240>(240);
 
-export const tasksRetry = atom<number>(3);
+export const tasksRetry = atom<3>(3);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ export const hasYaddsSidebarAtomWithPersistence = atom(
   }
 );
 
-const yaddsSidebarCategoryAtom = atom<string>(
+const yaddsSidebarCategoryAtom = atom<YaddsCategoryPath>(
   (window.electron?.store.get('yaddsSidebarCategory') as YaddsCategoryPath | undefined) ?? '/queueAll'
 );
 export const yaddsSidebarCategoryAtomWithPersistence = atom(
@@ -112,7 +112,7 @@ export const yaddsMainOrderIsAscendAtomWithPersistence = atom(
   }
 );
 
-const yaddsAppearanceAtom = atom<string>(
+const yaddsAppearanceAtom = atom<YaddsAppearance>(
   (window.electron?.store.get('yaddsAppearance') as YaddsAppearance | undefined) ?? 'system'
 );
 export const yaddsAppearanceAtomWithPersistence = atom(
@@ -123,7 +123,7 @@ export const yaddsAppearanceAtomWithPersistence = atom(
   }
 );
 
-const yaddsI18nCodeAtom = atom<string>(
+const yaddsI18nCodeAtom = atom<YaddsI18nCode>(
   (window.electron?.store.get('yaddsI18nCode') as YaddsI18nCode | undefined) ?? 'en'
 );
 export const yaddsI18nCodeAtomWithPersistence = atom(

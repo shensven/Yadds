@@ -240,7 +240,7 @@ const Server: React.FC = () => {
                 }}
               >
                 <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
-                  {t('server.ping_test')}
+                  {t('server.ping')}
                 </Typography>
               </Button>
             )}
