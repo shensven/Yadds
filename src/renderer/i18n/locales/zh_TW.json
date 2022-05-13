@@ -6,8 +6,8 @@
     "active": "進行中",
     "inactive": "非進行中",
     "stopped": "停用",
-    "server": "Server",
-    "settings": "Settings"
+    "server": "伺服器",
+    "settings": "設定"
   },
   "main": {
     "filter": "Filter...",
