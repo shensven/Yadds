@@ -19,7 +19,7 @@
     "date": "按添加时间",
     "title": "按文件名称",
     "download_progress": "按下载进度",
-    "download_speed": "按下载速率",
+    "download_speed": "按下载速度",
     "ascending": "升序",
     "descending": "降序",
     "list_view": "列表视图",
@@ -33,7 +33,7 @@
     "responsiveness": "延迟",
     "refresh": "刷新",
     "network_diagnosis": "网络诊断",
-    "ping_test": "Ping 测试",
+    "ping": "Ping 测试",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
     "quota": "空间配额",
@@ -64,7 +64,7 @@
       "username": "用户帐号",
       "password": "密码",
       "cancel": "取消",
-      "ok": "新增"
+      "ok": "确定"
     },
     "dialog_remove": {
       "confirm_remove": "确认移除",
