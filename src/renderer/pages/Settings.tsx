@@ -381,8 +381,8 @@ const Settings: React.FC = () => {
             <FormControl>
               <Select
                 size="small"
-                sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
-                value={dsmConnectList[dsmConnectIndex].sid}
+                displayEmpty
+                value={dsmConnectList[dsmConnectIndex]?.sid}
                 renderValue={() => (
                   <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
@@ -390,9 +390,11 @@ const Settings: React.FC = () => {
                     {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
                   </Typography>
                 )}
+                disabled={dsmConnectList.length === 0}
                 MenuProps={{
                   sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
                 }}
+                sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
                 open={isSelectQcOpen}
                 onOpen={() => setIsSelectQcOpen(true)}
                 onClose={() => setIsSelectQcOpen(false)}
