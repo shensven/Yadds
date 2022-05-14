@@ -6,11 +6,11 @@
     "active": "アクティブ",
     "inactive": "非アクティブ",
     "stopped": "停止しました",
-    "server": "Server",
-    "settings": "Settings"
+    "server": "サーバー",
+    "settings": "設定"
   },
   "main": {
-    "filter": "Filter...",
+    "filter": "フィルタ...",
     "new_task": "NEW TASK",
     "resume_all": "Resume All",
     "pause_all": "Pause All",
