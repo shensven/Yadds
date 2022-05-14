@@ -10,7 +10,7 @@
     "settings": "設定"
   },
   "main": {
-    "filter": "篩選",
+    "filter": "篩選...",
     "new_task": "建立任務",
     "resume_all": "全部開始",
     "pause_all": "全部暫停",
