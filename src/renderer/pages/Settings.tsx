@@ -381,24 +381,18 @@ const Settings: React.FC = () => {
             <FormControl>
               <Select
                 size="small"
-                displayEmpty
-                multiple
-                MenuProps={{
-                  elevation: 0,
-                  sx: {
-                    minWidth: theme.spacing(36),
-                    maxWidth: theme.spacing(36),
-                    '& .MuiPaper-root': { boxShadow: '0 0 24px rgba(0,0,0,0.08), 0 8px 8px rgba(0,0,0,0.04)' },
-                  },
-                }}
                 sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
-                disabled={dsmConnectList.length === 0}
-                value={[dsmConnectIndex]}
-                renderValue={() =>
-                  `${dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'} - ${
-                    dsmConnectList[dsmConnectIndex]?.username ?? 'null'
-                  }`
-                }
+                value={dsmConnectList[dsmConnectIndex].sid}
+                renderValue={() => (
+                  <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
+                    {' @ '}
+                    {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
+                  </Typography>
+                )}
+                MenuProps={{
+                  sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
+                }}
                 open={isSelectQcOpen}
                 onOpen={() => setIsSelectQcOpen(true)}
                 onClose={() => setIsSelectQcOpen(false)}
@@ -410,7 +404,7 @@ const Settings: React.FC = () => {
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
                         onClick={() => handleSelectQcOnChange(index, false)}
                       >
-                        {item.quickConnectID} - {item.username}
+                        {item.username} @ {item.quickConnectID}
                       </Typography>
                       <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectQcOnChange(index, true)}>
                         <IonTrashOutline sx={{ fontSize: 14 }} />
@@ -436,8 +430,11 @@ const Settings: React.FC = () => {
             <FormControl>
               <Select
                 size="small"
-                sx={{ minWidth: theme.spacing(24), maxWidth: theme.spacing(24), fontSize: 14 }}
+                sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
                 value={yaddsI18nCode}
+                MenuProps={{
+                  sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
+                }}
                 open={isSelectI18nOpen}
                 onOpen={() => setIsSelectI18nOpen(true)}
                 onClose={() => setIsSelectI18nOpen(false)}
@@ -447,9 +444,7 @@ const Settings: React.FC = () => {
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => {
-                          handleSelectI18nOnChange(item.languageCode);
-                        }}
+                        onClick={() => handleSelectI18nOnChange(item.languageCode)}
                       >
                         {item.label}
                       </Typography>
