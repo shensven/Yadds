@@ -2,17 +2,17 @@
   "name": "yadds",
   "version": "0.0.1",
   "description": "Yet Another DSM Download Station",
-  "main": "./dist/main/main.js",
+  "license": "GPL-3.0",
   "author": {
     "name": "SvenFE",
     "email": "shensven2016@gmail.com",
     "url": "https://github.com/shensven"
   },
+  "main": "./dist/main/main.js",
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
-    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
-    "postinstall": "npm run electron-rebuild && npm run link-modules"
+    "postinstall": "npm run electron-rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
-  "dependencies": {},
-  "license": "GPL-3.0"
+  "dependencies": {}
 }

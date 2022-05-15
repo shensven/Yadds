@@ -191,9 +191,9 @@ const createWindow = async () => {
   }
 
   // Open urls in the user's browser
-  mainWindow.webContents.on('new-window', (evt, url) => {
-    evt.preventDefault();
-    shell.openExternal(url);
+  mainWindow.webContents.setWindowOpenHandler((edata) => {
+    shell.openExternal(edata.url);
+    return { action: 'deny' };
   });
 
   // Remove this if your app does not use auto updates
