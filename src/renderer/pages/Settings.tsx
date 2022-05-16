@@ -382,7 +382,7 @@ const Settings: React.FC = () => {
               <Select
                 size="small"
                 displayEmpty
-                value={dsmConnectList[dsmConnectIndex]?.sid}
+                value={dsmConnectList[dsmConnectIndex]?.sid ?? ''}
                 renderValue={() => (
                   <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
