@@ -82,7 +82,6 @@ const signIn = (quickConnectID: string, pingPongInfo: PingPongInfo, account: str
 
           parsed.hostname = hostname;
           parsed.port = port;
-          parsed.port = port;
 
           resolve({
             success: true,
