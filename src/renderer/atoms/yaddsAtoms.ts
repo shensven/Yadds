@@ -169,12 +169,12 @@ export const dsmConnectListAtomWithPersistence = atom(
   }
 );
 
-const dsmConnectIndexAtom = atom<number>(-1);
-export const dsmConnectIndexAtomWithPersistence = atom(
-  (get) => get(dsmConnectIndexAtom),
-  (_get, set, newNum: number) => {
-    set(dsmConnectIndexAtom, newNum);
-    window.electron.store.set('dsmConnectIndex', newNum);
+const dsmCurrentSidAtom = atom<string>((window.electron?.store.get('dsmCurrentSid') as string | undefined) ?? '');
+export const dsmCurrentSidAtomWithPersistence = atom(
+  (get) => get(dsmCurrentSidAtom),
+  (_get, set, newStr: string) => {
+    set(dsmCurrentSidAtom, newStr);
+    window.electron.store.set('dsmCurrentSid', newStr);
   }
 );
 

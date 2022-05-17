@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
+import { find } from 'lodash';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -16,11 +17,7 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import {
-  dsmConnectIndexAtomWithPersistence,
-  dsmConnectListAtomWithPersistence,
-  dsmInfoAtom,
-} from '../atoms/yaddsAtoms';
+import { dsmConnectListAtomWithPersistence, dsmCurrentSidAtomWithPersistence, dsmInfoAtom } from '../atoms/yaddsAtoms';
 
 const OS_PLATFORM = window.electron?.getOS();
 
@@ -75,7 +72,7 @@ const Server: React.FC = () => {
   const { t } = useTranslation();
 
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [dsmInfo, setDsmInfo] = useAtom(dsmInfoAtom);
 
   const [select, setSelect] = useState(0);
@@ -128,10 +125,16 @@ const Server: React.FC = () => {
   ];
 
   const getDsmInfo = async () => {
+    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+
+    if (currentUser === undefined) {
+      return;
+    }
+
     const resp = await window.electron.net.getDsmInfo({
-      host: dsmConnectList[dsmConnectIndex]?.host,
-      port: dsmConnectList[dsmConnectIndex]?.port,
-      sid: dsmConnectList[dsmConnectIndex]?.sid,
+      host: currentUser.host,
+      port: currentUser.port,
+      sid: currentUser.sid,
     });
 
     if (!resp.success) {
@@ -149,10 +152,6 @@ const Server: React.FC = () => {
       });
     }
   };
-
-  useEffect(() => {
-    getDsmInfo();
-  }, []);
 
   return (
     <Box>

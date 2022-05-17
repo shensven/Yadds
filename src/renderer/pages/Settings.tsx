@@ -44,8 +44,8 @@ import gnome_appearance_light from '../assets/Settings/gnome_appearance_light.pn
 import gnome_appearance_dark from '../assets/Settings/gnome_appearance_dark.png';
 import gnome_appearance_follow_system from '../assets/Settings/gnome_appearance_follow_system.png';
 import {
-  dsmConnectIndexAtomWithPersistence,
   dsmConnectListAtomWithPersistence,
+  dsmCurrentSidAtomWithPersistence,
   hasYaddsSidebarAtomWithPersistence,
   hasYaddsSidebarMarginTopAtom,
   isYaddsAutoLaunchAtomWithPersistence,
@@ -135,7 +135,7 @@ const Settings: React.FC = () => {
   const [isYaddsAutoLaunch, persistIsYaddsAutoLaunch] = useAtom(isYaddsAutoLaunchAtomWithPersistence);
   const [isYaddsAutoUpdate, persistIsYaddsAutoUpdate] = useAtom(isYaddsAutoUpdateAtomWithPersistence);
   const [dsmConnectList, persistDsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmConnectIndex, persistDsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [dsmCurrentSid, persistDsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [, setTasksStatus] = useAtom(tasksStatusAtom);
 
   const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
@@ -191,14 +191,14 @@ const Settings: React.FC = () => {
     { languageCode: 'ja_JP', label: '日本語' },
   ];
 
-  const handleSelectQcOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
+  const handleSelectQcOnChange = (sid: string, menuItemIndex: number, isDelete: boolean) => {
     if (isDelete) {
-      setWhoWillRemove(menuItemAddressIndex);
+      setWhoWillRemove(menuItemIndex);
       setIsSelectQcOpen(false);
       setHasDialogDelete(true);
       return;
     }
-    persistDsmConnectIndex(menuItemAddressIndex);
+    persistDsmCurrentSid(sid);
     setIsSelectQcOpen(false);
   };
 
@@ -236,18 +236,26 @@ const Settings: React.FC = () => {
   };
 
   const handleRemove = () => {
-    // if (dsmConnectList.length === 1) {
-    //   persistDsmConnectList([]);
-    //   persistDsmConnectIndex(-1);
-    // } else if (whoWillRemove === 0) {
-    //   persistDsmConnectIndex(whoWillRemove + 1);
-    //   const arr = [...dsmConnectList];
-    //   arr.splice(whoWillRemove, 1);
-    //   persistDsmConnectList(arr);
-    // } else {
-    //   persistDsmConnectIndex(whoWillRemove);
-    // }
-    // setHasDialogDelete(false);
+    if (dsmConnectList.length === 1) {
+      persistDsmCurrentSid('');
+      persistDsmConnectList([]);
+    } else if (whoWillRemove === dsmConnectList.length - 1) {
+      const prevUser = dsmConnectList[whoWillRemove - 1];
+      persistDsmCurrentSid(prevUser.sid);
+
+      const arr = [...dsmConnectList];
+      arr.splice(whoWillRemove, 1);
+      persistDsmConnectList(arr);
+    } else {
+      const nextUser = dsmConnectList[whoWillRemove + 1];
+      persistDsmCurrentSid(nextUser.sid);
+
+      const arr = [...dsmConnectList];
+      arr.splice(whoWillRemove, 1);
+      persistDsmConnectList(arr);
+    }
+
+    setHasDialogDelete(false);
   };
 
   const handleAuth = async () => {
@@ -328,7 +336,7 @@ const Settings: React.FC = () => {
         sid: resp.data.sid,
       });
       persistDsmConnectList(arr);
-      persistDsmConnectIndex(dsmConnectList.length);
+      persistDsmCurrentSid(resp.data.sid);
       dismissDailogAdd();
       setTasksStatus({ isLoading: false, retry: 0 });
     }
@@ -390,12 +398,12 @@ const Settings: React.FC = () => {
               <Select
                 size="small"
                 displayEmpty
-                value={dsmConnectList[dsmConnectIndex]?.sid ?? ''}
+                value={dsmCurrentSid}
                 renderValue={() => (
                   <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {dsmConnectList[dsmConnectIndex]?.username ?? 'null'}
+                    {find(dsmConnectList, { sid: dsmCurrentSid })?.username ?? 'undefined'}
                     {' @ '}
-                    {dsmConnectList[dsmConnectIndex]?.quickConnectID ?? 'null'}
+                    {find(dsmConnectList, { sid: dsmCurrentSid })?.quickConnectID ?? 'undefined'}
                   </Typography>
                 )}
                 disabled={dsmConnectList.length === 0}
@@ -412,11 +420,14 @@ const Settings: React.FC = () => {
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectQcOnChange(index, false)}
+                        onClick={() => handleSelectQcOnChange(item.sid, index, false)}
                       >
                         {item.username} @ {item.quickConnectID}
                       </Typography>
-                      <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleSelectQcOnChange(index, true)}>
+                      <IconButton
+                        sx={{ width: 20, height: 20 }}
+                        onClick={() => handleSelectQcOnChange(item.sid, index, true)}
+                      >
                         <IonTrashOutline sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Stack>

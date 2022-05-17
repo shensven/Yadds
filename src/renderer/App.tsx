@@ -5,9 +5,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { useAtom } from 'jotai';
+import { find } from 'lodash';
 import {
-  dsmConnectIndexAtomWithPersistence,
   dsmConnectListAtomWithPersistence,
+  dsmCurrentSidAtomWithPersistence,
   dsmInfoAtom,
   tasksAtom,
   tasksRetry,
@@ -26,16 +27,18 @@ const App: React.FC = () => {
   const [TASKS_RETRY] = useAtom(tasksRetry);
   const [yaddsAppearance] = useAtom(yaddsAppearanceAtomWithPersistence);
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmConnectIndex] = useAtom(dsmConnectIndexAtomWithPersistence);
+  const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [, setTasks] = useAtom(tasksAtom);
   const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
   const [, setDsmInfo] = useAtom(dsmInfoAtom);
 
   const handleTasks = async () => {
+    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+
     const resp = await window.electron.net.poll({
-      host: dsmConnectList[dsmConnectIndex]?.host,
-      port: dsmConnectList[dsmConnectIndex]?.port,
-      sid: dsmConnectList[dsmConnectIndex]?.sid,
+      host: currentUser!.host,
+      port: currentUser!.port,
+      sid: currentUser!.sid,
     });
 
     if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
@@ -57,10 +60,12 @@ const App: React.FC = () => {
   };
 
   const getDsmInfo = async () => {
+    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+
     const resp = await window.electron.net.getDsmInfo({
-      host: dsmConnectList[dsmConnectIndex]?.host,
-      port: dsmConnectList[dsmConnectIndex]?.port,
-      sid: dsmConnectList[dsmConnectIndex]?.sid,
+      host: currentUser!.host,
+      port: currentUser!.port,
+      sid: currentUser!.sid,
     });
 
     if (!resp.success) {
@@ -80,7 +85,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!dsmConnectList[dsmConnectIndex]) {
+    if (dsmCurrentSid.length === 0) {
       setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
       return undefined;
@@ -102,7 +107,7 @@ const App: React.FC = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [dsmConnectList[dsmConnectIndex], tasksStatus.retry]);
+  }, [dsmCurrentSid, tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (yaddsAppearance) {
