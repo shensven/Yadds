@@ -35,7 +35,7 @@
     "network_diagnosis": "ネットワーク診断",
     "ping": "Ping",
     "synology_nas": "Synology NAS",
-    "dsm_version": "DSM バージョン",
+    "dsm_version": "DSMバージョン",
     "quota": "Quota",
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
@@ -73,12 +73,12 @@
       "yes": "YES"
     },
     "snackbar": {
-      "invalid_quickconnect_id": "Invalid QuickConnect ID",
-      "wrong_account_or_password": "Wrong account or password",
       "timeout": "Timeout",
       "invalid_request": "Invalid request",
       "unknown_error": "Unknown error",
-      "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist"
+      "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist",
+      "wrong_account_or_password": "Wrong account or password",
+      "invalid_quickconnect_id": "Invalid QuickConnect ID"
     }
   },
   "application_menu": {
