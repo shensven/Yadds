@@ -18,7 +18,7 @@ export interface PingPongError {
 
 const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
   // 5001
-  // const PORT = serverInfo.service?.port as number;
+  const PORT = serverInfo.service?.port as number;
 
   // 65500
   // const EXT_PORT = serverInfo.service?.ext_port as number;
@@ -26,17 +26,20 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
   // /webman/pingpong.cgi?action=cors&quickconnect=true
   const PINGPONG_PATH = serverInfo.server?.pingpong_path as string;
 
+  // cn3.quickconnect.cn
+  const RELAY_HOST = `${serverInfo.env?.relay_region}.${serverInfo.env?.control_host.split('.').slice(-2).join('.')}`;
+
+  // DDNS
+  const DDNS = serverInfo.server?.ddns as string;
+
   // 192-168-x-xxx.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
-  // const SMART_LAN = serverInfo.smartdns?.lan as string[];
+  const SMART_LAN = serverInfo.smartdns?.lan as string[];
 
   // syn6-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.YOUR-QUICKCONNECT-ID.direct.quickconnect.to
-  // const SMART_LAN_V6 = serverInfo.smartdns?.lanv6 as string[];
+  const SMART_LAN_V6 = serverInfo.smartdns?.lanv6 as string[];
 
   // YOUR-QUICKCONNECT-ID.direct.quickconnect.to
   // const SMART_HOST = serverInfo.smartdns?.host as string;
-
-  // cn3.quickconnect.cn
-  const RELAY_HOST = `${serverInfo.env?.relay_region}.${serverInfo.env?.control_host.split('.').slice(-2).join('.')}`;
 
   // 192.168.x.xxx
   // const LAN_IP = serverInfo.server?.interface[0].ip as string;
@@ -100,34 +103,29 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
     });
   };
 
-  const ADDRESS_SETS: {
-    url: string;
-    port: number;
-  }[] = [];
+  const ADDRESS_SETS: { url: string; port: number }[] = [];
 
-  // if (SMART_LAN.length > 0) {
-  //   SMART_LAN.forEach((lan: string) => {
-  //     ADDRESS_SETS.push({ url: lan, port: PORT });
-  //   });
-  // }
+  ADDRESS_SETS.push({ url: `${quickConnectID}.${RELAY_HOST}`, port: 443 });
 
-  // if (SMART_LAN_V6.length > 0) {
-  //   SMART_LAN_V6.forEach((lanv6: string) => {
-  //     ADDRESS_SETS.push({
-  //       url: lanv6,
-  //       port: PORT,
-  //     });
+  if (DDNS !== 'NULL') {
+    ADDRESS_SETS.push({ url: DDNS, port: PORT });
+  }
 
-  //     ADDRESS_SETS.push({
-  //       url: lanv6,
-  //       port: EXT_PORT,
-  //     });
-  //   });
-  // }
+  if (SMART_LAN.length > 0) {
+    SMART_LAN.forEach((lan: string) => {
+      ADDRESS_SETS.push({ url: lan, port: PORT });
+    });
+  }
+
+  if (SMART_LAN_V6.length > 0) {
+    SMART_LAN_V6.forEach((lanv6: string) => {
+      ADDRESS_SETS.push({ url: lanv6, port: PORT });
+      // ADDRESS_SETS.push({ url: lanv6, port: EXT_PORT });
+    });
+  }
 
   // ADDRESS_SETS.push({ url: SMART_HOST, port: PORT });
   // ADDRESS_SETS.push({ url: SMART_HOST, port: EXT_PORT });
-  ADDRESS_SETS.push({ url: `${quickConnectID}.${RELAY_HOST}`, port: 443 });
 
   const INSTANCE_SETS = ADDRESS_SETS.map(({ url, port }) => {
     return newInstance(url, port);
