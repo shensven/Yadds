@@ -169,7 +169,7 @@ export const dsmConnectListAtomWithPersistence = atom(
   }
 );
 
-const dsmConnectIndexAtom = atom<number>(0);
+const dsmConnectIndexAtom = atom<number>(-1);
 export const dsmConnectIndexAtomWithPersistence = atom(
   (get) => get(dsmConnectIndexAtom),
   (_get, set, newNum: number) => {

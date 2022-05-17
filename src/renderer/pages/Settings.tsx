@@ -25,6 +25,7 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import { useAtom } from 'jotai';
+import { find } from 'lodash';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
@@ -154,6 +155,8 @@ const Settings: React.FC = () => {
     showPassword: false,
   });
 
+  const [whoWillRemove, setWhoWillRemove] = useState<number>(-1);
+
   interface YaddsAppearanceObj {
     yaddsAppearance: YaddsAppearance;
     label: string;
@@ -190,8 +193,9 @@ const Settings: React.FC = () => {
 
   const handleSelectQcOnChange = (menuItemAddressIndex: number, isDelete: boolean) => {
     if (isDelete) {
-      setHasDialogDelete(true);
+      setWhoWillRemove(menuItemAddressIndex);
       setIsSelectQcOpen(false);
+      setHasDialogDelete(true);
       return;
     }
     persistDsmConnectIndex(menuItemAddressIndex);
@@ -205,6 +209,11 @@ const Settings: React.FC = () => {
     window.electron.setAppMenu(appMenuItemLabel);
     window.electron.setTray(t);
     setIsSelectI18nOpen(false);
+  };
+
+  const dismissDialogRemove = () => {
+    setHasDialogDelete(false);
+    setWhoWillRemove(-1);
   };
 
   const dismissDailogAdd = () => {
@@ -221,17 +230,32 @@ const Settings: React.FC = () => {
     setFormErr({ address: false, username: false, password: false });
   };
 
-  const dismissDaialogDelete = () => {
-    setHasDialogDelete(false);
-  };
-
   const dismissSnackbar = () => {
     setSnackbar({ show: false, errorInfo: '' });
     setFormErr({ address: false, username: false, password: false });
   };
 
+  const handleRemove = () => {
+    // if (dsmConnectList.length === 1) {
+    //   persistDsmConnectList([]);
+    //   persistDsmConnectIndex(-1);
+    // } else if (whoWillRemove === 0) {
+    //   persistDsmConnectIndex(whoWillRemove + 1);
+    //   const arr = [...dsmConnectList];
+    //   arr.splice(whoWillRemove, 1);
+    //   persistDsmConnectList(arr);
+    // } else {
+    //   persistDsmConnectIndex(whoWillRemove);
+    // }
+    // setHasDialogDelete(false);
+  };
+
   const handleAuth = async () => {
-    if (newConnect.connectAddress.length === 0) {
+    if (
+      newConnect.connectAddress.length === 0 ||
+      !/(^[a-zA-Z])/.test(newConnect.connectAddress) ||
+      /-$/.test(newConnect.connectAddress)
+    ) {
       setSnackbar({
         show: true,
         errorInfo: t('settings.snackbar.invalid_quickconnect_id'),
@@ -246,6 +270,20 @@ const Settings: React.FC = () => {
         errorInfo: t('settings.snackbar.wrong_account_or_password'),
       });
       setFormErr({ ...formErr, username: true, password: true });
+      return;
+    }
+
+    if (
+      find(dsmConnectList, {
+        quickConnectID: newConnect.connectAddress,
+        username: newConnect.username,
+      })
+    ) {
+      setSnackbar({
+        show: true,
+        errorInfo: t('settings.snackbar.no_duplicate_logins_allowed'),
+      });
+      setFormErr({ ...formErr, address: true, username: true });
       return;
     }
 
@@ -265,7 +303,12 @@ const Settings: React.FC = () => {
         errorInfo: t(`settings.snackbar.${resp.errorInfoSummary}`),
       });
 
+      setLoadingInDialogAdd(false);
+
       switch (resp.errorInfoSummary) {
+        case 'unknown_error':
+          setFormErr({ address: true, username: true, password: true });
+          break;
         case 'quickconnect_id_is_incorrect_or_does_not_exist':
           setFormErr({ ...formErr, address: true });
           break;
@@ -273,10 +316,7 @@ const Settings: React.FC = () => {
           setFormErr({ ...formErr, username: true, password: true });
           break;
         default:
-          return;
       }
-
-      setLoadingInDialogAdd(false);
     } else {
       const arr = [...dsmConnectList];
       arr.push({
@@ -288,11 +328,9 @@ const Settings: React.FC = () => {
         sid: resp.data.sid,
       });
       persistDsmConnectList(arr);
+      persistDsmConnectIndex(dsmConnectList.length);
       dismissDailogAdd();
-      setTasksStatus({
-        isLoading: false,
-        retry: 0,
-      });
+      setTasksStatus({ isLoading: false, retry: 0 });
     }
   };
 
@@ -568,7 +606,7 @@ const Settings: React.FC = () => {
                   <InputAdornment position="start">{newConnect.isHttps ? 'https://' : 'http://'}</InputAdornment>
                 ),
               }}
-              onChange={(evt) => setNewConnect({ ...newConnect, connectAddress: evt.target.value })}
+              onChange={(evt) => setNewConnect({ ...newConnect, connectAddress: evt.target.value.replace(/\s/g, '') })}
               onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
             />
             <FormControlLabel
@@ -586,7 +624,7 @@ const Settings: React.FC = () => {
               label={t('settings.dialog_add.username')}
               value={newConnect.username}
               InputLabelProps={{ sx: { fontSize: 14 } }}
-              onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value })}
+              onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value.replace(/\s/g, '') })}
               onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
             />
             <TextField
@@ -654,7 +692,7 @@ const Settings: React.FC = () => {
       </Dialog>
 
       {/* Confirm Remove */}
-      <Dialog open={hasDialogDelete} onClose={() => dismissDaialogDelete()}>
+      <Dialog open={hasDialogDelete} onClose={() => dismissDialogRemove()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
             <Typography>{t('settings.dialog_remove.confirm_remove')}</Typography>
@@ -667,17 +705,10 @@ const Settings: React.FC = () => {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button color="inherit" onClick={() => dismissDaialogDelete()}>
+          <Button color="inherit" onClick={() => dismissDialogRemove()}>
             {t('settings.dialog_remove.cancel')}
           </Button>
-          <Button
-            color="error"
-            onClick={() => {
-              persistDsmConnectList([]);
-              persistDsmConnectIndex(0);
-              dismissDaialogDelete();
-            }}
-          >
+          <Button color="error" onClick={() => handleRemove()}>
             {t('settings.dialog_remove.yes')}
           </Button>
         </DialogActions>
