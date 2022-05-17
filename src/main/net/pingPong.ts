@@ -1,4 +1,5 @@
 import { net } from 'electron';
+import { ErrorInfoSummary } from './ErrorInfoSummary';
 import { ServerInfo } from './getServerInfo';
 
 export interface PingPongInfo {
@@ -11,7 +12,7 @@ export interface PingPongInfo {
 export interface PingPongError {
   success: false;
   quickConnectID: string;
-  errorInfoSummary: string;
+  errorInfoSummary: ErrorInfoSummary;
   errorInfoDetail: string;
 }
 

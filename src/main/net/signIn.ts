@@ -1,11 +1,12 @@
 import { net } from 'electron';
 import queryString from 'query-string';
+import { ErrorInfoSummary } from './ErrorInfoSummary';
 import { PingPongInfo } from './pingPong';
 
 export interface SignInError {
   success: false;
   quickConnectID: string;
-  errorInfoSummary: string;
+  errorInfoSummary: ErrorInfoSummary;
   errorInfoDetail: string;
 }
 

@@ -1,4 +1,5 @@
 import { net } from 'electron';
+import { ErrorInfoSummary } from './ErrorInfoSummary';
 
 export interface ServerInfo {
   version: number;
@@ -60,7 +61,7 @@ export interface ServerInfo {
 export interface ServerError {
   success: false;
   quickConnectID: string;
-  errorInfoSummary: string;
+  errorInfoSummary: ErrorInfoSummary;
   errorInfoDetail: string;
 }
 
@@ -134,7 +135,7 @@ const queryCoordinator = async (quickConnectID: string, controlHost?: string) =>
   });
 };
 
-const getServerInfo = async (quickConnectID: string) => {
+const getServerInfo = async (quickConnectID: string): Promise<ServerInfo | ServerError> => {
   const respViaGlobal = await queryCoordinator(quickConnectID);
 
   // When any errors are returned

@@ -81,7 +81,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (!dsmConnectList[dsmConnectIndex]) {
-      console.log('renderer: undefined dsmConnectList[dsmConnectIndex]');
       setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
       return undefined;

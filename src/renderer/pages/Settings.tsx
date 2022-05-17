@@ -143,11 +143,7 @@ const Settings: React.FC = () => {
   const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useState({ show: false, errorInfo: '' });
-  const [formErr] = useState({
-    address: false,
-    username: false,
-    password: false,
-  });
+  const [formErr, setFormErr] = useState({ address: false, username: false, password: false });
 
   const [newConnect, setNewConnect] = useState({
     isQuickConnectID: true,
@@ -222,6 +218,7 @@ const Settings: React.FC = () => {
       password: '',
       showPassword: false,
     });
+    setFormErr({ address: false, username: false, password: false });
   };
 
   const dismissDaialogDelete = () => {
@@ -230,49 +227,8 @@ const Settings: React.FC = () => {
 
   const dismissSnackbar = () => {
     setSnackbar({ show: false, errorInfo: '' });
+    setFormErr({ address: false, username: false, password: false });
   };
-
-  // const handleAuthErrTitle = () => {
-  //   if (newConnect.isQuickConnectID) {
-  //     switch (snackbar.errCode) {
-  //       case '01':
-  //         return t('settings.snackbar.access_denied');
-  //       case '02':
-  //         return t('settings.snackbar.access_denied');
-  //       case '024':
-  //         return t('settings.snackbar.access_denied');
-  //       case '03':
-  //         return t('settings.snackbar.request_timeout');
-  //       case '04':
-  //         return t('settings.snackbar.access_denied');
-  //       default:
-  //         return t('settings.snackbar.access_denied');
-  //     }
-  //   } else {
-  //     return t('settings.snackbar.access_denied');
-  //   }
-  // };
-
-  // const handleAuthErrDesc = () => {
-  //   if (newConnect.isQuickConnectID) {
-  //     switch (snackbar.errCode) {
-  //       case '01':
-  //         return t('settings.snackbar.invalid_quickconnect_id');
-  //       case '02':
-  //         return t('settings.snackbar.unable_to_connect_to_quickconnect_coordinator');
-  //       case '024':
-  //         return t('settings.snackbar.invalid_quickconnect_id');
-  //       case '03':
-  //         return `${t('settings.snackbar.unable_to_connect_to')} ${newConnect.connectAddress}`;
-  //       case '04':
-  //         return t('settings.snackbar.wrong_account_or_password');
-  //       default:
-  //         return '';
-  //     }
-  //   } else {
-  //     return '';
-  //   }
-  // };
 
   const handleAuth = async () => {
     if (newConnect.connectAddress.length === 0) {
@@ -280,6 +236,7 @@ const Settings: React.FC = () => {
         show: true,
         errorInfo: t('settings.snackbar.invalid_quickconnect_id'),
       });
+      setFormErr({ ...formErr, address: true });
       return;
     }
 
@@ -288,6 +245,7 @@ const Settings: React.FC = () => {
         show: true,
         errorInfo: t('settings.snackbar.wrong_account_or_password'),
       });
+      setFormErr({ ...formErr, username: true, password: true });
       return;
     }
 
@@ -306,6 +264,18 @@ const Settings: React.FC = () => {
         show: true,
         errorInfo: t(`settings.snackbar.${resp.errorInfoSummary}`),
       });
+
+      switch (resp.errorInfoSummary) {
+        case 'quickconnect_id_is_incorrect_or_does_not_exist':
+          setFormErr({ ...formErr, address: true });
+          break;
+        case 'wrong_account_or_password':
+          setFormErr({ ...formErr, username: true, password: true });
+          break;
+        default:
+          return;
+      }
+
       setLoadingInDialogAdd(false);
     } else {
       const arr = [...dsmConnectList];
