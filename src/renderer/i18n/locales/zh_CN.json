@@ -67,8 +67,8 @@
       "ok": "确定"
     },
     "dialog_remove": {
-      "confirm_remove": "确认移除",
-      "are_you_sure": "您确定登出并断开与 DSM 的连接？",
+      "confirm_remove": "再次确认",
+      "are_you_sure": "您确定登出并断开与 DSM 的连接吗？",
       "cancel": "取消",
       "yes": "确定"
     },
@@ -78,7 +78,8 @@
       "unknown_error": "未知错误",
       "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID 不存在或不正确",
       "wrong_account_or_password": "帐号或密码错误",
-      "invalid_quickconnect_id": "无效的 QuickConnect ID"
+      "invalid_quickconnect_id": "无效的 QuickConnect ID",
+      "no_duplicate_logins_allowed": "不允许重复登录"
     }
   },
   "application_menu": {
