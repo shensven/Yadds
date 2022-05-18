@@ -102,6 +102,17 @@ const queryCoordinator = async (quickConnectID: string, controlHost?: string) =>
       });
     }, 5000);
 
+    request.on('error', () => {
+      resolve({
+        success: false,
+        quickConnectID,
+        errorInfoSummary: 'invalid_request',
+        errorInfoDetail: `[Get Server Info] [Invalid Request] https://${
+          controlHost ?? 'global.quickconnect.to'
+        }/Serv.php`,
+      });
+    });
+
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
         try {
@@ -117,17 +128,6 @@ const queryCoordinator = async (quickConnectID: string, controlHost?: string) =>
             }/Serv.php`,
           });
         }
-      });
-    });
-
-    request.on('error', () => {
-      resolve({
-        success: false,
-        quickConnectID,
-        errorInfoSummary: 'invalid_request',
-        errorInfoDetail: `[Get Server Info] [Invalid Request] https://${
-          controlHost ?? 'global.quickconnect.to'
-        }/Serv.php`,
       });
     });
 

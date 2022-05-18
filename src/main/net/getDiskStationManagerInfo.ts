@@ -48,6 +48,11 @@ const getDiskStationManagerInfo = (args: { host: string; port: number; sid: stri
       resolve({ success: false });
     }, 3000);
 
+    request.on('error', () => {
+      console.log(`main: bad request https://${host}/webapi/entry.cgi?${queryString.stringify(params)}`);
+      resolve({ success: false });
+    });
+
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
         try {
@@ -57,11 +62,6 @@ const getDiskStationManagerInfo = (args: { host: string; port: number; sid: stri
           resolve({ success: false });
         }
       });
-    });
-
-    request.on('error', () => {
-      console.log(`main: bad request https://${host}/webapi/entry.cgi?${queryString.stringify(params)}`);
-      resolve({ success: false });
     });
 
     request.end();

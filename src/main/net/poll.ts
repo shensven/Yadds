@@ -89,6 +89,11 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
       resolve({ success: false });
     }, 3000);
 
+    request.on('error', () => {
+      console.log(`main: bad request https://${host}/webapi/DownloadStation/task.cgi?${queryString.stringify(params)}`);
+      resolve({ success: false });
+    });
+
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
         try {
@@ -98,11 +103,6 @@ async function requestTasks(args: { host: string; port: number; sid: string }) {
           resolve({ success: false });
         }
       });
-    });
-
-    request.on('error', () => {
-      console.log(`main: bad request https://${host}/webapi/DownloadStation/task.cgi?${queryString.stringify(params)}`);
-      resolve({ success: false });
     });
 
     request.end();
@@ -140,6 +140,11 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
       resolve({ success: false });
     }, 3000);
 
+    request.on('error', () => {
+      console.log(`main: bad request https://${host}/webapi/DownloadStation/task.cgi?${queryString.stringify(params)}`);
+      resolve({ success: false });
+    });
+
     request.on('response', (response: Electron.IncomingMessage) => {
       response.on('data', (chunk: Buffer) => {
         try {
@@ -156,11 +161,6 @@ async function requestTasksDetail(args: { host: string; port: number; sid: strin
           resolve({ success: false });
         }
       });
-    });
-
-    request.on('error', () => {
-      console.log(`main: bad request https://${host}/webapi/DownloadStation/task.cgi?${queryString.stringify(params)}`);
-      resolve({ success: false });
     });
 
     request.end();

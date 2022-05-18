@@ -72,6 +72,15 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
         });
       }, 5000);
 
+      request.on('error', () => {
+        resolve({
+          success: false,
+          quickConnectID,
+          errorInfoSummary: 'invalid_request',
+          errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
+        });
+      });
+
       request.on('response', (response: Electron.IncomingMessage) => {
         response.on('data', (chunk: Buffer) => {
           try {
@@ -87,15 +96,6 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
               errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
             });
           }
-        });
-      });
-
-      request.on('error', () => {
-        resolve({
-          success: false,
-          quickConnectID,
-          errorInfoSummary: 'invalid_request',
-          errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
         });
       });
 
