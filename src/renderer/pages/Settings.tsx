@@ -43,6 +43,8 @@ import linux_appearance_follow_system from '../assets/Settings/linux_appearance_
 import gnome_appearance_light from '../assets/Settings/gnome_appearance_light.png';
 import gnome_appearance_dark from '../assets/Settings/gnome_appearance_dark.png';
 import gnome_appearance_follow_system from '../assets/Settings/gnome_appearance_follow_system.png';
+import IonLogoTwitter from '../components/icons/IonLogoTwitter';
+import IonLogoGithub from '../components/icons/IonLogoGithub';
 import {
   dsmConnectListAtomWithPersistence,
   dsmCurrentSidAtomWithPersistence,
@@ -528,19 +530,19 @@ const Settings: React.FC = () => {
                 {t('settings.this_copy_is_licensed_under_GPL_3_0')}
               </Typography>
             </Stack>
-            <Stack flexDirection="row" mt={theme.spacing(1)}>
+            <Stack flexDirection="row" alignItems="center" mt={theme.spacing(1)}>
               <Typography variant="subtitle2">{t('settings.devoloper')}</Typography>
-              <Typography
-                variant="subtitle2"
-                color={theme.palette.primary.main}
-                sx={{
-                  ml: theme.spacing(1),
-                  '&:hover': { opacity: 0.5 },
-                }}
-                onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
-              >
+              <Typography variant="subtitle2" color={theme.palette.text.secondary} sx={{ ml: theme.spacing(1) }}>
                 @SvenFE
               </Typography>
+              <IonLogoTwitter
+                sx={{ fontSize: 17, color: '#1DA1F2', ml: theme.spacing(1), '&:hover': { opacity: 0.5 } }}
+                onClick={() => window.electron.openViaBrowser('https://twitter.com/shensven2016')}
+              />
+              <IonLogoGithub
+                sx={{ fontSize: 17, color: '#333333', ml: theme.spacing(1), '&:hover': { opacity: 0.5 } }}
+                onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
+              />
             </Stack>
             <FormHelperText>Made with ❤️ in Kunming</FormHelperText>
           </FormGroup>
