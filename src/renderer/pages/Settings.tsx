@@ -299,48 +299,65 @@ const Settings: React.FC = () => {
 
     setLoadingInDialogAdd(true);
 
-    const resp = await window.electron.net.auth({
-      quickConnectID: newConnect.connectAddress,
-      account: newConnect.username,
-      passwd: newConnect.password,
-    });
+    try {
+      const resp = await window.electron.net.auth({
+        quickConnectID: newConnect.connectAddress,
+        account: newConnect.username,
+        passwd: newConnect.password,
+      });
 
-    console.log('auth', resp);
+      if ('command' in resp) {
+        if (resp.errno === 4 && resp.suberrno === 1) {
+          setSnackbar({
+            show: true,
+            errorInfo: t('settings.snackbar.quickconnect_id_is_incorrect_or_does_not_exist'),
+          });
+          setLoadingInDialogAdd(false);
+          setFormErr({ ...formErr, address: true });
+          console.log(resp);
+        }
 
-    if (!resp.success) {
+        if (resp.errno === 30) {
+          setSnackbar({
+            show: true,
+            errorInfo: `${t('settings.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
+          });
+          setLoadingInDialogAdd(false);
+          setFormErr({ ...formErr, address: true });
+        }
+      }
+
+      if ('success' in resp) {
+        if (!resp.success && resp.error.code === 400) {
+          setSnackbar({
+            show: true,
+            errorInfo: t('settings.snackbar.wrong_account_or_password'),
+          });
+          setLoadingInDialogAdd(false);
+          setFormErr({ ...formErr, username: true, password: true });
+        } else if (resp.success && resp.data.did.length > 0) {
+          const arr = [...dsmConnectList];
+          arr.push({
+            host: resp.hostname,
+            port: resp.port,
+            quickConnectID: resp.quickConnectID,
+            username: newConnect.username,
+            did: resp.data.did,
+            sid: resp.data.sid,
+          });
+          persistDsmConnectList(arr);
+          persistDsmCurrentSid(resp.data.sid);
+          dismissDailogAdd();
+          setTasksStatus({ isLoading: false, retry: 0 });
+        }
+      }
+    } catch {
       setSnackbar({
         show: true,
-        errorInfo: t(`settings.snackbar.${resp.errorInfoSummary}`),
+        errorInfo: `${t('settings.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
       });
-
       setLoadingInDialogAdd(false);
-
-      switch (resp.errorInfoSummary) {
-        case 'unknown_error':
-          setFormErr({ address: true, username: true, password: true });
-          break;
-        case 'quickconnect_id_is_incorrect_or_does_not_exist':
-          setFormErr({ ...formErr, address: true });
-          break;
-        case 'wrong_account_or_password':
-          setFormErr({ ...formErr, username: true, password: true });
-          break;
-        default:
-      }
-    } else {
-      const arr = [...dsmConnectList];
-      arr.push({
-        host: resp.hostname,
-        port: resp.port,
-        quickConnectID: resp.quickConnectID,
-        username: newConnect.username,
-        did: resp.data.did,
-        sid: resp.data.sid,
-      });
-      persistDsmConnectList(arr);
-      persistDsmCurrentSid(resp.data.sid);
-      dismissDailogAdd();
-      setTasksStatus({ isLoading: false, retry: 0 });
+      setFormErr({ ...formErr, address: true });
     }
   };
 

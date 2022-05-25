@@ -1,22 +1,14 @@
 import { net } from 'electron';
-import { ErrorInfoSummary } from './ErrorInfoSummary';
 import { ServerInfo } from './getServerInfo';
 
 export interface PingPongInfo {
-  success: boolean;
+  success: true;
+  ezid: string;
   hostname: string;
   port: number;
-  ezid?: string;
 }
 
-export interface PingPongError {
-  success: false;
-  quickConnectID: string;
-  errorInfoSummary: ErrorInfoSummary;
-  errorInfoDetail: string;
-}
-
-const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
+const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
   // 5001
   const PORT = serverInfo.service?.port as number;
 
@@ -47,7 +39,7 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
   // 221.213.xxx.xxx
   // const WAN_IP = serverInfo.server?.external.ip as string;
 
-  const newInstance = async (hostname: string, port: number) => {
+  const newInstance = (hostname: string, port: number) => {
     const options = {
       method: 'GET',
       protocol: 'https:',
@@ -59,43 +51,31 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
       },
     };
 
-    return new Promise<PingPongInfo | PingPongError>((resolve) => {
+    return new Promise<PingPongInfo>((resolve, reject) => {
       const request = net.request(options);
 
       setTimeout(() => {
         request.abort();
-        resolve({
-          success: false,
-          quickConnectID,
-          errorInfoSummary: 'timeout',
-          errorInfoDetail: `[PingPong] [Timeout] https://${hostname}:${port}`,
-        });
+        reject(new Error(`[PingPong] [Timeout] https://${hostname}:${port}`));
       }, 5000);
 
-      request.on('error', () => {
-        resolve({
-          success: false,
-          quickConnectID,
-          errorInfoSummary: 'invalid_request',
-          errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
-        });
-      });
+      request.on('error', reject);
 
       request.on('response', (response: Electron.IncomingMessage) => {
+        const data: Uint8Array[] | Buffer[] = [];
+
         response.on('data', (chunk: Buffer) => {
-          try {
-            const parsed: PingPongInfo = JSON.parse(chunk.toString());
-            parsed.hostname = hostname;
-            parsed.port = port;
-            resolve(parsed);
-          } catch {
-            resolve({
-              success: false,
-              quickConnectID,
-              errorInfoSummary: 'invalid_request',
-              errorInfoDetail: `[PingPong] [Invalid Request] https://${hostname}:${port}`,
-            });
-          }
+          data.push(chunk);
+        });
+
+        response.on('end', () => {
+          const json = Buffer.concat(data).toString();
+          const parsed = JSON.parse(json);
+
+          parsed.hostname = hostname;
+          parsed.port = port;
+
+          resolve(parsed);
         });
       });
 
@@ -131,7 +111,7 @@ const pingPong = (quickConnectID: string, serverInfo: ServerInfo) => {
     return newInstance(url, port);
   });
 
-  return Promise.race(INSTANCE_SETS);
+  return Promise.any(INSTANCE_SETS);
 };
 
 export default pingPong;

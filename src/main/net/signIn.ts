@@ -1,14 +1,6 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { ErrorInfoSummary } from './ErrorInfoSummary';
 import { PingPongInfo } from './pingPong';
-
-export interface SignInError {
-  success: false;
-  quickConnectID: string;
-  errorInfoSummary: ErrorInfoSummary;
-  errorInfoDetail: string;
-}
 
 export interface SignInWrongAccountOrPasswd {
   success: false;
@@ -50,66 +42,32 @@ const signIn = (quickConnectID: string, pingPongInfo: PingPongInfo, account: str
     },
   };
 
-  return new Promise<SignInInfo | SignInError>((resolve) => {
+  return new Promise<SignInInfo | SignInWrongAccountOrPasswd>((resolve, reject) => {
     const request = net.request(options);
 
     setTimeout(() => {
       request.abort();
-      resolve({
-        success: false,
-        quickConnectID,
-        errorInfoSummary: 'timeout',
-        errorInfoDetail: `[SYNO.API.Auth] [Timeout] https://${hostname}:${port}`,
-      });
+      reject(new Error(`[SYNO.API.Auth] [Timeout] https://${hostname}:${port}`));
     }, 10000);
 
-    request.on('error', () => {
-      resolve({
-        success: false,
-        quickConnectID,
-        errorInfoSummary: 'invalid_request',
-        errorInfoDetail: `[SYNO.API.Auth] [Invalid Request] https://${hostname}:${port}`,
-      });
-    });
+    request.on('error', reject);
 
     request.on('response', (response: Electron.IncomingMessage) => {
+      const data: Uint8Array[] | Buffer[] = [];
+
       response.on('data', (chunk: Buffer) => {
-        try {
-          const parsed = JSON.parse(chunk.toString());
+        data.push(chunk);
+      });
 
-          if (
-            (parsed as SignInWrongAccountOrPasswd).success === false &&
-            (parsed as SignInWrongAccountOrPasswd).error.code === 400
-          ) {
-            resolve({
-              success: false,
-              quickConnectID,
-              errorInfoSummary: 'wrong_account_or_password',
-              errorInfoDetail: `[SYNO.API.Auth] [Wrong Account or Password] https://${hostname}:${port}`,
-            });
-          }
+      response.on('end', () => {
+        const json = Buffer.concat(data).toString();
+        const parsed = JSON.parse(json);
 
-          parsed.hostname = hostname;
-          parsed.port = port;
+        parsed.quickConnectID = quickConnectID;
+        parsed.hostname = hostname;
+        parsed.port = port;
 
-          resolve({
-            success: true,
-            data: {
-              did: parsed.data.did,
-              sid: parsed.data.sid,
-            },
-            quickConnectID,
-            hostname,
-            port,
-          });
-        } catch {
-          resolve({
-            success: false,
-            quickConnectID,
-            errorInfoSummary: 'invalid_request',
-            errorInfoDetail: `[SYNO.API.Auth] [Invalid Request] https://${hostname}:${port}`,
-          });
-        }
+        resolve(parsed);
       });
     });
 
