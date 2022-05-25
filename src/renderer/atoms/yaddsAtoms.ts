@@ -15,10 +15,11 @@ export type YaddsAppearance = 'light' | 'dark' | 'system';
 export interface DsmConnectListType {
   host: string;
   port: number;
-  quickConnectID: string;
   username: string;
   did: string;
   sid: string;
+  quickConnectID?: string;
+  controlHost?: string;
 }
 
 export type YaddsI18nCode = 'en' | 'zh_CN' | 'zh_TW' | 'ja_JP';

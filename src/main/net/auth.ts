@@ -1,5 +1,6 @@
-import getServerInfo, { ServerError, ServerInfo } from './getServerInfo';
-import pingPong, { PingPongError, PingPongInfo } from './pingPong';
+import getServerInfo from './getServerInfo';
+
+import pingPong from './pingPong';
 import signIn from './signIn';
 
 const auth = async (args: { quickConnectID: string; account: string; passwd: string }) => {
@@ -7,17 +8,17 @@ const auth = async (args: { quickConnectID: string; account: string; passwd: str
 
   const serverInfo = await getServerInfo(quickConnectID);
 
-  if ((serverInfo as ServerError).success === false) {
+  if (serverInfo.errno !== 0) {
     return serverInfo;
   }
 
-  const pingPongInfo = await pingPong(quickConnectID, serverInfo as ServerInfo);
+  const pingPongInfo = await pingPong(quickConnectID, serverInfo);
 
-  if ((pingPongInfo as PingPongError).success === false) {
+  if (!pingPongInfo.success) {
     return pingPongInfo;
   }
 
-  const signInInfo = await signIn(quickConnectID, pingPongInfo as PingPongInfo, account, passwd);
+  const signInInfo = await signIn(quickConnectID, pingPongInfo, account, passwd);
 
   return signInInfo;
 };
