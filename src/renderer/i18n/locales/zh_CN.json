@@ -74,11 +74,10 @@
     },
     "snackbar": {
       "timeout": "连接超时",
-      "invalid_request": "无效的请求",
-      "unknown_error": "未知错误",
       "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID 不存在或不正确",
       "wrong_account_or_password": "帐号或密码错误",
       "invalid_quickconnect_id": "无效的 QuickConnect ID",
+      "cannot_connect_to": "Cannot connect to",
       "no_duplicate_logins_allowed": "不允许重复登录"
     }
   },
