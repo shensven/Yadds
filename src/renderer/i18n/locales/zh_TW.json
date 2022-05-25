@@ -74,11 +74,10 @@
     },
     "snackbar": {
       "timeout": "Timeout",
-      "invalid_request": "Invalid request",
-      "unknown_error": "Unknown error",
       "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist",
       "wrong_account_or_password": "Wrong account or password",
       "invalid_quickconnect_id": "Invalid QuickConnect ID",
+      "cannot_connect_to": "Cannot connect to",
       "no_duplicate_logins_allowed": "No duplicate logins allowed"
     }
   },
