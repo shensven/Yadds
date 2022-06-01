@@ -36,7 +36,7 @@
     "ping": "Ping 测试",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
-    "quota": "空间配额",
+    "quota": "配额",
     "available_capacity": "可用空间",
     "quickconnect_coordinator": "QuickConnent 协调服务器",
     "host_address": "主机地址"
@@ -77,7 +77,7 @@
       "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID 不存在或不正确",
       "wrong_account_or_password": "帐号或密码错误",
       "invalid_quickconnect_id": "无效的 QuickConnect ID",
-      "cannot_connect_to": "Cannot connect to",
+      "cannot_connect_to": "无法连接到",
       "no_duplicate_logins_allowed": "不允许重复登录"
     }
   },
