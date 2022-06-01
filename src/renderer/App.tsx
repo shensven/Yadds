@@ -74,25 +74,27 @@ const App: React.FC = () => {
       return;
     }
 
-    const resp = await window.electron.net.getDsmInfo({
-      host: currentUser!.host,
-      port: currentUser!.port,
-      sid: currentUser!.sid,
-    });
-
-    if (!resp.success) {
-      setDsmInfo({
-        model: '-',
-        version: '-',
+    try {
+      const resp = await window.electron.net.getDsmInfo({
+        host: currentUser.host,
+        port: currentUser.port,
+        sid: currentUser.sid,
       });
-    }
 
-    if (resp.success) {
-      const version = resp.data?.version_string.split(' ')[1] as string;
-      setDsmInfo({
-        model: resp.data?.model as string,
-        version,
-      });
+      if (resp.success) {
+        const version = resp.data.version_string.split(' ')[1] as string;
+        setDsmInfo({
+          model: resp.data.model as string,
+          version,
+        });
+      } else {
+        setDsmInfo({
+          model: '-',
+          version: '-',
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

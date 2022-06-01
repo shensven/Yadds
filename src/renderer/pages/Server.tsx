@@ -17,7 +17,12 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import { dsmConnectListAtomWithPersistence, dsmCurrentSidAtomWithPersistence, dsmInfoAtom } from '../atoms/yaddsAtoms';
+import {
+  dsmConnectListAtomWithPersistence,
+  dsmCurrentSidAtomWithPersistence,
+  dsmInfoAtom,
+  dsmQuotaAtom,
+} from '../atoms/yaddsAtoms';
 
 const OS_PLATFORM = window.electron?.getOS();
 
@@ -74,6 +79,7 @@ const Server: React.FC = () => {
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
   const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [dsmInfo, setDsmInfo] = useAtom(dsmInfoAtom);
+  const [dsmQuota, setDsmQuota] = useAtom(dsmQuotaAtom);
 
   const [select, setSelect] = useState(0);
 
@@ -92,14 +98,14 @@ const Server: React.FC = () => {
     },
     {
       title: t('server.quota'),
-      value: '0',
-      unit: 'GB',
+      value: dsmQuota.quota,
+      unit: dsmQuota.quota === '-' ? '' : 'GB',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.available_capacity'),
-      value: '0',
-      unit: 'GB',
+      value: dsmQuota.available_capacity,
+      unit: dsmQuota.available_capacity === '-' ? '' : 'GB',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
   ];

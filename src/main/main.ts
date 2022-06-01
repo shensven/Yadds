@@ -20,16 +20,17 @@ import {
   nativeImage,
   MenuItemConstructorOptions,
 } from 'electron';
-import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { resolveHtmlPath } from './util';
-import auth from './net/auth';
-import poll from './net/poll';
-import getDiskStationManagerInfo from './net/getDiskStationManagerInfo';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
 import { YaddsAppearance } from '../renderer/atoms/yaddsAtoms';
+import store from './store';
+import auth from './net/auth';
+import poll from './net/poll';
+import getDsmInfo from './net/getDsmInfo';
+import getQuota from './net/getQuota';
 
 export default class AppUpdater {
   constructor() {
@@ -47,7 +48,6 @@ const isLinux = process.platform === 'linux';
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
-const store = new Store({ encryptionKey: 'yadds0bfs' });
 
 if (isDebug) {
   require('electron-debug')();
@@ -211,9 +211,9 @@ app.applicationMenu = null;
 //------------------------------------------------------------------------------
 // When Electron has finished initializing, create the main window.
 
-const gotTheLock = app.requestSingleInstanceLock();
+const lock = app.requestSingleInstanceLock();
 
-if (!gotTheLock) {
+if (!lock) {
   app.quit();
 } else {
   app.on('second-instance', () => {
@@ -560,6 +560,10 @@ ipcMain.handle('net-poll', async (_, args) => {
   return poll(args);
 });
 
-ipcMain.handle('net-get-info', async (_, args) => {
-  return getDiskStationManagerInfo(args);
+ipcMain.handle('net-get-dsm-info', async (_, args) => {
+  return getDsmInfo(args);
+});
+
+ipcMain.handle('net-get-quota', async (_, args) => {
+  return getQuota();
 });

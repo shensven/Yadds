@@ -1,33 +1,32 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { DSTasks } from '../../renderer/atoms/yaddsAtoms';
 
-export interface TasksInfo {
-  data: {
-    offset: number; // 0
-    task: DSTasks[];
-    total: number;
-  };
+export interface DsmInfo {
   success: true;
-}
-
-export interface TasksError {
-  error: {
-    code: number;
+  data: {
+    codepage: string; // "chs"
+    model: string; // "DS920+"
+    ram: number; // 4096
+    serial: string; // 2XXXXXXXXX
+    temperature: number; // 52
+    temperature_warn: boolean;
+    time: string; // "Wed Jun  1 22:29:14 2022"
+    uptime: number; // 1587787
+    version: string; // 42661
+    version_string: string; // DSM 7.1-42661 Update 1
   };
-  success: false;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-
-const poll = (args: { host: string; port: number; sid: string }) => {
+const getDsmInfo = (args: { host: string; port: number; sid: string }) => {
   const { host, port, sid } = args;
+  if (!(host || port || sid)) {
+    return { success: false };
+  }
 
   const params = {
-    api: 'SYNO.DownloadStation2.Task',
+    api: 'SYNO.DSM.Info',
     version: 2,
-    method: 'list',
-    additional: `["detail", "transfer"]`,
+    method: 'getinfo',
   };
 
   const options = {
@@ -41,15 +40,15 @@ const poll = (args: { host: string; port: number; sid: string }) => {
     },
   };
 
-  return new Promise<TasksInfo | TasksError>((resolve, reject) => {
+  return new Promise<DsmInfo>((resolve, reject) => {
     const request = net.request(options);
 
     setTimeout(() => {
       request.abort();
-      reject(new Error(`[SYNO.DownloadStation2.Task] [Timeout] https://${host}:${port}`));
+      reject(new Error(`[SYNO.DSM.Info] [Timeout] https://${host}:${port}`));
     }, 3000);
 
-    request.on('error', reject);
+    request.on('error', () => reject);
 
     request.on('response', (response: Electron.IncomingMessage) => {
       const data: Uint8Array[] | Buffer[] = [];
@@ -68,4 +67,4 @@ const poll = (args: { host: string; port: number; sid: string }) => {
   });
 };
 
-export default poll;
+export default getDsmInfo;

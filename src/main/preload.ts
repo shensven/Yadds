@@ -113,7 +113,7 @@ contextBridge.exposeInMainWorld('electron', {
       return ipcRenderer.invoke('net-poll', args);
     },
     getDsmInfo(args: any) {
-      return ipcRenderer.invoke('net-get-info', args);
+      return ipcRenderer.invoke('net-get-dsm-info', args);
     },
   },
 });

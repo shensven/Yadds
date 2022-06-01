@@ -7,6 +7,7 @@ import { YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
 import { AppMenuItem } from './utils/appMenuItemHandler';
 import { ContextMenuItem } from './utils/contextMenuItemHandler';
 import { TasksError, TasksInfo } from '../main/net/poll';
+import { DsmInfo } from '../main/net/getDsmInfo';
 
 declare global {
   interface Window {
@@ -60,21 +61,9 @@ declare global {
 
         poll: (props: { host: string; port: number; sid: string }) => Promise<TasksError | TasksInfo>;
 
-        getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<{
-          success: boolean;
-          data?: {
-            codepage: string;
-            model: string;
-            ram: number;
-            serial: string;
-            temperature: number;
-            temperature_warn: boolean;
-            time: string;
-            uptime: number;
-            version: string;
-            version_string: string;
-          };
-        }>;
+        getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<DsmInfo>;
+
+        getQuata: (props: { host: string; port: number; sid: string }) => Promise<void>;
       };
     };
   }
