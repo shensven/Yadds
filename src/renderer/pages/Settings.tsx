@@ -552,11 +552,21 @@ const Settings: React.FC = () => {
                 @SvenFE
               </Typography>
               <IonLogoTwitter
-                sx={{ fontSize: 17, color: '#1DA1F2', ml: theme.spacing(1), '&:hover': { opacity: 0.5 } }}
+                sx={{
+                  fontSize: 17,
+                  color: theme.palette.text.disabled,
+                  ml: theme.spacing(1),
+                  '&:hover': { color: '#1DA1F2' },
+                }}
                 onClick={() => window.electron.openViaBrowser('https://twitter.com/shensven2016')}
               />
               <IonLogoGithub
-                sx={{ fontSize: 17, color: '#333333', ml: theme.spacing(1), '&:hover': { opacity: 0.5 } }}
+                sx={{
+                  fontSize: 17,
+                  color: theme.palette.text.disabled,
+                  ml: theme.spacing(1),
+                  '&:hover': { color: '#333333' },
+                }}
                 onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
               />
             </Stack>
@@ -566,7 +576,7 @@ const Settings: React.FC = () => {
       </Stack>
 
       {/* Add Connection */}
-      <Dialog open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
+      <Dialog keepMounted open={hasDialogAdd} onClose={() => dismissDailogAdd()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="stretch" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center">
@@ -624,7 +634,6 @@ const Settings: React.FC = () => {
               size="small"
               spellCheck={false}
               disabled={loadingInDialogAdd}
-              autoFocus
               error={formErr.address === true}
               label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
               value={newConnect.connectAddress}
@@ -721,7 +730,7 @@ const Settings: React.FC = () => {
       </Dialog>
 
       {/* Confirm Remove */}
-      <Dialog open={hasDialogDelete} onClose={() => dismissDialogRemove()}>
+      <Dialog keepMounted open={hasDialogDelete} onClose={() => dismissDialogRemove()}>
         <DialogTitle>
           <Stack flexDirection="row" alignItems="center">
             <Typography>{t('settings.dialog_remove.confirm_remove')}</Typography>
