@@ -133,7 +133,8 @@ const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => 
             <Typography sx={{ fontVariantNumeric: 'tabular-nums', fontSize: 12, color: theme.palette.text.disabled }}>
               {(item.additional?.transfer.size_downloaded as number) === item.size
                 ? t('main.completed')
-                : `00:00:${item.additional?.seconds_left.toString()}`}
+                : // : `00:00:${item.additional?.seconds_left.toString()}`}
+                  `00:00:00`}
             </Typography>
           </Stack>
         </ListItemText>

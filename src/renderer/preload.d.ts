@@ -1,11 +1,12 @@
 import { TFunction } from 'react-i18next';
 import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
-import { ServerError, ServerInfo } from 'main/net/getServerInfo';
+import { ServerError } from 'main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
-import { DSTasks, YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
+import { YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
 import { AppMenuItem } from './utils/appMenuItemHandler';
 import { ContextMenuItem } from './utils/contextMenuItemHandler';
+import { TasksError, TasksInfo } from '../main/net/poll';
 
 declare global {
   interface Window {
@@ -57,13 +58,7 @@ declare global {
           passwd: string;
         }) => Promise<ServerError | SignInWrongAccountOrPasswd | SignInInfo>;
 
-        poll: (props: { host: string; port: number; sid: string }) => Promise<{
-          success: boolean;
-          data: {
-            tasks: DSTasks[];
-            total?: number;
-          };
-        }>;
+        poll: (props: { host: string; port: number; sid: string }) => Promise<TasksError | TasksInfo>;
 
         getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<{
           success: boolean;

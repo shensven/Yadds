@@ -35,32 +35,44 @@ const App: React.FC = () => {
   const handleTasks = async () => {
     const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
 
-    const resp = await window.electron.net.poll({
-      host: currentUser!.host,
-      port: currentUser!.port,
-      sid: currentUser!.sid,
-    });
-
-    if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
-      console.log('renderer: bad tasks request');
-
-      setTasksStatus((old) => {
-        if (old.retry >= TASKS_RETRY) {
-          return { ...old, isLoading: false };
-        }
-        return { isLoading: true, retry: old.retry + 1 };
-      });
+    if (!currentUser) {
+      return;
     }
 
-    if (resp.success) {
-      console.log('renderer: good tasks request');
-      setTasksStatus({ isLoading: false, retry: 0 });
-      startTransition(() => setTasks(resp.data.tasks));
+    try {
+      const resp = await window.electron.net.poll({
+        host: currentUser.host,
+        port: currentUser.port,
+        sid: currentUser.sid,
+      });
+
+      if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
+        console.log('renderer: bad tasks request');
+
+        setTasksStatus((old) => {
+          if (old.retry >= TASKS_RETRY) {
+            return { ...old, isLoading: false };
+          }
+          return { isLoading: true, retry: old.retry + 1 };
+        });
+      }
+
+      if (resp.success) {
+        console.log('renderer: good tasks request', resp.data.task);
+        setTasksStatus({ isLoading: false, retry: 0 });
+        startTransition(() => setTasks(resp.data.task));
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const getDsmInfo = async () => {
     const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+
+    if (!currentUser) {
+      return;
+    }
 
     const resp = await window.electron.net.getDsmInfo({
       host: currentUser!.host,
@@ -102,7 +114,7 @@ const App: React.FC = () => {
         console.log('renderer: interval done');
         clearInterval(timer);
       }
-    }, 1000);
+    }, 2000);
 
     return () => {
       clearInterval(timer);
