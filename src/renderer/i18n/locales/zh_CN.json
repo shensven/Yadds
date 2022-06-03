@@ -37,6 +37,7 @@
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
     "quota": "配额",
+    "volume": "Volume",
     "available_capacity": "可用空间",
     "quickconnect_coordinator": "QuickConnent 协调服务器",
     "host_address": "主机地址"
