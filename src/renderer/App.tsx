@@ -10,6 +10,7 @@ import {
   dsmConnectListAtomWithPersistence,
   dsmCurrentSidAtomWithPersistence,
   dsmInfoAtom,
+  atomDsmQuotaList,
   tasksAtom,
   tasksRetry,
   tasksStatusAtom,
@@ -31,6 +32,7 @@ const App: React.FC = () => {
   const [, setTasks] = useAtom(tasksAtom);
   const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
   const [, setDsmInfo] = useAtom(dsmInfoAtom);
+  const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
 
   const handleTasks = async () => {
     const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
@@ -81,6 +83,8 @@ const App: React.FC = () => {
         sid: currentUser.sid,
       });
 
+      console.log('getDsmInfo', resp);
+
       if (resp.success) {
         const version = resp.data.version_string.split(' ')[1] as string;
         setDsmInfo({
@@ -98,6 +102,30 @@ const App: React.FC = () => {
     }
   };
 
+  const getQuata = async () => {
+    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+
+    if (!currentUser) {
+      return;
+    }
+
+    try {
+      const resp = await window.electron.net.getQuata({
+        host: currentUser.host,
+        port: currentUser.port,
+        sid: currentUser.sid,
+      });
+
+      console.log('getQuata', resp.data.items);
+
+      if (resp.success) {
+        setDsmQuotaList(resp.data.items);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (dsmCurrentSid.length === 0) {
       setTasksStatus({ isLoading: false, retry: 3 });
@@ -106,6 +134,7 @@ const App: React.FC = () => {
     }
 
     getDsmInfo();
+    getQuata();
 
     const timer = setInterval(() => {
       console.log('renderer: retry', tasksStatus.retry);

@@ -61,7 +61,7 @@ export const sidebarWidth = atom<240>(240);
 
 export const tasksRetry = atom<3>(3);
 
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 export const hasYaddsSidebarMarginTopAtom = atom<boolean>(true);
 
@@ -153,7 +153,7 @@ export const isYaddsAutoUpdateAtomWithPersistence = atom(
   }
 );
 
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 const dsmConnectListAtom = atom<DsmConnectListType[]>(
   (window.electron?.store.get('dsmConnectList') as DsmConnectListType[] | undefined) ?? []
@@ -175,21 +175,44 @@ export const dsmCurrentSidAtomWithPersistence = atom(
   }
 );
 
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 export const tasksAtom = atom<DSTasks[]>([]);
 
-export const tasksStatusAtom = atom({
-  isLoading: true,
-  retry: 0,
-});
+export const tasksStatusAtom = atom({ isLoading: true, retry: 0 });
 
-export const dsmInfoAtom = atom({
-  model: '-',
-  version: '-',
-});
+// -----------------------------------------------------------------------------
 
-export const dsmQuotaAtom = atom({
-  quota: '-',
-  available_capacity: '-',
-});
+export const dsmInfoAtom = atom({ model: '-', version: '-' });
+
+// -----------------------------------------------------------------------------
+
+export interface ShareQuota {
+  expanded: boolean;
+  leaf: boolean;
+  name: `share:${string}`; // 'share:Your_Root_Path';
+  quota: number;
+  share_quota: number;
+  share_used: number;
+  used: number;
+}
+export interface Volume {
+  children: ShareQuota[];
+  expanded: boolean;
+  leaf: boolean;
+  name: string; // '1'
+  quota: string; // 'NotSupport'
+  share_quota: string; // 'NotSupport'
+  share_used: string; // 'NotSupport'
+  used: string; // 'NotSupport'
+}
+export const atomDsmQuotaList = atom<Volume[]>([]);
+
+// -----------------------------------------------------------------------------
+
+export type PageServerQuotaTargetItem = `volume:${number},share:${string}`;
+export const atomPageServerQuotaTargetItem = atom<PageServerQuotaTargetItem>(`volume:${0},share:${''}`);
+
+// -----------------------------------------------------------------------------
+
+export const atomPageServerQuotaTargetValue = atom({ maxQuota: 'N/A', availableCapacity: 'N/A' });

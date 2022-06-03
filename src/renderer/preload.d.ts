@@ -3,11 +3,13 @@ import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
 import { ServerError } from 'main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
-import { YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
+import { PageServerQuotaTargetItem, YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
 import { AppMenuItem } from './utils/appMenuItemHandler';
 import { ContextMenuItem } from './utils/contextMenuItemHandler';
+import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
 import { DsmInfo } from '../main/net/getDsmInfo';
+import { PersonalSettingsInfo } from '../main/net/getQuota';
 
 declare global {
   interface Window {
@@ -24,6 +26,11 @@ declare global {
       setTray: (t: TFunction) => void;
 
       setContextMenu: (update: ContextMenuItem) => void;
+
+      contextMenuForQuota: {
+        create: (update: MenuItemConstructorOptionsForQuota) => void;
+        setTargetItem: (setPageServerQuotaTarget: (update: PageServerQuotaTargetItem) => void) => void;
+      };
 
       order: {
         byIterater: (persistOrderIterater: (update: string) => void) => void;
@@ -63,7 +70,7 @@ declare global {
 
         getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<DsmInfo>;
 
-        getQuata: (props: { host: string; port: number; sid: string }) => Promise<void>;
+        getQuata: (props: { host: string; port: number; sid: string }) => Promise<PersonalSettingsInfo>;
       };
     };
   }

@@ -25,6 +25,7 @@ import log from 'electron-log';
 import { resolveHtmlPath } from './util';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
+import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { YaddsAppearance } from '../renderer/atoms/yaddsAtoms';
 import store from './store';
 import auth from './net/auth';
@@ -428,6 +429,23 @@ ipcMain.handle('set-context-menu', async (_, args: ContextMenuItem) => {
   Menu.buildFromTemplate(template).popup();
 });
 
+ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorOptionsForQuota) => {
+  const template: MenuItemConstructorOptions[] = [];
+
+  args.forEach((item) => {
+    if (!item.enabled) {
+      template.push(item);
+    } else {
+      const newItem: MenuItemConstructorOptions = { ...item };
+      newItem.label = item.label?.split(',')[1].split(':')[1];
+      newItem.click = () => mainWindow?.webContents.send('ctx-menu-for-quota:set-target-item', item.label);
+      template.push(newItem);
+    }
+  });
+
+  Menu.buildFromTemplate(template).popup();
+});
+
 ipcMain.handle('set-tray', async (_, args: { showMainWindow: string; quit: string }) => {
   const devMenu: MenuItemConstructorOptions[] = [
     { label: 'Reload', click: () => mainWindow?.webContents.reload() },
@@ -565,5 +583,5 @@ ipcMain.handle('net-get-dsm-info', async (_, args) => {
 });
 
 ipcMain.handle('net-get-quota', async (_, args) => {
-  return getQuota();
+  return getQuota(args);
 });

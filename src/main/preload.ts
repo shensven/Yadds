@@ -3,7 +3,8 @@ import { NavigateFunction } from 'react-router-dom';
 import { TFunction } from 'react-i18next';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
-import { YaddsAppearance, YaddsCategoryPath } from '../renderer/atoms/yaddsAtoms';
+import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
+import { PageServerQuotaTargetItem, YaddsAppearance, YaddsCategoryPath } from '../renderer/atoms/yaddsAtoms';
 
 export type Channels = 'ipc-example';
 
@@ -37,6 +38,17 @@ contextBridge.exposeInMainWorld('electron', {
 
   setContextMenu: (args: ContextMenuItem) => {
     ipcRenderer.invoke('set-context-menu', args);
+  },
+
+  contextMenuForQuota: {
+    create: (args: MenuItemConstructorOptionsForQuota) => {
+      ipcRenderer.invoke('ctx-menu-for-quota:create', args);
+    },
+    setTargetItem: (setPageServerQuotaTargetItem: (update: PageServerQuotaTargetItem) => void) => {
+      ipcRenderer.on('ctx-menu-for-quota:set-target-item', (_, arg: PageServerQuotaTargetItem) => {
+        setPageServerQuotaTargetItem(arg);
+      });
+    },
   },
 
   order: {
@@ -114,6 +126,9 @@ contextBridge.exposeInMainWorld('electron', {
     },
     getDsmInfo(args: any) {
       return ipcRenderer.invoke('net-get-dsm-info', args);
+    },
+    getQuata(args: any) {
+      return ipcRenderer.invoke('net-get-quota', args);
     },
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
@@ -10,6 +10,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Icon from '@mui/material/Icon';
 import IcRoundCalendarViewWeek from '../components/icons/IcRoundCalendarViewWeek';
 import IcOutlineInfo from '../components/icons/IcOutlineInfo';
@@ -17,25 +18,32 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
+import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import {
   dsmConnectListAtomWithPersistence,
   dsmCurrentSidAtomWithPersistence,
   dsmInfoAtom,
-  dsmQuotaAtom,
+  atomDsmQuotaList,
+  atomPageServerQuotaTargetItem,
+  atomPageServerQuotaTargetValue,
+  ShareQuota,
 } from '../atoms/yaddsAtoms';
+import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
 const OS_PLATFORM = window.electron?.getOS();
 
 interface CardUnitProps {
+  hasIconButton: boolean;
   hasMarginRight: boolean;
   icon: JSX.Element;
   title: string;
   value: string;
   unit?: string;
+  onClick?: () => void;
 }
 
 const CardUnit: React.FC<CardUnitProps> = (props: CardUnitProps) => {
-  const { hasMarginRight, icon, title, value, unit } = props;
+  const { hasIconButton, hasMarginRight, icon, title, value, unit, onClick } = props;
   const theme = useTheme();
 
   return (
@@ -44,19 +52,33 @@ const CardUnit: React.FC<CardUnitProps> = (props: CardUnitProps) => {
       sx={{
         backgroundColor: theme.palette.card.default,
         mr: hasMarginRight ? 0 : theme.spacing(2),
-        py: theme.spacing(1),
-        pl: theme.spacing(1),
-        pr: theme.spacing(2),
+        p: theme.spacing(1),
         minWidth: theme.spacing(19),
       }}
     >
-      <Stack flexDirection="row" alignItems="center">
-        <Icon color="primary">{icon}</Icon>
-        <Typography noWrap variant="subtitle2" color={theme.palette.primary.main}>
-          {title}
-        </Typography>
+      <Stack flexDirection="row" justifyContent="space-between">
+        <Stack flexDirection="row" alignItems="center">
+          <Icon color="primary">{icon}</Icon>
+          <Typography noWrap variant="subtitle2" color={theme.palette.primary.main}>
+            {title}
+          </Typography>
+        </Stack>
+        {hasIconButton && (
+          <IconButton
+            color="primary"
+            size="small"
+            sx={{
+              appRegion: 'no-drag',
+              backgroundColor: theme.palette.input.default,
+              '&:hover': { backgroundColor: theme.palette.input.hover },
+            }}
+            onClick={onClick}
+          >
+            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
+          </IconButton>
+        )}
       </Stack>
-      <Stack flexDirection="row" alignItems="baseline">
+      <Stack flexDirection="row" alignItems="baseline" pr={theme.spacing(1)}>
         <Typography noWrap fontSize={20} fontWeight={700} pl={theme.spacing(0.5)}>
           {value}
         </Typography>
@@ -70,6 +92,7 @@ const CardUnit: React.FC<CardUnitProps> = (props: CardUnitProps) => {
 
 CardUnit.defaultProps = {
   unit: '',
+  onClick: () => {},
 };
 
 const Server: React.FC = () => {
@@ -79,7 +102,9 @@ const Server: React.FC = () => {
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
   const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [dsmInfo, setDsmInfo] = useAtom(dsmInfoAtom);
-  const [dsmQuota, setDsmQuota] = useAtom(dsmQuotaAtom);
+  const [dsmQuotaList] = useAtom(atomDsmQuotaList);
+  const [pageServerQuotaTargetItem, setPageServerQuotaTargetItem] = useAtom(atomPageServerQuotaTargetItem);
+  const [pageServerQuotaTargetValue, setPageServerQuotaTargetValue] = useAtom(atomPageServerQuotaTargetValue);
 
   const [select, setSelect] = useState(0);
 
@@ -98,14 +123,18 @@ const Server: React.FC = () => {
     },
     {
       title: t('server.quota'),
-      value: dsmQuota.quota,
-      unit: dsmQuota.quota === '-' ? '' : 'GB',
+      value: pageServerQuotaTargetValue.maxQuota,
+      unit: '',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
+      onClick: () => {
+        const template = createMenuItemConstructorOptionsForQuota(t, dsmQuotaList, pageServerQuotaTargetItem);
+        window.electron.contextMenuForQuota.create(template);
+      },
     },
     {
       title: t('server.available_capacity'),
-      value: dsmQuota.available_capacity,
-      unit: dsmQuota.available_capacity === '-' ? '' : 'GB',
+      value: 'N/A',
+      unit: '',
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
   ];
@@ -158,6 +187,29 @@ const Server: React.FC = () => {
       });
     }
   };
+
+  useEffect(() => {
+    window.electron.contextMenuForQuota.setTargetItem(setPageServerQuotaTargetItem); // send setPageServerQuotaTarge as a Closure to main process
+  }, []);
+
+  useEffect(() => {
+    const currenVolume = find(dsmQuotaList, {
+      name: pageServerQuotaTargetItem.split(',')[0].split(':')[1].toString(),
+    });
+
+    if (currenVolume !== undefined) {
+      const currenQuota = find(currenVolume.children, {
+        name: pageServerQuotaTargetItem.split(',')[1],
+      }) as ShareQuota | undefined;
+
+      if (currenQuota) {
+        setPageServerQuotaTargetValue({
+          maxQuota: currenQuota.share_quota.toFixed(2).toString(),
+          availableCapacity: (currenQuota.share_quota - currenQuota.share_used).toFixed(2).toString(),
+        });
+      }
+    }
+  }, [pageServerQuotaTargetItem]);
 
   return (
     <Box>
@@ -255,12 +307,14 @@ const Server: React.FC = () => {
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
             {serverBaseInfo.map((item, index) => (
               <CardUnit
+                hasIconButton={index === 2}
                 hasMarginRight={serverBaseInfo.length - 1 === index}
                 title={item.title}
                 value={item.value}
                 unit={item.unit}
                 icon={item.icon}
                 key={item.title}
+                onClick={item.onClick}
               />
             ))}
           </Stack>
@@ -269,6 +323,7 @@ const Server: React.FC = () => {
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
             {serverRoute.map((item, index) => (
               <CardUnit
+                hasIconButton={false}
                 hasMarginRight={serverRoute.length - 1 === index}
                 title={item.title}
                 value={item.value}
@@ -282,6 +337,7 @@ const Server: React.FC = () => {
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
             {serverResponsiveness.map((item, index) => (
               <CardUnit
+                hasIconButton={false}
                 hasMarginRight={serverResponsiveness.length - 1 === index}
                 title={item.title}
                 value={item.value}
