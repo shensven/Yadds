@@ -3,7 +3,8 @@ import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
 import { ServerError } from 'main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
-import { PageServerQuotaTargetItem, YaddsAppearance, YaddsCategoryPath } from './atoms/yaddsAtoms';
+import { PageServerQuotaTargetItem } from './atoms/yaddsAtoms';
+import { Appearance, SidebarCategory } from './atoms/atomUI';
 import { AppMenuItem } from './utils/appMenuItemHandler';
 import { ContextMenuItem } from './utils/contextMenuItemHandler';
 import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
@@ -19,7 +20,7 @@ declare global {
         on(channel: string, func: (...args: unknown[]) => void): (() => void) | undefined;
         once(channel: string, func: (...args: unknown[]) => void): void;
       };
-      toggleNativeTheme: (update: YaddsAppearance) => void;
+      toggleNativeTheme: (update: Appearance) => void;
 
       setAppMenu: (update: AppMenuItem) => void;
 
@@ -39,14 +40,11 @@ declare global {
 
       zoomWindow: () => void;
 
-      toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
+      toogleSidebar: (hasYaddsSidebar: boolean, setHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
 
-      toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: (update: boolean) => void) => void;
+      toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => void;
 
-      navigateTo: (
-        navigateViaReact: NavigateFunction,
-        persistYaddsSidebarCategory: (update: YaddsCategoryPath) => void
-      ) => void;
+      navigateTo: (navigateViaReact: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => void;
 
       store: {
         get: (key: string) => unknown;

@@ -26,7 +26,7 @@ import { resolveHtmlPath } from './util';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
-import { YaddsAppearance } from '../renderer/atoms/yaddsAtoms';
+import { Appearance } from '../renderer/atoms/atomUI';
 import store from './store';
 import auth from './net/auth';
 import poll from './net/poll';
@@ -205,7 +205,7 @@ const createWindow = async () => {
 //------------------------------------------------------------------------------
 // Initialize the default configuration of this application
 
-nativeTheme.themeSource = (store.get('yaddsAppearance') as YaddsAppearance | undefined) ?? 'system';
+nativeTheme.themeSource = (store.get('yaddsAppearance') as Appearance | undefined) ?? 'system';
 
 app.applicationMenu = null;
 

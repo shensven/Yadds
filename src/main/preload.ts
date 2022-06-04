@@ -4,7 +4,8 @@ import { TFunction } from 'react-i18next';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
-import { PageServerQuotaTargetItem, YaddsAppearance, YaddsCategoryPath } from '../renderer/atoms/yaddsAtoms';
+import { PageServerQuotaTargetItem } from '../renderer/atoms/yaddsAtoms';
+import { Appearance, SidebarCategory } from '../renderer/atoms/atomUI';
 
 export type Channels = 'ipc-example';
 
@@ -64,35 +65,32 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  toggleNativeTheme: (yaddsAppearance: YaddsAppearance) => {
-    ipcRenderer.invoke(`dark-mode:${yaddsAppearance}`);
+  toggleNativeTheme: (appearance: Appearance) => {
+    ipcRenderer.invoke(`dark-mode:${appearance}`);
   },
 
   zoomWindow: () => {
     ipcRenderer.invoke('zoom-window');
   },
 
-  toogleSidebar: (hasYaddsSidebar: boolean, persistHasYaddsSidebar: (update: boolean) => void) => {
+  toogleSidebar: (hasSidebar: boolean, setHasSidebar: (update: boolean) => void) => {
     ipcRenderer.removeAllListeners('toogle-sidebar');
     ipcRenderer.on('toogle-sidebar', () => {
-      persistHasYaddsSidebar(!hasYaddsSidebar);
+      setHasSidebar(!hasSidebar);
     });
   },
 
-  toogleSidebarMarginTop: (setHasYaddsSidebarMarginTop: (update: boolean) => void) => {
+  toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => {
     ipcRenderer.removeAllListeners('toogle-sidebar-mt');
     ipcRenderer.on('toogle-sidebar-mt', (_, arg: boolean) => {
-      setHasYaddsSidebarMarginTop(arg);
+      setHasSidebarMarginTop(arg);
     });
   },
 
-  navigateTo: (
-    navigateViaReact: NavigateFunction,
-    persistYaddsSidebarCategory: (update: YaddsCategoryPath) => void
-  ) => {
-    ipcRenderer.on('navigate', (_, arg: YaddsCategoryPath) => {
+  navigateTo: (navigateViaReact: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => {
+    ipcRenderer.on('navigate', (_, arg: SidebarCategory) => {
       navigateViaReact(arg);
-      persistYaddsSidebarCategory(arg);
+      setSidebarCategory(arg);
     });
   },
 

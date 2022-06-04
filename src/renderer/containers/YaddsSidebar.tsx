@@ -11,14 +11,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useAtom } from 'jotai';
+import { tasksAtom } from '../atoms/yaddsAtoms';
 import {
-  hasYaddsSidebarAtomWithPersistence,
-  hasYaddsSidebarMarginTopAtom,
-  sidebarWidth,
-  tasksAtom,
-  YaddsCategoryPath,
-  yaddsSidebarCategoryAtomWithPersistence,
-} from '../atoms/yaddsAtoms';
+  atomHasSidebarMarginTop,
+  atomSidebarWidth,
+  atomPersistenceHasSidebar,
+  SidebarCategory,
+  atomPersistenceSidebarCategory,
+} from '../atoms/atomUI';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
 import IonShapes from '../components/icons/IonShapes';
 import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
@@ -38,7 +38,7 @@ import IonCog from '../components/icons/IonCog';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 interface YaddsCategoryObj {
-  path: YaddsCategoryPath;
+  path: SidebarCategory;
   tasksLength: number;
   name: string;
   activeIcon: JSX.Element;
@@ -50,24 +50,24 @@ const YaddsSidebar: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
-  const [hasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
-  const [hasYaddsSidebarMarginTop, setHasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
-  const [yaddsSidebarCategory, persistYaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
+  const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
+  const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
+  const [hasSidebarMarginTop, setHasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
+  const [sidebarCategory, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [tasks] = useAtom(tasksAtom);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
 
   useEffect(() => {
-    window.electron?.navigateTo(navigate, persistYaddsSidebarCategory); // Init navigation from the top menu
+    window.electron?.navigateTo(navigate, setSidebarCategory); // Init navigation from the top menu
   }, []);
 
   useEffect(() => {
-    window.electron?.toogleSidebarMarginTop(setHasYaddsSidebarMarginTop); // handle the margin top of the sidebar
+    window.electron?.toogleSidebarMarginTop(setHasSidebarMarginTop); // handle the margin top of the sidebar
 
-    const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    const appMenuItemLabel = appMenuItemHandler(t, hasSidebar, hasSidebarMarginTop);
     window.electron?.setAppMenu(appMenuItemLabel); // Init or update application menu
-  }, [hasYaddsSidebarMarginTop]);
+  }, [hasSidebarMarginTop]);
 
   const categoryList: YaddsCategoryObj[] = [
     {
@@ -118,7 +118,7 @@ const YaddsSidebar: React.FC = () => {
     <Drawer
       anchor="left"
       variant="persistent"
-      open={hasYaddsSidebar}
+      open={hasSidebar}
       sx={{
         '& .MuiDrawer-paper': {
           backgroundColor: 'transparent',
@@ -130,7 +130,7 @@ const YaddsSidebar: React.FC = () => {
         dense
         sx={{
           mt: theme.spacing(1),
-          ...(hasYaddsSidebarMarginTop && {
+          ...(hasSidebarMarginTop && {
             [(isDarwin && 'mt') as string]: theme.spacing(4),
           }),
           transition: theme.transitions.create('margin', {
@@ -143,19 +143,19 @@ const YaddsSidebar: React.FC = () => {
           <ListItem key={item.path}>
             <ListItemButton
               disableRipple
-              selected={yaddsSidebarCategory === item.path}
+              selected={sidebarCategory === item.path}
               onClick={() => {
-                persistYaddsSidebarCategory(item.path);
+                setSidebarCategory(item.path);
                 navigate(item.path);
               }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: theme.spacing(4),
-                  color: yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
+                  color: sidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary,
                 }}
               >
-                {yaddsSidebarCategory === item.path ? item.activeIcon : item.inactiveIcon}
+                {sidebarCategory === item.path ? item.activeIcon : item.inactiveIcon}
               </ListItemIcon>
               <ListItemText
                 primary={
@@ -163,9 +163,7 @@ const YaddsSidebar: React.FC = () => {
                     noWrap
                     variant="subtitle2"
                     component="p"
-                    color={
-                      yaddsSidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary
-                    }
+                    color={sidebarCategory === item.path ? theme.palette.primary.main : theme.palette.text.secondary}
                     fontWeight={600}
                     sx={{ mr: theme.spacing(0.5) }}
                   >
@@ -197,20 +195,20 @@ const YaddsSidebar: React.FC = () => {
         <ListItem>
           <ListItemButton
             disableRipple
-            selected={yaddsSidebarCategory === '/server'}
+            selected={sidebarCategory === '/server'}
             sx={{ width: '100%' }}
             onClick={() => {
-              persistYaddsSidebarCategory('/server');
+              setSidebarCategory('/server');
               navigate('/server');
             }}
           >
             <ListItemIcon
               sx={{
                 minWidth: theme.spacing(4),
-                color: yaddsSidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary,
+                color: sidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary,
               }}
             >
-              {yaddsSidebarCategory === '/server' ? (
+              {sidebarCategory === '/server' ? (
                 <IonServer sx={{ fontSize: 20 }} />
               ) : (
                 <IonServerOutline sx={{ fontSize: 20 }} />
@@ -221,7 +219,7 @@ const YaddsSidebar: React.FC = () => {
                 <Typography
                   // noWrap
                   variant="subtitle2"
-                  color={yaddsSidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary}
+                  color={sidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary}
                   fontWeight={600}
                 >
                   {t('sidebar.server')}
@@ -235,20 +233,20 @@ const YaddsSidebar: React.FC = () => {
         <ListItem>
           <ListItemButton
             disableRipple
-            selected={yaddsSidebarCategory === '/settings'}
+            selected={sidebarCategory === '/settings'}
             sx={{ width: '100%' }}
             onClick={() => {
-              persistYaddsSidebarCategory('/settings');
+              setSidebarCategory('/settings');
               navigate('/settings');
             }}
           >
             <ListItemIcon
               sx={{
                 minWidth: theme.spacing(4),
-                color: yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
+                color: sidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
               }}
             >
-              {yaddsSidebarCategory === '/settings' ? (
+              {sidebarCategory === '/settings' ? (
                 <IonCog sx={{ fontSize: 20 }} />
               ) : (
                 <IonCogOutline sx={{ fontSize: 20 }} />
@@ -259,7 +257,7 @@ const YaddsSidebar: React.FC = () => {
                 <Typography
                   noWrap
                   variant="subtitle2"
-                  color={yaddsSidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary}
+                  color={sidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary}
                   fontWeight={600}
                 >
                   {t('sidebar.settings')}

@@ -48,16 +48,18 @@ import IonLogoGithub from '../components/icons/IonLogoGithub';
 import {
   dsmConnectListAtomWithPersistence,
   dsmCurrentSidAtomWithPersistence,
-  hasYaddsSidebarAtomWithPersistence,
-  hasYaddsSidebarMarginTopAtom,
-  isYaddsAutoLaunchAtomWithPersistence,
-  isYaddsAutoUpdateAtomWithPersistence,
   tasksStatusAtom,
-  YaddsAppearance,
-  yaddsAppearanceAtomWithPersistence,
-  YaddsI18nCode,
-  yaddsI18nCodeAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
+import {
+  Appearance,
+  atomHasSidebarMarginTop,
+  atomPersistenceAppearance,
+  atomPersistenceIsAutoLaunch,
+  atomPersistenceHasSidebar,
+  atomPersistenceLocaleName,
+  LocaleName,
+  atomPersistenceIsAutoUpdate,
+} from '../atoms/atomUI';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 const OS_PLATFORM = window.electron?.getOS();
@@ -130,12 +132,12 @@ const Settings: React.FC = () => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
 
-  const [hasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
-  const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
-  const [yaddsAppearance, persistYaddsAppearance] = useAtom(yaddsAppearanceAtomWithPersistence);
-  const [yaddsI18nCode, persistYaddsI18nCode] = useAtom(yaddsI18nCodeAtomWithPersistence);
-  const [isYaddsAutoLaunch, persistIsYaddsAutoLaunch] = useAtom(isYaddsAutoLaunchAtomWithPersistence);
-  const [isYaddsAutoUpdate, persistIsYaddsAutoUpdate] = useAtom(isYaddsAutoUpdateAtomWithPersistence);
+  const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
+  const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
+  const [appearance, setAppearance] = useAtom(atomPersistenceAppearance);
+  const [localeName, setLocaleName] = useAtom(atomPersistenceLocaleName);
+  const [isAutoLaunch, setIsAutoLaunch] = useAtom(atomPersistenceIsAutoLaunch);
+  const [isAutoUpdate, setIsAutoUpdate] = useAtom(atomPersistenceIsAutoUpdate);
   const [dsmConnectList, persistDsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
   const [dsmCurrentSid, persistDsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [, setTasksStatus] = useAtom(tasksStatusAtom);
@@ -160,7 +162,7 @@ const Settings: React.FC = () => {
   const [whoWillRemove, setWhoWillRemove] = useState<number>(-1);
 
   interface YaddsAppearanceObj {
-    yaddsAppearance: YaddsAppearance;
+    yaddsAppearance: Appearance;
     label: string;
     src: string;
   }
@@ -183,7 +185,7 @@ const Settings: React.FC = () => {
   ];
 
   interface YaddsI18n {
-    languageCode: YaddsI18nCode;
+    languageCode: LocaleName;
     label: string;
   }
   const i18nList: YaddsI18n[] = [
@@ -204,10 +206,10 @@ const Settings: React.FC = () => {
     setIsSelectQcOpen(false);
   };
 
-  const handleSelectI18nOnChange = (languageCode: YaddsI18nCode) => {
-    persistYaddsI18nCode(languageCode);
+  const handleSelectI18nOnChange = (languageCode: LocaleName) => {
+    setLocaleName(languageCode);
     i18n.changeLanguage(languageCode);
-    const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    const appMenuItemLabel = appMenuItemHandler(t, hasSidebar, hasSidebarMarginTop);
     window.electron.setAppMenu(appMenuItemLabel);
     window.electron.setTray(t);
     setIsSelectI18nOpen(false);
@@ -380,15 +382,15 @@ const Settings: React.FC = () => {
                   sx={{
                     borderRadius: 1,
                     overflow: 'hidden',
-                    filter: yaddsAppearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
+                    filter: appearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
                     height: 44,
                     width: 67,
                     '&:hover': {
-                      filter: yaddsAppearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
+                      filter: appearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
                     },
                   }}
                   onClick={() => {
-                    persistYaddsAppearance(item.yaddsAppearance);
+                    setAppearance(item.yaddsAppearance);
                     window.electron.toggleNativeTheme(item.yaddsAppearance);
                   }}
                 >
@@ -397,9 +399,7 @@ const Settings: React.FC = () => {
                 <Typography
                   variant="overline"
                   color={
-                    yaddsAppearance === item.yaddsAppearance
-                      ? theme.palette.text.secondary
-                      : theme.palette.text.disabled
+                    appearance === item.yaddsAppearance ? theme.palette.text.secondary : theme.palette.text.disabled
                   }
                 >
                   {item.label}
@@ -470,7 +470,7 @@ const Settings: React.FC = () => {
               <Select
                 size="small"
                 sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
-                value={yaddsI18nCode}
+                value={localeName}
                 MenuProps={{
                   sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
                 }}
@@ -499,16 +499,16 @@ const Settings: React.FC = () => {
         <SettingsFormItem label={t('settings.application')}>
           <FormGroup>
             <FormControlLabel
-              checked={isYaddsAutoLaunch}
+              checked={isAutoLaunch}
               label={<Typography variant="subtitle2">{t('settings.launch_yadds_at_login')}</Typography>}
-              control={<Checkbox size="small" checked={isYaddsAutoLaunch} />}
-              onClick={() => persistIsYaddsAutoLaunch(!isYaddsAutoLaunch)}
+              control={<Checkbox size="small" checked={isAutoLaunch} />}
+              onClick={() => setIsAutoLaunch(!isAutoLaunch)}
             />
             <FormControlLabel
-              checked={isYaddsAutoUpdate}
+              checked={isAutoUpdate}
               label={<Typography variant="subtitle2">{t('settings.automaticly_check_for_updates')}</Typography>}
-              control={<Checkbox size="small" checked={isYaddsAutoUpdate} />}
-              onClick={() => persistIsYaddsAutoUpdate(!isYaddsAutoUpdate)}
+              control={<Checkbox size="small" checked={isAutoUpdate} />}
+              onClick={() => setIsAutoUpdate(!isAutoUpdate)}
             />
             <Stack flexDirection="row" alignItems="center">
               <FormHelperText>{`${t('settings.current_version')} ${APP_VERSION}`}</FormHelperText>

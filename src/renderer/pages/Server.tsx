@@ -22,7 +22,7 @@ import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import {
   dsmConnectListAtomWithPersistence,
   dsmCurrentSidAtomWithPersistence,
-  dsmInfoAtom,
+  atomPageServerNasInfo,
   atomDsmQuotaList,
   atomPageServerQuotaTargetItem,
   atomPageServerQuotaTargetValue,
@@ -101,7 +101,7 @@ const Server: React.FC = () => {
 
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
   const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
-  const [dsmInfo, setDsmInfo] = useAtom(dsmInfoAtom);
+  const [pageServerNasInfo, setPageServerNasInfo] = useAtom(atomPageServerNasInfo);
   const [dsmQuotaList] = useAtom(atomDsmQuotaList);
   const [pageServerQuotaTargetItem, setPageServerQuotaTargetItem] = useAtom(atomPageServerQuotaTargetItem);
   const [pageServerQuotaTargetValue, setPageServerQuotaTargetValue] = useAtom(atomPageServerQuotaTargetValue);
@@ -111,13 +111,13 @@ const Server: React.FC = () => {
   const serverBaseInfo = [
     {
       title: t('server.synology_nas'),
-      value: dsmInfo.model,
+      value: pageServerNasInfo.model,
       unit: '',
       icon: <IcRoundCalendarViewWeek sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.dsm_version'),
-      value: dsmInfo.version,
+      value: pageServerNasInfo.version,
       unit: '',
       icon: <IcOutlineInfo sx={{ fontSize: 20 }} />,
     },
@@ -173,7 +173,7 @@ const Server: React.FC = () => {
     });
 
     if (!resp.success) {
-      setDsmInfo({
+      setPageServerNasInfo({
         model: '-',
         version: '-',
       });
@@ -181,7 +181,7 @@ const Server: React.FC = () => {
 
     if (resp.success) {
       const version = resp.data?.version_string.split(' ')[1] as string;
-      setDsmInfo({
+      setPageServerNasInfo({
         model: resp.data?.model as string,
         version,
       });

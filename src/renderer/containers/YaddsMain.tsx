@@ -13,13 +13,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
 import {
-  hasYaddsSidebarAtomWithPersistence,
-  hasYaddsSidebarMarginTopAtom,
-  sidebarWidth,
   yaddsMainOrderIsAscendAtomWithPersistence,
   yaddsMainOrderIteraterAtomWithPersistence,
-  yaddsSidebarCategoryAtomWithPersistence,
 } from '../atoms/yaddsAtoms';
+import {
+  atomHasSidebarMarginTop,
+  atomSidebarWidth,
+  atomPersistenceHasSidebar,
+  atomPersistenceSidebarCategory,
+} from '../atoms/atomUI';
 import IcRoundFilterList from '../components/icons/IcRoundFilterList';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import greyInactiveSvg from '../assets/yaddsSidebarIndicator/grey_inactive.svg';
@@ -41,10 +43,10 @@ const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const [SIDEBAR_WIDTH] = useAtom(sidebarWidth);
-  const [yaddsSidebarCategory] = useAtom(yaddsSidebarCategoryAtomWithPersistence);
-  const [hasYaddsSidebarMarginTop] = useAtom(hasYaddsSidebarMarginTopAtom);
-  const [hasYaddsSidebar, persistHasYaddsSidebar] = useAtom(hasYaddsSidebarAtomWithPersistence);
+  const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
+  const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
+  const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
+  const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [orderIterater, persistOrderIterater] = useAtom(yaddsMainOrderIteraterAtomWithPersistence);
   const [orderIsAscend, persistOrderIsAscend] = useAtom(yaddsMainOrderIsAscendAtomWithPersistence);
 
@@ -57,10 +59,10 @@ const YaddsMain: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    window.electron?.toogleSidebar(hasYaddsSidebar, persistHasYaddsSidebar); // handle the sidebar state
-    const appMenuItemLabel = appMenuItemHandler(t, hasYaddsSidebar, hasYaddsSidebarMarginTop);
+    window.electron?.toogleSidebar(hasSidebar, setHasSidebar); // handle the sidebar state
+    const appMenuItemLabel = appMenuItemHandler(t, hasSidebar, hasSidebarMarginTop);
     window.electron?.setAppMenu(appMenuItemLabel); // Init or update application menu
-  }, [hasYaddsSidebar]);
+  }, [hasSidebar]);
 
   return (
     <Paper
@@ -75,7 +77,7 @@ const YaddsMain: React.FC = () => {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
-        ...(hasYaddsSidebar && {
+        ...(hasSidebar && {
           width: `calc(100% - ${SIDEBAR_WIDTH}px)`,
           transition: theme.transitions.create('width', {
             easing: theme.transitions.easing.easeOut,
@@ -87,9 +89,9 @@ const YaddsMain: React.FC = () => {
       <Box sx={{ position: 'fixed', top: '47%' }}>
         <Icon
           sx={{ height: 40 }}
-          onMouseOver={() => setIndicatorScr(hasYaddsSidebar ? greyActiveLeftSvg : greyActiveRightSvg)}
+          onMouseOver={() => setIndicatorScr(hasSidebar ? greyActiveLeftSvg : greyActiveRightSvg)}
           onMouseOut={() => setIndicatorScr(greyInactiveSvg)}
-          onClick={() => persistHasYaddsSidebar(!hasYaddsSidebar)}
+          onClick={() => setHasSidebar(!hasSidebar)}
         >
           <img src={indicatorSrc} alt="" draggable="false" />
         </Icon>
@@ -101,7 +103,7 @@ const YaddsMain: React.FC = () => {
           position: 'sticky',
           flexDirection: 'column',
           backgroundColor: 'transparent',
-          display: yaddsSidebarCategory === '/server' || yaddsSidebarCategory === '/settings' ? 'none' : 'flex',
+          display: sidebarCategory === '/server' || sidebarCategory === '/settings' ? 'none' : 'flex',
         }}
         onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
       >
@@ -169,9 +171,9 @@ const YaddsMain: React.FC = () => {
       <Box
         sx={{
           px: theme.spacing(3),
-          overflowY: yaddsSidebarCategory === '/settings' || yaddsSidebarCategory === '/server' ? 'hidden' : 'scroll',
+          overflowY: sidebarCategory === '/settings' || sidebarCategory === '/server' ? 'hidden' : 'scroll',
           height:
-            yaddsSidebarCategory === '/settings' || yaddsSidebarCategory === '/server'
+            sidebarCategory === '/settings' || sidebarCategory === '/server'
               ? '100%'
               : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
         }}

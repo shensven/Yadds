@@ -9,13 +9,12 @@ import { find } from 'lodash';
 import {
   dsmConnectListAtomWithPersistence,
   dsmCurrentSidAtomWithPersistence,
-  dsmInfoAtom,
+  atomPageServerNasInfo,
   atomDsmQuotaList,
   tasksAtom,
-  tasksRetry,
   tasksStatusAtom,
-  yaddsAppearanceAtomWithPersistence,
 } from './atoms/yaddsAtoms';
+import { atomPersistenceAppearance, tasksRetry } from './atoms/atomUI';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -26,12 +25,12 @@ const App: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const [TASKS_RETRY] = useAtom(tasksRetry);
-  const [yaddsAppearance] = useAtom(yaddsAppearanceAtomWithPersistence);
+  const [appearance] = useAtom(atomPersistenceAppearance);
   const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
   const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
   const [, setTasks] = useAtom(tasksAtom);
   const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
-  const [, setDsmInfo] = useAtom(dsmInfoAtom);
+  const [, setPageServerNasInfo] = useAtom(atomPageServerNasInfo);
   const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
 
   const handleTasks = async () => {
@@ -87,12 +86,12 @@ const App: React.FC = () => {
 
       if (resp.success) {
         const version = resp.data.version_string.split(' ')[1] as string;
-        setDsmInfo({
+        setPageServerNasInfo({
           model: resp.data.model as string,
           version,
         });
       } else {
-        setDsmInfo({
+        setPageServerNasInfo({
           model: '-',
           version: '-',
         });
@@ -153,7 +152,7 @@ const App: React.FC = () => {
   }, [dsmCurrentSid, tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
-    switch (yaddsAppearance) {
+    switch (appearance) {
       case 'light':
         return 'light';
       case 'dark':
