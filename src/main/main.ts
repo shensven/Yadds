@@ -22,7 +22,7 @@ import {
 } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { resolveHtmlPath } from './util';
+import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } from './util';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
@@ -40,12 +40,6 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
-const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-const isProduction = process.env.NODE_ENV === 'production';
-const isDarwin = process.platform === 'darwin';
-const isWin32 = process.platform === 'win32';
-const isLinux = process.platform === 'linux';
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;

@@ -2,9 +2,15 @@
 import { URL } from 'url';
 import path from 'path';
 
-export let resolveHtmlPath: (htmlFileName: string) => string;
+export const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+export const isProduction = process.env.NODE_ENV === 'production';
 
-if (process.env.NODE_ENV === 'development') {
+export const isDarwin = process.platform === 'darwin';
+export const isWin32 = process.platform === 'win32';
+export const isLinux = process.platform === 'linux';
+
+export let resolveHtmlPath: (htmlFileName: string) => string;
+if (isDebug) {
   const port = process.env.PORT || 1212;
   resolveHtmlPath = (htmlFileName: string) => {
     const url = new URL(`http://localhost:${port}`);
