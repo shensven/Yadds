@@ -26,6 +26,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Slide from '@mui/material/Slide';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
+import RowItem from './Settings/RowItem';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
@@ -100,30 +101,6 @@ const getAppearanceFollowSystem = () => {
     default:
       return gnome_appearance_follow_system;
   }
-};
-
-interface SettingsFormItemProps {
-  label: string;
-  children: React.ReactNode;
-  hasMargin?: boolean;
-}
-const SettingsFormItem: React.FC<SettingsFormItemProps> = (props: SettingsFormItemProps) => {
-  const { label, children, hasMargin } = props;
-  const theme = useTheme();
-  const LABEL_WIDTH: string = theme.spacing(28);
-  return (
-    <Stack flex={1} flexDirection="row" px={theme.spacing(1)} py={theme.spacing(2)}>
-      <FormControl margin={hasMargin ? 'dense' : 'none'} sx={{ width: LABEL_WIDTH }}>
-        <Typography variant="subtitle2" fontWeight={800} color={theme.palette.text.primary}>
-          {label}
-        </Typography>
-      </FormControl>
-      {children}
-    </Stack>
-  );
-};
-SettingsFormItem.defaultProps = {
-  hasMargin: true,
 };
 
 const Settings: React.FC = () => {
@@ -373,7 +350,7 @@ const Settings: React.FC = () => {
         </Typography>
 
         {/* appearance */}
-        <SettingsFormItem label={t('settings.appearance')}>
+        <RowItem label={t('settings.appearance')}>
           <FormGroup row>
             {appearanceList.map((item) => (
               <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>
@@ -406,10 +383,10 @@ const Settings: React.FC = () => {
               </Stack>
             ))}
           </FormGroup>
-        </SettingsFormItem>
+        </RowItem>
 
         {/* QuickConnect ID or Address */}
-        <SettingsFormItem label={t('settings.quickconnect_id_or_address')}>
+        <RowItem label={t('settings.quickconnect_id_or_address')}>
           <FormGroup row>
             <FormControl>
               <Select
@@ -460,10 +437,10 @@ const Settings: React.FC = () => {
               {t('settings.new_connection')}
             </Button>
           </FormGroup>
-        </SettingsFormItem>
+        </RowItem>
 
         {/* locales */}
-        <SettingsFormItem label={t('settings.language')}>
+        <RowItem label={t('settings.language')}>
           <FormGroup>
             <FormControl>
               <Select
@@ -492,10 +469,10 @@ const Settings: React.FC = () => {
               </Select>
             </FormControl>
           </FormGroup>
-        </SettingsFormItem>
+        </RowItem>
 
         {/* system */}
-        <SettingsFormItem label={t('settings.application')}>
+        <RowItem label={t('settings.application')}>
           <FormGroup>
             <FormControlLabel
               checked={isAutoLaunch}
@@ -526,10 +503,10 @@ const Settings: React.FC = () => {
               </Button>
             </Stack>
           </FormGroup>
-        </SettingsFormItem>
+        </RowItem>
 
         {/* About */}
-        <SettingsFormItem label={t('settings.about')} hasMargin={false}>
+        <RowItem label={t('settings.about')} hasMargin={false}>
           <FormGroup>
             <Stack flexDirection="row">
               <Typography variant="subtitle2">{t('settings.license')}</Typography>
@@ -571,7 +548,7 @@ const Settings: React.FC = () => {
             </Stack>
             <FormHelperText>Made with ❤️ in Kunming</FormHelperText>
           </FormGroup>
-        </SettingsFormItem>
+        </RowItem>
       </Stack>
 
       {/* Add Connection */}
