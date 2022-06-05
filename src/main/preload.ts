@@ -25,6 +25,36 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
+  os: {
+    get: () => {
+      return ipcRenderer.sendSync('os:get');
+    },
+  },
+
+  app: {
+    getVersion: () => {
+      return ipcRenderer.sendSync('app:get-version');
+    },
+    openURL: (url: string) => {
+      ipcRenderer.invoke('app:open-url', url);
+    },
+    zoomWindow: () => {
+      ipcRenderer.invoke('app:zoom-window');
+    },
+    toggleNativeTheme: (appearance: Appearance) => {
+      ipcRenderer.invoke(`app:set-${appearance}-mode`);
+    },
+  },
+
+  store: {
+    get(key: string) {
+      return ipcRenderer.sendSync('electron-store:get', key);
+    },
+    set(key: string, val: unknown) {
+      ipcRenderer.send('electron-store:set', key, val);
+    },
+  },
+
   topMenuForApp: {
     create: (args: MenuItemLabelsForApp) => {
       ipcRenderer.invoke('top-menu-for-app:create', args);
@@ -54,6 +84,29 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
+  yadds: {
+    toogleSidebar: (hasSidebar: boolean, setHasSidebar: (update: boolean) => void) => {
+      ipcRenderer.removeAllListeners('yadds:toogle-sidebar');
+      ipcRenderer.on('yadds:toogle-sidebar', () => {
+        setHasSidebar(!hasSidebar);
+      });
+    },
+
+    toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => {
+      ipcRenderer.removeAllListeners('yadds:toogle-sidebar-mt');
+      ipcRenderer.on('yadds:toogle-sidebar-mt', (_, arg: boolean) => {
+        setHasSidebarMarginTop(arg);
+      });
+    },
+
+    navigate: (navigateFunc: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => {
+      ipcRenderer.on('yadds:navigate', (_, arg: SidebarCategory) => {
+        navigateFunc(arg);
+        setSidebarCategory(arg);
+      });
+    },
+  },
+
   queue: {
     orderBy: (setQueueIterater: (update: string) => void) => {
       ipcRenderer.on('queue:order-by', (_, arg: string) => {
@@ -67,68 +120,18 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  toggleNativeTheme: (appearance: Appearance) => {
-    ipcRenderer.invoke(`dark-mode:${appearance}`);
-  },
-
-  zoomWindow: () => {
-    ipcRenderer.invoke('zoom-window');
-  },
-
-  toogleSidebar: (hasSidebar: boolean, setHasSidebar: (update: boolean) => void) => {
-    ipcRenderer.removeAllListeners('toogle-sidebar');
-    ipcRenderer.on('toogle-sidebar', () => {
-      setHasSidebar(!hasSidebar);
-    });
-  },
-
-  toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => {
-    ipcRenderer.removeAllListeners('toogle-sidebar-mt');
-    ipcRenderer.on('toogle-sidebar-mt', (_, arg: boolean) => {
-      setHasSidebarMarginTop(arg);
-    });
-  },
-
-  navigateTo: (navigateViaReact: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => {
-    ipcRenderer.on('navigate', (_, arg: SidebarCategory) => {
-      navigateViaReact(arg);
-      setSidebarCategory(arg);
-    });
-  },
-
-  store: {
-    get(key: string) {
-      return ipcRenderer.sendSync('electron-store:get', key);
-    },
-    set(key: string, val: unknown) {
-      ipcRenderer.send('electron-store:set', key, val);
-    },
-  },
-
-  getOS: () => {
-    return ipcRenderer.sendSync('get-os-platform');
-  },
-
-  getAppVersion: () => {
-    return ipcRenderer.sendSync('get-app-version');
-  },
-
-  openViaBrowser: (url: string) => {
-    ipcRenderer.invoke('open-via-broswer', url);
-  },
-
   net: {
     auth(args: any) {
-      return ipcRenderer.invoke('net-auth', args);
+      return ipcRenderer.invoke('net:auth', args);
     },
     poll(args: any) {
-      return ipcRenderer.invoke('net-poll', args);
+      return ipcRenderer.invoke('net:poll', args);
     },
     getDsmInfo(args: any) {
-      return ipcRenderer.invoke('net-get-dsm-info', args);
+      return ipcRenderer.invoke('net:get-dsm-info', args);
     },
     getQuata(args: any) {
-      return ipcRenderer.invoke('net-get-quota', args);
+      return ipcRenderer.invoke('net:get-quota', args);
     },
   },
 });

@@ -20,7 +20,22 @@ declare global {
         on(channel: string, func: (...args: unknown[]) => void): (() => void) | undefined;
         once(channel: string, func: (...args: unknown[]) => void): void;
       };
-      toggleNativeTheme: (update: Appearance) => void;
+
+      os: {
+        get: () => 'darwin' | 'win32' | 'linux';
+      };
+
+      app: {
+        getVersion: () => string;
+        openURL: (url: string) => void;
+        zoomWindow: () => void;
+        toggleNativeTheme: (update: Appearance) => void;
+      };
+
+      store: {
+        get: (key: string) => unknown;
+        set: (key: string, val: unknown) => void;
+      };
 
       topMenuForApp: {
         create: (update: MenuItemLabelsForApp) => void;
@@ -39,29 +54,16 @@ declare global {
         setTargetItem: (setPageServerQuotaTarget: (update: PageServerQuotaTargetItem) => void) => void;
       };
 
+      yadds: {
+        toogleSidebar: (hasYaddsSidebar: boolean, setHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
+        toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => void;
+        navigate: (navigateFunc: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => void;
+      };
+
       queue: {
         orderBy: (setQueueIterater: (update: QueueIterater) => void) => void;
         isAscend: (setQueueIsAscend: (updaet: boolean) => void) => void;
       };
-
-      zoomWindow: () => void;
-
-      toogleSidebar: (hasYaddsSidebar: boolean, setHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
-
-      toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => void;
-
-      navigateTo: (navigateViaReact: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => void;
-
-      store: {
-        get: (key: string) => unknown;
-        set: (key: string, val: unknown) => void;
-      };
-
-      getOS: () => 'darwin' | 'win32' | 'linux';
-
-      getAppVersion: () => string;
-
-      openViaBrowser: (url: string) => void;
 
       net: {
         auth: (props: {

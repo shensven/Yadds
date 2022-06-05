@@ -59,7 +59,7 @@ const YaddsMain: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    window.electron?.toogleSidebar(hasSidebar, setHasSidebar); // handle the sidebar state
+    window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar); // handle the sidebar state
     const itemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
     window.electron?.topMenuForApp.create(itemLabels); // Init or update application menu
   }, [hasSidebar]);
@@ -105,7 +105,7 @@ const YaddsMain: React.FC = () => {
           backgroundColor: 'transparent',
           display: sidebarCategory === '/server' || sidebarCategory === '/settings' ? 'none' : 'flex',
         }}
-        onDoubleClick={() => window.electron.getOS() === 'darwin' && window.electron.zoomWindow()}
+        onDoubleClick={() => window.electron.os.get() === 'darwin' && window.electron.app.zoomWindow()}
       >
         <Stack flexDirection="row" justifyContent="flex-end" alignItems="center" sx={{ p: theme.spacing(2) }}>
           <Stack

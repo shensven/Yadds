@@ -29,7 +29,7 @@ import {
 } from '../atoms/atomTask';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
-const OS_PLATFORM = window.electron?.getOS();
+const OS_PLATFORM = window.electron?.os.get();
 
 interface CardUnitProps {
   hasIconButton: boolean;
@@ -214,7 +214,7 @@ const Server: React.FC = () => {
     <Box>
       <Box
         sx={{ height: theme.spacing(5), appRegion: 'drag' }}
-        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.zoomWindow()}
+        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.app.zoomWindow()}
       />
       <Stack sx={{ pl: theme.spacing(2) }}>
         <Typography variant="h4" fontWeight={600} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>

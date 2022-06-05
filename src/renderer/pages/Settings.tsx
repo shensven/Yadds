@@ -61,8 +61,8 @@ import {
 import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
 
-const OS_PLATFORM = window.electron?.getOS();
-const APP_VERSION = window.electron?.getAppVersion();
+const OS_PLATFORM = window.electron?.os.get();
+const APP_VERSION = window.electron?.app.getVersion();
 
 const getAppearanceLight = () => {
   switch (OS_PLATFORM) {
@@ -136,24 +136,24 @@ const Settings: React.FC = () => {
 
   const [whoWillRemove, setWhoWillRemove] = useState<number>(-1);
 
-  interface YaddsAppearanceObj {
-    yaddsAppearance: Appearance;
+  interface YaddsAppearance {
+    appearance: Appearance;
     label: string;
     src: string;
   }
-  const appearanceList: YaddsAppearanceObj[] = [
+  const appearanceList: YaddsAppearance[] = [
     {
-      yaddsAppearance: 'light',
+      appearance: 'light',
       label: t('settings.light'),
       src: getAppearanceLight(),
     },
     {
-      yaddsAppearance: 'dark',
+      appearance: 'dark',
       label: t('settings.dark'),
       src: getAppearanceDark(),
     },
     {
-      yaddsAppearance: 'system',
+      appearance: 'system',
       label: t('settings.follow_system'),
       src: getAppearanceFollowSystem(),
     },
@@ -342,7 +342,7 @@ const Settings: React.FC = () => {
     <Box>
       <Box
         sx={{ height: theme.spacing(5), appRegion: 'drag' }}
-        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.zoomWindow()}
+        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.app.zoomWindow()}
       />
       <Stack sx={{ pl: theme.spacing(2) }}>
         <Typography variant="h4" fontWeight={600} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
@@ -358,25 +358,23 @@ const Settings: React.FC = () => {
                   sx={{
                     borderRadius: 1,
                     overflow: 'hidden',
-                    filter: appearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
+                    filter: appearance === item.appearance ? 'grayscale(0)' : 'grayscale(100%) opacity(0.75)',
                     height: 44,
                     width: 67,
                     '&:hover': {
-                      filter: appearance === item.yaddsAppearance ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
+                      filter: appearance === item.appearance ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
                     },
                   }}
                   onClick={() => {
-                    setAppearance(item.yaddsAppearance);
-                    window.electron.toggleNativeTheme(item.yaddsAppearance);
+                    setAppearance(item.appearance);
+                    window.electron.app.toggleNativeTheme(item.appearance);
                   }}
                 >
                   <img src={item.src} alt="" draggable="false" width={67} height={44} />
                 </Box>
                 <Typography
                   variant="overline"
-                  color={
-                    appearance === item.yaddsAppearance ? theme.palette.text.secondary : theme.palette.text.disabled
-                  }
+                  color={appearance === item.appearance ? theme.palette.text.secondary : theme.palette.text.disabled}
                 >
                   {item.label}
                 </Typography>
@@ -517,7 +515,7 @@ const Settings: React.FC = () => {
                   ml: theme.spacing(1),
                   '&:hover': { opacity: 0.5 },
                 }}
-                onClick={() => window.electron.openViaBrowser('https://github.com/shensven/Yadds/blob/main/LICENSE')}
+                onClick={() => window.electron.app.openURL('https://github.com/shensven/Yadds/blob/main/LICENSE')}
               >
                 {t('settings.this_copy_is_licensed_under_GPL_3_0')}
               </Typography>
@@ -534,7 +532,7 @@ const Settings: React.FC = () => {
                   ml: theme.spacing(1),
                   '&:hover': { color: '#1DA1F2' },
                 }}
-                onClick={() => window.electron.openViaBrowser('https://twitter.com/shensven2016')}
+                onClick={() => window.electron.app.openURL('https://twitter.com/shensven2016')}
               />
               <IonLogoGithub
                 sx={{
@@ -543,7 +541,7 @@ const Settings: React.FC = () => {
                   ml: theme.spacing(1),
                   '&:hover': { color: '#333333' },
                 }}
-                onClick={() => window.electron.openViaBrowser('https://github.com/shensven')}
+                onClick={() => window.electron.app.openURL('https://github.com/shensven')}
               />
             </Stack>
             <FormHelperText>Made with ❤️ in Kunming</FormHelperText>

@@ -56,14 +56,14 @@ const YaddsSidebar: React.FC = () => {
   const [sidebarCategory, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [tasks] = useAtom(atomTasks);
 
-  const isDarwin = window.electron?.getOS() === 'darwin';
+  const isDarwin = window.electron?.os.get() === 'darwin';
 
   useEffect(() => {
-    window.electron?.navigateTo(navigate, setSidebarCategory); // Init navigation from the top menu
+    window.electron?.yadds.navigate(navigate, setSidebarCategory); // Init navigation from the top menu
   }, []);
 
   useEffect(() => {
-    window.electron?.toogleSidebarMarginTop(setHasSidebarMarginTop); // handle the margin top of the sidebar
+    window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop); // handle the margin top of the sidebar
 
     const itemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
     window.electron?.topMenuForApp.create(itemLabels); // Init or update application menu

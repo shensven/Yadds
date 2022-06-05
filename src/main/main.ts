@@ -199,14 +199,14 @@ const createWindow = async () => {
 
   mainWindow.on('enter-full-screen', () => {
     if (mainWindow) {
-      mainWindow.webContents.send('toogle-sidebar-mt', false);
+      mainWindow.webContents.send('yadds:toogle-sidebar-mt', false);
       store.set('isYaddsFullScreen', true);
     }
   });
 
   mainWindow.on('leave-full-screen', () => {
     if (mainWindow) {
-      mainWindow.webContents.send('toogle-sidebar-mt', true);
+      mainWindow.webContents.send('yadds:toogle-sidebar-mt', true);
       store.set('isYaddsFullScreen', false);
     }
   });
@@ -333,7 +333,7 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemLabelsForApp) 
         {
           label: args.preferences,
           accelerator: 'Command+,',
-          click: () => mainWindow?.webContents.send('navigate', '/settings'),
+          click: () => mainWindow?.webContents.send('yadds:navigate', '/settings'),
         },
         { type: 'separator' },
         { label: args.services, submenu: [] },
@@ -363,7 +363,7 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemLabelsForApp) 
     const subMenuView: MenuItemConstructorOptions = {
       label: args.view,
       submenu: [
-        { label: args.showHideSidebar, click: () => mainWindow?.webContents.send('toogle-sidebar') },
+        { label: args.showHideSidebar, click: () => mainWindow?.webContents.send('yadds:toogle-sidebar') },
         {
           label: args.toggleFullScreen,
           accelerator: 'Ctrl+Command+F',
@@ -374,12 +374,12 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemLabelsForApp) 
     const subMenuNavigation: MenuItemConstructorOptions = {
       label: args.navigate,
       submenu: [
-        { label: args.all, click: () => mainWindow?.webContents.send('navigate', '/queueAll') },
-        { label: args.downloading, click: () => mainWindow?.webContents.send('navigate', '/queueDownloading') },
-        { label: args.completed, click: () => mainWindow?.webContents.send('navigate', '/queueFinished') },
-        { label: args.active, click: () => mainWindow?.webContents.send('navigate', '/queueActive') },
-        { label: args.inactive, click: () => mainWindow?.webContents.send('navigate', '/queueInactive') },
-        { label: args.stopped, click: () => mainWindow?.webContents.send('navigate', '/queueStopped') },
+        { label: args.all, click: () => mainWindow?.webContents.send('yadds:navigate', '/queueAll') },
+        { label: args.downloading, click: () => mainWindow?.webContents.send('yadds:navigate', '/queueDownloading') },
+        { label: args.completed, click: () => mainWindow?.webContents.send('yadds:navigate', '/queueFinished') },
+        { label: args.active, click: () => mainWindow?.webContents.send('yadds:navigate', '/queueActive') },
+        { label: args.inactive, click: () => mainWindow?.webContents.send('yadds:navigate', '/queueInactive') },
+        { label: args.stopped, click: () => mainWindow?.webContents.send('yadds:navigate', '/queueStopped') },
       ],
     };
     const subMenuWindow: DarwinMenuItemConstructorOptions = {
@@ -568,19 +568,47 @@ ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorO
   Menu.buildFromTemplate(template).popup();
 });
 
-ipcMain.handle('dark-mode:light', async () => {
+ipcMain.on('electron-store:get', async (evt, key: string) => {
+  evt.returnValue = store.get(key);
+});
+
+ipcMain.on('electron-store:set', async (_, key: string, val: unknown) => {
+  store.set(key, val);
+});
+
+ipcMain.on('os:get', async (evt) => {
+  evt.returnValue = process.platform;
+});
+
+ipcMain.on('app:get-version', async (evt) => {
+  evt.returnValue = app.getVersion();
+});
+
+ipcMain.handle('app:open-url', async (_, url: string) => {
+  await shell.openExternal(url);
+});
+
+ipcMain.handle('app:zoom-window', async () => {
+  if (mainWindow?.isMaximized()) {
+    mainWindow?.unmaximize();
+  } else {
+    mainWindow?.maximize();
+  }
+});
+
+ipcMain.handle('app:set-light-mode', async () => {
   nativeTheme.themeSource = 'light';
   if (isWin32) {
     mainWindow?.setBackgroundColor('#e6e6e6');
   }
 });
-ipcMain.handle('dark-mode:dark', async () => {
+ipcMain.handle('app:set-dark-mode', async () => {
   nativeTheme.themeSource = 'dark';
   if (isWin32) {
     mainWindow?.setBackgroundColor('#1f1f1f');
   }
 });
-ipcMain.handle('dark-mode:system', async () => {
+ipcMain.handle('app:set-system-mode', async () => {
   nativeTheme.themeSource = 'system';
   if (isWin32) {
     if (nativeTheme.shouldUseDarkColors) {
@@ -591,46 +619,18 @@ ipcMain.handle('dark-mode:system', async () => {
   }
 });
 
-ipcMain.handle('zoom-window', async () => {
-  if (mainWindow?.isMaximized()) {
-    mainWindow?.unmaximize();
-  } else {
-    mainWindow?.maximize();
-  }
-});
-
-ipcMain.on('electron-store:get', async (evt, key: string) => {
-  evt.returnValue = store.get(key);
-});
-
-ipcMain.on('electron-store:set', async (_, key: string, val: unknown) => {
-  store.set(key, val);
-});
-
-ipcMain.on('get-os-platform', async (evt) => {
-  evt.returnValue = process.platform;
-});
-
-ipcMain.on('get-app-version', async (evt) => {
-  evt.returnValue = app.getVersion();
-});
-
-ipcMain.handle('open-via-broswer', async (_, url: string) => {
-  await shell.openExternal(url);
-});
-
-ipcMain.handle('net-auth', async (_, args) => {
+ipcMain.handle('net:auth', async (_, args) => {
   return auth(args);
 });
 
-ipcMain.handle('net-poll', async (_, args) => {
+ipcMain.handle('net:poll', async (_, args) => {
   return poll(args);
 });
 
-ipcMain.handle('net-get-dsm-info', async (_, args) => {
+ipcMain.handle('net:get-dsm-info', async (_, args) => {
   return getDsmInfo(args);
 });
 
-ipcMain.handle('net-get-quota', async (_, args) => {
+ipcMain.handle('net:get-quota', async (_, args) => {
   return getQuota(args);
 });
