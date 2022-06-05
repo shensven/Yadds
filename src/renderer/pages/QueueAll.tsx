@@ -4,8 +4,8 @@ import { useAtom } from 'jotai';
 import orderBy from 'lodash/orderBy';
 import { atomPersistenceQueueIsAscend, atomPersistenceQueueIterater } from '../atoms/atomUI';
 import { Task, atomTasks } from '../atoms/atomTask';
-import QueueEmpty from '../components/QueueEmpty/QueueEmpty';
-import MainListItem from '../components/listItem/MainListItem';
+import QueueEmpty from './Queue/QueueEmpty';
+import QueueItem from './Queue/QueueItem';
 
 const QueueAll: React.FC = () => {
   const [tasks] = useAtom(atomTasks);
@@ -34,7 +34,7 @@ const QueueAll: React.FC = () => {
   return (
     <List>
       {orderBy(tasks, (item) => getIteratees(item), queueIsAscend ? 'asc' : 'desc').map((item) => (
-        <MainListItem key={item.id} item={item} />
+        <QueueItem key={item.id} item={item} />
       ))}
     </List>
   );

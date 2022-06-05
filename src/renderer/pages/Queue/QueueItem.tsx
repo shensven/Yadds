@@ -9,13 +9,13 @@ import ButtonBase from '@mui/material/ButtonBase';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useTranslation } from 'react-i18next';
 import byteSize from 'byte-size';
-import IonPlay from '../icons/IonPlay';
-import IonPause from '../icons/IonPause';
-import TablerArrowNarrowUp from '../icons/TablerArrowNarrowUp';
-import TablerArrowNarrowDown from '../icons/TablerArrowNarrowDown';
+import IonPlay from '../../components/icons/IonPlay';
+import IonPause from '../../components/icons/IonPause';
+import TablerArrowNarrowUp from '../../components/icons/TablerArrowNarrowUp';
+import TablerArrowNarrowDown from '../../components/icons/TablerArrowNarrowDown';
 import { Task } from '../../atoms/atomTask';
 
-const MainListItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
+const QueueItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
   const { t } = useTranslation();
 
   const { item } = props;
@@ -143,4 +143,4 @@ const MainListItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
   );
 };
 
-export default MainListItem;
+export default QueueItem;

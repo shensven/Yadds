@@ -22,9 +22,9 @@ import {
 } from '../atoms/atomUI';
 import IcRoundFilterList from '../components/icons/IcRoundFilterList';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
-import greyInactiveSvg from '../assets/yaddsSidebarIndicator/grey_inactive.svg';
-import greyActiveLeftSvg from '../assets/yaddsSidebarIndicator/grey_active_left.svg';
-import greyActiveRightSvg from '../assets/yaddsSidebarIndicator/grey_active_right.svg';
+import greyInactiveSvg from './assets/grey_inactive.svg';
+import greyActiveLeftSvg from './assets/grey_active_left.svg';
+import greyActiveRightSvg from './assets/grey_active_right.svg';
 import RedirectEl from '../pages/RedirectEl';
 import QueueAll from '../pages/QueueAll';
 import QueueDownloading from '../pages/QueueDownloading';
