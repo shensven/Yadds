@@ -1,15 +1,11 @@
 {
   "description": "Yet Another DSM Download Station",
   "keywords": [
+    "synology",
+    "download station",
     "electron",
-    "boilerplate",
     "react",
-    "typescript",
-    "ts",
-    "sass",
-    "webpack",
-    "hot",
-    "reload"
+    "typescript"
   ],
   "homepage": "https://github.com/shensven/Yadds",
   "bugs": {
@@ -121,14 +117,14 @@
     "react-router-dom": "6.3.0"
   },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "0.5.6",
+    "@pmmmwh/react-refresh-webpack-plugin": "0.5.7",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "13.3.0",
     "@types/byte-size": "8.1.0",
     "@types/jest": "27.5.2",
     "@types/lodash": "4.14.182",
-    "@types/node": "17.0.33",
+    "@types/node": "17.0.40",
     "@types/react": "18.0.11",
     "@types/react-dom": "18.0.5",
     "@types/react-test-renderer": "18.0.0",
@@ -139,7 +135,7 @@
     "browserslist-config-erb": "^0.0.3",
     "chalk": "^4.1.2",
     "concurrently": "^7.1.0",
-    "core-js": "^3.22.5",
+    "core-js": "^3.22.8",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^3.4.1",
@@ -174,10 +170,10 @@
     "react-refresh": "^0.13.0",
     "react-test-renderer": "18.1.0",
     "rimraf": "^3.0.2",
-    "sass": "^1.51.0",
+    "sass": "^1.52.2",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
-    "terser-webpack-plugin": "^5.3.1",
+    "terser-webpack-plugin": "^5.3.3",
     "ts-jest": "28.0.4",
     "ts-loader": "^9.3.0",
     "ts-node": "^10.7.0",
@@ -186,7 +182,7 @@
     "webpack": "^5.72.1",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0",
+    "webpack-dev-server": "^4.9.1",
     "webpack-merge": "^5.8.0"
   },
   "build": {
