@@ -8,17 +8,14 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Icon from '@mui/material/Icon';
+import CardUnit from './Server/CardUnit';
 import IcRoundCalendarViewWeek from '../components/icons/IcRoundCalendarViewWeek';
 import IcOutlineInfo from '../components/icons/IcOutlineInfo';
 import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
 import {
   atomPageServerNasInfo,
@@ -30,69 +27,6 @@ import {
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
 const OS_PLATFORM = window.electron?.os.get();
-
-interface CardUnitProps {
-  hasIconButton: boolean;
-  hasMarginRight: boolean;
-  icon: JSX.Element;
-  title: string;
-  value: string;
-  unit?: string;
-  onClick?: () => void;
-}
-
-const CardUnit: React.FC<CardUnitProps> = (props: CardUnitProps) => {
-  const { hasIconButton, hasMarginRight, icon, title, value, unit, onClick } = props;
-  const theme = useTheme();
-
-  return (
-    <Card
-      elevation={0}
-      sx={{
-        backgroundColor: theme.palette.card.default,
-        mr: hasMarginRight ? 0 : theme.spacing(2),
-        p: theme.spacing(1),
-        minWidth: theme.spacing(19),
-      }}
-    >
-      <Stack flexDirection="row" justifyContent="space-between">
-        <Stack flexDirection="row" alignItems="center">
-          <Icon color="primary">{icon}</Icon>
-          <Typography noWrap variant="subtitle2" color={theme.palette.primary.main}>
-            {title}
-          </Typography>
-        </Stack>
-        {hasIconButton && (
-          <IconButton
-            color="primary"
-            size="small"
-            sx={{
-              appRegion: 'no-drag',
-              backgroundColor: theme.palette.input.default,
-              '&:hover': { backgroundColor: theme.palette.input.hover },
-            }}
-            onClick={onClick}
-          >
-            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
-          </IconButton>
-        )}
-      </Stack>
-      <Stack flexDirection="row" alignItems="baseline" pr={theme.spacing(1)}>
-        <Typography noWrap fontSize={20} fontWeight={700} pl={theme.spacing(0.5)}>
-          {value}
-        </Typography>
-        <Typography fontSize={12} fontWeight={500} pl={theme.spacing(0.5)}>
-          {unit}
-        </Typography>
-      </Stack>
-    </Card>
-  );
-};
-
-CardUnit.defaultProps = {
-  unit: '',
-  onClick: () => {},
-};
 
 const Server: React.FC = () => {
   const theme = useTheme();
