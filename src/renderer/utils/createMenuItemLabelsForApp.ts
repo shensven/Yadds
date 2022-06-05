@@ -1,6 +1,6 @@
 import { TFunction } from 'react-i18next';
 
-const menuItemHandler = (
+const createMenuItemLabelsForApp = (
   t: TFunction<'translation', undefined>,
   hasYaddsSidebar: boolean,
   hasYaddsSidebarMarginTop: boolean
@@ -48,6 +48,6 @@ const menuItemHandler = (
   return menuItemLabel;
 };
 
-export default menuItemHandler;
+export default createMenuItemLabelsForApp;
 
-export type AppMenuItem = ReturnType<typeof menuItemHandler>;
+export type MenuItemLabelsForApp = ReturnType<typeof createMenuItemLabelsForApp>;

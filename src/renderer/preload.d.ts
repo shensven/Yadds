@@ -1,12 +1,12 @@
-import { TFunction } from 'react-i18next';
 import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
 import { ServerError } from 'main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
-import { Appearance, SidebarCategory } from './atoms/atomUI';
+import { Appearance, QueueIterater, SidebarCategory } from './atoms/atomUI';
 import { PageServerQuotaTargetItem } from './atoms/atomTask';
-import { AppMenuItem } from './utils/appMenuItemHandler';
-import { ContextMenuItem } from './utils/contextMenuItemHandler';
+import { MenuItemLabelsForApp } from './utils/createMenuItemLabelsForApp';
+import { MenuItemLabelsForTray } from './utils/createMenuItemLabelsForTray';
+import { MenuItemLabelsForQueue } from './utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
 import { DsmInfo } from '../main/net/getDsmInfo';
@@ -22,19 +22,25 @@ declare global {
       };
       toggleNativeTheme: (update: Appearance) => void;
 
-      setAppMenu: (update: AppMenuItem) => void;
+      topMenuForApp: {
+        create: (update: MenuItemLabelsForApp) => void;
+      };
 
-      setTray: (t: TFunction) => void;
+      contextMenuForTray: {
+        create: (update: MenuItemLabelsForTray) => void;
+      };
 
-      setContextMenu: (update: ContextMenuItem) => void;
+      contextMenuForQueue: {
+        create: (update: MenuItemLabelsForQueue) => void;
+      };
 
       contextMenuForQuota: {
         create: (update: MenuItemConstructorOptionsForQuota) => void;
         setTargetItem: (setPageServerQuotaTarget: (update: PageServerQuotaTargetItem) => void) => void;
       };
 
-      order: {
-        byIterater: (setQueueIterater: (update: string) => void) => void;
+      queue: {
+        orderBy: (setQueueIterater: (update: QueueIterater) => void) => void;
         isAscend: (setQueueIsAscend: (updaet: boolean) => void) => void;
       };
 

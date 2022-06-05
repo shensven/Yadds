@@ -94,12 +94,14 @@ export const atomPersistenceIsAutoUpdate = atom(
 
 // -----------------------------------------------------------------------------
 
-const atomQueueIterater = atom<string>(
-  (window.electron?.store.get('yaddsMainOrderIterater') as string | undefined) ?? 'date'
+export type QueueIterater = 'date' | 'title' | 'download_progress' | 'download_speed';
+
+const atomQueueIterater = atom<QueueIterater>(
+  (window.electron?.store.get('yaddsMainOrderIterater') as QueueIterater | undefined) ?? 'date'
 );
 export const atomPersistenceQueueIterater = atom(
   (get) => get(atomQueueIterater),
-  (_get, set, newStr: string) => {
+  (_get, set, newStr: QueueIterater) => {
     set(atomQueueIterater, newStr);
     window.electron.store.set('yaddsMainOrderIterater', newStr);
   }

@@ -1,8 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { NavigateFunction } from 'react-router-dom';
-import { TFunction } from 'react-i18next';
-import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
-import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
+import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
+import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
+import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance, SidebarCategory } from '../renderer/atoms/atomUI';
 import { PageServerQuotaTargetItem } from '../renderer/atoms/atomTask';
@@ -25,20 +25,22 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  setAppMenu: (args: AppMenuItem) => {
-    ipcRenderer.invoke('set-application-menu', args);
+  topMenuForApp: {
+    create: (args: MenuItemLabelsForApp) => {
+      ipcRenderer.invoke('top-menu-for-app:create', args);
+    },
   },
 
-  setTray: (t: TFunction) => {
-    const menuItemLabel = {
-      showMainWindow: t('tray.show_main_window'),
-      quit: t('tray.quit'),
-    };
-    ipcRenderer.invoke('set-tray', menuItemLabel);
+  contextMenuForTray: {
+    create: (args: MenuItemLabelsForTray) => {
+      ipcRenderer.invoke('ctx-menu-for-tray:create', args);
+    },
   },
 
-  setContextMenu: (args: ContextMenuItem) => {
-    ipcRenderer.invoke('set-context-menu', args);
+  contextMenuForQueue: {
+    create: (args: MenuItemLabelsForQueue) => {
+      ipcRenderer.invoke('ctx-menu-for-queue:create', args);
+    },
   },
 
   contextMenuForQuota: {
@@ -52,14 +54,14 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
-  order: {
-    byIterater: (setQueueIterater: (update: string) => void) => {
-      ipcRenderer.on('order-by-iterater', (_, arg: string) => {
+  queue: {
+    orderBy: (setQueueIterater: (update: string) => void) => {
+      ipcRenderer.on('queue:order-by', (_, arg: string) => {
         setQueueIterater(arg);
       });
     },
     isAscend: (setQueueIsAscend: (update: boolean) => void) => {
-      ipcRenderer.on('order-is-ascend', (_, arg: boolean) => {
+      ipcRenderer.on('queue:is-ascend', (_, arg: boolean) => {
         setQueueIsAscend(arg);
       });
     },

@@ -45,6 +45,8 @@ import gnome_appearance_dark from './assets/Settings/gnome_appearance_dark.png';
 import gnome_appearance_follow_system from './assets/Settings/gnome_appearance_follow_system.png';
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
+import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
+import createMenuItemLabelsForTray from '../utils/createMenuItemLabelsForTray';
 import {
   Appearance,
   atomHasSidebarMarginTop,
@@ -57,7 +59,6 @@ import {
 } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
-import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 const OS_PLATFORM = window.electron?.getOS();
 const APP_VERSION = window.electron?.getAppVersion();
@@ -181,15 +182,15 @@ const Settings: React.FC = () => {
     },
   ];
 
-  interface YaddsI18n {
-    languageCode: LocaleName;
+  interface SettingsLocale {
+    localeName: LocaleName;
     label: string;
   }
-  const i18nList: YaddsI18n[] = [
-    { languageCode: 'en', label: 'English' },
-    { languageCode: 'zh_CN', label: '简体中文' },
-    { languageCode: 'zh_TW', label: '繁體中文' },
-    { languageCode: 'ja_JP', label: '日本語' },
+  const localeNameList: SettingsLocale[] = [
+    { localeName: 'en', label: 'English' },
+    { localeName: 'zh_CN', label: '简体中文' },
+    { localeName: 'zh_TW', label: '繁體中文' },
+    { localeName: 'ja_JP', label: '日本語' },
   ];
 
   const handleSelectQcOnChange = (sid: string, menuItemIndex: number, isDelete: boolean) => {
@@ -203,12 +204,13 @@ const Settings: React.FC = () => {
     setIsSelectQcOpen(false);
   };
 
-  const handleSelectI18nOnChange = (languageCode: LocaleName) => {
-    setLocaleName(languageCode);
-    i18n.changeLanguage(languageCode);
-    const appMenuItemLabel = appMenuItemHandler(t, hasSidebar, hasSidebarMarginTop);
-    window.electron.setAppMenu(appMenuItemLabel);
-    window.electron.setTray(t);
+  const handleSelectI18nOnChange = (targetLocaleName: LocaleName) => {
+    setLocaleName(targetLocaleName);
+    i18n.changeLanguage(targetLocaleName);
+    const topMenuItemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
+    window.electron.topMenuForApp.create(topMenuItemLabels);
+    const ctxMenuItemLabels = createMenuItemLabelsForTray(t);
+    window.electron.contextMenuForTray.create(ctxMenuItemLabels);
     setIsSelectI18nOpen(false);
   };
 
@@ -460,7 +462,7 @@ const Settings: React.FC = () => {
           </FormGroup>
         </SettingsFormItem>
 
-        {/* i18n */}
+        {/* locales */}
         <SettingsFormItem label={t('settings.language')}>
           <FormGroup>
             <FormControl>
@@ -475,12 +477,12 @@ const Settings: React.FC = () => {
                 onOpen={() => setIsSelectI18nOpen(true)}
                 onClose={() => setIsSelectI18nOpen(false)}
               >
-                {i18nList.map((item) => (
-                  <MenuItem key={item.languageCode} dense disableRipple value={item.languageCode}>
+                {localeNameList.map((item) => (
+                  <MenuItem key={item.localeName} dense disableRipple value={item.localeName}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectI18nOnChange(item.languageCode)}
+                        onClick={() => handleSelectI18nOnChange(item.localeName)}
                       >
                         {item.label}
                       </Typography>

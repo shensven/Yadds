@@ -1,9 +1,9 @@
 import { TFunction } from 'react-i18next';
 
-const menuItemHandler = (
+const createMenuItemLabelsForQueue = (
   t: TFunction<'translation', undefined>,
-  yaddsMainOrderIterater: string,
-  yaddsMainOrderIsAcsend: boolean
+  queueIterater: string,
+  queueIsAscend: boolean
 ) => {
   const menuItem = {
     resumeAll: t('main.resume_all'),
@@ -12,12 +12,12 @@ const menuItemHandler = (
     listView: t('main.list_view'),
     matrixView: t('main.matrix_view'),
     sortBy: t('main.sort_by'),
-    yaddsMainOrderIterater,
+    queueIterater,
     date: t('main.date'),
     title: t('main.title'),
     downloadProgress: t('main.download_progress'),
     downloadSpeed: t('main.download_speed'),
-    yaddsMainOrderIsAcsend,
+    queueIsAscend,
     ascending: t('main.ascending'),
     descending: t('main.descending'),
   };
@@ -25,6 +25,6 @@ const menuItemHandler = (
   return menuItem;
 };
 
-export default menuItemHandler;
+export default createMenuItemLabelsForQueue;
 
-export type ContextMenuItem = ReturnType<typeof menuItemHandler>;
+export type MenuItemLabelsForQueue = ReturnType<typeof createMenuItemLabelsForQueue>;

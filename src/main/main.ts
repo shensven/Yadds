@@ -23,8 +23,9 @@ import {
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } from './util';
-import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
-import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
+import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
+import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
+import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
 import store from './store';
@@ -317,7 +318,7 @@ ipcMain.on('ipc-example', async (evt, arg) => {
   evt.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.handle('set-application-menu', async (_, args: AppMenuItem) => {
+ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemLabelsForApp) => {
   interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
     submenu?: DarwinMenuItemConstructorOptions[] | Menu;
@@ -421,79 +422,7 @@ ipcMain.handle('set-application-menu', async (_, args: AppMenuItem) => {
   }
 });
 
-ipcMain.handle('set-context-menu', async (_, args: ContextMenuItem) => {
-  const template: MenuItemConstructorOptions[] = [
-    { label: args.resumeAll },
-    { label: args.pauseAll },
-    { label: args.deleteAll },
-    { type: 'separator' },
-    { label: args.listView, type: 'radio', checked: true },
-    { label: args.matrixView, type: 'radio', checked: false },
-    { type: 'separator' },
-    {
-      label: args.sortBy,
-      submenu: [
-        {
-          label: args.date,
-          type: 'radio',
-          checked: args.yaddsMainOrderIterater === 'date',
-          click: () => mainWindow?.webContents.send('order-by-iterater', 'date'),
-        },
-        {
-          label: args.title,
-          type: 'radio',
-          checked: args.yaddsMainOrderIterater === 'title',
-          click: () => mainWindow?.webContents.send('order-by-iterater', 'title'),
-        },
-        {
-          label: args.downloadProgress,
-          type: 'radio',
-          checked: args.yaddsMainOrderIterater === 'download_progress',
-          click: () => mainWindow?.webContents.send('order-by-iterater', 'download_progress'),
-        },
-        {
-          label: args.downloadSpeed,
-          type: 'radio',
-          checked: args.yaddsMainOrderIterater === 'download_speed',
-          click: () => mainWindow?.webContents.send('order-by-iterater', 'download_speed'),
-        },
-        { type: 'separator' },
-        {
-          label: args.ascending,
-          type: 'radio',
-          checked: args.yaddsMainOrderIsAcsend,
-          click: () => mainWindow?.webContents.send('order-is-ascend', true),
-        },
-        {
-          label: args.descending,
-          type: 'radio',
-          checked: !args.yaddsMainOrderIsAcsend,
-          click: () => mainWindow?.webContents.send('order-is-ascend', false),
-        },
-      ],
-    },
-  ];
-  Menu.buildFromTemplate(template).popup();
-});
-
-ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorOptionsForQuota) => {
-  const template: MenuItemConstructorOptions[] = [];
-
-  args.forEach((item) => {
-    if (!item.enabled) {
-      template.push(item);
-    } else {
-      const newItem: MenuItemConstructorOptions = { ...item };
-      newItem.label = item.label?.split(',')[1].split(':')[1];
-      newItem.click = () => mainWindow?.webContents.send('ctx-menu-for-quota:set-target-item', item.label);
-      template.push(newItem);
-    }
-  });
-
-  Menu.buildFromTemplate(template).popup();
-});
-
-ipcMain.handle('set-tray', async (_, args: { showMainWindow: string; quit: string }) => {
+ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemLabelsForTray) => {
   const devMenu: MenuItemConstructorOptions[] = [
     { label: 'Reload', click: () => mainWindow?.webContents.reload() },
     { label: 'Toggle Developer Tools', click: () => mainWindow?.webContents.toggleDevTools() },
@@ -564,6 +493,79 @@ ipcMain.handle('set-tray', async (_, args: { showMainWindow: string; quit: strin
       }
     }
   });
+});
+
+ipcMain.handle('ctx-menu-for-queue:create', async (_, args: MenuItemLabelsForQueue) => {
+  const template: MenuItemConstructorOptions[] = [
+    { label: args.resumeAll },
+    { label: args.pauseAll },
+    { label: args.deleteAll },
+    { type: 'separator' },
+    { label: args.listView, type: 'radio', checked: true },
+    { label: args.matrixView, type: 'radio', checked: false },
+    { type: 'separator' },
+    {
+      label: args.sortBy,
+      submenu: [
+        {
+          label: args.date,
+          type: 'radio',
+          checked: args.queueIterater === 'date',
+          click: () => mainWindow?.webContents.send('queue:order-by', 'date'),
+        },
+        {
+          label: args.title,
+          type: 'radio',
+          checked: args.queueIterater === 'title',
+          click: () => mainWindow?.webContents.send('queue:order-by', 'title'),
+        },
+        {
+          label: args.downloadProgress,
+          type: 'radio',
+          checked: args.queueIterater === 'download_progress',
+          click: () => mainWindow?.webContents.send('queue:order-by', 'download_progress'),
+        },
+        {
+          label: args.downloadSpeed,
+          type: 'radio',
+          checked: args.queueIterater === 'download_speed',
+          click: () => mainWindow?.webContents.send('queue:order-by', 'download_speed'),
+        },
+        { type: 'separator' },
+        {
+          label: args.ascending,
+          type: 'radio',
+          checked: args.queueIsAscend,
+          click: () => mainWindow?.webContents.send('queue:is-ascend', true),
+        },
+        {
+          label: args.descending,
+          type: 'radio',
+          checked: !args.queueIsAscend,
+          click: () => mainWindow?.webContents.send('queue:is-ascend', false),
+        },
+      ],
+    },
+  ];
+
+  Menu.buildFromTemplate(template).popup();
+});
+
+ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorOptionsForQuota) => {
+  const template: MenuItemConstructorOptions[] = [];
+
+  args.forEach((item) => {
+    if (!item.enabled) {
+      template.push(item);
+    } else {
+      const newItem: MenuItemConstructorOptions = { ...item };
+      newItem.label = item.label?.split(',')[1].split(':')[1];
+      newItem.click = () => mainWindow?.webContents.send('ctx-menu-for-quota:set-target-item', item.label);
+      template.push(newItem);
+    }
+  });
+
+  Menu.buildFromTemplate(template).popup();
 });
 
 ipcMain.handle('dark-mode:light', async () => {

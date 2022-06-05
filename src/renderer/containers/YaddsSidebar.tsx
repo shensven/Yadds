@@ -35,7 +35,7 @@ import IonServerOutline from '../components/icons/IonServerOutline';
 import IonServer from '../components/icons/IonServer';
 import IonCogOutline from '../components/icons/IonCogOutline';
 import IonCog from '../components/icons/IonCog';
-import appMenuItemHandler from '../utils/appMenuItemHandler';
+import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
 
 interface YaddsCategoryObj {
   path: SidebarCategory;
@@ -65,8 +65,8 @@ const YaddsSidebar: React.FC = () => {
   useEffect(() => {
     window.electron?.toogleSidebarMarginTop(setHasSidebarMarginTop); // handle the margin top of the sidebar
 
-    const appMenuItemLabel = appMenuItemHandler(t, hasSidebar, hasSidebarMarginTop);
-    window.electron?.setAppMenu(appMenuItemLabel); // Init or update application menu
+    const itemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
+    window.electron?.topMenuForApp.create(itemLabels); // Init or update application menu
   }, [hasSidebarMarginTop]);
 
   const categoryList: YaddsCategoryObj[] = [

@@ -34,8 +34,9 @@ import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
 import Settings from '../pages/Settings';
-import appMenuItemHandler from '../utils/appMenuItemHandler';
-import contextMenuItemHandler from '../utils/contextMenuItemHandler';
+import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
+import createMenuItemLabelsForTray from '../utils/createMenuItemLabelsForTray';
+import createMenuItemLabelsForQueue from '../utils/createMenuItemLabelsForQueue';
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
@@ -51,15 +52,16 @@ const YaddsMain: React.FC = () => {
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
-    window.electron?.setTray(t); // Init system tary
-    window.electron?.order.byIterater(setQueueIterater); // Init the sorting iterater of the main page list
-    window.electron?.order.isAscend(setQueueIsAscend); // Init the ascend/descend of the main page list
+    const itemLabels = createMenuItemLabelsForTray(t);
+    window.electron?.contextMenuForTray.create(itemLabels); // Init system tary
+    window.electron?.queue.orderBy(setQueueIterater); // Init the sorting iterater of the main page list
+    window.electron?.queue.isAscend(setQueueIsAscend); // Init the ascend/descend of the main page list
   }, []);
 
   useEffect(() => {
     window.electron?.toogleSidebar(hasSidebar, setHasSidebar); // handle the sidebar state
-    const appMenuItemLabel = appMenuItemHandler(t, hasSidebar, hasSidebarMarginTop);
-    window.electron?.setAppMenu(appMenuItemLabel); // Init or update application menu
+    const itemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
+    window.electron?.topMenuForApp.create(itemLabels); // Init or update application menu
   }, [hasSidebar]);
 
   return (
@@ -158,8 +160,8 @@ const YaddsMain: React.FC = () => {
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
             onClick={() => {
-              const contextMenuItemLabel = contextMenuItemHandler(t, queueIterater, queueIsAscend);
-              window.electron.setContextMenu(contextMenuItemLabel);
+              const itemLabels = createMenuItemLabelsForQueue(t, queueIterater, queueIsAscend);
+              window.electron.contextMenuForQueue.create(itemLabels);
             }}
           >
             <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
