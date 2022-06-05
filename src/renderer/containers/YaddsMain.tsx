@@ -12,15 +12,13 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
-import {
-  yaddsMainOrderIsAscendAtomWithPersistence,
-  yaddsMainOrderIteraterAtomWithPersistence,
-} from '../atoms/yaddsAtoms';
+import { atomSidebarWidth } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
-  atomSidebarWidth,
   atomPersistenceHasSidebar,
   atomPersistenceSidebarCategory,
+  atomPersistenceQueueIterater,
+  atomPersistenceQueueIsAscend,
 } from '../atoms/atomUI';
 import IcRoundFilterList from '../components/icons/IcRoundFilterList';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
@@ -47,15 +45,15 @@ const YaddsMain: React.FC = () => {
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
-  const [orderIterater, persistOrderIterater] = useAtom(yaddsMainOrderIteraterAtomWithPersistence);
-  const [orderIsAscend, persistOrderIsAscend] = useAtom(yaddsMainOrderIsAscendAtomWithPersistence);
+  const [queueIterater, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
+  const [queueIsAscend, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
     window.electron?.setTray(t); // Init system tary
-    window.electron?.order.byIterater(persistOrderIterater); // Init the sorting iterater of the main page list
-    window.electron?.order.isAscend(persistOrderIsAscend); // Init the ascend/descend of the main page list
+    window.electron?.order.byIterater(setQueueIterater); // Init the sorting iterater of the main page list
+    window.electron?.order.isAscend(setQueueIsAscend); // Init the ascend/descend of the main page list
   }, []);
 
   useEffect(() => {
@@ -160,7 +158,7 @@ const YaddsMain: React.FC = () => {
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
             onClick={() => {
-              const contextMenuItemLabel = contextMenuItemHandler(t, orderIterater, orderIsAscend);
+              const contextMenuItemLabel = contextMenuItemHandler(t, queueIterater, queueIsAscend);
               window.electron.setContextMenu(contextMenuItemLabel);
             }}
           >

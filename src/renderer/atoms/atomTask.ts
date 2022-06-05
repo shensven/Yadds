@@ -1,62 +1,6 @@
 import { atom } from 'jotai';
 
-const yaddsMainOrderIteraterAtom = atom<string>(
-  (window.electron?.store.get('yaddsMainOrderIterater') as string | undefined) ?? 'date'
-);
-export const yaddsMainOrderIteraterAtomWithPersistence = atom(
-  (get) => get(yaddsMainOrderIteraterAtom),
-  (_get, set, newStr: string) => {
-    set(yaddsMainOrderIteraterAtom, newStr);
-    window.electron.store.set('yaddsMainOrderIterater', newStr);
-  }
-);
-
-const yaddsMainOrderIsAscendAtom = atom<boolean>(
-  (window.electron?.store.get('yaddsMainOrderIsAscend') as boolean | undefined) ?? true
-);
-export const yaddsMainOrderIsAscendAtomWithPersistence = atom(
-  (get) => get(yaddsMainOrderIsAscendAtom),
-  (_get, set, newBool: boolean) => {
-    set(yaddsMainOrderIsAscendAtom, newBool);
-    window.electron.store.set('yaddsMainOrderIsAscend', newBool);
-  }
-);
-
-// -----------------------------------------------------------------------------
-
-export interface DsmConnectListType {
-  host: string;
-  port: number;
-  username: string;
-  did: string;
-  sid: string;
-  quickConnectID?: string;
-  controlHost?: string;
-}
-
-const dsmConnectListAtom = atom<DsmConnectListType[]>(
-  (window.electron?.store.get('dsmConnectList') as DsmConnectListType[] | undefined) ?? []
-);
-export const dsmConnectListAtomWithPersistence = atom(
-  (get) => get(dsmConnectListAtom),
-  (_get, set, newArr: DsmConnectListType[]) => {
-    set(dsmConnectListAtom, newArr);
-    window.electron.store.set('dsmConnectList', newArr);
-  }
-);
-
-const dsmCurrentSidAtom = atom<string>((window.electron?.store.get('dsmCurrentSid') as string | undefined) ?? '');
-export const dsmCurrentSidAtomWithPersistence = atom(
-  (get) => get(dsmCurrentSidAtom),
-  (_get, set, newStr: string) => {
-    set(dsmCurrentSidAtom, newStr);
-    window.electron.store.set('dsmCurrentSid', newStr);
-  }
-);
-
-// -----------------------------------------------------------------------------
-
-export interface DSTasks {
+export interface Task {
   additional: {
     detail: {
       completed_time: number; // 1652972006
@@ -89,9 +33,9 @@ export interface DSTasks {
   username: string; // "your-dsm-username"
 }
 
-export const tasksAtom = atom<DSTasks[]>([]);
+export const atomTasks = atom<Task[]>([]);
 
-export const tasksStatusAtom = atom({ isLoading: true, retry: 0 });
+export const atomTasksStatus = atom({ isLoading: true, retry: 0 });
 
 // -----------------------------------------------------------------------------
 

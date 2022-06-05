@@ -2,22 +2,18 @@ import React from 'react';
 import List from '@mui/material/List';
 import { useAtom } from 'jotai';
 import orderBy from 'lodash/orderBy';
-import {
-  DSTasks,
-  tasksAtom,
-  yaddsMainOrderIsAscendAtomWithPersistence,
-  yaddsMainOrderIteraterAtomWithPersistence,
-} from '../atoms/yaddsAtoms';
+import { atomPersistenceQueueIsAscend, atomPersistenceQueueIterater } from '../atoms/atomUI';
+import { Task, atomTasks } from '../atoms/atomTask';
 import QueueEmpty from '../components/QueueEmpty/QueueEmpty';
 import MainListItem from '../components/listItem/MainListItem';
 
 const QueueStopped: React.FC = () => {
-  const [tasks] = useAtom(tasksAtom);
-  const [orderIterater] = useAtom(yaddsMainOrderIteraterAtomWithPersistence);
-  const [orderIsAscend] = useAtom(yaddsMainOrderIsAscendAtomWithPersistence);
+  const [tasks] = useAtom(atomTasks);
+  const [queueIterater] = useAtom(atomPersistenceQueueIterater);
+  const [queueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
-  const getIteratees = (item: DSTasks) => {
-    switch (orderIterater) {
+  const getIteratees = (item: Task) => {
+    switch (queueIterater) {
       case 'date':
         return [item.additional?.detail.create_time];
       case 'title':
@@ -40,7 +36,7 @@ const QueueStopped: React.FC = () => {
       {orderBy(
         tasks.filter((task) => task.status === 3),
         (item) => getIteratees(item),
-        orderIsAscend ? 'asc' : 'desc'
+        queueIsAscend ? 'asc' : 'desc'
       ).map((item) => (
         <MainListItem key={item.id} item={item} />
       ))}

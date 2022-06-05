@@ -1,6 +1,6 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { Volume } from '../../renderer/atoms/yaddsAtoms';
+import { Volume } from '../../renderer/atoms/atomTask';
 
 export interface PersonalSettingsInfo {
   success: true;

@@ -79,26 +79,79 @@ const createWindow = async () => {
     await installExtensions();
   }
 
-  mainWindow = new BrowserWindow({
-    show: false,
-    x: (store.get('windowBounds.x') as number) || undefined,
-    y: (store.get('windowBounds.y') as number) || undefined,
-    [((isDarwin || isLinux) && 'width') as string]: (store.get('windowBounds.width') as number) || 990,
-    [(isWin32 && 'width') as string]: (store.get('windowBounds.width') as number) || 990 + 16,
-    height: (store.get('windowBounds.height') as number) || 720,
-    [((isDarwin || isLinux) && 'minWidth') as string]: 990,
-    [(isWin32 && 'minWidth') as string]: 990 + 16, // The min-width will be smaller, workaround on Microsoft Buuuuuugdows platforms!!!
-    minHeight: 720,
-    [(isDarwin && 'titleBarStyle') as string]: 'hidden',
-    // trafficLightPosition: { x: 19, y: 19 },
-    [(isDarwin && 'vibrancy') as string]: 'sidebar',
-    [((isWin32 || isLinux) && 'backgroundColor') as string]: '#e6e6e6',
-    [(isDarwin && 'icon') as string]: getAssetPath('icon_darwin.png'),
-    [(isWin32 && 'icon') as string]: getAssetPath('icon_win32.png'),
-    webPreferences: {
-      preload: app.isPackaged ? path.join(__dirname, 'preload.js') : path.join(__dirname, '../../.erb/dll/preload.js'),
-    },
-  });
+  switch (process.platform) {
+    case 'darwin':
+      mainWindow = new BrowserWindow({
+        show: false,
+        x: (store.get('windowBounds.x') as number) || undefined,
+        y: (store.get('windowBounds.y') as number) || undefined,
+        width: (store.get('windowBounds.width') as number) || 990,
+        height: (store.get('windowBounds.height') as number) || 720,
+        minWidth: 990,
+        minHeight: 720,
+        titleBarStyle: 'hidden',
+        // trafficLightPosition: { x: 19, y: 19 },
+        vibrancy: 'sidebar',
+        icon: getAssetPath('icon_darwin.png'),
+        webPreferences: {
+          preload: app.isPackaged
+            ? path.join(__dirname, 'preload.js')
+            : path.join(__dirname, '../../.erb/dll/preload.js'),
+        },
+      });
+      break;
+    case 'win32':
+      mainWindow = new BrowserWindow({
+        show: false,
+        x: (store.get('windowBounds.x') as number) || undefined,
+        y: (store.get('windowBounds.y') as number) || undefined,
+        width: (store.get('windowBounds.width') as number) || 990 + 16,
+        height: (store.get('windowBounds.height') as number) || 720,
+        minWidth: 990 + 16, // The min-width will be smaller, workaround on Microsoft Buuuuuugdows platforms!!!
+        minHeight: 720,
+        backgroundColor: '#e6e6e6',
+        icon: getAssetPath('icon_win32.png'),
+        webPreferences: {
+          preload: app.isPackaged
+            ? path.join(__dirname, 'preload.js')
+            : path.join(__dirname, '../../.erb/dll/preload.js'),
+        },
+      });
+      break;
+    case 'linux':
+      mainWindow = new BrowserWindow({
+        show: false,
+        x: (store.get('windowBounds.x') as number) || undefined,
+        y: (store.get('windowBounds.y') as number) || undefined,
+        width: (store.get('windowBounds.width') as number) || 990,
+        height: (store.get('windowBounds.height') as number) || 720,
+        minWidth: 990,
+        minHeight: 720,
+        backgroundColor: '#e6e6e6',
+        webPreferences: {
+          preload: app.isPackaged
+            ? path.join(__dirname, 'preload.js')
+            : path.join(__dirname, '../../.erb/dll/preload.js'),
+        },
+      });
+      break;
+    default:
+      mainWindow = new BrowserWindow({
+        show: false,
+        x: (store.get('windowBounds.x') as number) || undefined,
+        y: (store.get('windowBounds.y') as number) || undefined,
+        width: (store.get('windowBounds.width') as number) || 990,
+        height: (store.get('windowBounds.height') as number) || 720,
+        minWidth: 990,
+        minHeight: 720,
+        backgroundColor: '#e6e6e6',
+        webPreferences: {
+          preload: app.isPackaged
+            ? path.join(__dirname, 'preload.js')
+            : path.join(__dirname, '../../.erb/dll/preload.js'),
+        },
+      });
+  }
 
   mainWindow.menuBarVisible = false;
 

@@ -4,8 +4,8 @@ import { TFunction } from 'react-i18next';
 import { AppMenuItem } from '../renderer/utils/appMenuItemHandler';
 import { ContextMenuItem } from '../renderer/utils/contextMenuItemHandler';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
-import { PageServerQuotaTargetItem } from '../renderer/atoms/yaddsAtoms';
 import { Appearance, SidebarCategory } from '../renderer/atoms/atomUI';
+import { PageServerQuotaTargetItem } from '../renderer/atoms/atomTask';
 
 export type Channels = 'ipc-example';
 
@@ -53,14 +53,14 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   order: {
-    byIterater: (persistYaddsMainOrderIterater: (update: string) => void) => {
+    byIterater: (setQueueIterater: (update: string) => void) => {
       ipcRenderer.on('order-by-iterater', (_, arg: string) => {
-        persistYaddsMainOrderIterater(arg);
+        setQueueIterater(arg);
       });
     },
-    isAscend: (persistYaddsMainOrderIsAscend: (update: boolean) => void) => {
+    isAscend: (setQueueIsAscend: (update: boolean) => void) => {
       ipcRenderer.on('order-is-ascend', (_, arg: boolean) => {
-        persistYaddsMainOrderIsAscend(arg);
+        setQueueIsAscend(arg);
       });
     },
   },

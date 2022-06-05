@@ -3,8 +3,8 @@ import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
 import { ServerError } from 'main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
-import { PageServerQuotaTargetItem } from './atoms/yaddsAtoms';
 import { Appearance, SidebarCategory } from './atoms/atomUI';
+import { PageServerQuotaTargetItem } from './atoms/atomTask';
 import { AppMenuItem } from './utils/appMenuItemHandler';
 import { ContextMenuItem } from './utils/contextMenuItemHandler';
 import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
@@ -34,8 +34,8 @@ declare global {
       };
 
       order: {
-        byIterater: (persistOrderIterater: (update: string) => void) => void;
-        isAscend: (persistOrderIsAscend: (updaet: boolean) => void) => void;
+        byIterater: (setQueueIterater: (update: string) => void) => void;
+        isAscend: (setQueueIsAscend: (updaet: boolean) => void) => void;
       };
 
       zoomWindow: () => void;

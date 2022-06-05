@@ -19,15 +19,14 @@ import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
 import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
 import {
-  dsmConnectListAtomWithPersistence,
-  dsmCurrentSidAtomWithPersistence,
   atomPageServerNasInfo,
   atomDsmQuotaList,
   atomPageServerQuotaTargetItem,
   atomPageServerQuotaTargetValue,
   ShareQuota,
-} from '../atoms/yaddsAtoms';
+} from '../atoms/atomTask';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
 const OS_PLATFORM = window.electron?.getOS();
@@ -99,8 +98,8 @@ const Server: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
+  const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
+  const [targetSid] = useAtom(atomPersistenceTargetSid);
   const [pageServerNasInfo, setPageServerNasInfo] = useAtom(atomPageServerNasInfo);
   const [dsmQuotaList] = useAtom(atomDsmQuotaList);
   const [pageServerQuotaTargetItem, setPageServerQuotaTargetItem] = useAtom(atomPageServerQuotaTargetItem);
@@ -160,16 +159,16 @@ const Server: React.FC = () => {
   ];
 
   const getDsmInfo = async () => {
-    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+    const targetUser = find(connectedUsers, { sid: targetSid });
 
-    if (currentUser === undefined) {
+    if (!targetUser) {
       return;
     }
 
     const resp = await window.electron.net.getDsmInfo({
-      host: currentUser.host,
-      port: currentUser.port,
-      sid: currentUser.sid,
+      host: targetUser.host,
+      port: targetUser.port,
+      sid: targetUser.sid,
     });
 
     if (!resp.success) {

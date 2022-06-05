@@ -11,14 +11,14 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useAtom } from 'jotai';
-import { tasksAtom } from '../atoms/yaddsAtoms';
+import { atomSidebarWidth } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
-  atomSidebarWidth,
   atomPersistenceHasSidebar,
   SidebarCategory,
   atomPersistenceSidebarCategory,
 } from '../atoms/atomUI';
+import { atomTasks } from '../atoms/atomTask';
 import IonShapesOutline from '../components/icons/IonShapesOutline';
 import IonShapes from '../components/icons/IonShapes';
 import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
@@ -54,7 +54,7 @@ const YaddsSidebar: React.FC = () => {
   const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop, setHasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [sidebarCategory, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
-  const [tasks] = useAtom(tasksAtom);
+  const [tasks] = useAtom(atomTasks);
 
   const isDarwin = window.electron?.getOS() === 'darwin';
 

@@ -1,6 +1,6 @@
 import { MenuItemConstructorOptions } from 'electron';
 import { TFunction } from 'react-i18next';
-import { PageServerQuotaTargetItem, Volume } from '../atoms/yaddsAtoms';
+import { PageServerQuotaTargetItem, Volume } from '../atoms/atomTask';
 
 const createMenuItemConstructorOptionsForQuota = (
   t: TFunction<'translation', undefined>,

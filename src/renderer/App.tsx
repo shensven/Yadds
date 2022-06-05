@@ -6,15 +6,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
-import {
-  dsmConnectListAtomWithPersistence,
-  dsmCurrentSidAtomWithPersistence,
-  atomPageServerNasInfo,
-  atomDsmQuotaList,
-  tasksAtom,
-  tasksStatusAtom,
-} from './atoms/yaddsAtoms';
-import { atomPersistenceAppearance, tasksRetry } from './atoms/atomUI';
+import { atomTasksRetryMax } from './atoms/atomConstant';
+import { atomPersistenceAppearance } from './atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from './atoms/atomConnectedUsers';
+import { atomPageServerNasInfo, atomDsmQuotaList, atomTasks, atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -24,34 +19,34 @@ import './App.scss';
 const App: React.FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
-  const [TASKS_RETRY] = useAtom(tasksRetry);
+  const [TASKS_RETRY_MAX] = useAtom(atomTasksRetryMax);
   const [appearance] = useAtom(atomPersistenceAppearance);
-  const [dsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
-  const [, setTasks] = useAtom(tasksAtom);
-  const [tasksStatus, setTasksStatus] = useAtom(tasksStatusAtom);
+  const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
+  const [targetSid] = useAtom(atomPersistenceTargetSid);
+  const [, setTasks] = useAtom(atomTasks);
+  const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
   const [, setPageServerNasInfo] = useAtom(atomPageServerNasInfo);
   const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
 
   const handleTasks = async () => {
-    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+    const targetUser = find(connectedUsers, { sid: targetSid });
 
-    if (!currentUser) {
+    if (!targetUser) {
       return;
     }
 
     try {
       const resp = await window.electron.net.poll({
-        host: currentUser.host,
-        port: currentUser.port,
-        sid: currentUser.sid,
+        host: targetUser.host,
+        port: targetUser.port,
+        sid: targetUser.sid,
       });
 
-      if (!resp.success && tasksStatus.retry < TASKS_RETRY) {
+      if (!resp.success && tasksStatus.retry < TASKS_RETRY_MAX) {
         console.log('renderer: bad tasks request');
 
         setTasksStatus((old) => {
-          if (old.retry >= TASKS_RETRY) {
+          if (old.retry >= TASKS_RETRY_MAX) {
             return { ...old, isLoading: false };
           }
           return { isLoading: true, retry: old.retry + 1 };
@@ -69,17 +64,17 @@ const App: React.FC = () => {
   };
 
   const getDsmInfo = async () => {
-    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+    const targetUser = find(connectedUsers, { sid: targetSid });
 
-    if (!currentUser) {
+    if (!targetUser) {
       return;
     }
 
     try {
       const resp = await window.electron.net.getDsmInfo({
-        host: currentUser.host,
-        port: currentUser.port,
-        sid: currentUser.sid,
+        host: targetUser.host,
+        port: targetUser.port,
+        sid: targetUser.sid,
       });
 
       console.log('getDsmInfo', resp);
@@ -102,17 +97,17 @@ const App: React.FC = () => {
   };
 
   const getQuata = async () => {
-    const currentUser = find(dsmConnectList, { sid: dsmCurrentSid });
+    const targetUser = find(connectedUsers, { sid: targetSid });
 
-    if (!currentUser) {
+    if (!targetUser) {
       return;
     }
 
     try {
       const resp = await window.electron.net.getQuata({
-        host: currentUser.host,
-        port: currentUser.port,
-        sid: currentUser.sid,
+        host: targetUser.host,
+        port: targetUser.port,
+        sid: targetUser.sid,
       });
 
       console.log('getQuata', resp.data.items);
@@ -126,7 +121,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (dsmCurrentSid.length === 0) {
+    if (targetSid.length === 0) {
       setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
       return undefined;
@@ -138,7 +133,7 @@ const App: React.FC = () => {
     const timer = setInterval(() => {
       console.log('renderer: retry', tasksStatus.retry);
 
-      if (tasksStatus.retry < TASKS_RETRY) {
+      if (tasksStatus.retry < TASKS_RETRY_MAX) {
         handleTasks();
       } else {
         console.log('renderer: interval done');
@@ -149,7 +144,7 @@ const App: React.FC = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [dsmCurrentSid, tasksStatus.retry]);
+  }, [targetSid, tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (appearance) {

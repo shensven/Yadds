@@ -1,9 +1,5 @@
 import { atom } from 'jotai';
 
-export const atomSidebarWidth = atom<240>(240);
-
-// -----------------------------------------------------------------------------
-
 export const atomHasSidebarMarginTop = atom<boolean>(true);
 
 // -----------------------------------------------------------------------------
@@ -98,4 +94,26 @@ export const atomPersistenceIsAutoUpdate = atom(
 
 // -----------------------------------------------------------------------------
 
-export const tasksRetry = atom<3>(3);
+const atomQueueIterater = atom<string>(
+  (window.electron?.store.get('yaddsMainOrderIterater') as string | undefined) ?? 'date'
+);
+export const atomPersistenceQueueIterater = atom(
+  (get) => get(atomQueueIterater),
+  (_get, set, newStr: string) => {
+    set(atomQueueIterater, newStr);
+    window.electron.store.set('yaddsMainOrderIterater', newStr);
+  }
+);
+
+// -----------------------------------------------------------------------------
+
+const atomQueueIsAscend = atom<boolean>(
+  (window.electron?.store.get('yaddsMainOrderIsAscend') as boolean | undefined) ?? true
+);
+export const atomPersistenceQueueIsAscend = atom(
+  (get) => get(atomQueueIsAscend),
+  (_get, set, newBool: boolean) => {
+    set(atomQueueIsAscend, newBool);
+    window.electron.store.set('yaddsMainOrderIsAscend', newBool);
+  }
+);

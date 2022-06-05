@@ -13,9 +13,9 @@ import IonPlay from '../icons/IonPlay';
 import IonPause from '../icons/IonPause';
 import TablerArrowNarrowUp from '../icons/TablerArrowNarrowUp';
 import TablerArrowNarrowDown from '../icons/TablerArrowNarrowDown';
-import { DSTasks } from '../../atoms/yaddsAtoms';
+import { Task } from '../../atoms/atomTask';
 
-const MainListItem: React.FC<{ item: DSTasks }> = (props: { item: DSTasks }) => {
+const MainListItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
   const { t } = useTranslation();
 
   const { item } = props;

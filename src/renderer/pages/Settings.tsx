@@ -46,11 +46,6 @@ import gnome_appearance_follow_system from '../assets/Settings/gnome_appearance_
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
 import {
-  dsmConnectListAtomWithPersistence,
-  dsmCurrentSidAtomWithPersistence,
-  tasksStatusAtom,
-} from '../atoms/yaddsAtoms';
-import {
   Appearance,
   atomHasSidebarMarginTop,
   atomPersistenceAppearance,
@@ -60,6 +55,8 @@ import {
   LocaleName,
   atomPersistenceIsAutoUpdate,
 } from '../atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
+import { atomTasksStatus } from '../atoms/atomTask';
 import appMenuItemHandler from '../utils/appMenuItemHandler';
 
 const OS_PLATFORM = window.electron?.getOS();
@@ -138,9 +135,9 @@ const Settings: React.FC = () => {
   const [localeName, setLocaleName] = useAtom(atomPersistenceLocaleName);
   const [isAutoLaunch, setIsAutoLaunch] = useAtom(atomPersistenceIsAutoLaunch);
   const [isAutoUpdate, setIsAutoUpdate] = useAtom(atomPersistenceIsAutoUpdate);
-  const [dsmConnectList, persistDsmConnectList] = useAtom(dsmConnectListAtomWithPersistence);
-  const [dsmCurrentSid, persistDsmCurrentSid] = useAtom(dsmCurrentSidAtomWithPersistence);
-  const [, setTasksStatus] = useAtom(tasksStatusAtom);
+  const [connectedUsers, setConnectedUsers] = useAtom(atomPersistenceConnectedUsers);
+  const [targetSid, setTargetSid] = useAtom(atomPersistenceTargetSid);
+  const [, setTasksStatus] = useAtom(atomTasksStatus);
 
   const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
   const [isSelectI18nOpen, setIsSelectI18nOpen] = useState<boolean>(false);
@@ -202,7 +199,7 @@ const Settings: React.FC = () => {
       setHasDialogDelete(true);
       return;
     }
-    persistDsmCurrentSid(sid);
+    setTargetSid(sid);
     setIsSelectQcOpen(false);
   };
 
@@ -240,23 +237,23 @@ const Settings: React.FC = () => {
   };
 
   const handleRemove = () => {
-    if (dsmConnectList.length === 1) {
-      persistDsmCurrentSid('');
-      persistDsmConnectList([]);
-    } else if (whoWillRemove === dsmConnectList.length - 1) {
-      const prevUser = dsmConnectList[whoWillRemove - 1];
-      persistDsmCurrentSid(prevUser.sid);
+    if (connectedUsers.length === 1) {
+      setTargetSid('');
+      setConnectedUsers([]);
+    } else if (whoWillRemove === connectedUsers.length - 1) {
+      const prevUser = connectedUsers[whoWillRemove - 1];
+      setTargetSid(prevUser.sid);
 
-      const arr = [...dsmConnectList];
+      const arr = [...connectedUsers];
       arr.splice(whoWillRemove, 1);
-      persistDsmConnectList(arr);
+      setConnectedUsers(arr);
     } else {
-      const nextUser = dsmConnectList[whoWillRemove + 1];
-      persistDsmCurrentSid(nextUser.sid);
+      const nextUser = connectedUsers[whoWillRemove + 1];
+      setTargetSid(nextUser.sid);
 
-      const arr = [...dsmConnectList];
+      const arr = [...connectedUsers];
       arr.splice(whoWillRemove, 1);
-      persistDsmConnectList(arr);
+      setConnectedUsers(arr);
     }
 
     setHasDialogDelete(false);
@@ -286,7 +283,7 @@ const Settings: React.FC = () => {
     }
 
     if (
-      find(dsmConnectList, {
+      find(connectedUsers, {
         quickConnectID: newConnect.connectAddress,
         username: newConnect.username,
       })
@@ -337,7 +334,7 @@ const Settings: React.FC = () => {
           setLoadingInDialogAdd(false);
           setFormErr({ ...formErr, username: true, password: true });
         } else if (resp.success && resp.data.did.length > 0) {
-          const arr = [...dsmConnectList];
+          const arr = [...connectedUsers];
           arr.push({
             host: resp.hostname,
             port: resp.port,
@@ -346,8 +343,8 @@ const Settings: React.FC = () => {
             did: resp.data.did,
             sid: resp.data.sid,
           });
-          persistDsmConnectList(arr);
-          persistDsmCurrentSid(resp.data.sid);
+          setConnectedUsers(arr);
+          setTargetSid(resp.data.sid);
           dismissDailogAdd();
           setTasksStatus({ isLoading: false, retry: 0 });
         }
@@ -416,15 +413,15 @@ const Settings: React.FC = () => {
               <Select
                 size="small"
                 displayEmpty
-                value={dsmCurrentSid}
+                value={targetSid}
                 renderValue={() => (
                   <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {find(dsmConnectList, { sid: dsmCurrentSid })?.username ?? 'undefined'}
+                    {find(connectedUsers, { sid: targetSid })?.username ?? 'undefined'}
                     {' @ '}
-                    {find(dsmConnectList, { sid: dsmCurrentSid })?.quickConnectID ?? 'undefined'}
+                    {find(connectedUsers, { sid: targetSid })?.quickConnectID ?? 'undefined'}
                   </Typography>
                 )}
-                disabled={dsmConnectList.length === 0}
+                disabled={connectedUsers.length === 0}
                 MenuProps={{
                   sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
                 }}
@@ -433,7 +430,7 @@ const Settings: React.FC = () => {
                 onOpen={() => setIsSelectQcOpen(true)}
                 onClose={() => setIsSelectQcOpen(false)}
               >
-                {dsmConnectList.map((item, index) => (
+                {connectedUsers.map((item, index) => (
                   <MenuItem key={item.sid} dense disableRipple value={item.sid}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography

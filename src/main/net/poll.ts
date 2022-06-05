@@ -1,11 +1,11 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { DSTasks } from '../../renderer/atoms/yaddsAtoms';
+import { Task } from '../../renderer/atoms/atomTask';
 
 export interface TasksInfo {
   data: {
     offset: number; // 0
-    task: DSTasks[];
+    task: Task[];
     total: number;
   };
   success: true;
