@@ -103,7 +103,7 @@ const YaddsMain: React.FC = () => {
           position: 'sticky',
           flexDirection: 'column',
           backgroundColor: 'transparent',
-          display: sidebarCategory === '/server' || sidebarCategory === '/settings' ? 'none' : 'flex',
+          display: ['/server', '/settings'].includes(sidebarCategory) ? 'none' : 'flex',
         }}
         onDoubleClick={() => window.electron.os.get() === 'darwin' && window.electron.app.zoomWindow()}
       >
@@ -171,11 +171,10 @@ const YaddsMain: React.FC = () => {
       <Box
         sx={{
           px: theme.spacing(3),
-          overflowY: sidebarCategory === '/settings' || sidebarCategory === '/server' ? 'hidden' : 'scroll',
-          height:
-            sidebarCategory === '/settings' || sidebarCategory === '/server'
-              ? '100%'
-              : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
+          overflowY: ['/settings', '/server'].includes(sidebarCategory) ? 'hidden' : 'scroll',
+          height: ['/settings', '/server'].includes(sidebarCategory)
+            ? '100%'
+            : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
         }}
       >
         <Routes>
