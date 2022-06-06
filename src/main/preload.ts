@@ -5,7 +5,7 @@ import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsFor
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance, SidebarCategory } from '../renderer/atoms/atomUI';
-import { PageServerQuotaTargetItem } from '../renderer/atoms/atomTask';
+import { TargeMenuItemForQuota } from '../renderer/atoms/atomTask';
 
 export type Channels = 'ipc-example';
 
@@ -77,9 +77,9 @@ contextBridge.exposeInMainWorld('electron', {
     create: (args: MenuItemConstructorOptionsForQuota) => {
       ipcRenderer.invoke('ctx-menu-for-quota:create', args);
     },
-    setTargetItem: (setPageServerQuotaTargetItem: (update: PageServerQuotaTargetItem) => void) => {
-      ipcRenderer.on('ctx-menu-for-quota:set-target-item', (_, arg: PageServerQuotaTargetItem) => {
-        setPageServerQuotaTargetItem(arg);
+    setTargetItem: (setTargeMenuItemForQuota: (update: TargeMenuItemForQuota) => void) => {
+      ipcRenderer.on('ctx-menu-for-quota:set-target-item', (_, arg: TargeMenuItemForQuota) => {
+        setTargeMenuItemForQuota(arg);
       });
     },
   },

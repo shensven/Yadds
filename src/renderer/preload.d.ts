@@ -3,7 +3,7 @@ import { Channels } from 'main/preload';
 import { ServerError } from 'main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
 import { Appearance, QueueIterater, SidebarCategory } from './atoms/atomUI';
-import { PageServerQuotaTargetItem } from './atoms/atomTask';
+import { TargeMenuItemForQuota } from './atoms/atomTask';
 import { MenuItemLabelsForApp } from './utils/createMenuItemLabelsForApp';
 import { MenuItemLabelsForTray } from './utils/createMenuItemLabelsForTray';
 import { MenuItemLabelsForQueue } from './utils/createMenuItemLabelsForQueue';
@@ -51,7 +51,7 @@ declare global {
 
       contextMenuForQuota: {
         create: (update: MenuItemConstructorOptionsForQuota) => void;
-        setTargetItem: (setPageServerQuotaTarget: (update: PageServerQuotaTargetItem) => void) => void;
+        setTargetItem: (setPageServerQuotaTarget: (update: TargeMenuItemForQuota) => void) => void;
       };
 
       yadds: {

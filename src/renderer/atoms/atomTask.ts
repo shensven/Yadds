@@ -1,3 +1,4 @@
+import { ByteSizeResult } from 'byte-size';
 import { atom } from 'jotai';
 
 export interface Task {
@@ -39,7 +40,7 @@ export const atomTasksStatus = atom({ isLoading: true, retry: 0 });
 
 // -----------------------------------------------------------------------------
 
-export const atomPageServerNasInfo = atom({ model: '-', version: '-' });
+export const atomNasInfo = atom({ model: '-', version: '-' });
 
 // -----------------------------------------------------------------------------
 
@@ -66,9 +67,17 @@ export const atomDsmQuotaList = atom<Volume[]>([]);
 
 // -----------------------------------------------------------------------------
 
-export type PageServerQuotaTargetItem = `volume:${number},share:${string}`;
-export const atomPageServerQuotaTargetItem = atom<PageServerQuotaTargetItem>(`volume:${0},share:${''}`);
+export type TargeMenuItemForQuota = `volume:${number},share:${string}`;
+export const atomTargeMenuItemForQuota = atom<TargeMenuItemForQuota>(`volume:${0},share:${''}`);
 
 // -----------------------------------------------------------------------------
 
-export const atomPageServerQuotaTargetValue = atom({ maxQuota: 'N/A', availableCapacity: 'N/A' });
+interface TargeByteSizeForQuota {
+  max: ByteSizeResult;
+  available: ByteSizeResult;
+}
+
+export const atomTargeByteSizeForQuota = atom<TargeByteSizeForQuota>({
+  max: { value: '', unit: '', long: '', toString: () => '' },
+  available: { value: '', unit: '', long: '', toString: () => '' },
+});

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
+import byteSize from 'byte-size';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -18,10 +19,10 @@ import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
 import {
-  atomPageServerNasInfo,
+  atomNasInfo,
   atomDsmQuotaList,
-  atomPageServerQuotaTargetItem,
-  atomPageServerQuotaTargetValue,
+  atomTargeMenuItemForQuota,
+  atomTargeByteSizeForQuota,
   ShareQuota,
 } from '../atoms/atomTask';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
@@ -34,40 +35,40 @@ const Server: React.FC = () => {
 
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetSid] = useAtom(atomPersistenceTargetSid);
-  const [pageServerNasInfo, setPageServerNasInfo] = useAtom(atomPageServerNasInfo);
+  const [nasInfo, setNasInfo] = useAtom(atomNasInfo);
   const [dsmQuotaList] = useAtom(atomDsmQuotaList);
-  const [pageServerQuotaTargetItem, setPageServerQuotaTargetItem] = useAtom(atomPageServerQuotaTargetItem);
-  const [pageServerQuotaTargetValue, setPageServerQuotaTargetValue] = useAtom(atomPageServerQuotaTargetValue);
+  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomTargeMenuItemForQuota);
+  const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const [select, setSelect] = useState(0);
 
   const serverBaseInfo = [
     {
       title: t('server.synology_nas'),
-      value: pageServerNasInfo.model,
+      value: nasInfo.model,
       unit: '',
       icon: <IcRoundCalendarViewWeek sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.dsm_version'),
-      value: pageServerNasInfo.version,
+      value: nasInfo.version,
       unit: '',
       icon: <IcOutlineInfo sx={{ fontSize: 20 }} />,
     },
     {
       title: t('server.quota'),
-      value: pageServerQuotaTargetValue.maxQuota,
-      unit: '',
+      value: targeByteSizeForQuota.max.value,
+      unit: targeByteSizeForQuota.max.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
       onClick: () => {
-        const template = createMenuItemConstructorOptionsForQuota(t, dsmQuotaList, pageServerQuotaTargetItem);
+        const template = createMenuItemConstructorOptionsForQuota(t, dsmQuotaList, targeMenuItemForQuota);
         window.electron.contextMenuForQuota.create(template);
       },
     },
     {
       title: t('server.available_capacity'),
-      value: 'N/A',
-      unit: '',
+      value: targeByteSizeForQuota.available.value,
+      unit: targeByteSizeForQuota.available.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
   ];
@@ -106,43 +107,40 @@ const Server: React.FC = () => {
     });
 
     if (!resp.success) {
-      setPageServerNasInfo({
-        model: '-',
-        version: '-',
-      });
+      setNasInfo({ model: '-', version: '-' });
     }
 
     if (resp.success) {
       const version = resp.data?.version_string.split(' ')[1] as string;
-      setPageServerNasInfo({
-        model: resp.data?.model as string,
-        version,
-      });
+      setNasInfo({ model: resp.data?.model as string, version });
     }
   };
 
   useEffect(() => {
-    window.electron.contextMenuForQuota.setTargetItem(setPageServerQuotaTargetItem); // send setPageServerQuotaTarge as a Closure to main process
+    window.electron.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota); // send setPageServerQuotaTarge as a Closure to main process
   }, []);
 
   useEffect(() => {
-    const currenVolume = find(dsmQuotaList, {
-      name: pageServerQuotaTargetItem.split(',')[0].split(':')[1].toString(),
+    const targetVolume = find(dsmQuotaList, {
+      name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
     });
 
-    if (currenVolume !== undefined) {
-      const currenQuota = find(currenVolume.children, {
-        name: pageServerQuotaTargetItem.split(',')[1],
+    if (targetVolume !== undefined) {
+      const targetQuota = find(targetVolume.children, {
+        name: targeMenuItemForQuota.split(',')[1],
       }) as ShareQuota | undefined;
 
-      if (currenQuota) {
-        setPageServerQuotaTargetValue({
-          maxQuota: currenQuota.share_quota.toFixed(2).toString(),
-          availableCapacity: (currenQuota.share_quota - currenQuota.share_used).toFixed(2).toString(),
+      if (targetQuota) {
+        setTargeByteSizeForQuota({
+          max: byteSize(targetQuota.share_quota * 1024 * 1024, { units: 'iec', precision: 2 }),
+          available: byteSize((targetQuota.share_quota - targetQuota.share_used) * 1024 * 1024, {
+            units: 'iec',
+            precision: 2,
+          }),
         });
       }
     }
-  }, [pageServerQuotaTargetItem]);
+  }, [targeMenuItemForQuota]);
 
   return (
     <Box>

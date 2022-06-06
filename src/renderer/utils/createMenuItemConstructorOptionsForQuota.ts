@@ -1,16 +1,16 @@
 import { MenuItemConstructorOptions } from 'electron';
 import { TFunction } from 'react-i18next';
-import { PageServerQuotaTargetItem, Volume } from '../atoms/atomTask';
+import { TargeMenuItemForQuota, Volume } from '../atoms/atomTask';
 
 const createMenuItemConstructorOptionsForQuota = (
   t: TFunction<'translation', undefined>,
   dsmQuotaList: Volume[],
-  pageServerQuotaTargeItem: PageServerQuotaTargetItem
+  targeMenuItemForQuota: TargeMenuItemForQuota
 ) => {
   const template: MenuItemConstructorOptions[] = [];
 
-  const targetVolume = pageServerQuotaTargeItem.split(',')[0].split(':')[1];
-  const targetQuotaName = pageServerQuotaTargeItem.split(',')[1].split(':')[1];
+  const targetVolume = targeMenuItemForQuota.split(',')[0].split(':')[1];
+  const targetQuotaName = targeMenuItemForQuota.split(',')[1].split(':')[1];
 
   dsmQuotaList.forEach((volume) => {
     template.push({

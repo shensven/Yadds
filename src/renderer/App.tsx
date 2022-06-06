@@ -9,7 +9,7 @@ import { find } from 'lodash';
 import { atomTasksRetryMax } from './atoms/atomConstant';
 import { atomPersistenceAppearance } from './atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from './atoms/atomConnectedUsers';
-import { atomPageServerNasInfo, atomDsmQuotaList, atomTasks, atomTasksStatus } from './atoms/atomTask';
+import { atomNasInfo, atomDsmQuotaList, atomTasks, atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -25,7 +25,7 @@ const App: React.FC = () => {
   const [targetSid] = useAtom(atomPersistenceTargetSid);
   const [, setTasks] = useAtom(atomTasks);
   const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
-  const [, setPageServerNasInfo] = useAtom(atomPageServerNasInfo);
+  const [, setNasInfo] = useAtom(atomNasInfo);
   const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
 
   const handleTasks = async () => {
@@ -81,12 +81,12 @@ const App: React.FC = () => {
 
       if (resp.success) {
         const version = resp.data.version_string.split(' ')[1] as string;
-        setPageServerNasInfo({
+        setNasInfo({
           model: resp.data.model as string,
           version,
         });
       } else {
-        setPageServerNasInfo({
+        setNasInfo({
           model: '-',
           version: '-',
         });
