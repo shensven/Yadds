@@ -42,6 +42,10 @@ const schema: Schema<YaddsCache> = {
   },
 };
 
-const cache = new Store<YaddsCache>({ schema, clearInvalidConfig: true });
+const cache = new Store<YaddsCache>({
+  name: 'cache',
+  schema,
+  clearInvalidConfig: true,
+});
 
 export default cache;

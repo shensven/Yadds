@@ -23,6 +23,10 @@ const schema: Schema<YaddsPreferences> = {
   },
 };
 
-const preferences = new Store<YaddsPreferences>({ schema, clearInvalidConfig: true });
+const preferences = new Store<YaddsPreferences>({
+  name: 'preferences',
+  schema,
+  clearInvalidConfig: true,
+});
 
 export default preferences;

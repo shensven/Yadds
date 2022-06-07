@@ -26,6 +26,10 @@ const schema: Schema<YaddsConnectedUsers> = {
   },
 };
 
-const connectedUsers = new Store<YaddsConnectedUsers>({ schema, clearInvalidConfig: true });
+const connectedUsers = new Store<YaddsConnectedUsers>({
+  name: 'connectedUsers',
+  schema,
+  clearInvalidConfig: true,
+});
 
 export default connectedUsers;
