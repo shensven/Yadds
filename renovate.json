@@ -30,6 +30,8 @@
       "matchDepTypes": ["dependencies"],
       "enabled": false,
       "excludePackageNames": [
+        "@emotion/react",
+        "@emotion/styled",
         "@fontsource/barlow",
         "@mui/material",
         "@mui/system",

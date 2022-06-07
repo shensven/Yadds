@@ -99,6 +99,8 @@
     }
   },
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
     "@fontsource/barlow": "4.5.7",
     "@mui/material": "5.8.2",
     "@mui/system": "5.8.2",
