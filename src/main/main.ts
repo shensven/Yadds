@@ -24,12 +24,14 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-insta
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } from './util';
+import cache, { YaddsCache } from './store/cache';
+import preferences, { YaddsPreferences } from './store/preferences';
+import { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
 import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
-import store from './store';
 import auth from './net/auth';
 import poll from './net/poll';
 import getDsmInfo from './net/getDsmInfo';
@@ -73,10 +75,10 @@ const createWindow = async () => {
     case 'darwin':
       mainWindow = new BrowserWindow({
         show: false,
-        x: (store.get('windowBounds.x') as number) || undefined,
-        y: (store.get('windowBounds.y') as number) || undefined,
-        width: (store.get('windowBounds.width') as number) || 990,
-        height: (store.get('windowBounds.height') as number) || 720,
+        x: (cache.get('windowBounds.x') as number) || undefined,
+        y: (cache.get('windowBounds.y') as number) || undefined,
+        width: (cache.get('windowBounds.width') as number) || 990,
+        height: (cache.get('windowBounds.height') as number) || 720,
         minWidth: 990,
         minHeight: 720,
         titleBarStyle: 'hidden',
@@ -93,10 +95,10 @@ const createWindow = async () => {
     case 'win32':
       mainWindow = new BrowserWindow({
         show: false,
-        x: (store.get('windowBounds.x') as number) || undefined,
-        y: (store.get('windowBounds.y') as number) || undefined,
-        width: (store.get('windowBounds.width') as number) || 990 + 16,
-        height: (store.get('windowBounds.height') as number) || 720,
+        x: (cache.get('windowBounds.x') as number) || undefined,
+        y: (cache.get('windowBounds.y') as number) || undefined,
+        width: (cache.get('windowBounds.width') as number) || 990 + 16,
+        height: (cache.get('windowBounds.height') as number) || 720,
         minWidth: 990 + 16, // The min-width will be smaller, workaround on Microsoft Buuuuuugdows platforms!!!
         minHeight: 720,
         backgroundColor: '#e6e6e6',
@@ -111,10 +113,10 @@ const createWindow = async () => {
     case 'linux':
       mainWindow = new BrowserWindow({
         show: false,
-        x: (store.get('windowBounds.x') as number) || undefined,
-        y: (store.get('windowBounds.y') as number) || undefined,
-        width: (store.get('windowBounds.width') as number) || 990,
-        height: (store.get('windowBounds.height') as number) || 720,
+        x: (cache.get('windowBounds.x') as number) || undefined,
+        y: (cache.get('windowBounds.y') as number) || undefined,
+        width: (cache.get('windowBounds.width') as number) || 990,
+        height: (cache.get('windowBounds.height') as number) || 720,
         minWidth: 990,
         minHeight: 720,
         backgroundColor: '#e6e6e6',
@@ -128,10 +130,10 @@ const createWindow = async () => {
     default:
       mainWindow = new BrowserWindow({
         show: false,
-        x: (store.get('windowBounds.x') as number) || undefined,
-        y: (store.get('windowBounds.y') as number) || undefined,
-        width: (store.get('windowBounds.width') as number) || 990,
-        height: (store.get('windowBounds.height') as number) || 720,
+        x: (cache.get('windowBounds.x') as number) || undefined,
+        y: (cache.get('windowBounds.y') as number) || undefined,
+        width: (cache.get('windowBounds.width') as number) || 990,
+        height: (cache.get('windowBounds.height') as number) || 720,
         minWidth: 990,
         minHeight: 720,
         backgroundColor: '#e6e6e6',
@@ -153,7 +155,7 @@ const createWindow = async () => {
     }
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
-    } else if (store.get('isYaddsMaximized') as boolean | undefined) {
+    } else if (cache.get('isMaximized') as boolean | undefined) {
       mainWindow.maximize();
     } else {
       mainWindow.show();
@@ -163,40 +165,40 @@ const createWindow = async () => {
   mainWindow.on('moved', () => {
     if (mainWindow) {
       const bounds = mainWindow.getBounds();
-      store.set('windowBounds', bounds);
+      cache.set('windowBounds', bounds);
     }
   });
 
   mainWindow.on('resized', () => {
     if (mainWindow) {
       const bounds = mainWindow.getBounds();
-      store.set('windowBounds', bounds);
+      cache.set('windowBounds', bounds);
     }
   });
 
   mainWindow.on('maximize', () => {
     if (mainWindow) {
-      store.set('isYaddsMaximized', true);
+      cache.set('isMaximized', true);
     }
   });
 
   mainWindow.on('unmaximize', () => {
     if (mainWindow) {
-      store.set('isYaddsMaximized', false);
+      cache.set('isMaximized', false);
     }
   });
 
   mainWindow.on('enter-full-screen', () => {
     if (mainWindow) {
       mainWindow.webContents.send('yadds:toogle-sidebar-mt', false);
-      store.set('isYaddsFullScreen', true);
+      cache.set('isFullScreened', true);
     }
   });
 
   mainWindow.on('leave-full-screen', () => {
     if (mainWindow) {
       mainWindow.webContents.send('yadds:toogle-sidebar-mt', true);
-      store.set('isYaddsFullScreen', false);
+      cache.set('isFullScreened', false);
     }
   });
 
@@ -204,7 +206,7 @@ const createWindow = async () => {
   mainWindow.on('close', (evt) => {
     if (willQuitApp) {
       app.exit();
-    } else if (store.get('isYaddsFullScreen')) {
+    } else if (cache.get('isFullScreened')) {
       mainWindow?.setFullScreen(false);
       evt.preventDefault();
     } else {
@@ -242,7 +244,7 @@ const createWindow = async () => {
 //------------------------------------------------------------------------------
 // Initialize the default configuration of this application
 
-nativeTheme.themeSource = (store.get('yaddsAppearance') as Appearance | undefined) ?? 'system';
+nativeTheme.themeSource = (preferences.get('appearance') as Appearance | undefined) ?? 'system';
 
 app.applicationMenu = null;
 
@@ -425,7 +427,7 @@ ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemLabelsForTray
           mainWindow?.show();
         }
         if (isWin32 || isLinux) {
-          if (store.get('isYaddsMaximized')) {
+          if (cache.get('isMaximized')) {
             mainWindow?.maximize();
           } else {
             mainWindow?.show();
@@ -475,7 +477,7 @@ ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemLabelsForTray
 
   tray.on('click', () => {
     if (isWin32) {
-      if (store.get('isYaddsMaximized')) {
+      if (cache.get('isMaximized')) {
         mainWindow?.maximize();
       } else {
         mainWindow?.show();
@@ -557,12 +559,28 @@ ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorO
   Menu.buildFromTemplate(template).popup();
 });
 
-ipcMain.on('electron-store:get', async (evt, key: string) => {
-  evt.returnValue = store.get(key);
+ipcMain.on('cache:get', async (evt, key: keyof YaddsCache) => {
+  evt.returnValue = cache.get(key);
 });
 
-ipcMain.on('electron-store:set', async (_, key: string, val: unknown) => {
-  store.set(key, val);
+ipcMain.on('cache:set', async (_, key: keyof YaddsCache, val: unknown) => {
+  cache.set(key, val);
+});
+
+ipcMain.on('preferences:get', async (evt, key: keyof YaddsPreferences) => {
+  evt.returnValue = preferences.get(key);
+});
+
+ipcMain.on('preferences:set', async (_, key: keyof YaddsPreferences, val: unknown) => {
+  preferences.set(key, val);
+});
+
+ipcMain.on('connectedUsers:get', async (evt, key: keyof YaddsConnectedUsers) => {
+  evt.returnValue = preferences.get(key);
+});
+
+ipcMain.on('connectedUsers:set', async (_, key: keyof YaddsConnectedUsers, val: unknown) => {
+  preferences.set(key, val);
 });
 
 ipcMain.on('os:get', async (evt) => {

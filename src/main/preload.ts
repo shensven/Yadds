@@ -1,5 +1,8 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 import { NavigateFunction } from 'react-router-dom';
+import { YaddsCache } from './store/cache';
+import { YaddsPreferences } from './store/preferences';
+import { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
 import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
@@ -25,6 +28,33 @@ contextBridge.exposeInMainWorld('electron', {
     },
   },
 
+  cache: {
+    get(key: keyof YaddsCache) {
+      return ipcRenderer.sendSync('cache:get', key);
+    },
+    set(key: keyof YaddsCache, val: unknown) {
+      ipcRenderer.send('cache:set', key, val);
+    },
+  },
+
+  preferences: {
+    get(key: keyof YaddsPreferences) {
+      return ipcRenderer.sendSync('preferences:get', key);
+    },
+    set(key: keyof YaddsPreferences, val: unknown) {
+      ipcRenderer.send('preferences:set', key, val);
+    },
+  },
+
+  connectedUsers: {
+    get(key: keyof YaddsConnectedUsers) {
+      return ipcRenderer.sendSync('preferences:get', key);
+    },
+    set(key: keyof YaddsConnectedUsers, val: unknown) {
+      ipcRenderer.send('preferences:set', key, val);
+    },
+  },
+
   os: {
     get: () => {
       return ipcRenderer.sendSync('os:get');
@@ -43,15 +73,6 @@ contextBridge.exposeInMainWorld('electron', {
     },
     toggleNativeTheme: (appearance: Appearance) => {
       ipcRenderer.invoke(`app:set-${appearance}-mode`);
-    },
-  },
-
-  store: {
-    get(key: string) {
-      return ipcRenderer.sendSync('electron-store:get', key);
-    },
-    set(key: string, val: unknown) {
-      ipcRenderer.send('electron-store:set', key, val);
     },
   },
 

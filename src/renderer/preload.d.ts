@@ -1,7 +1,10 @@
 import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
-import { ServerError } from 'main/net/getServerInfo';
-import { SignInInfo, SignInWrongAccountOrPasswd } from 'main/net/signIn';
+import { YaddsCache } from '../main/store/cache';
+import { YaddsPreferences } from '../main/store/preferences';
+import { YaddsConnectedUsers } from '../main/store/connectedUsers';
+import { ServerError } from '../main/net/getServerInfo';
+import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { Appearance, QueueIterater, SidebarCategory } from './atoms/atomUI';
 import { TargeMenuItemForQuota } from './atoms/atomTask';
 import { MenuItemLabelsForApp } from './utils/createMenuItemLabelsForApp';
@@ -21,6 +24,21 @@ declare global {
         once(channel: string, func: (...args: unknown[]) => void): void;
       };
 
+      cache: {
+        get: (key: keyof YaddsCache) => unknown;
+        set: (key: keyof YaddsCache, val: unknown) => void;
+      };
+
+      preferences: {
+        get: (key: keyof YaddsPreferences) => unknown;
+        set: (key: keyof YaddsPreferences, val: unknown) => void;
+      };
+
+      connectedUsers: {
+        get: (key: keyof YaddsConnectedUsers) => unknown;
+        set: (key: keyof YaddsConnectedUsers, val: unknown) => void;
+      };
+
       os: {
         get: () => 'darwin' | 'win32' | 'linux';
       };
@@ -30,11 +48,6 @@ declare global {
         openURL: (url: string) => void;
         zoomWindow: () => void;
         toggleNativeTheme: (update: Appearance) => void;
-      };
-
-      store: {
-        get: (key: string) => unknown;
-        set: (key: string, val: unknown) => void;
       };
 
       topMenuForApp: {

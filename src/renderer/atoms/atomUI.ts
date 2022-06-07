@@ -4,12 +4,12 @@ export const atomHasSidebarMarginTop = atom<boolean>(true);
 
 // -----------------------------------------------------------------------------
 
-const atomHasSidebar = atom<boolean>((window.electron?.store.get('hasYaddsSidebar') as boolean | undefined) ?? true);
+const atomHasSidebar = atom<boolean>((window.electron?.cache.get('hasSidebar') as boolean | undefined) ?? true);
 export const atomPersistenceHasSidebar = atom(
   (get) => get(atomHasSidebar),
   (_get, set, newBool: boolean) => {
     set(atomHasSidebar, newBool);
-    window.electron.store.set('hasYaddsSidebar', newBool);
+    window.electron.cache.set('hasSidebar', newBool);
   }
 );
 
@@ -26,13 +26,13 @@ export type SidebarCategory =
   | '/settings';
 
 const atomSidebarCategory = atom<SidebarCategory>(
-  (window.electron?.store.get('yaddsSidebarCategory') as SidebarCategory | undefined) ?? '/queueAll'
+  (window.electron?.cache.get('sidebarCategory') as SidebarCategory | undefined) ?? '/queueAll'
 );
 export const atomPersistenceSidebarCategory = atom(
   (get) => get(atomSidebarCategory),
   (_get, set, newStr: SidebarCategory) => {
     set(atomSidebarCategory, newStr);
-    window.electron.store.set('yaddsSidebarCategory', newStr);
+    window.electron.cache.set('sidebarCategory', newStr);
   }
 );
 
@@ -41,13 +41,13 @@ export const atomPersistenceSidebarCategory = atom(
 export type Appearance = 'light' | 'dark' | 'system';
 
 const atomAppearance = atom<Appearance>(
-  (window.electron?.store.get('yaddsAppearance') as Appearance | undefined) ?? 'system'
+  (window.electron?.preferences.get('appearance') as Appearance | undefined) ?? 'system'
 );
 export const atomPersistenceAppearance = atom(
   (get) => get(atomAppearance),
   (_get, set, newStr: Appearance) => {
     set(atomAppearance, newStr);
-    window.electron.store.set('yaddsAppearance', newStr);
+    window.electron.preferences.set('appearance', newStr);
   }
 );
 
@@ -55,40 +55,38 @@ export const atomPersistenceAppearance = atom(
 
 export type LocaleName = 'en' | 'zh_CN' | 'zh_TW' | 'ja_JP';
 
-const atomLocaleName = atom<LocaleName>(
-  (window.electron?.store.get('yaddsI18nCode') as LocaleName | undefined) ?? 'en'
-);
+const atomLocaleName = atom<LocaleName>((window.electron?.preferences.get('locale') as LocaleName | undefined) ?? 'en');
 export const atomPersistenceLocaleName = atom(
   (get) => get(atomLocaleName),
   (_get, set, newStr: LocaleName) => {
     set(atomLocaleName, newStr);
-    window.electron.store.set('yaddsI18nCode', newStr);
+    window.electron.preferences.set('locale', newStr);
   }
 );
 
 // -----------------------------------------------------------------------------
 
 const atomIsAutoLaunch = atom<boolean>(
-  (window.electron?.store.get('isYaddsAutoLaunch') as boolean | undefined) ?? false
+  (window.electron?.preferences.get('isAutoLaunch') as boolean | undefined) ?? false
 );
 export const atomPersistenceIsAutoLaunch = atom(
   (get) => get(atomIsAutoLaunch),
   (_get, set, newBool: boolean) => {
     set(atomIsAutoLaunch, newBool);
-    window.electron.store.set('isYaddsAutoLaunch', newBool);
+    window.electron.preferences.set('isAutoLaunch', newBool);
   }
 );
 
 // -----------------------------------------------------------------------------
 
 const atomIsAutoUpdate = atom<boolean>(
-  (window.electron?.store.get('isYaddsAutoUpdate') as boolean | undefined) ?? true
+  (window.electron?.preferences.get('isAutoUpdate') as boolean | undefined) ?? false
 );
 export const atomPersistenceIsAutoUpdate = atom(
   (get) => get(atomIsAutoUpdate),
   (_get, set, newBool: boolean) => {
     set(atomIsAutoUpdate, newBool);
-    window.electron.store.set('isYaddsAutoUpdate', newBool);
+    window.electron.preferences.set('isAutoUpdate', newBool);
   }
 );
 
@@ -97,25 +95,23 @@ export const atomPersistenceIsAutoUpdate = atom(
 export type QueueIterater = 'date' | 'title' | 'download_progress' | 'download_speed';
 
 const atomQueueIterater = atom<QueueIterater>(
-  (window.electron?.store.get('yaddsMainOrderIterater') as QueueIterater | undefined) ?? 'date'
+  (window.electron?.cache.get('queueIterater') as QueueIterater | undefined) ?? 'date'
 );
 export const atomPersistenceQueueIterater = atom(
   (get) => get(atomQueueIterater),
   (_get, set, newStr: QueueIterater) => {
     set(atomQueueIterater, newStr);
-    window.electron.store.set('yaddsMainOrderIterater', newStr);
+    window.electron.cache.set('queueIterater', newStr);
   }
 );
 
 // -----------------------------------------------------------------------------
 
-const atomQueueIsAscend = atom<boolean>(
-  (window.electron?.store.get('yaddsMainOrderIsAscend') as boolean | undefined) ?? true
-);
+const atomQueueIsAscend = atom<boolean>((window.electron?.cache.get('queueIsAscend') as boolean | undefined) ?? true);
 export const atomPersistenceQueueIsAscend = atom(
   (get) => get(atomQueueIsAscend),
   (_get, set, newBool: boolean) => {
     set(atomQueueIsAscend, newBool);
-    window.electron.store.set('yaddsMainOrderIsAscend', newBool);
+    window.electron.cache.set('queueIsAscend', newBool);
   }
 );

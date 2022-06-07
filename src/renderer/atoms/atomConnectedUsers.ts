@@ -11,23 +11,23 @@ export interface ConnectedUser {
 }
 
 const atomConnectedUsers = atom<ConnectedUser[]>(
-  (window.electron?.store.get('dsmConnectList') as ConnectedUser[] | undefined) ?? []
+  (window.electron?.connectedUsers.get('list') as ConnectedUser[] | undefined) ?? []
 );
 export const atomPersistenceConnectedUsers = atom(
   (get) => get(atomConnectedUsers),
   (_get, set, newArr: ConnectedUser[]) => {
     set(atomConnectedUsers, newArr);
-    window.electron.store.set('dsmConnectList', newArr);
+    window.electron.connectedUsers.set('list', newArr);
   }
 );
 
 // -----------------------------------------------------------------------------
 
-const atomTargetSid = atom<string>((window.electron?.store.get('dsmCurrentSid') as string | undefined) ?? '');
+const atomTargetSid = atom<string>((window.electron?.connectedUsers.get('target') as string | undefined) ?? '');
 export const atomPersistenceTargetSid = atom(
   (get) => get(atomTargetSid),
   (_get, set, newStr: string) => {
     set(atomTargetSid, newStr);
-    window.electron.store.set('dsmCurrentSid', newStr);
+    window.electron.connectedUsers.set('target', newStr);
   }
 );

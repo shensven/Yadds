@@ -10,7 +10,7 @@ import Server from './Server';
 import Settings from './Settings';
 
 const RedirectEl: React.FC = () => {
-  const category = window.electron?.store.get('yaddsSidebarCategory') as SidebarCategory | undefined;
+  const category = window.electron?.cache.get('sidebarCategory') as SidebarCategory | undefined;
 
   switch (category) {
     case '/queueAll':
