@@ -1,8 +1,9 @@
 import { atom } from 'jotai';
 
-export const atomHasSidebarMarginTop = atom<boolean>(true);
-
+// Sidebar
 // -----------------------------------------------------------------------------
+
+export const atomHasSidebarMarginTop = atom<boolean>(true);
 
 const atomHasSidebar = atom<boolean>((window.electron?.cache.get('hasSidebar') as boolean | undefined) ?? true);
 export const atomPersistenceHasSidebar = atom(
@@ -12,8 +13,6 @@ export const atomPersistenceHasSidebar = atom(
     window.electron.cache.set('hasSidebar', newBool);
   }
 );
-
-// -----------------------------------------------------------------------------
 
 export type SidebarCategory =
   | '/queueAll'
@@ -36,60 +35,7 @@ export const atomPersistenceSidebarCategory = atom(
   }
 );
 
-// -----------------------------------------------------------------------------
-
-export type Appearance = 'light' | 'dark' | 'system';
-
-const atomAppearance = atom<Appearance>(
-  (window.electron?.preferences.get('appearance') as Appearance | undefined) ?? 'system'
-);
-export const atomPersistenceAppearance = atom(
-  (get) => get(atomAppearance),
-  (_get, set, newStr: Appearance) => {
-    set(atomAppearance, newStr);
-    window.electron.preferences.set('appearance', newStr);
-  }
-);
-
-// -----------------------------------------------------------------------------
-
-export type LocaleName = 'en' | 'zh_CN' | 'zh_TW' | 'ja_JP';
-
-const atomLocaleName = atom<LocaleName>((window.electron?.preferences.get('locale') as LocaleName | undefined) ?? 'en');
-export const atomPersistenceLocaleName = atom(
-  (get) => get(atomLocaleName),
-  (_get, set, newStr: LocaleName) => {
-    set(atomLocaleName, newStr);
-    window.electron.preferences.set('locale', newStr);
-  }
-);
-
-// -----------------------------------------------------------------------------
-
-const atomIsAutoLaunch = atom<boolean>(
-  (window.electron?.preferences.get('isAutoLaunch') as boolean | undefined) ?? false
-);
-export const atomPersistenceIsAutoLaunch = atom(
-  (get) => get(atomIsAutoLaunch),
-  (_get, set, newBool: boolean) => {
-    set(atomIsAutoLaunch, newBool);
-    window.electron.preferences.set('isAutoLaunch', newBool);
-  }
-);
-
-// -----------------------------------------------------------------------------
-
-const atomIsAutoUpdate = atom<boolean>(
-  (window.electron?.preferences.get('isAutoUpdate') as boolean | undefined) ?? false
-);
-export const atomPersistenceIsAutoUpdate = atom(
-  (get) => get(atomIsAutoUpdate),
-  (_get, set, newBool: boolean) => {
-    set(atomIsAutoUpdate, newBool);
-    window.electron.preferences.set('isAutoUpdate', newBool);
-  }
-);
-
+// Queue
 // -----------------------------------------------------------------------------
 
 export type QueueIterater = 'date' | 'title' | 'download_progress' | 'download_speed';
@@ -105,13 +51,60 @@ export const atomPersistenceQueueIterater = atom(
   }
 );
 
-// -----------------------------------------------------------------------------
-
 const atomQueueIsAscend = atom<boolean>((window.electron?.cache.get('queueIsAscend') as boolean | undefined) ?? true);
 export const atomPersistenceQueueIsAscend = atom(
   (get) => get(atomQueueIsAscend),
   (_get, set, newBool: boolean) => {
     set(atomQueueIsAscend, newBool);
     window.electron.cache.set('queueIsAscend', newBool);
+  }
+);
+
+// Settings
+// -----------------------------------------------------------------------------
+
+export type Appearance = 'light' | 'dark' | 'system';
+
+const atomAppearance = atom<Appearance>(
+  (window.electron?.preferences.get('appearance') as Appearance | undefined) ?? 'system'
+);
+export const atomPersistenceAppearance = atom(
+  (get) => get(atomAppearance),
+  (_get, set, newStr: Appearance) => {
+    set(atomAppearance, newStr);
+    window.electron.preferences.set('appearance', newStr);
+  }
+);
+
+export type LocaleName = 'en' | 'zh_CN' | 'zh_TW' | 'ja_JP';
+
+const atomLocaleName = atom<LocaleName>((window.electron?.preferences.get('locale') as LocaleName | undefined) ?? 'en');
+export const atomPersistenceLocaleName = atom(
+  (get) => get(atomLocaleName),
+  (_get, set, newStr: LocaleName) => {
+    set(atomLocaleName, newStr);
+    window.electron.preferences.set('locale', newStr);
+  }
+);
+
+const atomIsAutoLaunch = atom<boolean>(
+  (window.electron?.preferences.get('isAutoLaunch') as boolean | undefined) ?? false
+);
+export const atomPersistenceIsAutoLaunch = atom(
+  (get) => get(atomIsAutoLaunch),
+  (_get, set, newBool: boolean) => {
+    set(atomIsAutoLaunch, newBool);
+    window.electron.preferences.set('isAutoLaunch', newBool);
+  }
+);
+
+const atomIsAutoUpdate = atom<boolean>(
+  (window.electron?.preferences.get('isAutoUpdate') as boolean | undefined) ?? false
+);
+export const atomPersistenceIsAutoUpdate = atom(
+  (get) => get(atomIsAutoUpdate),
+  (_get, set, newBool: boolean) => {
+    set(atomIsAutoUpdate, newBool);
+    window.electron.preferences.set('isAutoUpdate', newBool);
   }
 );
