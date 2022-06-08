@@ -60,6 +60,22 @@ export const atomPersistenceQueueIsAscend = atom(
   }
 );
 
+// Server
+// -----------------------------------------------------------------------------
+
+export type ServerActiveTab = 'basicInfomation' | 'route' | 'responsiveness';
+
+const atomServerActiveTab = atom<ServerActiveTab>(
+  (window.electron?.cache.get('serverActiveTab') as ServerActiveTab | undefined) ?? 'basicInfomation'
+);
+export const atomPersistenceServerActiveTab = atom(
+  (get) => get(atomServerActiveTab),
+  (_get, set, newStr: ServerActiveTab) => {
+    set(atomServerActiveTab, newStr);
+    window.electron.cache.set('serverActiveTab', newStr);
+  }
+);
+
 // Settings
 // -----------------------------------------------------------------------------
 

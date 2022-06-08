@@ -1,6 +1,6 @@
 import { Rectangle } from 'electron';
 import Store, { Schema } from 'electron-store';
-import { QueueIterater, SidebarCategory } from '../../renderer/atoms/atomUI';
+import { QueueIterater, ServerActiveTab, SidebarCategory } from '../../renderer/atoms/atomUI';
 
 export type YaddsCache = {
   windowBounds: Rectangle;
@@ -10,6 +10,7 @@ export type YaddsCache = {
   sidebarCategory: SidebarCategory;
   queueIterater: QueueIterater;
   queueIsAscend: boolean;
+  serverActiveTab: ServerActiveTab;
 };
 
 const schema: Schema<YaddsCache> = {
@@ -39,6 +40,9 @@ const schema: Schema<YaddsCache> = {
   },
   queueIsAscend: {
     type: 'boolean',
+  },
+  serverActiveTab: {
+    type: 'string',
   },
 };
 

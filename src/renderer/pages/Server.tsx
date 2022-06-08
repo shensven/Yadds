@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
@@ -17,6 +17,7 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
+import { atomPersistenceServerActiveTab } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
 import {
   atomNasInfo,
@@ -33,6 +34,7 @@ const Server: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetSid] = useAtom(atomPersistenceTargetSid);
   const [nasInfo, setNasInfo] = useAtom(atomNasInfo);
@@ -40,9 +42,7 @@ const Server: React.FC = () => {
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
-  const [select, setSelect] = useState(0);
-
-  const serverBaseInfo = [
+  const basicInfomation = [
     {
       title: t('server.synology_nas'),
       value: nasInfo.model,
@@ -72,7 +72,7 @@ const Server: React.FC = () => {
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
     },
   ];
-  const serverRoute = [
+  const route = [
     {
       title: t('server.quickconnect_coordinator'),
       value: 'global.quickconnect.to',
@@ -84,7 +84,7 @@ const Server: React.FC = () => {
       icon: <IcOutlineCable sx={{ fontSize: 20 }} />,
     },
   ];
-  const serverResponsiveness = [
+  const responsiveness = [
     {
       title: 'DS920+',
       value: '32',
@@ -157,9 +157,9 @@ const Server: React.FC = () => {
             <ToggleButton
               value="left"
               disableRipple
-              selected={select === 0}
+              selected={serverActiveTab === 'basicInfomation'}
               sx={{ px: theme.spacing(2), py: 0 }}
-              onClick={() => setSelect(0)}
+              onClick={() => setServerActiveTab('basicInfomation')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
                 {t('server.basic_information')}
@@ -168,9 +168,9 @@ const Server: React.FC = () => {
             <ToggleButton
               value="left"
               disableRipple
-              selected={select === 1}
+              selected={serverActiveTab === 'route'}
               sx={{ px: theme.spacing(2), py: 0 }}
-              onClick={() => setSelect(1)}
+              onClick={() => setServerActiveTab('route')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
                 {t('server.route')}
@@ -179,9 +179,9 @@ const Server: React.FC = () => {
             <ToggleButton
               value="right"
               disableRipple
-              selected={select === 2}
+              selected={serverActiveTab === 'responsiveness'}
               sx={{ px: theme.spacing(2), py: 0 }}
-              onClick={() => setSelect(2)}
+              onClick={() => setServerActiveTab('responsiveness')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
                 {t('server.responsiveness')}
@@ -189,7 +189,7 @@ const Server: React.FC = () => {
             </ToggleButton>
           </ToggleButtonGroup>
           <Stack flexDirection="row">
-            {select === 0 && (
+            {serverActiveTab === 'basicInfomation' && (
               <Button
                 size="small"
                 sx={{
@@ -204,7 +204,7 @@ const Server: React.FC = () => {
                 </Typography>
               </Button>
             )}
-            {select === 1 && (
+            {serverActiveTab === 'route' && (
               <Button
                 size="small"
                 sx={{
@@ -218,7 +218,7 @@ const Server: React.FC = () => {
                 </Typography>
               </Button>
             )}
-            {select === 2 && (
+            {serverActiveTab === 'responsiveness' && (
               <Button
                 size="small"
                 sx={{
@@ -234,12 +234,12 @@ const Server: React.FC = () => {
             )}
           </Stack>
         </Stack>
-        {select === 0 && (
+        {serverActiveTab === 'basicInfomation' && (
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
-            {serverBaseInfo.map((item, index) => (
+            {basicInfomation.map((item, index) => (
               <CardUnit
                 hasIconButton={index === 2}
-                hasMarginRight={serverBaseInfo.length - 1 === index}
+                hasMarginRight={basicInfomation.length - 1 === index}
                 title={item.title}
                 value={item.value}
                 unit={item.unit}
@@ -250,12 +250,12 @@ const Server: React.FC = () => {
             ))}
           </Stack>
         )}
-        {select === 1 && (
+        {serverActiveTab === 'route' && (
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
-            {serverRoute.map((item, index) => (
+            {route.map((item, index) => (
               <CardUnit
                 hasIconButton={false}
-                hasMarginRight={serverRoute.length - 1 === index}
+                hasMarginRight={route.length - 1 === index}
                 title={item.title}
                 value={item.value}
                 icon={item.icon}
@@ -264,12 +264,12 @@ const Server: React.FC = () => {
             ))}
           </Stack>
         )}
-        {select === 2 && (
+        {serverActiveTab === 'responsiveness' && (
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
-            {serverResponsiveness.map((item, index) => (
+            {responsiveness.map((item, index) => (
               <CardUnit
                 hasIconButton={false}
-                hasMarginRight={serverResponsiveness.length - 1 === index}
+                hasMarginRight={responsiveness.length - 1 === index}
                 title={item.title}
                 value={item.value}
                 unit={item.unit}
