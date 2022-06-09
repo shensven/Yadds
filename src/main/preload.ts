@@ -48,10 +48,10 @@ contextBridge.exposeInMainWorld('electron', {
 
   connectedUsers: {
     get(key: keyof YaddsConnectedUsers) {
-      return ipcRenderer.sendSync('preferences:get', key);
+      return ipcRenderer.sendSync('connectedUsers:get', key);
     },
     set(key: keyof YaddsConnectedUsers, val: unknown) {
-      ipcRenderer.send('preferences:set', key, val);
+      ipcRenderer.send('connectedUsers:set', key, val);
     },
   },
 

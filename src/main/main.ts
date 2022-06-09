@@ -26,7 +26,7 @@ import log from 'electron-log';
 import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } from './util';
 import cache, { YaddsCache } from './store/cache';
 import preferences, { YaddsPreferences } from './store/preferences';
-import { YaddsConnectedUsers } from './store/connectedUsers';
+import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
 import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
@@ -576,11 +576,11 @@ ipcMain.on('preferences:set', async (_, key: keyof YaddsPreferences, val: unknow
 });
 
 ipcMain.on('connectedUsers:get', async (evt, key: keyof YaddsConnectedUsers) => {
-  evt.returnValue = preferences.get(key);
+  evt.returnValue = connectedUsers.get(key);
 });
 
 ipcMain.on('connectedUsers:set', async (_, key: keyof YaddsConnectedUsers, val: unknown) => {
-  preferences.set(key, val);
+  connectedUsers.set(key, val);
 });
 
 ipcMain.on('os:get', async (evt) => {
