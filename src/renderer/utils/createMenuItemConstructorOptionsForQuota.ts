@@ -5,7 +5,7 @@ import { Volume } from '../atoms/atomTask';
 
 const createMenuItemConstructorOptionsForQuota = (
   t: TFunction<'translation', undefined>,
-  dsmQuotaList: Volume[],
+  quotaList: Volume[],
   targeMenuItemForQuota: TargeMenuItemForQuota
 ) => {
   const template: MenuItemConstructorOptions[] = [];
@@ -13,7 +13,7 @@ const createMenuItemConstructorOptionsForQuota = (
   const targetVolumeName = targeMenuItemForQuota.split(',')[0].split(':')[1];
   const targetShareName = targeMenuItemForQuota.split(',')[1].split(':')[1];
 
-  dsmQuotaList.forEach((volume) => {
+  quotaList.forEach((volume) => {
     template.push({
       label: `${t('server.volume')} ${volume.name}`,
       enabled: false,

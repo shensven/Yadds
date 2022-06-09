@@ -59,7 +59,7 @@ export interface Volume {
   share_used: string; // 'NotSupport'
   used: string; // 'NotSupport'
 }
-export const atomDsmQuotaList = atom<Volume[]>([]);
+export const atomQuotaList = atom<Volume[]>([]);
 
 // -----------------------------------------------------------------------------
 

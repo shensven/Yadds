@@ -10,7 +10,7 @@ import byteSize from 'byte-size';
 import { atomTasksRetryMax } from './atoms/atomConstant';
 import { atomNasInfo, atomPersistenceAppearance, atomPersistenceTargeMenuItemForQuota } from './atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
-import { atomDsmQuotaList, atomTargeByteSizeForQuota, atomTasks, atomTasksStatus, Share } from './atoms/atomTask';
+import { atomQuotaList, atomTargeByteSizeForQuota, atomTasks, atomTasksStatus, Share } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -27,7 +27,7 @@ const App: React.FC = () => {
   const [, setTasks] = useAtom(atomTasks);
   const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
   const [, setNasInfo] = useAtom(atomNasInfo);
-  const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
+  const [, setQuotaList] = useAtom(atomQuotaList);
   const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
@@ -116,7 +116,7 @@ const App: React.FC = () => {
       console.log('getQuata', resp.data.items);
 
       if (resp.success) {
-        setDsmQuotaList(resp.data.items);
+        setQuotaList(resp.data.items);
         const targetVolume = find(resp.data.items, {
           name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
         });
@@ -146,6 +146,12 @@ const App: React.FC = () => {
     if (targetDid.length === 0) {
       setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
+      setNasInfo({ model: '-', version: '-' });
+      setQuotaList([]);
+      setTargeByteSizeForQuota({
+        max: { value: '-', unit: '', long: '', toString: () => '' },
+        available: { value: '-', unit: '', long: '', toString: () => '' },
+      });
       return undefined;
     }
 

@@ -19,7 +19,7 @@ import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
 import { atomNasInfo, atomPersistenceServerActiveTab, atomPersistenceTargeMenuItemForQuota } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomDsmQuotaList, atomTargeByteSizeForQuota, Share } from '../atoms/atomTask';
+import { atomQuotaList, atomTargeByteSizeForQuota, Share } from '../atoms/atomTask';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
 const OS_PLATFORM = window.electron?.os.get();
@@ -32,7 +32,7 @@ const Server: React.FC = () => {
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [nasInfo, setNasInfo] = useAtom(atomNasInfo);
-  const [dsmQuotaList] = useAtom(atomDsmQuotaList);
+  const [quotaList] = useAtom(atomQuotaList);
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
@@ -55,7 +55,7 @@ const Server: React.FC = () => {
       unit: targeByteSizeForQuota.max.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
       onClick: () => {
-        const template = createMenuItemConstructorOptionsForQuota(t, dsmQuotaList, targeMenuItemForQuota);
+        const template = createMenuItemConstructorOptionsForQuota(t, quotaList, targeMenuItemForQuota);
         window.electron.contextMenuForQuota.create(template);
       },
     },
@@ -115,7 +115,7 @@ const Server: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const targetVolume = find(dsmQuotaList, {
+    const targetVolume = find(quotaList, {
       name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
     });
 
