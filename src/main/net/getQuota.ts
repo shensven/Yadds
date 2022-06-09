@@ -1,6 +1,6 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { Volume } from '../../renderer/atoms/atomTask';
+import { Volume } from '../../renderer/atoms/atomUI';
 
 export interface PersonalSettingsInfo {
   success: true;

@@ -17,9 +17,15 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import { atomNasInfo, atomPersistenceServerActiveTab, atomPersistenceTargeMenuItemForQuota } from '../atoms/atomUI';
+import {
+  atomNasInfo,
+  atomPersistenceServerActiveTab,
+  atomPersistenceTargeMenuItemForQuota,
+  atomQuotaList,
+  atomTargeByteSizeForQuota,
+  Share,
+} from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomQuotaList, atomTargeByteSizeForQuota, Share } from '../atoms/atomTask';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
 const OS_PLATFORM = window.electron?.os.get();

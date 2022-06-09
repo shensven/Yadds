@@ -1,4 +1,3 @@
-import { ByteSizeResult } from 'byte-size';
 import { atom } from 'jotai';
 
 export interface Task {
@@ -37,38 +36,3 @@ export interface Task {
 export const atomTasks = atom<Task[]>([]);
 
 export const atomTasksStatus = atom({ isLoading: true, retry: 0 });
-
-// -----------------------------------------------------------------------------
-
-export interface Share {
-  expanded: boolean;
-  leaf: boolean;
-  name: `share:${string}`; // 'share:Your_Root_Path';
-  quota: number;
-  share_quota: number;
-  share_used: number;
-  used: number;
-}
-export interface Volume {
-  children: Share[];
-  expanded: boolean;
-  leaf: boolean;
-  name: string; // '1'
-  quota: string; // 'NotSupport'
-  share_quota: string; // 'NotSupport'
-  share_used: string; // 'NotSupport'
-  used: string; // 'NotSupport'
-}
-export const atomQuotaList = atom<Volume[]>([]);
-
-// -----------------------------------------------------------------------------
-
-interface TargeByteSizeForQuota {
-  max: ByteSizeResult;
-  available: ByteSizeResult;
-}
-
-export const atomTargeByteSizeForQuota = atom<TargeByteSizeForQuota>({
-  max: { value: '-', unit: '', long: '', toString: () => '' },
-  available: { value: '-', unit: '', long: '', toString: () => '' },
-});

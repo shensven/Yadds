@@ -1,7 +1,6 @@
 import { MenuItemConstructorOptions } from 'electron';
 import { TFunction } from 'react-i18next';
-import { TargeMenuItemForQuota } from '../atoms/atomUI';
-import { Volume } from '../atoms/atomTask';
+import { TargeMenuItemForQuota, Volume } from '../atoms/atomUI';
 
 const createMenuItemConstructorOptionsForQuota = (
   t: TFunction<'translation', undefined>,

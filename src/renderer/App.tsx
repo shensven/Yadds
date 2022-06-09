@@ -8,9 +8,16 @@ import { useAtom } from 'jotai';
 import { find } from 'lodash';
 import byteSize from 'byte-size';
 import { atomTasksRetryMax } from './atoms/atomConstant';
-import { atomNasInfo, atomPersistenceAppearance, atomPersistenceTargeMenuItemForQuota } from './atoms/atomUI';
+import {
+  atomNasInfo,
+  atomPersistenceAppearance,
+  atomPersistenceTargeMenuItemForQuota,
+  atomQuotaList,
+  atomTargeByteSizeForQuota,
+  Share,
+} from './atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
-import { atomQuotaList, atomTargeByteSizeForQuota, atomTasks, atomTasksStatus, Share } from './atoms/atomTask';
+import { atomTasks, atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
