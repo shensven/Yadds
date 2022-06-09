@@ -1,6 +1,7 @@
 import { MenuItemConstructorOptions } from 'electron';
 import { TFunction } from 'react-i18next';
-import { TargeMenuItemForQuota, Volume } from '../atoms/atomTask';
+import { TargeMenuItemForQuota } from '../atoms/atomUI';
+import { Volume } from '../atoms/atomTask';
 
 const createMenuItemConstructorOptionsForQuota = (
   t: TFunction<'translation', undefined>,
@@ -9,8 +10,8 @@ const createMenuItemConstructorOptionsForQuota = (
 ) => {
   const template: MenuItemConstructorOptions[] = [];
 
-  const targetVolume = targeMenuItemForQuota.split(',')[0].split(':')[1];
-  const targetQuotaName = targeMenuItemForQuota.split(',')[1].split(':')[1];
+  const targetVolumeName = targeMenuItemForQuota.split(',')[0].split(':')[1];
+  const targetShareName = targeMenuItemForQuota.split(',')[1].split(':')[1];
 
   dsmQuotaList.forEach((volume) => {
     template.push({
@@ -18,12 +19,12 @@ const createMenuItemConstructorOptionsForQuota = (
       enabled: false,
     });
     template.push({ type: 'separator' });
-    volume.children.forEach((shareQuota) => {
+    volume.children.forEach((share) => {
       template.push({
-        label: `volume:${volume.name},${shareQuota.name}`,
+        label: `volume:${volume.name},${share.name}`,
         enabled: true,
         type: 'checkbox',
-        checked: volume.name === targetVolume && shareQuota.name === `share:${targetQuotaName}`,
+        checked: volume.name === targetVolumeName && share.name === `share:${targetShareName}`,
       });
     });
   });

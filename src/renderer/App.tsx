@@ -6,10 +6,11 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
+import byteSize from 'byte-size';
 import { atomTasksRetryMax } from './atoms/atomConstant';
-import { atomNasInfo, atomPersistenceAppearance } from './atoms/atomUI';
+import { atomNasInfo, atomPersistenceAppearance, atomPersistenceTargeMenuItemForQuota } from './atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
-import { atomDsmQuotaList, atomTasks, atomTasksStatus } from './atoms/atomTask';
+import { atomDsmQuotaList, atomTargeByteSizeForQuota, atomTasks, atomTasksStatus, Share } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -27,6 +28,8 @@ const App: React.FC = () => {
   const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
   const [, setNasInfo] = useAtom(atomNasInfo);
   const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
+  const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
+  const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const handleTasks = async () => {
     const targetUser = find(connectedUsers, { did: targetDid });
@@ -54,7 +57,7 @@ const App: React.FC = () => {
       }
 
       if (resp.success) {
-        console.log('renderer: good tasks request', resp.data.task);
+        // console.log('renderer: good tasks request', resp.data.task);
         setTasksStatus({ isLoading: false, retry: 0 });
         startTransition(() => setTasks(resp.data.task));
       }
@@ -114,6 +117,25 @@ const App: React.FC = () => {
 
       if (resp.success) {
         setDsmQuotaList(resp.data.items);
+        const targetVolume = find(resp.data.items, {
+          name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
+        });
+
+        if (targetVolume !== undefined) {
+          const targetQuota = find(targetVolume.children, {
+            name: targeMenuItemForQuota.split(',')[1],
+          }) as Share | undefined;
+
+          if (targetQuota) {
+            setTargeByteSizeForQuota({
+              max: byteSize(targetQuota.share_quota * 1024 * 1024, { units: 'iec', precision: 2 }),
+              available: byteSize((targetQuota.share_quota - targetQuota.share_used) * 1024 * 1024, {
+                units: 'iec',
+                precision: 2,
+              }),
+            });
+          }
+        }
       }
     } catch (error) {
       console.log(error);
@@ -131,7 +153,7 @@ const App: React.FC = () => {
     getQuata();
 
     const timer = setInterval(() => {
-      console.log('renderer: retry', tasksStatus.retry);
+      // console.log('renderer: retry', tasksStatus.retry);
 
       if (tasksStatus.retry < TASKS_RETRY_MAX) {
         handleTasks();

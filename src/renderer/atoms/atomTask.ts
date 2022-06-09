@@ -40,7 +40,7 @@ export const atomTasksStatus = atom({ isLoading: true, retry: 0 });
 
 // -----------------------------------------------------------------------------
 
-export interface ShareQuota {
+export interface Share {
   expanded: boolean;
   leaf: boolean;
   name: `share:${string}`; // 'share:Your_Root_Path';
@@ -50,7 +50,7 @@ export interface ShareQuota {
   used: number;
 }
 export interface Volume {
-  children: ShareQuota[];
+  children: Share[];
   expanded: boolean;
   leaf: boolean;
   name: string; // '1'
@@ -63,17 +63,12 @@ export const atomDsmQuotaList = atom<Volume[]>([]);
 
 // -----------------------------------------------------------------------------
 
-export type TargeMenuItemForQuota = `volume:${number},share:${string}`;
-export const atomTargeMenuItemForQuota = atom<TargeMenuItemForQuota>(`volume:${0},share:${''}`);
-
-// -----------------------------------------------------------------------------
-
 interface TargeByteSizeForQuota {
   max: ByteSizeResult;
   available: ByteSizeResult;
 }
 
 export const atomTargeByteSizeForQuota = atom<TargeByteSizeForQuota>({
-  max: { value: '', unit: '', long: '', toString: () => '' },
-  available: { value: '', unit: '', long: '', toString: () => '' },
+  max: { value: '-', unit: '', long: '', toString: () => '' },
+  available: { value: '-', unit: '', long: '', toString: () => '' },
 });

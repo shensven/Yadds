@@ -17,14 +17,9 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import { atomNasInfo, atomPersistenceServerActiveTab } from '../atoms/atomUI';
+import { atomNasInfo, atomPersistenceServerActiveTab, atomPersistenceTargeMenuItemForQuota } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import {
-  atomDsmQuotaList,
-  atomTargeMenuItemForQuota,
-  atomTargeByteSizeForQuota,
-  ShareQuota,
-} from '../atoms/atomTask';
+import { atomDsmQuotaList, atomTargeByteSizeForQuota, Share } from '../atoms/atomTask';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
 
 const OS_PLATFORM = window.electron?.os.get();
@@ -38,7 +33,7 @@ const Server: React.FC = () => {
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [nasInfo, setNasInfo] = useAtom(atomNasInfo);
   const [dsmQuotaList] = useAtom(atomDsmQuotaList);
-  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomTargeMenuItemForQuota);
+  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const basicInfomation = [
@@ -127,7 +122,9 @@ const Server: React.FC = () => {
     if (targetVolume !== undefined) {
       const targetQuota = find(targetVolume.children, {
         name: targeMenuItemForQuota.split(',')[1],
-      }) as ShareQuota | undefined;
+      }) as Share | undefined;
+
+      console.log('targetQuota', targetQuota);
 
       if (targetQuota) {
         setTargeByteSizeForQuota({

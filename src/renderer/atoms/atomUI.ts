@@ -78,6 +78,20 @@ export const atomPersistenceServerActiveTab = atom(
 
 export const atomNasInfo = atom({ model: '-', version: '-' });
 
+export type TargeMenuItemForQuota = `volume:${number},share:${string}`;
+
+const atomTargeMenuItemForQuota = atom<TargeMenuItemForQuota>(
+  (window.electron?.cache.get('targeMenuItemForQuota') as TargeMenuItemForQuota | undefined) ??
+    `volume:${0},share:${''}`
+);
+export const atomPersistenceTargeMenuItemForQuota = atom(
+  (get) => get(atomTargeMenuItemForQuota),
+  (_get, set, newStr: TargeMenuItemForQuota) => {
+    set(atomTargeMenuItemForQuota, newStr);
+    window.electron.cache.set('targeMenuItemForQuota', newStr);
+  }
+);
+
 // Settings
 // -----------------------------------------------------------------------------
 

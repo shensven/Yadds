@@ -7,8 +7,7 @@ import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForA
 import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
-import { Appearance, SidebarCategory } from '../renderer/atoms/atomUI';
-import { TargeMenuItemForQuota } from '../renderer/atoms/atomTask';
+import { Appearance, SidebarCategory, TargeMenuItemForQuota } from '../renderer/atoms/atomUI';
 
 export type Channels = 'ipc-example';
 
