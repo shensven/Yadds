@@ -64,11 +64,11 @@ declare global {
 
       contextMenuForQuota: {
         create: (update: MenuItemConstructorOptionsForQuota) => void;
-        setTargetItem: (setPageServerQuotaTarget: (update: TargeMenuItemForQuota) => void) => void;
+        setTargetItem: (setTargeMenuItemForQuota: (update: TargeMenuItemForQuota) => void) => void;
       };
 
       yadds: {
-        toogleSidebar: (hasYaddsSidebar: boolean, setHasYaddsSidebar: (hasYaddsSidebar: boolean) => void) => void;
+        toogleSidebar: (hasSidebar: boolean, setHasSidebar: (hasSidebar: boolean) => void) => void;
         toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => void;
         navigate: (navigateFunc: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => void;
       };
