@@ -58,7 +58,7 @@ import {
   LocaleName,
   atomPersistenceIsAutoUpdate,
 } from '../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
 
 const OS_PLATFORM = window.electron?.os.get();
@@ -114,7 +114,7 @@ const Settings: React.FC = () => {
   const [isAutoLaunch, setIsAutoLaunch] = useAtom(atomPersistenceIsAutoLaunch);
   const [isAutoUpdate, setIsAutoUpdate] = useAtom(atomPersistenceIsAutoUpdate);
   const [connectedUsers, setConnectedUsers] = useAtom(atomPersistenceConnectedUsers);
-  const [targetSid, setTargetSid] = useAtom(atomPersistenceTargetSid);
+  const [targetDid, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasksStatus] = useAtom(atomTasksStatus);
 
   const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
@@ -170,14 +170,14 @@ const Settings: React.FC = () => {
     { localeName: 'ja_JP', label: '日本語' },
   ];
 
-  const handleSelectQcOnChange = (sid: string, menuItemIndex: number, isDelete: boolean) => {
+  const handleSelectQcOnChange = (did: string, menuItemIndex: number, isDelete: boolean) => {
     if (isDelete) {
       setWhoWillRemove(menuItemIndex);
       setIsSelectQcOpen(false);
       setHasDialogDelete(true);
       return;
     }
-    setTargetSid(sid);
+    setTargetDid(did);
     setIsSelectQcOpen(false);
   };
 
@@ -217,18 +217,18 @@ const Settings: React.FC = () => {
 
   const handleRemove = () => {
     if (connectedUsers.length === 1) {
-      setTargetSid('');
+      setTargetDid('');
       setConnectedUsers([]);
     } else if (whoWillRemove === connectedUsers.length - 1) {
       const prevUser = connectedUsers[whoWillRemove - 1];
-      setTargetSid(prevUser.sid);
+      setTargetDid(prevUser.did);
 
       const arr = [...connectedUsers];
       arr.splice(whoWillRemove, 1);
       setConnectedUsers(arr);
     } else {
       const nextUser = connectedUsers[whoWillRemove + 1];
-      setTargetSid(nextUser.sid);
+      setTargetDid(nextUser.did);
 
       const arr = [...connectedUsers];
       arr.splice(whoWillRemove, 1);
@@ -323,7 +323,7 @@ const Settings: React.FC = () => {
             sid: resp.data.sid,
           });
           setConnectedUsers(arr);
-          setTargetSid(resp.data.sid);
+          setTargetDid(resp.data.did);
           dismissDailogAdd();
           setTasksStatus({ isLoading: false, retry: 0 });
         }
@@ -390,12 +390,12 @@ const Settings: React.FC = () => {
               <Select
                 size="small"
                 displayEmpty
-                value={targetSid}
+                value={targetDid}
                 renderValue={() => (
                   <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {find(connectedUsers, { sid: targetSid })?.username ?? 'undefined'}
+                    {find(connectedUsers, { did: targetDid })?.username ?? 'undefined'}
                     {' @ '}
-                    {find(connectedUsers, { sid: targetSid })?.quickConnectID ?? 'undefined'}
+                    {find(connectedUsers, { did: targetDid })?.quickConnectID ?? 'undefined'}
                   </Typography>
                 )}
                 disabled={connectedUsers.length === 0}
@@ -408,17 +408,17 @@ const Settings: React.FC = () => {
                 onClose={() => setIsSelectQcOpen(false)}
               >
                 {connectedUsers.map((item, index) => (
-                  <MenuItem key={item.sid} dense disableRipple value={item.sid}>
+                  <MenuItem key={item.did} dense disableRipple value={item.did}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectQcOnChange(item.sid, index, false)}
+                        onClick={() => handleSelectQcOnChange(item.did, index, false)}
                       >
                         {item.username} @ {item.quickConnectID}
                       </Typography>
                       <IconButton
                         sx={{ width: 20, height: 20 }}
-                        onClick={() => handleSelectQcOnChange(item.sid, index, true)}
+                        onClick={() => handleSelectQcOnChange(item.did, index, true)}
                       >
                         <IonTrashOutline sx={{ fontSize: 14 }} />
                       </IconButton>

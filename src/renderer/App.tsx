@@ -8,7 +8,7 @@ import { useAtom } from 'jotai';
 import { find } from 'lodash';
 import { atomTasksRetryMax } from './atoms/atomConstant';
 import { atomPersistenceAppearance } from './atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from './atoms/atomConnectedUsers';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
 import { atomNasInfo, atomDsmQuotaList, atomTasks, atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
@@ -22,14 +22,14 @@ const App: React.FC = () => {
   const [TASKS_RETRY_MAX] = useAtom(atomTasksRetryMax);
   const [appearance] = useAtom(atomPersistenceAppearance);
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
-  const [targetSid] = useAtom(atomPersistenceTargetSid);
+  const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasks] = useAtom(atomTasks);
   const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
   const [, setNasInfo] = useAtom(atomNasInfo);
   const [, setDsmQuotaList] = useAtom(atomDsmQuotaList);
 
   const handleTasks = async () => {
-    const targetUser = find(connectedUsers, { sid: targetSid });
+    const targetUser = find(connectedUsers, { did: targetDid });
 
     if (!targetUser) {
       return;
@@ -64,7 +64,7 @@ const App: React.FC = () => {
   };
 
   const getDsmInfo = async () => {
-    const targetUser = find(connectedUsers, { sid: targetSid });
+    const targetUser = find(connectedUsers, { did: targetDid });
 
     if (!targetUser) {
       return;
@@ -97,7 +97,7 @@ const App: React.FC = () => {
   };
 
   const getQuata = async () => {
-    const targetUser = find(connectedUsers, { sid: targetSid });
+    const targetUser = find(connectedUsers, { did: targetDid });
 
     if (!targetUser) {
       return;
@@ -121,7 +121,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (targetSid.length === 0) {
+    if (targetDid.length === 0) {
       setTasksStatus({ isLoading: false, retry: 3 });
       setTasks([]);
       return undefined;
@@ -144,7 +144,7 @@ const App: React.FC = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [targetSid, tasksStatus.retry]);
+  }, [targetDid, tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
     switch (appearance) {

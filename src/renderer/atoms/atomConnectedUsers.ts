@@ -23,11 +23,11 @@ export const atomPersistenceConnectedUsers = atom(
 
 // -----------------------------------------------------------------------------
 
-const atomTargetSid = atom<string>((window.electron?.connectedUsers.get('target') as string | undefined) ?? '');
-export const atomPersistenceTargetSid = atom(
-  (get) => get(atomTargetSid),
+const atomTargetDid = atom<string>((window.electron?.connectedUsers.get('target') as string | undefined) ?? '');
+export const atomPersistenceTargetDid = atom(
+  (get) => get(atomTargetDid),
   (_get, set, newStr: string) => {
-    set(atomTargetSid, newStr);
+    set(atomTargetDid, newStr);
     window.electron.connectedUsers.set('target', newStr);
   }
 );

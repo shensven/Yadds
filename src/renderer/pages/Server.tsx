@@ -18,7 +18,7 @@ import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
 import { atomPersistenceServerActiveTab } from '../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetSid } from '../atoms/atomConnectedUsers';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import {
   atomNasInfo,
   atomDsmQuotaList,
@@ -36,7 +36,7 @@ const Server: React.FC = () => {
 
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
-  const [targetSid] = useAtom(atomPersistenceTargetSid);
+  const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [nasInfo, setNasInfo] = useAtom(atomNasInfo);
   const [dsmQuotaList] = useAtom(atomDsmQuotaList);
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomTargeMenuItemForQuota);
@@ -94,7 +94,7 @@ const Server: React.FC = () => {
   ];
 
   const getDsmInfo = async () => {
-    const targetUser = find(connectedUsers, { sid: targetSid });
+    const targetUser = find(connectedUsers, { did: targetDid });
 
     if (!targetUser) {
       return;
