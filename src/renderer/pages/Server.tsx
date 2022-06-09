@@ -17,10 +17,9 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import { atomPersistenceServerActiveTab } from '../atoms/atomUI';
+import { atomNasInfo, atomPersistenceServerActiveTab } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import {
-  atomNasInfo,
   atomDsmQuotaList,
   atomTargeMenuItemForQuota,
   atomTargeByteSizeForQuota,

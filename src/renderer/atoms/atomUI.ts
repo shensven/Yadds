@@ -76,6 +76,8 @@ export const atomPersistenceServerActiveTab = atom(
   }
 );
 
+export const atomNasInfo = atom({ model: '-', version: '-' });
+
 // Settings
 // -----------------------------------------------------------------------------
 

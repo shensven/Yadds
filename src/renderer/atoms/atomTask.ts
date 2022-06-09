@@ -40,10 +40,6 @@ export const atomTasksStatus = atom({ isLoading: true, retry: 0 });
 
 // -----------------------------------------------------------------------------
 
-export const atomNasInfo = atom({ model: '-', version: '-' });
-
-// -----------------------------------------------------------------------------
-
 export interface ShareQuota {
   expanded: boolean;
   leaf: boolean;
