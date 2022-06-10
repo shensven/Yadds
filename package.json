@@ -107,7 +107,7 @@
     "byte-size": "8.1.0",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.7",
-    "electron-store": "8.0.1",
+    "electron-store": "8.0.2",
     "electron-updater": "^5.0.1",
     "i18next": "21.8.9",
     "jotai": "1.7.1",
