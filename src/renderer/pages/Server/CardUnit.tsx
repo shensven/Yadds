@@ -25,7 +25,8 @@ const CardUnit: React.FC<ICardUnit> = (props: ICardUnit) => {
       elevation={0}
       sx={{
         backgroundColor: theme.palette.card.default,
-        mr: hasMarginRight ? 0 : theme.spacing(2),
+        mr: !hasMarginRight ? 0 : theme.spacing(2),
+        mb: theme.spacing(2),
         p: theme.spacing(1),
         minWidth: theme.spacing(19),
       }}

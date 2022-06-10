@@ -241,7 +241,7 @@ const Server: React.FC = () => {
             {basicInfomation.map((item, index) => (
               <CardUnit
                 hasIconButton={index === 2}
-                hasMarginRight={basicInfomation.length - 1 === index}
+                hasMarginRight={basicInfomation.length - 1 !== index}
                 title={item.title}
                 value={item.value}
                 unit={item.unit}
@@ -253,11 +253,11 @@ const Server: React.FC = () => {
           </Stack>
         )}
         {serverActiveTab === 'route' && (
-          <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
-            {route.map((item, index) => (
+          <Stack flexDirection="column" mt={theme.spacing(4)} width="100%">
+            {route.map((item) => (
               <CardUnit
                 hasIconButton={false}
-                hasMarginRight={route.length - 1 === index}
+                hasMarginRight={false}
                 title={item.title}
                 value={item.value}
                 icon={item.icon}
