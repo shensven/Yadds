@@ -27,23 +27,12 @@ import Slide from '@mui/material/Slide';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
 import RowItem from './Settings/RowItem';
+import ApprearanceItem from './Settings/ApprearanceItem';
 import IonPersonCircle from '../components/icons/IonPersonCircle';
 import IonEyeOffOutline from '../components/icons/IonEyeOffOutline';
 import IonEyeOutline from '../components/icons/IonEyeOutline';
 import IonTrashOutline from '../components/icons/IonTrashOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
-import darwin_appearance_light from './assets/Settings/darwin_appearance_light.png';
-import darwin_appearance_dark from './assets/Settings/darwin_appearance_dark.png';
-import darwin_appearance_follow_system from './assets/Settings/darwin_appearance_follow_system.png';
-import win32_appearance_light from './assets/Settings/win32_appearance_light.png';
-import win32_appearance_dark from './assets/Settings/win32_appearance_dark.png';
-import win32_appearance_follow_system from './assets/Settings/win32_appearance_follow_system.png';
-import linux_appearance_light from './assets/Settings/linux_appearance_light.png';
-import linux_appearance_dark from './assets/Settings/linux_appearance_dark.png';
-import linux_appearance_follow_system from './assets/Settings/linux_appearance_follow_system.png';
-import gnome_appearance_light from './assets/Settings/gnome_appearance_light.png';
-import gnome_appearance_dark from './assets/Settings/gnome_appearance_dark.png';
-import gnome_appearance_follow_system from './assets/Settings/gnome_appearance_follow_system.png';
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
 import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
@@ -63,45 +52,6 @@ import { atomTasksStatus } from '../atoms/atomTask';
 
 const OS_PLATFORM = window.electron?.os.get();
 const APP_VERSION = window.electron?.app.getVersion();
-
-const getAppearanceLight = () => {
-  switch (OS_PLATFORM) {
-    case 'darwin':
-      return darwin_appearance_light;
-    case 'win32':
-      return win32_appearance_light;
-    case 'linux':
-      return linux_appearance_light;
-    default:
-      return gnome_appearance_light;
-  }
-};
-
-const getAppearanceDark = () => {
-  switch (OS_PLATFORM) {
-    case 'darwin':
-      return darwin_appearance_dark;
-    case 'win32':
-      return win32_appearance_dark;
-    case 'linux':
-      return linux_appearance_dark;
-    default:
-      return gnome_appearance_dark;
-  }
-};
-
-const getAppearanceFollowSystem = () => {
-  switch (OS_PLATFORM) {
-    case 'darwin':
-      return darwin_appearance_follow_system;
-    case 'win32':
-      return win32_appearance_follow_system;
-    case 'linux':
-      return linux_appearance_follow_system;
-    default:
-      return gnome_appearance_follow_system;
-  }
-};
 
 const Settings: React.FC = () => {
   const theme = useTheme();
@@ -139,23 +89,19 @@ const Settings: React.FC = () => {
   interface YaddsAppearance {
     appearance: Appearance;
     label: string;
-    src: string;
   }
   const appearanceList: YaddsAppearance[] = [
     {
       appearance: 'light',
       label: t('settings.light'),
-      src: getAppearanceLight(),
     },
     {
       appearance: 'dark',
       label: t('settings.dark'),
-      src: getAppearanceDark(),
     },
     {
       appearance: 'system',
       label: t('settings.follow_system'),
-      src: getAppearanceFollowSystem(),
     },
   ];
 
@@ -370,7 +316,7 @@ const Settings: React.FC = () => {
                     window.electron.app.toggleNativeTheme(item.appearance);
                   }}
                 >
-                  <img src={item.src} alt="" draggable="false" width={67} height={44} />
+                  <ApprearanceItem appearance={item.appearance} os={OS_PLATFORM} />
                 </Box>
                 <Typography
                   variant="overline"
