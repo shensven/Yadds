@@ -19,6 +19,7 @@ export interface DsmInfo {
 
 const getDsmInfo = (args: { host: string; port: number; sid: string }) => {
   const { host, port, sid } = args;
+
   if (!(host || port || sid)) {
     return { success: false };
   }
