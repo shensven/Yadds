@@ -106,16 +106,10 @@ const App: React.FC = () => {
   }, [targetDid, tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
-    switch (appearance) {
-      case 'light':
-        return 'light';
-      case 'dark':
-        return 'dark';
-      case 'system':
-        return prefersDarkMode ? 'dark' : 'light';
-      default:
-        return 'light';
+    if (appearance === 'system') {
+      return prefersDarkMode ? 'dark' : 'light';
     }
+    return appearance;
   };
 
   return (
