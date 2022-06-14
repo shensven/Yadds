@@ -37,6 +37,7 @@ import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
 import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
 import createMenuItemLabelsForTray from '../utils/createMenuItemLabelsForTray';
+import { atomAppVersion, atomOS } from '../atoms/atomConstant';
 import {
   Appearance,
   atomHasSidebarMarginTop,
@@ -50,13 +51,12 @@ import {
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
 
-const OS_PLATFORM = window.electron?.os.get();
-const APP_VERSION = window.electron?.app.getVersion();
-
 const Settings: React.FC = () => {
   const theme = useTheme();
   const { t, i18n } = useTranslation();
 
+  const [OS_PLATFORM] = useAtom(atomOS);
+  const [APP_VERSION] = useAtom(atomAppVersion);
   const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [appearance, setAppearance] = useAtom(atomPersistenceAppearance);

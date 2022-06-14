@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
-import { atomSidebarWidth } from '../atoms/atomConstant';
+import { atomOS, atomSidebarWidth } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
   atomPersistenceHasSidebar,
@@ -42,6 +42,7 @@ const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [OS_PLATFORM] = useAtom(atomOS);
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
@@ -105,7 +106,7 @@ const YaddsMain: React.FC = () => {
           backgroundColor: 'transparent',
           display: ['/server', '/settings'].includes(sidebarCategory) ? 'none' : 'flex',
         }}
-        onDoubleClick={() => window.electron.os.get() === 'darwin' && window.electron.app.zoomWindow()}
+        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.app.zoomWindow()}
       >
         <Stack flexDirection="row" justifyContent="flex-end" alignItems="center" sx={{ p: theme.spacing(2) }}>
           <Stack

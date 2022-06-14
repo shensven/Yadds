@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useAtom } from 'jotai';
-import { atomSidebarWidth } from '../atoms/atomConstant';
+import { atomOS, atomSidebarWidth } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
   atomPersistenceHasSidebar,
@@ -50,13 +50,12 @@ const YaddsSidebar: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [OS_PLATFORM] = useAtom(atomOS);
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop, setHasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [sidebarCategory, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [tasks] = useAtom(atomTasks);
-
-  const isDarwin = window.electron?.os.get() === 'darwin';
 
   useEffect(() => {
     window.electron?.yadds.navigate(navigate, setSidebarCategory); // Init navigation from the top menu
@@ -131,7 +130,7 @@ const YaddsSidebar: React.FC = () => {
         sx={{
           mt: theme.spacing(1),
           ...(hasSidebarMarginTop && {
-            [(isDarwin && 'mt') as string]: theme.spacing(4),
+            [(OS_PLATFORM === 'darwin' && 'mt') as string]: theme.spacing(4),
           }),
           transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.easeOut,

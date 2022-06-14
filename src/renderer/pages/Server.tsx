@@ -17,6 +17,7 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
+import { atomOS } from '../atoms/atomConstant';
 import {
   atomNasInfo,
   atomPersistenceServerActiveTab,
@@ -30,12 +31,11 @@ import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemCon
 import getNasInfo from '../utils/getNasInfo';
 import getQuota from '../utils/getQuota';
 
-const OS_PLATFORM = window.electron?.os.get();
-
 const Server: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
+  const [OS_PLATFORM] = useAtom(atomOS);
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
