@@ -25,6 +25,7 @@ import {
 } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
+import getNasInfo from '../utils/getNasInfo';
 import getQuota from '../utils/getQuota';
 
 const OS_PLATFORM = window.electron?.os.get();
@@ -92,27 +93,9 @@ const Server: React.FC = () => {
     },
   ];
 
-  const getDsmInfo = async () => {
-    const targetUser = find(connectedUsers, { did: targetDid });
-
-    if (!targetUser) {
-      return;
-    }
-
-    const resp = await window.electron.net.getDsmInfo({
-      host: targetUser.host,
-      port: targetUser.port,
-      sid: targetUser.sid,
-    });
-
-    if (!resp.success) {
-      setNasInfo({ model: '-', version: '-' });
-    }
-
-    if (resp.success) {
-      const version = resp.data?.version_string.split(' ')[1] as string;
-      setNasInfo({ model: resp.data?.model as string, version });
-    }
+  const refreshBasicInfomation = () => {
+    getNasInfo({ connectedUsers, targetDid, setNasInfo });
+    getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
   };
 
   useEffect(() => {
@@ -120,6 +103,7 @@ const Server: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    getNasInfo({ connectedUsers, targetDid, setNasInfo });
     getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
   }, [targeMenuItemForQuota]);
 
@@ -178,7 +162,7 @@ const Server: React.FC = () => {
                   '&:hover': { backgroundColor: theme.palette.input.hover },
                   ml: theme.spacing(1),
                 }}
-                onClick={() => getDsmInfo()}
+                onClick={() => refreshBasicInfomation()}
               >
                 <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
                   {t('server.refresh')}

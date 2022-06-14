@@ -19,6 +19,7 @@ import { atomTasks, atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
+import getNasInfo from './utils/getNasInfo';
 import getQuota from './utils/getQuota';
 import './i18n/i18n';
 import './App.scss';
@@ -72,39 +73,6 @@ const App: React.FC = () => {
     }
   };
 
-  const getDsmInfo = async () => {
-    const targetUser = find(connectedUsers, { did: targetDid });
-
-    if (!targetUser) {
-      return;
-    }
-
-    try {
-      const resp = await window.electron.net.getDsmInfo({
-        host: targetUser.host,
-        port: targetUser.port,
-        sid: targetUser.sid,
-      });
-
-      console.log('getDsmInfo', resp);
-
-      if (resp.success) {
-        const version = resp.data.version_string.split(' ')[1] as string;
-        setNasInfo({
-          model: resp.data.model as string,
-          version,
-        });
-      } else {
-        setNasInfo({
-          model: '-',
-          version: '-',
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (targetDid.length === 0) {
       setTasksStatus({ isLoading: false, retry: 3 });
@@ -118,7 +86,7 @@ const App: React.FC = () => {
       return undefined;
     }
 
-    getDsmInfo();
+    getNasInfo({ connectedUsers, targetDid, setNasInfo });
     getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
 
     const timer = setInterval(() => {

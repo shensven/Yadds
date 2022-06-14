@@ -77,7 +77,12 @@ export const atomPersistenceServerActiveTab = atom(
   }
 );
 
-export const atomNasInfo = atom({ model: '-', version: '-' });
+export interface NasInfo {
+  model: string;
+  version: string;
+}
+
+export const atomNasInfo = atom<NasInfo>({ model: '-', version: '-' });
 
 export interface Share {
   expanded: boolean;
