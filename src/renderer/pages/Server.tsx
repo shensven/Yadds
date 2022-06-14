@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
+import byteSize from 'byte-size';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -22,6 +23,7 @@ import {
   atomPersistenceTargeMenuItemForQuota,
   atomQuotaList,
   atomTargeByteSizeForQuota,
+  Share,
 } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
@@ -100,11 +102,32 @@ const Server: React.FC = () => {
 
   useEffect(() => {
     window.electron.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota); // send setPageServerQuotaTarge as a Closure to main process
+    getNasInfo({ connectedUsers, targetDid, setNasInfo });
+    getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
   }, []);
 
   useEffect(() => {
-    getNasInfo({ connectedUsers, targetDid, setNasInfo });
-    getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
+    const targetVolume = find(quotaList, {
+      name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
+    });
+
+    if (targetVolume !== undefined) {
+      const targetQuota = find(targetVolume.children, {
+        name: targeMenuItemForQuota.split(',')[1],
+      }) as Share | undefined;
+
+      console.log('targetQuota', targetQuota);
+
+      if (targetQuota) {
+        setTargeByteSizeForQuota({
+          max: byteSize(targetQuota.share_quota * 1024 * 1024, { units: 'iec', precision: 2 }),
+          available: byteSize((targetQuota.share_quota - targetQuota.share_used) * 1024 * 1024, {
+            units: 'iec',
+            precision: 2,
+          }),
+        });
+      }
+    }
   }, [targeMenuItemForQuota]);
 
   return (
