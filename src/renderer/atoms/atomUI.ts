@@ -114,7 +114,7 @@ export const atomPersistenceTargeMenuItemForQuota = atom(
   }
 );
 
-interface TargeByteSizeForQuota {
+export interface TargeByteSizeForQuota {
   max: ByteSizeResult;
   available: ByteSizeResult;
 }
