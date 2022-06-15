@@ -6,9 +6,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { useAtom } from 'jotai';
 import { atomTasksRetryMax } from './atoms/atomConstant';
-import { atomNasInfo, atomPersistenceAppearance, atomQuotaList, atomTargeByteSizeForQuota } from './atoms/atomUI';
+import { atomPersistenceAppearance } from './atoms/atomUI';
 import { atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
-import { atomTasks, atomTasksStatus } from './atoms/atomTask';
+import { atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
@@ -24,27 +24,18 @@ const App: React.FC = () => {
   const [TASKS_RETRY_MAX] = useAtom(atomTasksRetryMax);
   const [appearance] = useAtom(atomPersistenceAppearance);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
-  const [, setTasks] = useAtom(atomTasks);
-  const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
-  const [, setNasInfo] = useAtom(atomNasInfo);
-  const [, setQuotaList] = useAtom(atomQuotaList);
-  const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
+  const [tasksStatus] = useAtom(atomTasksStatus);
 
-  const getNasInfo = useNasInfo();
-  const getQuota = useQuota();
-  const handleTasks = useTasks();
+  const { getNasInfo, resetNasInfo } = useNasInfo();
+  const { getQuota, resetQuota } = useQuota();
+  const { handleTasks, stopTasks } = useTasks();
 
   useEffect(() => {
     if (targetDid.length === 0) {
-      setTasksStatus({ isLoading: false, retry: 3 });
-      setTasks([]);
-      setNasInfo({ model: '-', version: '-' });
-      setQuotaList([]);
-      setTargeByteSizeForQuota({
-        max: { value: '-', unit: '', long: '', toString: () => '' },
-        available: { value: '-', unit: '', long: '', toString: () => '' },
-      });
-      return undefined;
+      stopTasks();
+      resetNasInfo();
+      resetQuota();
+      return () => {};
     }
 
     getNasInfo();

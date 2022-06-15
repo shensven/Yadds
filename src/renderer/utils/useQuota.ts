@@ -53,7 +53,15 @@ const useQuota = () => {
     }
   };
 
-  return getQuota;
+  const resetQuota = () => {
+    setQuotaList([]);
+    setTargeByteSizeForQuota({
+      max: { value: '-', unit: '', long: '', toString: () => '' },
+      available: { value: '-', unit: '', long: '', toString: () => '' },
+    });
+  };
+
+  return { getQuota, resetQuota };
 };
 
 export default useQuota;

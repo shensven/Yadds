@@ -33,7 +33,11 @@ const useNasInfo = () => {
     }
   };
 
-  return getNasInfo;
+  const resetNasInfo = () => {
+    setNasInfo({ model: '-', version: '-' });
+  };
+
+  return { getNasInfo, resetNasInfo };
 };
 
 export default useNasInfo;

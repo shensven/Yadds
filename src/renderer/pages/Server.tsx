@@ -41,8 +41,8 @@ const Server: React.FC = () => {
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
-  const getNasInfo = useNasInfo();
-  const getQuota = useQuota();
+  const { getNasInfo } = useNasInfo();
+  const { getQuota } = useQuota();
 
   const basicInfomation = [
     {
