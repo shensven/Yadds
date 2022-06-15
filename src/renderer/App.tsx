@@ -6,20 +6,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { useAtom } from 'jotai';
 import { atomTasksRetryMax } from './atoms/atomConstant';
-import {
-  atomNasInfo,
-  atomPersistenceAppearance,
-  atomPersistenceTargeMenuItemForQuota,
-  atomQuotaList,
-  atomTargeByteSizeForQuota,
-} from './atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
+import { atomNasInfo, atomPersistenceAppearance, atomQuotaList, atomTargeByteSizeForQuota } from './atoms/atomUI';
+import { atomPersistenceTargetDid } from './atoms/atomConnectedUsers';
 import { atomTasks, atomTasksStatus } from './atoms/atomTask';
 import initMUITheme from './theme/yaddsMUITheme';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
-import getNasInfo from './utils/getNasInfo';
-import getQuota from './utils/getQuota';
+import useNasInfo from './utils/useNasInfo';
+import useQuota from './utils/useQuota';
 import useTasks from './utils/useTasks';
 import './i18n/i18n';
 import './App.scss';
@@ -29,15 +23,15 @@ const App: React.FC = () => {
 
   const [TASKS_RETRY_MAX] = useAtom(atomTasksRetryMax);
   const [appearance] = useAtom(atomPersistenceAppearance);
-  const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasks] = useAtom(atomTasks);
   const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
   const [, setNasInfo] = useAtom(atomNasInfo);
   const [, setQuotaList] = useAtom(atomQuotaList);
-  const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
+  const getNasInfo = useNasInfo();
+  const getQuota = useQuota();
   const handleTasks = useTasks();
 
   useEffect(() => {
@@ -53,8 +47,8 @@ const App: React.FC = () => {
       return undefined;
     }
 
-    getNasInfo({ connectedUsers, targetDid, setNasInfo });
-    getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
+    getNasInfo();
+    getQuota();
 
     const timer = setInterval(() => {
       // console.log('renderer: retry', tasksStatus.retry);

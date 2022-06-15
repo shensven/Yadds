@@ -26,10 +26,9 @@ import {
   atomTargeByteSizeForQuota,
   Share,
 } from '../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
-import getNasInfo from '../utils/getNasInfo';
-import getQuota from '../utils/getQuota';
+import useNasInfo from '../utils/useNasInfo';
+import useQuota from '../utils/useQuota';
 
 const Server: React.FC = () => {
   const theme = useTheme();
@@ -37,12 +36,13 @@ const Server: React.FC = () => {
 
   const [OS_PLATFORM] = useAtom(atomOS);
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
-  const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
-  const [targetDid] = useAtom(atomPersistenceTargetDid);
-  const [nasInfo, setNasInfo] = useAtom(atomNasInfo);
-  const [quotaList, setQuotaList] = useAtom(atomQuotaList);
+  const [nasInfo] = useAtom(atomNasInfo);
+  const [quotaList] = useAtom(atomQuotaList);
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
+
+  const getNasInfo = useNasInfo();
+  const getQuota = useQuota();
 
   const basicInfomation = [
     {
@@ -96,14 +96,14 @@ const Server: React.FC = () => {
   ];
 
   const refreshBasicInfomation = () => {
-    getNasInfo({ connectedUsers, targetDid, setNasInfo });
-    getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
+    getNasInfo();
+    getQuota();
   };
 
   useEffect(() => {
     window.electron.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota); // send setPageServerQuotaTarge as a Closure to main process
-    getNasInfo({ connectedUsers, targetDid, setNasInfo });
-    getQuota({ connectedUsers, targetDid, targeMenuItemForQuota, setQuotaList, setTargeByteSizeForQuota });
+    getNasInfo();
+    getQuota();
   }, []);
 
   useEffect(() => {

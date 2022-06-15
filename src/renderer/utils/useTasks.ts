@@ -38,7 +38,7 @@ const useTasks = () => {
       }
 
       if (resp.success) {
-        console.log('renderer: good tasks request', resp.data.task);
+        // console.log('renderer: good tasks request', resp.data.task);
         setTasksStatus({ isLoading: false, retry: 0 });
         startTransition(() => setTasks(resp.data.task));
       }
