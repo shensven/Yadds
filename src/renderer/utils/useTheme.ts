@@ -1,4 +1,7 @@
-import { createTheme, darkScrollbar, PaletteMode } from '@mui/material';
+import { createTheme, darkScrollbar, PaletteMode, useMediaQuery } from '@mui/material';
+import { Theme } from '@mui/system';
+import { useAtom } from 'jotai';
+import { atomPersistenceAppearance } from '../atoms/atomUI';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -11,7 +14,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-const designTokens = (mode: PaletteMode) => {
+const createDesignTokens = (mode: PaletteMode) => {
   return {
     palette: {
       mode,
@@ -58,7 +61,7 @@ const designTokens = (mode: PaletteMode) => {
   };
 };
 
-const customizeCompnents = (mode: PaletteMode) => {
+const createOverrideCompnents = (mode: PaletteMode) => {
   return {
     components: {
       MuiCssBaseline: {
@@ -116,8 +119,24 @@ const customizeCompnents = (mode: PaletteMode) => {
   };
 };
 
-const initMUITheme = (mode: 'light' | 'dark') => {
-  return createTheme(designTokens(mode), customizeCompnents(mode));
+const useTheme = () => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const [appearance] = useAtom(atomPersistenceAppearance);
+
+  let theme: Theme;
+
+  if (appearance === 'system') {
+    if (prefersDarkMode) {
+      theme = createTheme(createDesignTokens('dark'), createOverrideCompnents('dark'));
+    } else {
+      theme = createTheme(createDesignTokens('light'), createOverrideCompnents('light'));
+    }
+  } else {
+    theme = createTheme(createDesignTokens(appearance), createOverrideCompnents(appearance));
+  }
+
+  return { theme };
 };
 
-export default initMUITheme;
+export default useTheme;
