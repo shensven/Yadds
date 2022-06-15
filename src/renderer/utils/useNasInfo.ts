@@ -26,15 +26,9 @@ const useNasInfo = () => {
 
       if (resp.success) {
         const version = resp.data.version_string.split(' ')[1] as string;
-        setNasInfo({
-          model: resp.data.model as string,
-          version,
-        });
+        setNasInfo({ model: resp.data.model as string, version });
       } else {
-        setNasInfo({
-          model: '-',
-          version: '-',
-        });
+        setNasInfo({ model: '-', version: '-' });
       }
     } catch (error) {
       console.log(error);
