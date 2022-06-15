@@ -1,11 +1,10 @@
-import React, { startTransition, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { useAtom } from 'jotai';
-import { find } from 'lodash';
 import { atomTasksRetryMax } from './atoms/atomConstant';
 import {
   atomNasInfo,
@@ -21,6 +20,7 @@ import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
 import getNasInfo from './utils/getNasInfo';
 import getQuota from './utils/getQuota';
+import useTasks from './utils/useTasks';
 import './i18n/i18n';
 import './App.scss';
 
@@ -38,40 +38,7 @@ const App: React.FC = () => {
   const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
-  const handleTasks = async () => {
-    const targetUser = find(connectedUsers, { did: targetDid });
-
-    if (!targetUser) {
-      return;
-    }
-
-    try {
-      const resp = await window.electron.net.poll({
-        host: targetUser.host,
-        port: targetUser.port,
-        sid: targetUser.sid,
-      });
-
-      if (!resp.success && tasksStatus.retry < TASKS_RETRY_MAX) {
-        console.log('renderer: bad tasks request');
-
-        setTasksStatus((old) => {
-          if (old.retry >= TASKS_RETRY_MAX) {
-            return { ...old, isLoading: false };
-          }
-          return { isLoading: true, retry: old.retry + 1 };
-        });
-      }
-
-      if (resp.success) {
-        // console.log('renderer: good tasks request', resp.data.task);
-        setTasksStatus({ isLoading: false, retry: 0 });
-        startTransition(() => setTasks(resp.data.task));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const handleTasks = useTasks();
 
   useEffect(() => {
     if (targetDid.length === 0) {
@@ -100,9 +67,7 @@ const App: React.FC = () => {
       }
     }, 2000);
 
-    return () => {
-      clearInterval(timer);
-    };
+    return () => clearInterval(timer);
   }, [targetDid, tasksStatus.retry]);
 
   const toogleMUITheme = (): 'light' | 'dark' => {
