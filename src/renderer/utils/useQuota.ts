@@ -14,9 +14,7 @@ const useQuota = () => {
   const getQuota = async () => {
     const targetUser = find(connectedUsers, { did: targetDid });
 
-    if (!targetUser) {
-      return;
-    }
+    if (!targetUser) return;
 
     try {
       const resp = await window.electron.net.getQuata({

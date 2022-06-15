@@ -11,9 +11,7 @@ const useNasInfo = () => {
   const getNasInfo = async () => {
     const targetUser = find(connectedUsers, { did: targetDid });
 
-    if (!targetUser) {
-      return;
-    }
+    if (!targetUser) return;
 
     try {
       const resp = await window.electron.net.getDsmInfo({
