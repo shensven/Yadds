@@ -24,6 +24,7 @@ English | [简体中文](./README-zh-hans.md)
 - [x] Cross-platform support (macOS, Windows, Linux)
 - [x] Multi-language hot-switching (English, 简体中文, 繁體中文, 日本語 and etc.)
 - [x] Dark mode
+- [ ] Support Touch Bar (Mac only if available)
 - [ ] Download progress visualization
 - [ ] Multi-account switching
 
