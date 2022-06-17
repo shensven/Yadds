@@ -35,7 +35,7 @@ import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
 import Settings from '../pages/Settings';
 import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
-import createMenuItemLabelsForTray from '../utils/createMenuItemLabelsForTray';
+import useMenuInTray from '../utils/useMenuInTray';
 import createMenuItemLabelsForQueue from '../utils/createMenuItemLabelsForQueue';
 
 const YaddsMain: React.FC = () => {
@@ -50,11 +50,12 @@ const YaddsMain: React.FC = () => {
   const [queueIterater, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
   const [queueIsAscend, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
+  const { menuItems } = useMenuInTray();
+
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
-    const itemLabels = createMenuItemLabelsForTray(t);
-    window.electron?.contextMenuForTray.create(itemLabels); // Init system tary
+    window.electron?.contextMenuForTray.create(menuItems); // Init system tary
     window.electron?.queue.orderBy(setQueueIterater); // Init the sorting iterater of the main page list
     window.electron?.queue.isAscend(setQueueIsAscend); // Init the ascend/descend of the main page list
   }, []);

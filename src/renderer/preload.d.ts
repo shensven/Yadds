@@ -7,7 +7,7 @@ import { ServerError } from '../main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { Appearance, QueueIterater, SidebarCategory, TargeMenuItemForQuota } from './atoms/atomUI';
 import { MenuItemLabelsForApp } from './utils/createMenuItemLabelsForApp';
-import { MenuItemLabelsForTray } from './utils/createMenuItemLabelsForTray';
+import { MenuItemsInTray } from './utils/useMenuInTray';
 import { MenuItemLabelsForQueue } from './utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
@@ -54,7 +54,7 @@ declare global {
       };
 
       contextMenuForTray: {
-        create: (update: MenuItemLabelsForTray) => void;
+        create: (update: MenuItemsInTray) => void;
       };
 
       contextMenuForQueue: {

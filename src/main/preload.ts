@@ -4,7 +4,7 @@ import { YaddsCache } from './store/cache';
 import { YaddsPreferences } from './store/preferences';
 import { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
-import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
+import { MenuItemInTray } from '../renderer/utils/useMenuInTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance, SidebarCategory, TargeMenuItemForQuota } from '../renderer/atoms/atomUI';
@@ -82,7 +82,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   contextMenuForTray: {
-    create: (args: MenuItemLabelsForTray) => {
+    create: (args: MenuItemInTray) => {
       ipcRenderer.invoke('ctx-menu-for-tray:create', args);
     },
   },

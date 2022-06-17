@@ -36,7 +36,7 @@ import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoadi
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
 import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
-import createMenuItemLabelsForTray from '../utils/createMenuItemLabelsForTray';
+import useMenuInTray from '../utils/useMenuInTray';
 import { atomAppVersion, atomOS } from '../atoms/atomConstant';
 import {
   Appearance,
@@ -66,6 +66,8 @@ const Settings: React.FC = () => {
   const [connectedUsers, setConnectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasksStatus] = useAtom(atomTasksStatus);
+
+  const { menuItems: menuItemsInTray } = useMenuInTray();
 
   const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
   const [isSelectI18nOpen, setIsSelectI18nOpen] = useState<boolean>(false);
@@ -132,8 +134,7 @@ const Settings: React.FC = () => {
     i18n.changeLanguage(targetLocaleName);
     const topMenuItemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
     window.electron.topMenuForApp.create(topMenuItemLabels);
-    const ctxMenuItemLabels = createMenuItemLabelsForTray(t);
-    window.electron.contextMenuForTray.create(ctxMenuItemLabels);
+    window.electron.contextMenuForTray.create(menuItemsInTray);
     setIsSelectI18nOpen(false);
   };
 
