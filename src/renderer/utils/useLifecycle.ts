@@ -14,7 +14,7 @@ const useLifecycle = () => {
 
   const { getNasInfo, resetNasInfo } = useNasInfo();
   const { getQuota, resetQuota } = useQuota();
-  const { handleTasks, stopTasks } = useTasks();
+  const { pollTasks, stopTasks } = useTasks();
 
   useEffect(() => {
     if (targetDid.length === 0) {
@@ -30,7 +30,7 @@ const useLifecycle = () => {
     const timer = setInterval(() => {
       // console.log('renderer: retry', tasksStatus.retry);
       if (tasksStatus.retry < TASKS_RETRY_MAX) {
-        handleTasks();
+        pollTasks();
       } else {
         console.log('renderer: interval done');
         clearInterval(timer);

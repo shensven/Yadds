@@ -12,7 +12,7 @@ const useTasks = () => {
   const [, setTasks] = useAtom(atomTasks);
   const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
 
-  const handleTasks = async () => {
+  const pollTasks = async () => {
     const targetUser = find(connectedUsers, { did: targetDid });
 
     if (!targetUser) return;
@@ -36,7 +36,7 @@ const useTasks = () => {
       }
 
       if (resp.success) {
-        console.log('renderer: good tasks request', resp.data.task);
+        // console.log('renderer: good tasks request', resp.data.task);
 
         setTasksStatus({ isLoading: false, retry: 0 });
         startTransition(() => setTasks(resp.data.task));
@@ -51,7 +51,7 @@ const useTasks = () => {
     setTasks([]);
   };
 
-  return { handleTasks, stopTasks };
+  return { pollTasks, stopTasks };
 };
 
 export default useTasks;
