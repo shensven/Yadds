@@ -30,7 +30,7 @@ import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
-import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuConstructorOptionsForQuota';
+import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
 import auth from './net/auth';
 import poll from './net/poll';

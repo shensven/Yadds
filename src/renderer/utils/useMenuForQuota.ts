@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '../atoms/atomUI';
 
-const useMenuConstructorOptionsForQuota = () => {
+const useMenuForQuota = () => {
   const { t } = useTranslation();
 
   const [quotaList] = useAtom(atomQuotaList);
@@ -33,8 +33,6 @@ const useMenuConstructorOptionsForQuota = () => {
   return { menuItemConstructorOptions };
 };
 
-export default useMenuConstructorOptionsForQuota;
+export default useMenuForQuota;
 
-export type MenuItemConstructorOptionsInQuota = ReturnType<
-  typeof useMenuConstructorOptionsForQuota
->['menuItemConstructorOptions'];
+export type MenuItemConstructorOptionsInQuota = ReturnType<typeof useMenuForQuota>['menuItemConstructorOptions'];

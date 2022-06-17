@@ -6,7 +6,7 @@ import { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
-import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuConstructorOptionsForQuota';
+import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuForQuota';
 import { Appearance, SidebarCategory, TargeMenuItemForQuota } from '../renderer/atoms/atomUI';
 
 export type Channels = 'ipc-example';

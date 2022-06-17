@@ -26,7 +26,7 @@ import {
   atomTargeByteSizeForQuota,
   Share,
 } from '../atoms/atomUI';
-import useMenuConstructorOptionsForQuota from '../utils/useMenuConstructorOptionsForQuota';
+import useMenuForQuota from '../utils/useMenuForQuota';
 import useNasInfo from '../utils/useNasInfo';
 import useQuota from '../utils/useQuota';
 
@@ -43,7 +43,7 @@ const Server: React.FC = () => {
 
   const { getNasInfo } = useNasInfo();
   const { getQuota } = useQuota();
-  const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuConstructorOptionsForQuota();
+  const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuForQuota();
 
   const basicInfomation = [
     {
