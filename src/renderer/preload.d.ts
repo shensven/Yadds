@@ -8,7 +8,7 @@ import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { Appearance, QueueIterater, SidebarCategory, TargeMenuItemForQuota } from './atoms/atomUI';
 import { MenuItemsInApp } from './utils/useMenuInApp';
 import { MenuItemsInTray } from './utils/useMenuInTray';
-import { MenuItemLabelsForQueue } from './utils/createMenuItemLabelsForQueue';
+import { MenuItemsInQueue } from './utils/useMenuForQueue';
 import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
 import { DsmInfo } from '../main/net/getDsmInfo';
@@ -58,7 +58,7 @@ declare global {
       };
 
       contextMenuForQueue: {
-        create: (update: MenuItemLabelsForQueue) => void;
+        create: (update: MenuItemsInQueue) => void;
       };
 
       contextMenuForQuota: {

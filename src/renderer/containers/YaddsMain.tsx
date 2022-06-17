@@ -35,7 +35,7 @@ import Server from '../pages/Server';
 import Settings from '../pages/Settings';
 import useMenuInApp from '../utils/useMenuInApp';
 import useMenuInTray from '../utils/useMenuInTray';
-import createMenuItemLabelsForQueue from '../utils/createMenuItemLabelsForQueue';
+import useMenuForQueue from '../utils/useMenuForQueue';
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
@@ -45,11 +45,12 @@ const YaddsMain: React.FC = () => {
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
-  const [queueIterater, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
-  const [queueIsAscend, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
+  const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
+  const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
   const { menuItems: menuItemsInApp } = useMenuInApp();
   const { menuItems: menuItemsInTray } = useMenuInTray();
+  const { menuItems: menuItemsInQueue } = useMenuForQueue();
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
@@ -159,10 +160,7 @@ const YaddsMain: React.FC = () => {
               backgroundColor: theme.palette.input.default,
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
-            onClick={() => {
-              const itemLabels = createMenuItemLabelsForQueue(t, queueIterater, queueIsAscend);
-              window.electron.contextMenuForQueue.create(itemLabels);
-            }}
+            onClick={() => window.electron.contextMenuForQueue.create(menuItemsInQueue)}
           >
             <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
           </IconButton>

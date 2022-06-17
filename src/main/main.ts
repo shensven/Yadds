@@ -29,7 +29,7 @@ import preferences, { YaddsPreferences } from './store/preferences';
 import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuInApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuInTray';
-import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
+import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
 import auth from './net/auth';
@@ -486,7 +486,7 @@ ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemsInTray) => {
   });
 });
 
-ipcMain.handle('ctx-menu-for-queue:create', async (_, args: MenuItemLabelsForQueue) => {
+ipcMain.handle('ctx-menu-for-queue:create', async (_, args: MenuItemsInQueue) => {
   const template: MenuItemConstructorOptions[] = [
     { label: args.resumeAll },
     { label: args.pauseAll },
