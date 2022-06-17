@@ -35,8 +35,8 @@ import IonTrashOutline from '../components/icons/IonTrashOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
-import useMenuInApp from '../utils/useMenuInApp';
-import useMenuInTray from '../utils/useMenuInTray';
+import useMenuForApp from '../utils/useMenuForApp';
+import useMenuForTray from '../utils/useMenuForTray';
 import { atomAppVersion, atomOS } from '../atoms/atomConstant';
 import {
   Appearance,
@@ -63,8 +63,8 @@ const Settings: React.FC = () => {
   const [targetDid, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasksStatus] = useAtom(atomTasksStatus);
 
-  const { menuItems: menuItemsInApp } = useMenuInApp();
-  const { menuItems: menuItemsInTray } = useMenuInTray();
+  const { menuItems: menuItemsInApp } = useMenuForApp();
+  const { menuItems: menuItemsInTray } = useMenuForTray();
 
   const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
   const [isSelectI18nOpen, setIsSelectI18nOpen] = useState<boolean>(false);

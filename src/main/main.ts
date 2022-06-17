@@ -27,8 +27,8 @@ import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } fr
 import cache, { YaddsCache } from './store/cache';
 import preferences, { YaddsPreferences } from './store/preferences';
 import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
-import { MenuItemsInApp } from '../renderer/utils/useMenuInApp';
-import { MenuItemsInTray } from '../renderer/utils/useMenuInTray';
+import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
+import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';

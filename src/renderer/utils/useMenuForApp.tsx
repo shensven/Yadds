@@ -2,8 +2,9 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { atomHasSidebarMarginTop, atomPersistenceHasSidebar } from '../atoms/atomUI';
 
-const useMenuInApp = () => {
+const useMenuForApp = () => {
   const { t } = useTranslation();
+
   const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
 
@@ -48,6 +49,6 @@ const useMenuInApp = () => {
   return { menuItems };
 };
 
-export default useMenuInApp;
+export default useMenuForApp;
 
-export type MenuItemsInApp = ReturnType<typeof useMenuInApp>['menuItems'];
+export type MenuItemsInApp = ReturnType<typeof useMenuForApp>['menuItems'];

@@ -33,8 +33,8 @@ import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
 import Settings from '../pages/Settings';
-import useMenuInApp from '../utils/useMenuInApp';
-import useMenuInTray from '../utils/useMenuInTray';
+import useMenuForApp from '../utils/useMenuForApp';
+import useMenuForTray from '../utils/useMenuForTray';
 import useMenuForQueue from '../utils/useMenuForQueue';
 
 const YaddsMain: React.FC = () => {
@@ -48,8 +48,8 @@ const YaddsMain: React.FC = () => {
   const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
   const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
-  const { menuItems: menuItemsInApp } = useMenuInApp();
-  const { menuItems: menuItemsInTray } = useMenuInTray();
+  const { menuItems: menuItemsInApp } = useMenuForApp();
+  const { menuItems: menuItemsInTray } = useMenuForTray();
   const { menuItems: menuItemsInQueue } = useMenuForQueue();
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);

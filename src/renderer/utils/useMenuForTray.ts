@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-const useMenuInTray = () => {
+const useMenuForTray = () => {
   const { t } = useTranslation();
 
   const menuItems = {
@@ -11,6 +11,6 @@ const useMenuInTray = () => {
   return { menuItems };
 };
 
-export default useMenuInTray;
+export default useMenuForTray;
 
-export type MenuItemsInTray = ReturnType<typeof useMenuInTray>['menuItems'];
+export type MenuItemsInTray = ReturnType<typeof useMenuForTray>['menuItems'];
