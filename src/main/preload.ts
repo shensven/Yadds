@@ -3,8 +3,8 @@ import { NavigateFunction } from 'react-router-dom';
 import { YaddsCache } from './store/cache';
 import { YaddsPreferences } from './store/preferences';
 import { YaddsConnectedUsers } from './store/connectedUsers';
-import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
-import { MenuItemInTray } from '../renderer/utils/useMenuInTray';
+import { MenuItemsInApp } from '../renderer/utils/useMenuInApp';
+import { MenuItemsInTray } from '../renderer/utils/useMenuInTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance, SidebarCategory, TargeMenuItemForQuota } from '../renderer/atoms/atomUI';
@@ -76,13 +76,13 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   topMenuForApp: {
-    create: (args: MenuItemLabelsForApp) => {
+    create: (args: MenuItemsInApp) => {
       ipcRenderer.invoke('top-menu-for-app:create', args);
     },
   },
 
   contextMenuForTray: {
-    create: (args: MenuItemInTray) => {
+    create: (args: MenuItemsInTray) => {
       ipcRenderer.invoke('ctx-menu-for-tray:create', args);
     },
   },

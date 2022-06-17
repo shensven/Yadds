@@ -27,8 +27,8 @@ import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } fr
 import cache, { YaddsCache } from './store/cache';
 import preferences, { YaddsPreferences } from './store/preferences';
 import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
-import { MenuItemLabelsForApp } from '../renderer/utils/createMenuItemLabelsForApp';
-import { MenuItemLabelsForTray } from '../renderer/utils/createMenuItemLabelsForTray';
+import { MenuItemsInApp } from '../renderer/utils/useMenuInApp';
+import { MenuItemsInTray } from '../renderer/utils/useMenuInTray';
 import { MenuItemLabelsForQueue } from '../renderer/utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
@@ -309,7 +309,7 @@ ipcMain.on('ipc-example', async (evt, arg) => {
   evt.reply('ipc-example', msgTemplate('pong'));
 });
 
-ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemLabelsForApp) => {
+ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemsInApp) => {
   interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
     selector?: string;
     submenu?: DarwinMenuItemConstructorOptions[] | Menu;
@@ -413,7 +413,7 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemLabelsForApp) 
   }
 });
 
-ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemLabelsForTray) => {
+ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemsInTray) => {
   const devMenu: MenuItemConstructorOptions[] = [
     { label: 'Reload', click: () => mainWindow?.webContents.reload() },
     { label: 'Toggle Developer Tools', click: () => mainWindow?.webContents.toggleDevTools() },
