@@ -6,7 +6,7 @@ import { YaddsConnectedUsers } from '../main/store/connectedUsers';
 import { ServerError } from '../main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { Appearance, QueueIterater, SidebarCategory, TargeMenuItemForQuota } from './atoms/atomUI';
-import { MenuItemLabelsForApp } from './utils/createMenuItemLabelsForApp';
+import { MenuItemsInApp } from './utils/useMenuInApp';
 import { MenuItemsInTray } from './utils/useMenuInTray';
 import { MenuItemLabelsForQueue } from './utils/createMenuItemLabelsForQueue';
 import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
@@ -50,7 +50,7 @@ declare global {
       };
 
       topMenuForApp: {
-        create: (update: MenuItemLabelsForApp) => void;
+        create: (update: MenuItemsInApp) => void;
       };
 
       contextMenuForTray: {

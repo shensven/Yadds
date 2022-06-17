@@ -35,7 +35,7 @@ import IonServerOutline from '../components/icons/IonServerOutline';
 import IonServer from '../components/icons/IonServer';
 import IonCogOutline from '../components/icons/IonCogOutline';
 import IonCog from '../components/icons/IonCog';
-import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
+import useMenuInApp from '../utils/useMenuInApp';
 
 interface YaddsCategoryObj {
   path: SidebarCategory;
@@ -57,15 +57,15 @@ const YaddsSidebar: React.FC = () => {
   const [sidebarCategory, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [tasks] = useAtom(atomTasks);
 
+  const { menuItems: menuItemsInApp } = useMenuInApp();
+
   useEffect(() => {
     window.electron?.yadds.navigate(navigate, setSidebarCategory); // Init navigation from the top menu
   }, []);
 
   useEffect(() => {
     window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop); // handle the margin top of the sidebar
-
-    const itemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
-    window.electron?.topMenuForApp.create(itemLabels); // Init or update application menu
+    window.electron?.topMenuForApp.create(menuItemsInApp); // Init or update application menu
   }, [hasSidebarMarginTop]);
 
   const categoryList: YaddsCategoryObj[] = [

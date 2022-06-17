@@ -14,7 +14,6 @@ import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
 import { atomOS, atomSidebarWidth } from '../atoms/atomConstant';
 import {
-  atomHasSidebarMarginTop,
   atomPersistenceHasSidebar,
   atomPersistenceSidebarCategory,
   atomPersistenceQueueIterater,
@@ -34,7 +33,7 @@ import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
 import Settings from '../pages/Settings';
-import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
+import useMenuInApp from '../utils/useMenuInApp';
 import useMenuInTray from '../utils/useMenuInTray';
 import createMenuItemLabelsForQueue from '../utils/createMenuItemLabelsForQueue';
 
@@ -45,25 +44,24 @@ const YaddsMain: React.FC = () => {
   const [OS_PLATFORM] = useAtom(atomOS);
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
-  const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [queueIterater, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
   const [queueIsAscend, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
-  const { menuItems } = useMenuInTray();
+  const { menuItems: menuItemsInApp } = useMenuInApp();
+  const { menuItems: menuItemsInTray } = useMenuInTray();
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
-    window.electron?.contextMenuForTray.create(menuItems); // Init system tary
+    window.electron?.contextMenuForTray.create(menuItemsInTray); // Init system tary
     window.electron?.queue.orderBy(setQueueIterater); // Init the sorting iterater of the main page list
     window.electron?.queue.isAscend(setQueueIsAscend); // Init the ascend/descend of the main page list
   }, []);
 
   useEffect(() => {
     window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar); // handle the sidebar state
-    const itemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
-    window.electron?.topMenuForApp.create(itemLabels); // Init or update application menu
+    window.electron?.topMenuForApp.create(menuItemsInApp); // Init or update application menu
   }, [hasSidebar]);
 
   return (

@@ -35,15 +35,13 @@ import IonTrashOutline from '../components/icons/IonTrashOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
-import createMenuItemLabelsForApp from '../utils/createMenuItemLabelsForApp';
+import useMenuInApp from '../utils/useMenuInApp';
 import useMenuInTray from '../utils/useMenuInTray';
 import { atomAppVersion, atomOS } from '../atoms/atomConstant';
 import {
   Appearance,
-  atomHasSidebarMarginTop,
   atomPersistenceAppearance,
   atomPersistenceIsAutoLaunch,
-  atomPersistenceHasSidebar,
   atomPersistenceLocaleName,
   LocaleName,
   atomPersistenceIsAutoUpdate,
@@ -57,8 +55,6 @@ const Settings: React.FC = () => {
 
   const [OS_PLATFORM] = useAtom(atomOS);
   const [APP_VERSION] = useAtom(atomAppVersion);
-  const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
-  const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [appearance, setAppearance] = useAtom(atomPersistenceAppearance);
   const [localeName, setLocaleName] = useAtom(atomPersistenceLocaleName);
   const [isAutoLaunch, setIsAutoLaunch] = useAtom(atomPersistenceIsAutoLaunch);
@@ -67,6 +63,7 @@ const Settings: React.FC = () => {
   const [targetDid, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasksStatus] = useAtom(atomTasksStatus);
 
+  const { menuItems: menuItemsInApp } = useMenuInApp();
   const { menuItems: menuItemsInTray } = useMenuInTray();
 
   const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
@@ -132,8 +129,7 @@ const Settings: React.FC = () => {
   const handleSelectI18nOnChange = (targetLocaleName: LocaleName) => {
     setLocaleName(targetLocaleName);
     i18n.changeLanguage(targetLocaleName);
-    const topMenuItemLabels = createMenuItemLabelsForApp(t, hasSidebar, hasSidebarMarginTop);
-    window.electron.topMenuForApp.create(topMenuItemLabels);
+    window.electron.topMenuForApp.create(menuItemsInApp);
     window.electron.contextMenuForTray.create(menuItemsInTray);
     setIsSelectI18nOpen(false);
   };

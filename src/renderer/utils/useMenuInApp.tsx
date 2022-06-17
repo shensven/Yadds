@@ -1,11 +1,13 @@
-import { TFunction } from 'react-i18next';
+import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import { atomHasSidebarMarginTop, atomPersistenceHasSidebar } from '../atoms/atomUI';
 
-const createMenuItemLabelsForApp = (
-  t: TFunction<'translation', undefined>,
-  hasYaddsSidebar: boolean,
-  hasYaddsSidebarMarginTop: boolean
-) => {
-  const menuItemLabel = {
+const useMenuInApp = () => {
+  const { t } = useTranslation();
+  const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
+  const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
+
+  const menuItems = {
     aboutYadds: t('application_menu.darwin.about_yadds'),
     checkForUpdates: t('application_menu.darwin.check_for_updates'),
     preferences: t('application_menu.darwin.preferences'),
@@ -23,10 +25,8 @@ const createMenuItemLabelsForApp = (
     paste: t('application_menu.darwin.paste'),
     selectAll: t('application_menu.darwin.select_all'),
     view: t('application_menu.darwin.view'),
-    showHideSidebar: hasYaddsSidebar
-      ? t('application_menu.darwin.hide_sidebar')
-      : t('application_menu.darwin.show_sidebar'),
-    toggleFullScreen: hasYaddsSidebarMarginTop
+    showHideSidebar: hasSidebar ? t('application_menu.darwin.hide_sidebar') : t('application_menu.darwin.show_sidebar'),
+    toggleFullScreen: hasSidebarMarginTop
       ? t('application_menu.darwin.enter_full_screen')
       : t('application_menu.darwin.exit_full_screen'),
     navigate: t('application_menu.darwin.navigate'),
@@ -45,9 +45,9 @@ const createMenuItemLabelsForApp = (
     reportABug: t('application_menu.darwin.report_a_bug'),
   };
 
-  return menuItemLabel;
+  return { menuItems };
 };
 
-export default createMenuItemLabelsForApp;
+export default useMenuInApp;
 
-export type MenuItemLabelsForApp = ReturnType<typeof createMenuItemLabelsForApp>;
+export type MenuItemsInApp = ReturnType<typeof useMenuInApp>['menuItems'];
