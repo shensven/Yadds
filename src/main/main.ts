@@ -30,7 +30,7 @@ import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
-import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
+import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuConstructorOptionsForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
 import auth from './net/auth';
 import poll from './net/poll';
@@ -542,7 +542,7 @@ ipcMain.handle('ctx-menu-for-queue:create', async (_, args: MenuItemsInQueue) =>
   Menu.buildFromTemplate(template).popup();
 });
 
-ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorOptionsForQuota) => {
+ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorOptionsInQuota) => {
   const template: MenuItemConstructorOptions[] = [];
 
   args.forEach((item) => {

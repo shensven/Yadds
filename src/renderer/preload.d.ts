@@ -9,7 +9,7 @@ import { Appearance, QueueIterater, SidebarCategory, TargeMenuItemForQuota } fro
 import { MenuItemsInApp } from './utils/useMenuForApp';
 import { MenuItemsInTray } from './utils/useMenuForTray';
 import { MenuItemsInQueue } from './utils/useMenuForQueue';
-import { MenuItemConstructorOptionsForQuota } from './utils/createMenuItemConstructorOptionsForQuota';
+import { MenuItemConstructorOptionsInQuota } from './utils/useMenuConstructorOptionsForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
 import { DsmInfo } from '../main/net/getDsmInfo';
 import { PersonalSettingsInfo } from '../main/net/getQuota';
@@ -62,7 +62,7 @@ declare global {
       };
 
       contextMenuForQuota: {
-        create: (update: MenuItemConstructorOptionsForQuota) => void;
+        create: (update: MenuItemConstructorOptionsInQuota) => void;
         setTargetItem: (setTargeMenuItemForQuota: (update: TargeMenuItemForQuota) => void) => void;
       };
 

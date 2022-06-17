@@ -6,7 +6,7 @@ import { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
-import { MenuItemConstructorOptionsForQuota } from '../renderer/utils/createMenuItemConstructorOptionsForQuota';
+import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuConstructorOptionsForQuota';
 import { Appearance, SidebarCategory, TargeMenuItemForQuota } from '../renderer/atoms/atomUI';
 
 export type Channels = 'ipc-example';
@@ -94,7 +94,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   contextMenuForQuota: {
-    create: (args: MenuItemConstructorOptionsForQuota) => {
+    create: (args: MenuItemConstructorOptionsInQuota) => {
       ipcRenderer.invoke('ctx-menu-for-quota:create', args);
     },
     setTargetItem: (setTargeMenuItemForQuota: (update: TargeMenuItemForQuota) => void) => {

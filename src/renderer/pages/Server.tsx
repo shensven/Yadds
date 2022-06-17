@@ -26,7 +26,7 @@ import {
   atomTargeByteSizeForQuota,
   Share,
 } from '../atoms/atomUI';
-import createMenuItemConstructorOptionsForQuota from '../utils/createMenuItemConstructorOptionsForQuota';
+import useMenuConstructorOptionsForQuota from '../utils/useMenuConstructorOptionsForQuota';
 import useNasInfo from '../utils/useNasInfo';
 import useQuota from '../utils/useQuota';
 
@@ -43,6 +43,7 @@ const Server: React.FC = () => {
 
   const { getNasInfo } = useNasInfo();
   const { getQuota } = useQuota();
+  const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuConstructorOptionsForQuota();
 
   const basicInfomation = [
     {
@@ -62,10 +63,7 @@ const Server: React.FC = () => {
       value: targeByteSizeForQuota.max.value,
       unit: targeByteSizeForQuota.max.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
-      onClick: () => {
-        const template = createMenuItemConstructorOptionsForQuota(t, quotaList, targeMenuItemForQuota);
-        window.electron.contextMenuForQuota.create(template);
-      },
+      onClick: () => window.electron.contextMenuForQuota.create(menuItemConstructorOptionsInQuota),
     },
     {
       title: t('server.available_capacity'),
