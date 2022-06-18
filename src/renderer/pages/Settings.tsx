@@ -35,8 +35,6 @@ import IonTrashOutline from '../components/icons/IonTrashOutline';
 import EosIconsThreeDotsLoading from '../components/icons/EosIconsThreeDotsLoading';
 import IonLogoTwitter from '../components/icons/IonLogoTwitter';
 import IonLogoGithub from '../components/icons/IonLogoGithub';
-import useMenuForApp from '../utils/useMenuForApp';
-import useMenuForTray from '../utils/useMenuForTray';
 import { atomAppVersion, atomOS } from '../atoms/atomConstant';
 import {
   Appearance,
@@ -63,13 +61,10 @@ const Settings: React.FC = () => {
   const [targetDid, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasksStatus] = useAtom(atomTasksStatus);
 
-  const { menuItems: menuItemsInApp } = useMenuForApp();
-  const { menuItems: menuItemsInTray } = useMenuForTray();
-
-  const [isSelectQcOpen, setIsSelectQcOpen] = useState<boolean>(false);
-  const [isSelectI18nOpen, setIsSelectI18nOpen] = useState<boolean>(false);
+  const [hasSelecterForAddress, setHasSelecterForAddress] = useState<boolean>(false);
+  const [hasSelecterForLocale, setHasSelecterForLocale] = useState<boolean>(false);
+  const [hasLoading, setHasLoading] = useState<boolean>(false);
   const [hasDialogAdd, setHasDialogAdd] = useState<boolean>(false);
-  const [loadingInDialogAdd, setLoadingInDialogAdd] = useState<boolean>(false);
   const [hasDialogDelete, setHasDialogDelete] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useState({ show: false, errorInfo: '' });
   const [formErr, setFormErr] = useState({ address: false, username: false, password: false });
@@ -115,23 +110,21 @@ const Settings: React.FC = () => {
     { localeName: 'ja_JP', label: '日本語' },
   ];
 
-  const handleSelectQcOnChange = (did: string, menuItemIndex: number, isDelete: boolean) => {
+  const handleAddress = (did: string, menuItemIndex: number, isDelete: boolean) => {
     if (isDelete) {
       setWhoWillRemove(menuItemIndex);
-      setIsSelectQcOpen(false);
+      setHasSelecterForAddress(false);
       setHasDialogDelete(true);
       return;
     }
     setTargetDid(did);
-    setIsSelectQcOpen(false);
+    setHasSelecterForAddress(false);
   };
 
-  const handleSelectI18nOnChange = (targetLocaleName: LocaleName) => {
-    setLocaleName(targetLocaleName);
+  const handleLocale = (targetLocaleName: LocaleName) => {
     i18n.changeLanguage(targetLocaleName);
-    window.electron.topMenuForApp.create(menuItemsInApp);
-    window.electron.contextMenuForTray.create(menuItemsInTray);
-    setIsSelectI18nOpen(false);
+    setLocaleName(targetLocaleName);
+    setHasSelecterForLocale(false);
   };
 
   const dismissDialogRemove = () => {
@@ -141,7 +134,7 @@ const Settings: React.FC = () => {
 
   const dismissDailogAdd = () => {
     setHasDialogAdd(false);
-    setLoadingInDialogAdd(false);
+    setHasLoading(false);
     setNewConnect({
       isQuickConnectID: true,
       connectAddress: '',
@@ -218,7 +211,7 @@ const Settings: React.FC = () => {
       return;
     }
 
-    setLoadingInDialogAdd(true);
+    setHasLoading(true);
 
     try {
       const resp = await window.electron.net.auth({
@@ -233,7 +226,7 @@ const Settings: React.FC = () => {
             show: true,
             errorInfo: t('settings.snackbar.quickconnect_id_is_incorrect_or_does_not_exist'),
           });
-          setLoadingInDialogAdd(false);
+          setHasLoading(false);
           setFormErr({ ...formErr, address: true });
         }
 
@@ -242,7 +235,7 @@ const Settings: React.FC = () => {
             show: true,
             errorInfo: `${t('settings.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
           });
-          setLoadingInDialogAdd(false);
+          setHasLoading(false);
           setFormErr({ ...formErr, address: true });
         }
       }
@@ -253,7 +246,7 @@ const Settings: React.FC = () => {
             show: true,
             errorInfo: t('settings.snackbar.wrong_account_or_password'),
           });
-          setLoadingInDialogAdd(false);
+          setHasLoading(false);
           setFormErr({ ...formErr, username: true, password: true });
         } else if (resp.success && resp.data.did.length > 0) {
           const arr = [...connectedUsers];
@@ -276,7 +269,7 @@ const Settings: React.FC = () => {
         show: true,
         errorInfo: `${t('settings.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
       });
-      setLoadingInDialogAdd(false);
+      setHasLoading(false);
       setFormErr({ ...formErr, address: true });
     }
   };
@@ -308,10 +301,7 @@ const Settings: React.FC = () => {
                       filter: appearance === item.appearance ? 'grayscale(0)' : 'grayscale(25%) opacity(1)',
                     },
                   }}
-                  onClick={() => {
-                    setAppearance(item.appearance);
-                    window.electron.app.toggleNativeTheme(item.appearance);
-                  }}
+                  onClick={() => setAppearance(item.appearance)}
                 >
                   <ApprearanceItem appearance={item.appearance} os={OS_PLATFORM} />
                 </Box>
@@ -346,23 +336,20 @@ const Settings: React.FC = () => {
                   sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
                 }}
                 sx={{ minWidth: theme.spacing(36), maxWidth: theme.spacing(36), fontSize: 14 }}
-                open={isSelectQcOpen}
-                onOpen={() => setIsSelectQcOpen(true)}
-                onClose={() => setIsSelectQcOpen(false)}
+                open={hasSelecterForAddress}
+                onOpen={() => setHasSelecterForAddress(true)}
+                onClose={() => setHasSelecterForAddress(false)}
               >
                 {connectedUsers.map((item, index) => (
                   <MenuItem key={item.did} dense disableRipple value={item.did}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectQcOnChange(item.did, index, false)}
+                        onClick={() => handleAddress(item.did, index, false)}
                       >
                         {item.username} @ {item.quickConnectID}
                       </Typography>
-                      <IconButton
-                        sx={{ width: 20, height: 20 }}
-                        onClick={() => handleSelectQcOnChange(item.did, index, true)}
-                      >
+                      <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleAddress(item.did, index, true)}>
                         <IonTrashOutline sx={{ fontSize: 14 }} />
                       </IconButton>
                     </Stack>
@@ -391,16 +378,16 @@ const Settings: React.FC = () => {
                 MenuProps={{
                   sx: { minWidth: theme.spacing(36), maxWidth: theme.spacing(36) },
                 }}
-                open={isSelectI18nOpen}
-                onOpen={() => setIsSelectI18nOpen(true)}
-                onClose={() => setIsSelectI18nOpen(false)}
+                open={hasSelecterForLocale}
+                onOpen={() => setHasSelecterForLocale(true)}
+                onClose={() => setHasSelecterForLocale(false)}
               >
                 {localeNameList.map((item) => (
                   <MenuItem key={item.localeName} dense disableRipple value={item.localeName}>
                     <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                       <Typography
                         sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                        onClick={() => handleSelectI18nOnChange(item.localeName)}
+                        onClick={() => handleLocale(item.localeName)}
                       >
                         {item.label}
                       </Typography>
@@ -550,7 +537,7 @@ const Settings: React.FC = () => {
             <TextField
               size="small"
               spellCheck={false}
-              disabled={loadingInDialogAdd}
+              disabled={hasLoading}
               error={formErr.address === true}
               label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
               value={newConnect.connectAddress}
@@ -574,7 +561,7 @@ const Settings: React.FC = () => {
             <TextField
               size="small"
               spellCheck={false}
-              disabled={loadingInDialogAdd}
+              disabled={hasLoading}
               error={formErr.username === true}
               label={t('settings.dialog_add.username')}
               value={newConnect.username}
@@ -585,7 +572,7 @@ const Settings: React.FC = () => {
             <TextField
               size="small"
               spellCheck={false}
-              disabled={loadingInDialogAdd}
+              disabled={hasLoading}
               error={formErr.password === true}
               label={t('settings.dialog_add.password')}
               value={newConnect.password}
@@ -624,14 +611,14 @@ const Settings: React.FC = () => {
                 easing: theme.transitions.easing.easeIn,
                 duration: theme.transitions.duration.standard,
               }),
-              ...(loadingInDialogAdd && {
+              ...(hasLoading && {
                 backgroundColor: theme.palette.action.disabledBackground,
               }),
             }}
-            disabled={loadingInDialogAdd}
+            disabled={hasLoading}
             onClick={() => handleAuth()}
           >
-            {loadingInDialogAdd ? <EosIconsThreeDotsLoading /> : t('settings.dialog_add.ok')}
+            {hasLoading ? <EosIconsThreeDotsLoading /> : t('settings.dialog_add.ok')}
           </Button>
         </DialogActions>
         <Snackbar

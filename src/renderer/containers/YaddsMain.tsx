@@ -33,8 +33,6 @@ import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
 import Settings from '../pages/Settings';
-import useMenuForApp from '../utils/useMenuForApp';
-import useMenuForTray from '../utils/useMenuForTray';
 import useMenuForQueue from '../utils/useMenuForQueue';
 
 const YaddsMain: React.FC = () => {
@@ -48,22 +46,14 @@ const YaddsMain: React.FC = () => {
   const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
   const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
-  const { menuItems: menuItemsInApp } = useMenuForApp();
-  const { menuItems: menuItemsInTray } = useMenuForTray();
   const { menuItems: menuItemsInQueue } = useMenuForQueue();
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
 
   useEffect(() => {
-    window.electron?.contextMenuForTray.create(menuItemsInTray); // Init system tary
     window.electron?.queue.orderBy(setQueueIterater); // Init the sorting iterater of the main page list
-    window.electron?.queue.isAscend(setQueueIsAscend); // Init the ascend/descend of the main page list
+    window.electron?.queue.isAscend(setQueueIsAscend); // Init the ascend / descend of the main page list
   }, []);
-
-  useEffect(() => {
-    window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar); // handle the sidebar state
-    window.electron?.topMenuForApp.create(menuItemsInApp); // Init or update application menu
-  }, [hasSidebar]);
 
   return (
     <Paper

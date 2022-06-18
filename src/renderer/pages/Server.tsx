@@ -100,8 +100,6 @@ const Server: React.FC = () => {
 
   useEffect(() => {
     window.electron.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota); // send setPageServerQuotaTarge as a Closure to main process
-    getNasInfo();
-    getQuota();
   }, []);
 
   useEffect(() => {

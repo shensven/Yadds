@@ -6,14 +6,14 @@ import Stack from '@mui/material/Stack';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
 import useTheme from './utils/useTheme';
-import useLifecycle from './utils/useLifecycle';
+import useSchedule from './utils/useSchedule';
 import './i18n/i18n';
 import './App.scss';
 
 const App: React.FC = () => {
   const { theme } = useTheme();
 
-  useLifecycle();
+  useSchedule();
 
   return (
     <ThemeProvider theme={theme}>
