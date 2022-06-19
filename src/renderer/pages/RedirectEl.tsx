@@ -1,13 +1,13 @@
 import React from 'react';
-import { SidebarCategory } from 'renderer/atoms/atomUI';
-import QueueActive from './QueueActive';
 import QueueAll from './QueueAll';
 import QueueDownloading from './QueueDownloading';
 import QueueFinished from './QueueFinished';
+import QueueActive from './QueueActive';
 import QueueInactive from './QueueInactive';
 import QueueStopped from './QueueStopped';
 import Server from './Server';
 import Settings from './Settings';
+import { SidebarCategory } from '../atoms/atomUI';
 
 const RedirectEl: React.FC = () => {
   const category = window.electron?.cache.get('sidebarCategory') as SidebarCategory | undefined;

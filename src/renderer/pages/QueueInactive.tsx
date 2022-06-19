@@ -1,7 +1,7 @@
 import React from 'react';
-import List from '@mui/material/List';
 import { useAtom } from 'jotai';
-import orderBy from 'lodash/orderBy';
+import { orderBy } from 'lodash';
+import { List } from '@mui/material';
 import { atomPersistenceQueueIsAscend, atomPersistenceQueueIterater } from '../atoms/atomUI';
 import { Task, atomTasks } from '../atoms/atomTask';
 import QueueEmpty from './Queue/QueueEmpty';

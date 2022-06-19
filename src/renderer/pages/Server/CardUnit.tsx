@@ -1,10 +1,5 @@
-import Card from '@mui/material/Card';
-import Icon from '@mui/material/Icon';
-import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
-import { useTheme } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import IonEllipsisHorizontal from '../../components/icons/IonEllipsisHorizontal';
+import { Card, Icon, IconButton, Stack, Typography, useTheme } from '@mui/material';
+import IonEllipsisHorizontal from '../../assets/icons/IonEllipsisHorizontal';
 
 interface ICardUnit {
   hasIconButton: boolean;

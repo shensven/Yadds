@@ -1,13 +1,11 @@
-import { useTheme } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
-import FormControl from '@mui/material/FormControl';
-import Typography from '@mui/material/Typography';
+import { FormControl, Stack, Typography, useTheme } from '@mui/material';
 
 interface IRowItem {
   label: string;
   children: React.ReactNode;
   hasMargin?: boolean;
 }
+
 const RowItem: React.FC<IRowItem> = (props: IRowItem) => {
   const { label, children, hasMargin } = props;
   const theme = useTheme();

@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
-import { useTheme } from '@mui/material/styles';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import ButtonBase from '@mui/material/ButtonBase';
-import LinearProgress from '@mui/material/LinearProgress';
 import { useTranslation } from 'react-i18next';
 import byteSize from 'byte-size';
-import IonPlay from '../../components/icons/IonPlay';
-import IonPause from '../../components/icons/IonPause';
-import TablerArrowNarrowUp from '../../components/icons/TablerArrowNarrowUp';
-import TablerArrowNarrowDown from '../../components/icons/TablerArrowNarrowDown';
+import {
+  ButtonBase,
+  LinearProgress,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import IonPlay from '../../assets/icons/IonPlay';
+import IonPause from '../../assets/icons/IonPause';
+import TablerArrowNarrowUp from '../../assets/icons/TablerArrowNarrowUp';
+import TablerArrowNarrowDown from '../../assets/icons/TablerArrowNarrowDown';
 import { Task } from '../../atoms/atomTask';
 
 const QueueItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
+  const theme = useTheme();
   const { t } = useTranslation();
 
   const { item } = props;
@@ -24,8 +27,6 @@ const QueueItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
   const SIZE_DOWNLOADED = byteSize(item.additional?.transfer.size_downloaded as number, { units: 'iec', precision: 2 });
   const SPEED_DOWNLOAD = byteSize(item.additional?.transfer.speed_download as number, { units: 'iec', precision: 2 });
   const SPEED_UPLOAD = byteSize(item.additional?.transfer.speed_upload as number, { units: 'iec', precision: 2 });
-
-  const theme = useTheme();
 
   const [hasAction, setHasAction] = useState<boolean>(false);
   const [isDownload, setIsDownload] = useState<boolean>(true);

@@ -1,16 +1,17 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import React from 'react';
 import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Divider,
+  useTheme,
+} from '@mui/material';
 import { atomOS, atomSidebarWidth } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
@@ -19,22 +20,23 @@ import {
   atomPersistenceSidebarCategory,
 } from '../atoms/atomUI';
 import { atomTasks } from '../atoms/atomTask';
-import IonShapesOutline from '../components/icons/IonShapesOutline';
-import IonShapes from '../components/icons/IonShapes';
-import IonArrowDownCircleOutline from '../components/icons/IonArrowDownCircleOutline';
-import IonArrowDownCircle from '../components/icons/IonArrowDownCircle';
-import IonCheckmarkCircleOutline from '../components/icons/IonCheckmarkCircleOutline';
-import IonCheckmarkCircle from '../components/icons/IonCheckmarkCircle';
-import IonArrowUpCircleOutline from '../components/icons/IonArrowUpCircleOutline';
-import IonArrowUpCircle from '../components/icons/IonArrowUpCircle';
-import IonCloseCircleOutline from '../components/icons/IonCloseCircleOutline';
-import IonCloseCircle from '../components/icons/IonCloseCircle';
-import IonStopCircleOutline from '../components/icons/IonStopCircleOutline';
-import IonStopCircle from '../components/icons/IonStopCircle';
-import IonServerOutline from '../components/icons/IonServerOutline';
-import IonServer from '../components/icons/IonServer';
-import IonCogOutline from '../components/icons/IonCogOutline';
-import IonCog from '../components/icons/IonCog';
+import useNav from '../utils/useNav';
+import IonShapesOutline from '../assets/icons/IonShapesOutline';
+import IonShapes from '../assets/icons/IonShapes';
+import IonArrowDownCircleOutline from '../assets/icons/IonArrowDownCircleOutline';
+import IonArrowDownCircle from '../assets/icons/IonArrowDownCircle';
+import IonCheckmarkCircleOutline from '../assets/icons/IonCheckmarkCircleOutline';
+import IonCheckmarkCircle from '../assets/icons/IonCheckmarkCircle';
+import IonArrowUpCircleOutline from '../assets/icons/IonArrowUpCircleOutline';
+import IonArrowUpCircle from '../assets/icons/IonArrowUpCircle';
+import IonCloseCircleOutline from '../assets/icons/IonCloseCircleOutline';
+import IonCloseCircle from '../assets/icons/IonCloseCircle';
+import IonStopCircleOutline from '../assets/icons/IonStopCircleOutline';
+import IonStopCircle from '../assets/icons/IonStopCircle';
+import IonServerOutline from '../assets/icons/IonServerOutline';
+import IonServer from '../assets/icons/IonServer';
+import IonCogOutline from '../assets/icons/IonCogOutline';
+import IonCog from '../assets/icons/IonCog';
 
 interface YaddsCategoryObj {
   path: SidebarCategory;
@@ -45,20 +47,17 @@ interface YaddsCategoryObj {
 }
 
 const YaddsSidebar: React.FC = () => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const { t } = useTranslation();
+
+  const { navigate } = useNav();
 
   const [OS_PLATFORM] = useAtom(atomOS);
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
-  const [sidebarCategory, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
+  const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [tasks] = useAtom(atomTasks);
-
-  useEffect(() => {
-    window.electron?.yadds.navigate(navigate, setSidebarCategory); // Init navigation from the top menu
-  }, []);
 
   const categoryList: YaddsCategoryObj[] = [
     {
@@ -110,12 +109,7 @@ const YaddsSidebar: React.FC = () => {
       anchor="left"
       variant="persistent"
       open={hasSidebar}
-      sx={{
-        '& .MuiDrawer-paper': {
-          backgroundColor: 'transparent',
-          width: SIDEBAR_WIDTH,
-        },
-      }}
+      sx={{ '& .MuiDrawer-paper': { backgroundColor: 'transparent', width: SIDEBAR_WIDTH } }}
     >
       <List
         dense
@@ -132,14 +126,7 @@ const YaddsSidebar: React.FC = () => {
       >
         {categoryList.map((item) => (
           <ListItem key={item.path}>
-            <ListItemButton
-              disableRipple
-              selected={sidebarCategory === item.path}
-              onClick={() => {
-                setSidebarCategory(item.path);
-                navigate(item.path);
-              }}
-            >
+            <ListItemButton disableRipple selected={sidebarCategory === item.path} onClick={() => navigate(item.path)}>
               <ListItemIcon
                 sx={{
                   minWidth: theme.spacing(4),
@@ -188,10 +175,7 @@ const YaddsSidebar: React.FC = () => {
             disableRipple
             selected={sidebarCategory === '/server'}
             sx={{ width: '100%' }}
-            onClick={() => {
-              setSidebarCategory('/server');
-              navigate('/server');
-            }}
+            onClick={() => navigate('/server')}
           >
             <ListItemIcon
               sx={{
@@ -226,10 +210,7 @@ const YaddsSidebar: React.FC = () => {
             disableRipple
             selected={sidebarCategory === '/settings'}
             sx={{ width: '100%' }}
-            onClick={() => {
-              setSidebarCategory('/settings');
-              navigate('/settings');
-            }}
+            onClick={() => navigate('/settings')}
           >
             <ListItemIcon
               sx={{

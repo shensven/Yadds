@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Button,
@@ -21,14 +22,13 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import IonPersonCircle from '../../components/icons/IonPersonCircle';
+import IonPersonCircle from '../../assets/icons/IonPersonCircle';
 import { atomHasDialogAddressAdder } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../../atoms/atomTask';
-import IonEyeOutline from '../../components/icons/IonEyeOutline';
-import IonEyeOffOutline from '../../components/icons/IonEyeOffOutline';
-import EosIconsThreeDotsLoading from '../../components/icons/EosIconsThreeDotsLoading';
+import IonEyeOutline from '../../assets/icons/IonEyeOutline';
+import IonEyeOffOutline from '../../assets/icons/IonEyeOffOutline';
+import EosIconsThreeDotsLoading from '../../assets/icons/EosIconsThreeDotsLoading';
 
 const DialogAddressAdder: React.FC = () => {
   const theme = useTheme();

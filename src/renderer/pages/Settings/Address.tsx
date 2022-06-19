@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import RowItem from './RowItem';
-import IonTrashOutline from '../../components/icons/IonTrashOutline';
+import IonTrashOutline from '../../assets/icons/IonTrashOutline';
 import { atomHasDialogAddressAdder, atomHasDialogAddressRemover } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 

@@ -1,29 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Icon from '@mui/material/Icon';
-import AppBar from '@mui/material/AppBar';
-import Stack from '@mui/material/Stack';
-import InputBase from '@mui/material/InputBase';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import { AppBar, Box, Button, Icon, IconButton, InputBase, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { atomSidebarWidth } from '../atoms/atomConstant';
-import {
-  atomPersistenceHasSidebar,
-  atomPersistenceSidebarCategory,
-  atomPersistenceQueueIterater,
-  atomPersistenceQueueIsAscend,
-} from '../atoms/atomUI';
-import IcRoundFilterList from '../components/icons/IcRoundFilterList';
-import IonEllipsisHorizontal from '../components/icons/IonEllipsisHorizontal';
-import greyInactiveSvg from './assets/grey_inactive.svg';
-import greyActiveLeftSvg from './assets/grey_active_left.svg';
-import greyActiveRightSvg from './assets/grey_active_right.svg';
+import { atomPersistenceHasSidebar, atomPersistenceSidebarCategory } from '../atoms/atomUI';
+import IcRoundFilterList from '../assets/icons/IcRoundFilterList';
+import IonEllipsisHorizontal from '../assets/icons/IonEllipsisHorizontal';
+import greyInactiveSvg from '../assets/images/grey_inactive.svg';
+import greyActiveLeftSvg from '../assets/images/grey_active_left.svg';
+import greyActiveRightSvg from '../assets/images/grey_active_right.svg';
 import RedirectEl from '../pages/RedirectEl';
 import QueueAll from '../pages/QueueAll';
 import QueueDownloading from '../pages/QueueDownloading';
@@ -45,17 +31,10 @@ const YaddsMain: React.FC = () => {
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
-  const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
-  const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
   const { menuItems: menuItemsInQueue } = useMenuForQueue();
 
   const [indicatorSrc, setIndicatorScr] = useState<string>(greyInactiveSvg);
-
-  useEffect(() => {
-    window.electron?.queue.orderBy(setQueueIterater); // Init the sorting iterater of the main page list
-    window.electron?.queue.isAscend(setQueueIsAscend); // Init the ascend / descend of the main page list
-  }, []);
 
   return (
     <Paper

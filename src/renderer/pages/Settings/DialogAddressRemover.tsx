@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography, useTheme } from '@mui/material';
-import IonTrashOutline from '../../components/icons/IonTrashOutline';
+import IonTrashOutline from '../../assets/icons/IonTrashOutline';
 import { atomHasDialogAddressRemover } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 

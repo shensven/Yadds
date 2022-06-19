@@ -3,20 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
 import byteSize from 'byte-size';
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import ToggleButton from '@mui/material/ToggleButton';
-import Button from '@mui/material/Button';
+import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Typography, useTheme } from '@mui/material';
 import CardUnit from './Server/CardUnit';
-import IcRoundCalendarViewWeek from '../components/icons/IcRoundCalendarViewWeek';
-import IcOutlineInfo from '../components/icons/IcOutlineInfo';
-import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
-import IcOutlineExplore from '../components/icons/IcOutlineExplore';
-import IcOutlineCable from '../components/icons/IcOutlineCable';
-import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
+import IcRoundCalendarViewWeek from '../assets/icons/IcRoundCalendarViewWeek';
+import IcOutlineInfo from '../assets/icons/IcOutlineInfo';
+import IcOutlineAlbum from '../assets/icons/IcOutlineAlbum';
+import IcOutlineExplore from '../assets/icons/IcOutlineExplore';
+import IcOutlineCable from '../assets/icons/IcOutlineCable';
+import IcRoundSwapHoriz from '../assets/icons/IcRoundSwapHoriz';
 import {
   atomNasInfo,
   atomPersistenceServerActiveTab,

@@ -1,11 +1,15 @@
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
+import { useNavigate } from 'react-router-dom';
 import { atomTasksRetryMax } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
   atomPersistenceAppearance,
   atomPersistenceHasSidebar,
   atomPersistenceLocaleName,
+  atomPersistenceQueueIsAscend,
+  atomPersistenceQueueIterater,
+  atomPersistenceSidebarCategory,
 } from '../atoms/atomUI';
 import { atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
@@ -16,8 +20,15 @@ import useMenuForApp from './useMenuForApp';
 import useMenuForTray from './useMenuForTray';
 
 const useSchedule = () => {
+  const navigate = useNavigate();
+
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop, setHasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
+
+  const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
+  const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
+
+  const [, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
 
   const [appearance] = useAtom(atomPersistenceAppearance);
   const [localeName] = useAtom(atomPersistenceLocaleName);
@@ -42,6 +53,15 @@ const useSchedule = () => {
     window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop);
     window.electron?.topMenuForApp.create(menuItemsInApp);
   }, [hasSidebarMarginTop]);
+
+  useEffect(() => {
+    window.electron?.yadds.navigate(navigate, setSidebarCategory);
+  }, []);
+
+  useEffect(() => {
+    window.electron?.queue.orderBy(setQueueIterater);
+    window.electron?.queue.isAscend(setQueueIsAscend);
+  }, []);
 
   useEffect(() => {
     window.electron?.app.toggleNativeTheme(appearance);

@@ -1,9 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Box, Stack, Typography, useTheme } from '@mui/material';
 import Apprearance from './Settings/Apprearance';
 import Address from './Settings/Address';
 import Locale from './Settings/Locale';

@@ -1,7 +1,6 @@
 import React from 'react';
-import { useTheme } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
-import bagDynamicClay from './assets/bag-dynamic-clay.png';
+import { Stack, useTheme } from '@mui/material';
+import bagDynamicClay from '../../assets/images/bag-dynamic-clay.png';
 
 const QueueEmpty: React.FC = () => {
   const theme = useTheme();

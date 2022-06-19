@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
-import { FormControl, FormGroup, MenuItem, Select, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { FormControl, FormGroup, MenuItem, Select, Stack, Typography, useTheme } from '@mui/material';
 import RowItem from './RowItem';
 import { atomPersistenceLocaleName, LocaleName } from '../../atoms/atomUI';
 

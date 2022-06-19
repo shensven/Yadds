@@ -1,6 +1,5 @@
-import { createTheme, darkScrollbar, PaletteMode, useMediaQuery } from '@mui/material';
-import { Theme } from '@mui/system';
 import { useAtom } from 'jotai';
+import { createTheme, darkScrollbar, PaletteMode, Theme, useMediaQuery } from '@mui/material';
 import { atomPersistenceAppearance } from '../atoms/atomUI';
 
 declare module '@mui/material/styles' {
