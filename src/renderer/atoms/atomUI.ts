@@ -177,3 +177,6 @@ export const atomPersistenceIsAutoUpdate = atom(
     window.electron.preferences.set('isAutoUpdate', newBool);
   }
 );
+
+export const atomHasDialogAddressAdder = atom<boolean>(false);
+export const atomHasDialogAddressRemover = atom<boolean>(false);

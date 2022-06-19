@@ -119,24 +119,24 @@ const createOverrideCompnents = (mode: PaletteMode) => {
   };
 };
 
-const useTheme = () => {
+const useDesignSystem = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const [appearance] = useAtom(atomPersistenceAppearance);
 
-  let theme: Theme;
+  let designSystem: Theme;
 
   if (appearance === 'system') {
     if (prefersDarkMode) {
-      theme = createTheme(createDesignTokens('dark'), createOverrideCompnents('dark'));
+      designSystem = createTheme(createDesignTokens('dark'), createOverrideCompnents('dark'));
     } else {
-      theme = createTheme(createDesignTokens('light'), createOverrideCompnents('light'));
+      designSystem = createTheme(createDesignTokens('light'), createOverrideCompnents('light'));
     }
   } else {
-    theme = createTheme(createDesignTokens(appearance), createOverrideCompnents(appearance));
+    designSystem = createTheme(createDesignTokens(appearance), createOverrideCompnents(appearance));
   }
 
-  return { theme };
+  return { designSystem };
 };
 
-export default useTheme;
+export default useDesignSystem;

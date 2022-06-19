@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { useAtom } from 'jotai';
-import { atomOS, atomSidebarWidth } from '../atoms/atomConstant';
+import { atomSidebarWidth } from '../atoms/atomConstant';
 import {
   atomPersistenceHasSidebar,
   atomPersistenceSidebarCategory,
@@ -33,13 +33,15 @@ import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
 import Settings from '../pages/Settings';
+import useWindow from '../utils/useWindow';
 import useMenuForQueue from '../utils/useMenuForQueue';
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const [OS_PLATFORM] = useAtom(atomOS);
+  const { zoomWindowForDarwin } = useWindow();
+
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
@@ -96,7 +98,7 @@ const YaddsMain: React.FC = () => {
           backgroundColor: 'transparent',
           display: ['/server', '/settings'].includes(sidebarCategory) ? 'none' : 'flex',
         }}
-        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.app.zoomWindow()}
+        onDoubleClick={() => zoomWindowForDarwin()}
       >
         <Stack flexDirection="row" justifyContent="flex-end" alignItems="center" sx={{ p: theme.spacing(2) }}>
           <Stack

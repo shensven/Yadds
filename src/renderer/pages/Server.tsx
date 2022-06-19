@@ -17,7 +17,6 @@ import IcOutlineAlbum from '../components/icons/IcOutlineAlbum';
 import IcOutlineExplore from '../components/icons/IcOutlineExplore';
 import IcOutlineCable from '../components/icons/IcOutlineCable';
 import IcRoundSwapHoriz from '../components/icons/IcRoundSwapHoriz';
-import { atomOS } from '../atoms/atomConstant';
 import {
   atomNasInfo,
   atomPersistenceServerActiveTab,
@@ -26,6 +25,7 @@ import {
   atomTargeByteSizeForQuota,
   Share,
 } from '../atoms/atomUI';
+import useWindow from '../utils/useWindow';
 import useMenuForQuota from '../utils/useMenuForQuota';
 import useNasInfo from '../utils/useNasInfo';
 import useQuota from '../utils/useQuota';
@@ -34,12 +34,13 @@ const Server: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const [OS_PLATFORM] = useAtom(atomOS);
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [nasInfo] = useAtom(atomNasInfo);
   const [quotaList] = useAtom(atomQuotaList);
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
+
+  const { zoomWindowForDarwin } = useWindow();
 
   const { getNasInfo } = useNasInfo();
   const { getQuota } = useQuota();
@@ -128,10 +129,7 @@ const Server: React.FC = () => {
 
   return (
     <Box>
-      <Box
-        sx={{ height: theme.spacing(5), appRegion: 'drag' }}
-        onDoubleClick={() => OS_PLATFORM === 'darwin' && window.electron.app.zoomWindow()}
-      />
+      <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} onDoubleClick={() => zoomWindowForDarwin()} />
       <Stack sx={{ pl: theme.spacing(2) }}>
         <Typography variant="h4" fontWeight={600} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
           {t('server.server')}

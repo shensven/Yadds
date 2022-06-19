@@ -5,18 +5,17 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
-import useTheme from './utils/useTheme';
+import useDesignSystem from './utils/useDesignSystem';
 import useSchedule from './utils/useSchedule';
 import './i18n/i18n';
 import './App.scss';
 
 const App: React.FC = () => {
-  const { theme } = useTheme();
-
+  const { designSystem } = useDesignSystem();
   useSchedule();
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={designSystem}>
       <CssBaseline />
       <MemoryRouter>
         <Stack direction="row">
