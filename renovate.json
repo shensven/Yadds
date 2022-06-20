@@ -35,6 +35,7 @@
         "@fontsource/barlow",
         "@mui/material",
         "@mui/system",
+        "ahooks",
         "byte-size",
         "electron-store",
         "i18next",
