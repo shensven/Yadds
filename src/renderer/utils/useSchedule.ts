@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { useNavigate } from 'react-router-dom';
 import { atomTasksRetryMax } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
@@ -9,10 +8,11 @@ import {
   atomPersistenceLocaleName,
   atomPersistenceQueueIsAscend,
   atomPersistenceQueueIterater,
-  atomPersistenceSidebarCategory,
+  atomPersistenceTargeMenuItemForQuota,
 } from '../atoms/atomUI';
 import { atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
+import useNav from './useNav';
 import useNasInfo from './useNasInfo';
 import useQuota from './useQuota';
 import useTasks from './useTasks';
@@ -20,15 +20,13 @@ import useMenuForApp from './useMenuForApp';
 import useMenuForTray from './useMenuForTray';
 
 const useSchedule = () => {
-  const navigate = useNavigate();
-
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop, setHasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
 
   const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
   const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
 
-  const [, setSidebarCategory] = useAtom(atomPersistenceSidebarCategory);
+  const [, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
 
   const [appearance] = useAtom(atomPersistenceAppearance);
   const [localeName] = useAtom(atomPersistenceLocaleName);
@@ -37,12 +35,15 @@ const useSchedule = () => {
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [tasksStatus] = useAtom(atomTasksStatus);
 
-  const { getNasInfo, resetNasInfo } = useNasInfo();
-  const { getQuota, resetQuota } = useQuota();
-  const { pollTasks, stopTasks } = useTasks();
-
   const { menuItems: menuItemsInApp } = useMenuForApp();
   const { menuItems: menuItemsInTray } = useMenuForTray();
+
+  const { navigate } = useNav();
+
+  const { getNasInfo, resetNasInfo } = useNasInfo();
+  const { getQuota, resetQuota } = useQuota();
+
+  const { pollTasks, stopTasks } = useTasks();
 
   useEffect(() => {
     window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar);
@@ -55,7 +56,7 @@ const useSchedule = () => {
   }, [hasSidebarMarginTop]);
 
   useEffect(() => {
-    window.electron?.yadds.navigate(navigate, setSidebarCategory);
+    window.electron?.yadds.navigate(navigate);
   }, []);
 
   useEffect(() => {
@@ -64,8 +65,17 @@ const useSchedule = () => {
   }, []);
 
   useEffect(() => {
+    window.electron?.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota);
+  }, []);
+
+  useEffect(() => {
     window.electron?.app.toggleNativeTheme(appearance);
   }, [appearance]);
+
+  useEffect(() => {
+    window.electron?.topMenuForApp.create(menuItemsInApp);
+    window.electron?.contextMenuForTray.create(menuItemsInTray);
+  }, [localeName]);
 
   useEffect(() => {
     if (targetDid.length === 0) {
@@ -90,11 +100,6 @@ const useSchedule = () => {
 
     return () => clearInterval(timer);
   }, [targetDid, tasksStatus.retry]);
-
-  useEffect(() => {
-    window.electron?.topMenuForApp.create(menuItemsInApp);
-    window.electron?.contextMenuForTray.create(menuItemsInTray);
-  }, [localeName]);
 };
 
 export default useSchedule;

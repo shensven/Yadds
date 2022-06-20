@@ -15,3 +15,5 @@ const useNav = () => {
 };
 
 export default useNav;
+
+export type Nav = ReturnType<typeof useNav>['navigate'];

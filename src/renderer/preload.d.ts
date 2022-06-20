@@ -1,11 +1,11 @@
-import { NavigateFunction } from 'react-router-dom';
 import { Channels } from 'main/preload';
 import { YaddsCache } from '../main/store/cache';
 import { YaddsPreferences } from '../main/store/preferences';
 import { YaddsConnectedUsers } from '../main/store/connectedUsers';
 import { ServerError } from '../main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
-import { Appearance, QueueIterater, SidebarCategory, TargeMenuItemForQuota } from './atoms/atomUI';
+import { Appearance, QueueIterater, TargeMenuItemForQuota } from './atoms/atomUI';
+import { Nav } from './utils/useNav';
 import { MenuItemsInApp } from './utils/useMenuForApp';
 import { MenuItemsInTray } from './utils/useMenuForTray';
 import { MenuItemsInQueue } from './utils/useMenuForQueue';
@@ -69,7 +69,7 @@ declare global {
       yadds: {
         toogleSidebar: (hasSidebar: boolean, setHasSidebar: (hasSidebar: boolean) => void) => void;
         toogleSidebarMarginTop: (setHasSidebarMarginTop: (update: boolean) => void) => void;
-        navigate: (navigateFunc: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => void;
+        navigate: (nav: Nav) => void;
       };
 
       queue: {

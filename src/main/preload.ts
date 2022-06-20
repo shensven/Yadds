@@ -1,9 +1,9 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
-import { NavigateFunction } from 'react-router-dom';
 import { YaddsCache } from './store/cache';
 import { YaddsPreferences } from './store/preferences';
 import { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
+import { Nav } from '../renderer/utils/useNav';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
 import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuForQuota';
@@ -119,10 +119,9 @@ contextBridge.exposeInMainWorld('electron', {
       });
     },
 
-    navigate: (navigateFunc: NavigateFunction, setSidebarCategory: (update: SidebarCategory) => void) => {
+    navigate: (nav: Nav) => {
       ipcRenderer.on('yadds:navigate', (_, arg: SidebarCategory) => {
-        navigateFunc(arg);
-        setSidebarCategory(arg);
+        nav(arg);
       });
     },
   },

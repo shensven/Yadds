@@ -54,9 +54,11 @@ const YaddsSidebar: React.FC = () => {
 
   const [OS_PLATFORM] = useAtom(atomOS);
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
+
   const [hasSidebar] = useAtom(atomPersistenceHasSidebar);
   const [hasSidebarMarginTop] = useAtom(atomHasSidebarMarginTop);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
+
   const [tasks] = useAtom(atomTasks);
 
   const categoryList: YaddsCategoryObj[] = [

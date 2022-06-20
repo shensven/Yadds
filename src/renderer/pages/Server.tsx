@@ -31,7 +31,7 @@ const Server: React.FC = () => {
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [nasInfo] = useAtom(atomNasInfo);
   const [quotaList] = useAtom(atomQuotaList);
-  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
+  const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const { zoomWindowForDarwin } = useWindow();
@@ -92,10 +92,6 @@ const Server: React.FC = () => {
     getNasInfo();
     getQuota();
   };
-
-  useEffect(() => {
-    window.electron.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota); // send setPageServerQuotaTarge as a Closure to main process
-  }, []);
 
   useEffect(() => {
     const targetVolume = find(quotaList, {
