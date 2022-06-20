@@ -115,7 +115,7 @@ export const atomPersistenceTargeMenuItemForQuota = atom(
   (get) => get(atomTargeMenuItemForQuota),
   (_get, set, newStr: TargeMenuItemForQuota) => {
     set(atomTargeMenuItemForQuota, newStr);
-    window.electron.cache.set('targeMenuItemForQuota', newStr);
+    window.electron?.cache.set('targeMenuItemForQuota', newStr);
   }
 );
 

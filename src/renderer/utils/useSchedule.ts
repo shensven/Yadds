@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useUpdateEffect } from 'ahooks';
 import { useAtom } from 'jotai';
 import { atomTasksRetryMax } from '../atoms/atomConstant';
 import {
@@ -8,7 +9,6 @@ import {
   atomPersistenceLocaleName,
   atomPersistenceQueueIsAscend,
   atomPersistenceQueueIterater,
-  atomPersistenceTargeMenuItemForQuota,
 } from '../atoms/atomUI';
 import { atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import { atomTasksStatus } from '../atoms/atomTask';
@@ -25,8 +25,6 @@ const useSchedule = () => {
 
   const [, setQueueIterater] = useAtom(atomPersistenceQueueIterater);
   const [, setQueueIsAscend] = useAtom(atomPersistenceQueueIsAscend);
-
-  const [, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
 
   const [appearance] = useAtom(atomPersistenceAppearance);
   const [localeName] = useAtom(atomPersistenceLocaleName);
@@ -45,34 +43,35 @@ const useSchedule = () => {
 
   const { pollTasks, stopTasks } = useTasks();
 
+  // create top menu and tray
   useEffect(() => {
-    window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar);
     window.electron?.topMenuForApp.create(menuItemsInApp);
-  }, [hasSidebar]);
-
-  useEffect(() => {
-    window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop);
-    window.electron?.topMenuForApp.create(menuItemsInApp);
-  }, [hasSidebarMarginTop]);
-
-  useEffect(() => {
-    window.electron?.yadds.navigate(navigate);
+    window.electron?.contextMenuForTray.create(menuItemsInTray);
   }, []);
 
+  // let the main process to control some state of the rederer process by closures
   useEffect(() => {
+    window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop);
+    window.electron?.yadds.navigate(navigate);
     window.electron?.queue.orderBy(setQueueIterater);
     window.electron?.queue.isAscend(setQueueIsAscend);
   }, []);
 
-  useEffect(() => {
-    window.electron?.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota);
-  }, []);
+  useUpdateEffect(() => {
+    window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar);
+    window.electron?.topMenuForApp.create(menuItemsInApp);
+  }, [hasSidebar]);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
+    window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop);
+    window.electron?.topMenuForApp.create(menuItemsInApp);
+  }, [hasSidebarMarginTop]);
+
+  useUpdateEffect(() => {
     window.electron?.app.toggleNativeTheme(appearance);
   }, [appearance]);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     window.electron?.topMenuForApp.create(menuItemsInApp);
     window.electron?.contextMenuForTray.create(menuItemsInTray);
   }, [localeName]);

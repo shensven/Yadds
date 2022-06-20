@@ -8,7 +8,7 @@ const useQuota = () => {
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [, setQuotaList] = useAtom(atomQuotaList);
-  const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
+  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const getQuota = async () => {
@@ -45,6 +45,7 @@ const useQuota = () => {
                 precision: 2,
               }),
             });
+            window.electron?.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota);
           }
         }
       }
@@ -59,6 +60,7 @@ const useQuota = () => {
       max: { value: '-', unit: '', long: '', toString: () => '' },
       available: { value: '-', unit: '', long: '', toString: () => '' },
     });
+    setTargeMenuItemForQuota(`volume:${0},share:${''}`);
   };
 
   return { getQuota, resetQuota };

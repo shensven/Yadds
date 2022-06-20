@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useUpdateEffect } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
@@ -93,7 +94,7 @@ const Server: React.FC = () => {
     getQuota();
   };
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const targetVolume = find(quotaList, {
       name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
     });
