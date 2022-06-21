@@ -27,6 +27,7 @@ English | [简体中文](./README-zh-hans.md)
 - [ ] Support Touch Bar (Mac only if available)
 - [ ] Download progress visualization
 - [ ] Multi-account switching
+- [ ] Automatic access to BitTorrent tracker list
 
 ## 📦 INSTALLATION
 
