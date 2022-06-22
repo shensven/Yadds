@@ -57,7 +57,6 @@ const useSchedule = () => {
   }, []);
 
   useUpdateEffect(() => {
-    console.log(hasSidebar);
     window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar);
     window.electron?.topMenuForApp.create(menuItemsInApp);
   }, [hasSidebar]);
@@ -77,8 +76,6 @@ const useSchedule = () => {
   }, [localeName]);
 
   useUpdateEffect(() => {
-    console.log(fetchStatus);
-
     if (fetchStatus === 'switching') {
       resetTasks();
       resetQuota();
@@ -109,6 +106,7 @@ const useSchedule = () => {
       resetQuota();
       resetTargetMenuItemForQuota();
       resetNasInfo();
+      console.log('stopped');
       return undefined;
     }
 

@@ -36,7 +36,6 @@ const Address: React.FC = () => {
       setHasSelecterForAddress(false);
       setHasDialogAddressRemover(true);
     } else {
-      // setFetchStatus('pending');
       setTargetDid(did);
       setHasSelecterForAddress(false);
     }

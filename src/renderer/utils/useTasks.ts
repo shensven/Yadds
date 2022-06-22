@@ -17,9 +17,6 @@ const useTasks = () => {
   const pollTasks = async () => {
     const targetUser = find(connectedUsers, { did: targetDid });
 
-    // console.log(targetDid);
-    // console.log(targetUser);
-
     if (!targetUser) {
       resetTasks();
       return;
@@ -32,11 +29,12 @@ const useTasks = () => {
         sid: targetUser.sid,
       });
 
+      // console.log('pollTasks', resp);
+
       if (!resp.success) {
         setFetchStatus('pending');
         resetTasks();
       } else {
-        console.log('pollTasks', resp.data.task);
         setFetchStatus('polling');
         startTransition(() => setTasks(resp.data.task));
       }

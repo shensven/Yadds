@@ -91,8 +91,6 @@ const Server: React.FC = () => {
   ];
 
   useUpdateEffect(() => {
-    console.log('targeMenuItemForQuota', targeMenuItemForQuota);
-
     const targetVolume = find(quotaList, {
       name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
     });

@@ -40,7 +40,7 @@ const useQuota = () => {
         sid: targetUser.sid,
       });
 
-      // console.log('getQuata', resp.data.items);
+      // console.log('getQuata', resp);
 
       if (!resp.success) {
         setFetchStatus('pending');
