@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography, useTheme } from '@mui/material';
 import IonTrashOutline from '../../assets/icons/IonTrashOutline';
-import { atomHasDialogAddressRemover } from '../../atoms/atomUI';
+import { atomHasDialogAddressRemover, atomWhoWillRemove } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 
 const DialogAddressRemover: React.FC = () => {
@@ -12,9 +12,9 @@ const DialogAddressRemover: React.FC = () => {
 
   const [connectedUsers, setConnectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [, setTargetDid] = useAtom(atomPersistenceTargetDid);
-  const [hasDialogAddressRemover, setHasDialogAddressRemover] = useAtom(atomHasDialogAddressRemover);
 
-  const [whoWillRemove, setWhoWillRemove] = useState(-1);
+  const [hasDialogAddressRemover, setHasDialogAddressRemover] = useAtom(atomHasDialogAddressRemover);
+  const [whoWillRemove, setWhoWillRemove] = useAtom(atomWhoWillRemove);
 
   const dismissDialogRemove = () => {
     setHasDialogAddressRemover(false);

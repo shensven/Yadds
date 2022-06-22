@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
 import byteSize from 'byte-size';
-import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Typography, useTheme } from '@mui/material';
+import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography, useTheme } from '@mui/material';
 import CardUnit from './Server/CardUnit';
+import FluentVirtualNetwork20Filled from '../assets/icons/FluentVirtualNetwork20Filled';
+import EosIconsThreeDotsLoading from '../assets/icons/EosIconsThreeDotsLoading';
 import IcRoundCalendarViewWeek from '../assets/icons/IcRoundCalendarViewWeek';
 import IcOutlineInfo from '../assets/icons/IcOutlineInfo';
 import IcOutlineAlbum from '../assets/icons/IcOutlineAlbum';
@@ -20,14 +22,15 @@ import {
   atomTargeByteSizeForQuota,
   Share,
 } from '../atoms/atomUI';
+import { atomFetchStatus } from '../atoms/atomTask';
 import useWindow from '../utils/useWindow';
 import useMenuForQuota from '../utils/useMenuForQuota';
-import useNasInfo from '../utils/useNasInfo';
-import useQuota from '../utils/useQuota';
 
 const Server: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
+
+  const [fetchStatus] = useAtom(atomFetchStatus);
 
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [nasInfo] = useAtom(atomNasInfo);
@@ -37,8 +40,6 @@ const Server: React.FC = () => {
 
   const { zoomWindowForDarwin } = useWindow();
 
-  const { getNasInfo } = useNasInfo();
-  const { getQuota } = useQuota();
   const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuForQuota();
 
   const basicInfomation = [
@@ -89,12 +90,9 @@ const Server: React.FC = () => {
     },
   ];
 
-  const refreshBasicInfomation = () => {
-    getNasInfo();
-    getQuota();
-  };
-
   useUpdateEffect(() => {
+    console.log('targeMenuItemForQuota', targeMenuItemForQuota);
+
     const targetVolume = find(quotaList, {
       name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
     });
@@ -122,16 +120,39 @@ const Server: React.FC = () => {
     <Box>
       <Box sx={{ height: theme.spacing(5), appRegion: 'drag' }} onDoubleClick={() => zoomWindowForDarwin()} />
       <Stack sx={{ pl: theme.spacing(2) }}>
-        <Typography variant="h4" fontWeight={600} color={theme.palette.text.primary} sx={{ mb: theme.spacing(2) }}>
-          {t('server.server')}
-        </Typography>
-        <Stack flexDirection="row" justifyContent="space-between">
-          <ToggleButtonGroup size="small">
+        <Stack flexDirection="row" alignItems="center" sx={{ mb: theme.spacing(2) }}>
+          <Typography variant="h4" fontWeight={600} color={theme.palette.text.primary}>
+            {t('server.server')}
+          </Typography>
+          {fetchStatus === 'stopped' && (
+            <Tooltip title="没有连接 DSM 实例" placement="right" arrow>
+              <Stack alignItems="center" sx={{ ml: theme.spacing(1) }}>
+                <FluentVirtualNetwork20Filled color="disabled" sx={{ fontSize: 40 }} />
+              </Stack>
+            </Tooltip>
+          )}
+          {['pending'].includes(fetchStatus) && (
+            <Tooltip title="等待网络" placement="right" arrow>
+              <Stack alignItems="center" sx={{ ml: theme.spacing(1) }}>
+                <EosIconsThreeDotsLoading color="primary" sx={{ fontSize: 40 }} />
+              </Stack>
+            </Tooltip>
+          )}
+          {fetchStatus === 'polling' && (
+            <Tooltip title="已和 DSM 建立连接" placement="right" arrow>
+              <Stack alignItems="center" sx={{ ml: theme.spacing(1) }}>
+                <FluentVirtualNetwork20Filled color="primary" sx={{ fontSize: 40 }} />
+              </Stack>
+            </Tooltip>
+          )}
+        </Stack>
+        <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+          <ToggleButtonGroup size="small" sx={{ height: theme.spacing(3) }}>
             <ToggleButton
               value="left"
               disableRipple
               selected={serverActiveTab === 'basicInfomation'}
-              sx={{ px: theme.spacing(2), py: 0 }}
+              sx={{ px: theme.spacing(2) }}
               onClick={() => setServerActiveTab('basicInfomation')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
@@ -142,7 +163,7 @@ const Server: React.FC = () => {
               value="left"
               disableRipple
               selected={serverActiveTab === 'route'}
-              sx={{ px: theme.spacing(2), py: 0 }}
+              sx={{ px: theme.spacing(2) }}
               onClick={() => setServerActiveTab('route')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
@@ -153,7 +174,7 @@ const Server: React.FC = () => {
               value="right"
               disableRipple
               selected={serverActiveTab === 'responsiveness'}
-              sx={{ px: theme.spacing(2), py: 0 }}
+              sx={{ px: theme.spacing(2) }}
               onClick={() => setServerActiveTab('responsiveness')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
@@ -162,21 +183,6 @@ const Server: React.FC = () => {
             </ToggleButton>
           </ToggleButtonGroup>
           <Stack flexDirection="row">
-            {serverActiveTab === 'basicInfomation' && (
-              <Button
-                size="small"
-                sx={{
-                  backgroundColor: theme.palette.input.default,
-                  '&:hover': { backgroundColor: theme.palette.input.hover },
-                  ml: theme.spacing(1),
-                }}
-                onClick={() => refreshBasicInfomation()}
-              >
-                <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
-                  {t('server.refresh')}
-                </Typography>
-              </Button>
-            )}
             {serverActiveTab === 'route' && (
               <Button
                 size="small"

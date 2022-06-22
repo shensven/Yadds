@@ -180,3 +180,4 @@ export const atomPersistenceIsAutoUpdate = atom(
 
 export const atomHasDialogAddressAdder = atom<boolean>(false);
 export const atomHasDialogAddressRemover = atom<boolean>(false);
+export const atomWhoWillRemove = atom<number>(-1);

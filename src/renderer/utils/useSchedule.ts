@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
-import { useUpdateEffect } from 'ahooks';
+import { useEffect, useLayoutEffect } from 'react';
+import { usePrevious, useUpdateEffect } from 'ahooks';
 import { useAtom } from 'jotai';
-import { atomTasksRetryMax } from '../atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
   atomPersistenceAppearance,
@@ -11,7 +10,7 @@ import {
   atomPersistenceQueueIterater,
 } from '../atoms/atomUI';
 import { atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomTasksStatus } from '../atoms/atomTask';
+import { atomFetchStatus } from '../atoms/atomTask';
 import useNav from './useNav';
 import useNasInfo from './useNasInfo';
 import useQuota from './useQuota';
@@ -29,9 +28,9 @@ const useSchedule = () => {
   const [appearance] = useAtom(atomPersistenceAppearance);
   const [localeName] = useAtom(atomPersistenceLocaleName);
 
-  const [TASKS_RETRY_MAX] = useAtom(atomTasksRetryMax);
+  const [fetchStatus, setFetchStatus] = useAtom(atomFetchStatus);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
-  const [tasksStatus] = useAtom(atomTasksStatus);
+  const prevTargetDid = usePrevious(targetDid);
 
   const { menuItems: menuItemsInApp } = useMenuForApp();
   const { menuItems: menuItemsInTray } = useMenuForTray();
@@ -39,18 +38,18 @@ const useSchedule = () => {
   const { navigate } = useNav();
 
   const { getNasInfo, resetNasInfo } = useNasInfo();
-  const { getQuota, resetQuota } = useQuota();
+  const { getQuota, resetQuota, resetTargetMenuItem: resetTargetMenuItemForQuota } = useQuota();
 
-  const { pollTasks, stopTasks } = useTasks();
+  const { pollTasks, resetTasks } = useTasks();
 
   // create top menu and tray
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.electron?.topMenuForApp.create(menuItemsInApp);
     window.electron?.contextMenuForTray.create(menuItemsInTray);
   }, []);
 
   // let the main process to control some state of the rederer process by closures
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.electron?.yadds.toogleSidebarMarginTop(setHasSidebarMarginTop);
     window.electron?.yadds.navigate(navigate);
     window.electron?.queue.orderBy(setQueueIterater);
@@ -58,6 +57,7 @@ const useSchedule = () => {
   }, []);
 
   useUpdateEffect(() => {
+    console.log(hasSidebar);
     window.electron?.yadds.toogleSidebar(hasSidebar, setHasSidebar);
     window.electron?.topMenuForApp.create(menuItemsInApp);
   }, [hasSidebar]);
@@ -76,29 +76,54 @@ const useSchedule = () => {
     window.electron?.contextMenuForTray.create(menuItemsInTray);
   }, [localeName]);
 
-  useEffect(() => {
-    if (targetDid.length === 0) {
-      stopTasks();
-      resetNasInfo();
+  useUpdateEffect(() => {
+    console.log(fetchStatus);
+
+    if (fetchStatus === 'switching') {
+      resetTasks();
       resetQuota();
-      return () => {};
+      resetTargetMenuItemForQuota();
+      resetNasInfo();
+      getNasInfo();
+      return undefined;
     }
 
-    getNasInfo();
-    getQuota();
+    if (fetchStatus === 'pending') {
+      const timer = setInterval(() => {
+        getNasInfo();
+      }, 4000);
+      return () => clearInterval(timer);
+    }
 
-    const timer = setInterval(() => {
-      // console.log('renderer: retry', tasksStatus.retry);
-      if (tasksStatus.retry < TASKS_RETRY_MAX) {
+    if (fetchStatus === 'polling') {
+      const timer = setInterval(() => {
+        getNasInfo();
+        getQuota();
         pollTasks();
-      } else {
-        console.log('renderer: interval done');
-        clearInterval(timer);
-      }
-    }, 2000);
+      }, 2000);
+      return () => clearInterval(timer);
+    }
 
-    return () => clearInterval(timer);
-  }, [targetDid, tasksStatus.retry]);
+    if (fetchStatus === 'stopped') {
+      resetTasks();
+      resetQuota();
+      resetTargetMenuItemForQuota();
+      resetNasInfo();
+      return undefined;
+    }
+
+    return undefined;
+  }, [fetchStatus]);
+
+  useEffect(() => {
+    if (targetDid.length === 0) {
+      setFetchStatus('stopped');
+    } else if (prevTargetDid !== targetDid) {
+      setFetchStatus('switching');
+    } else {
+      setFetchStatus('polling');
+    }
+  }, [targetDid]);
 };
 
 export default useSchedule;

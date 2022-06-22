@@ -25,7 +25,6 @@ import {
 import IonPersonCircle from '../../assets/icons/IonPersonCircle';
 import { atomHasDialogAddressAdder } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
-import { atomTasksStatus } from '../../atoms/atomTask';
 import IonEyeOutline from '../../assets/icons/IonEyeOutline';
 import IonEyeOffOutline from '../../assets/icons/IonEyeOffOutline';
 import EosIconsThreeDotsLoading from '../../assets/icons/EosIconsThreeDotsLoading';
@@ -36,7 +35,6 @@ const DialogAddressAdder: React.FC = () => {
 
   const [connectedUsers, setConnectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [, setTargetDid] = useAtom(atomPersistenceTargetDid);
-  const [, setTasksStatus] = useAtom(atomTasksStatus);
   const [hasDialogAddressAdder, setHasDialogAddressAdder] = useAtom(atomHasDialogAddressAdder);
 
   const [hasLoading, setHasLoading] = useState(false);
@@ -142,7 +140,6 @@ const DialogAddressAdder: React.FC = () => {
           setConnectedUsers(arr);
           setTargetDid(resp.data.did);
           dismissDailogAdd();
-          setTasksStatus({ isLoading: false, retry: 0 });
         }
       }
     } catch {
@@ -158,16 +155,16 @@ const DialogAddressAdder: React.FC = () => {
   return (
     <Dialog keepMounted open={hasDialogAddressAdder} onClose={() => dismissDailogAdd()}>
       <DialogTitle>
-        <Stack flexDirection="row" alignItems="stretch" justifyContent="space-between">
+        <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
           <Stack flexDirection="row" alignItems="center">
             <IonPersonCircle sx={{ fontSize: 32 }} />
           </Stack>
-          <ToggleButtonGroup size="small">
+          <ToggleButtonGroup size="small" sx={{ height: theme.spacing(3) }}>
             <ToggleButton
               value="left"
               disableRipple
               selected={newConnect.isQuickConnectID}
-              sx={{ px: theme.spacing(2), py: 0 }}
+              sx={{ px: theme.spacing(2) }}
               onClick={() =>
                 setNewConnect({
                   ...newConnect,
@@ -188,7 +185,7 @@ const DialogAddressAdder: React.FC = () => {
               value="right"
               disableRipple
               selected={!newConnect.isQuickConnectID}
-              sx={{ px: theme.spacing(2), py: 0 }}
+              sx={{ px: theme.spacing(2) }}
               onClick={() =>
                 setNewConnect({
                   ...newConnect,

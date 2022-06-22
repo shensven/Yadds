@@ -1,21 +1,29 @@
 import { startTransition } from 'react';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
-import { atomTasksRetryMax } from '../atoms/atomConstant';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomTasks, atomTasksStatus } from '../atoms/atomTask';
+import { atomTasks, atomFetchStatus } from '../atoms/atomTask';
 
 const useTasks = () => {
-  const [TASKS_RETRY_MAX] = useAtom(atomTasksRetryMax);
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [, setTasks] = useAtom(atomTasks);
-  const [tasksStatus, setTasksStatus] = useAtom(atomTasksStatus);
+  const [, setFetchStatus] = useAtom(atomFetchStatus);
+
+  const resetTasks = () => {
+    setTasks([]);
+  };
 
   const pollTasks = async () => {
     const targetUser = find(connectedUsers, { did: targetDid });
 
-    if (!targetUser) return;
+    // console.log(targetDid);
+    // console.log(targetUser);
+
+    if (!targetUser) {
+      resetTasks();
+      return;
+    }
 
     try {
       const resp = await window.electron.net.poll({
@@ -24,34 +32,22 @@ const useTasks = () => {
         sid: targetUser.sid,
       });
 
-      if (!resp.success && tasksStatus.retry < TASKS_RETRY_MAX) {
-        console.log('renderer: bad tasks request');
-
-        setTasksStatus((old) => {
-          if (old.retry >= TASKS_RETRY_MAX) {
-            return { ...old, isLoading: false };
-          }
-          return { isLoading: true, retry: old.retry + 1 };
-        });
-      }
-
-      if (resp.success) {
-        // console.log('renderer: good tasks request', resp.data.task);
-
-        setTasksStatus({ isLoading: false, retry: 0 });
+      if (!resp.success) {
+        setFetchStatus('pending');
+        resetTasks();
+      } else {
+        console.log('pollTasks', resp.data.task);
+        setFetchStatus('polling');
         startTransition(() => setTasks(resp.data.task));
       }
     } catch (error) {
+      setFetchStatus('pending');
+      resetTasks();
       console.log(error);
     }
   };
 
-  const stopTasks = () => {
-    setTasksStatus({ isLoading: false, retry: 3 });
-    setTasks([]);
-  };
-
-  return { pollTasks, stopTasks };
+  return { pollTasks, resetTasks };
 };
 
 export default useTasks;

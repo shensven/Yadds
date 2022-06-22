@@ -35,4 +35,4 @@ export interface Task {
 
 export const atomTasks = atom<Task[]>([]);
 
-export const atomTasksStatus = atom({ isLoading: true, retry: 0 });
+export const atomFetchStatus = atom<'stopped' | 'pending' | 'polling' | 'switching'>('stopped');

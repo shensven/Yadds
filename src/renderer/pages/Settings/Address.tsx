@@ -15,7 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import RowItem from './RowItem';
 import IonTrashOutline from '../../assets/icons/IonTrashOutline';
-import { atomHasDialogAddressAdder, atomHasDialogAddressRemover } from '../../atoms/atomUI';
+import { atomHasDialogAddressAdder, atomHasDialogAddressRemover, atomWhoWillRemove } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 
 const Address: React.FC = () => {
@@ -26,19 +26,20 @@ const Address: React.FC = () => {
   const [targetDid, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [, setHasDialogAddressAdder] = useAtom(atomHasDialogAddressAdder);
   const [, setHasDialogAddressRemover] = useAtom(atomHasDialogAddressRemover);
+  const [, setWhoWillRemove] = useAtom(atomWhoWillRemove);
 
   const [hasSelecterForAddress, setHasSelecterForAddress] = useState(false);
-  const [, setWhoWillRemove] = useState<number>(-1);
 
   const handleAddress = (did: string, menuItemIndex: number, isDelete: boolean) => {
     if (isDelete) {
       setWhoWillRemove(menuItemIndex);
       setHasSelecterForAddress(false);
       setHasDialogAddressRemover(true);
-      return;
+    } else {
+      // setFetchStatus('pending');
+      setTargetDid(did);
+      setHasSelecterForAddress(false);
     }
-    setTargetDid(did);
-    setHasSelecterForAddress(false);
   };
 
   return (
