@@ -1,3 +1,4 @@
+import { startTransition } from 'react';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
 import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '../atoms/atomUI';
@@ -45,7 +46,7 @@ const useQuota = () => {
         resetQuota();
       } else {
         setFetchStatus('polling');
-        setQuotaList(resp.data.items);
+        startTransition(() => setQuotaList(resp.data.items));
       }
     } catch (error) {
       setFetchStatus('pending');
