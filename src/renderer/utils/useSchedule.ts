@@ -81,7 +81,7 @@ const useSchedule = () => {
       resetQuota();
       resetNasInfo();
       getNasInfo();
-      console.log('switching');
+      // console.log('switching');
       return undefined;
     }
 
@@ -89,7 +89,7 @@ const useSchedule = () => {
       const timer = setInterval(() => {
         getNasInfo();
       }, 4000);
-      console.log('pending');
+      // console.log('pending');
       return () => clearInterval(timer);
     }
 
@@ -99,7 +99,7 @@ const useSchedule = () => {
       const timer = setInterval(() => {
         pollTasks();
       }, 2000);
-      console.log('polling');
+      // console.log('polling');
       return () => clearInterval(timer);
     }
 
@@ -108,7 +108,7 @@ const useSchedule = () => {
       resetQuota();
       resetTargetMenuItemForQuota();
       resetNasInfo();
-      console.log('stopped');
+      // console.log('stopped');
       return undefined;
     }
 

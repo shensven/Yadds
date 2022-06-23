@@ -102,8 +102,6 @@ const Server: React.FC = () => {
   }, [targeMenuItemForQuota]);
 
   useEffect(() => {
-    console.log('server fetchStatus', fetchStatus);
-
     if (fetchStatus === 'polling') {
       const timer = setInterval(() => {
         getQuota();
