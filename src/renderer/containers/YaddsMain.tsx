@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { AppBar, Box, Button, Icon, IconButton, InputBase, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { atomSidebarWidth } from '../atoms/atomConstant';
 import { atomPersistenceHasSidebar, atomPersistenceSidebarCategory } from '../atoms/atomUI';
+import { atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import IcRoundFilterList from '../assets/icons/IcRoundFilterList';
 import IonEllipsisHorizontal from '../assets/icons/IonEllipsisHorizontal';
 import greyInactiveSvg from '../assets/images/grey_inactive.svg';
@@ -31,6 +32,7 @@ const YaddsMain: React.FC = () => {
   const [SIDEBAR_WIDTH] = useAtom(atomSidebarWidth);
   const [sidebarCategory] = useAtom(atomPersistenceSidebarCategory);
   const [hasSidebar, setHasSidebar] = useAtom(atomPersistenceHasSidebar);
+  const [targetDid] = useAtom(atomPersistenceTargetDid);
 
   const { menuItems: menuItemsInQueue } = useMenuForQueue();
 
@@ -111,6 +113,7 @@ const YaddsMain: React.FC = () => {
           </Stack>
           <Button
             size="small"
+            disabled={targetDid.length === 0}
             sx={{
               appRegion: 'no-drag',
               alignSelf: 'stretch',
@@ -126,6 +129,7 @@ const YaddsMain: React.FC = () => {
           <IconButton
             color="primary"
             size="small"
+            disabled={targetDid.length === 0}
             sx={{
               appRegion: 'no-drag',
               backgroundColor: theme.palette.input.default,
@@ -133,7 +137,7 @@ const YaddsMain: React.FC = () => {
             }}
             onClick={() => window.electron.contextMenuForQueue.create(menuItemsInQueue)}
           >
-            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
+            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color={targetDid.length === 0 ? 'disabled' : 'primary'} />
           </IconButton>
         </Stack>
       </AppBar>

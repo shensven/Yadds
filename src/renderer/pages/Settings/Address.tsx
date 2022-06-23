@@ -51,9 +51,11 @@ const Address: React.FC = () => {
             value={targetDid}
             renderValue={() => (
               <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {find(connectedUsers, { did: targetDid })?.username ?? 'undefined'}
-                {' @ '}
-                {find(connectedUsers, { did: targetDid })?.quickConnectID ?? 'undefined'}
+                {targetDid.length === 0 && 'N/A'}
+                {targetDid.length > 0 &&
+                  `${find(connectedUsers, { did: targetDid })?.username} @ ${
+                    find(connectedUsers, { did: targetDid })?.quickConnectID
+                  }`}
               </Typography>
             )}
             disabled={connectedUsers.length === 0}

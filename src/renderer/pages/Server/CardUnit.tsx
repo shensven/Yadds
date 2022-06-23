@@ -1,5 +1,7 @@
+import { useAtom } from 'jotai';
 import { Card, Icon, IconButton, Stack, Typography, useTheme } from '@mui/material';
 import IonEllipsisHorizontal from '../../assets/icons/IonEllipsisHorizontal';
+import { atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 
 interface ICardUnit {
   hasIconButton: boolean;
@@ -13,7 +15,9 @@ interface ICardUnit {
 
 const CardUnit: React.FC<ICardUnit> = (props: ICardUnit) => {
   const { hasIconButton, hasMarginRight, icon, title, value, unit, onClick } = props;
+
   const theme = useTheme();
+  const [targetDid] = useAtom(atomPersistenceTargetDid);
 
   return (
     <Card
@@ -37,6 +41,7 @@ const CardUnit: React.FC<ICardUnit> = (props: ICardUnit) => {
           <IconButton
             color="primary"
             size="small"
+            disabled={targetDid.length === 0}
             sx={{
               appRegion: 'no-drag',
               backgroundColor: theme.palette.input.default,
@@ -44,7 +49,7 @@ const CardUnit: React.FC<ICardUnit> = (props: ICardUnit) => {
             }}
             onClick={onClick}
           >
-            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color="primary" />
+            <IonEllipsisHorizontal sx={{ fontSize: 14 }} color={targetDid.length === 0 ? 'disabled' : 'primary'} />
           </IconButton>
         )}
       </Stack>
