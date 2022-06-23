@@ -1,9 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useUpdateEffect } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
-import { find } from 'lodash';
-import byteSize from 'byte-size';
 import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography, useTheme } from '@mui/material';
 import CardUnit from './Server/CardUnit';
 import FluentVirtualNetwork20Filled from '../assets/icons/FluentVirtualNetwork20Filled';
@@ -20,11 +18,12 @@ import {
   atomPersistenceTargeMenuItemForQuota,
   atomQuotaList,
   atomTargeByteSizeForQuota,
-  Share,
 } from '../atoms/atomUI';
 import { atomFetchStatus } from '../atoms/atomTask';
 import useWindow from '../utils/useWindow';
+import useQuota from '../utils/useQuota';
 import useMenuForQuota from '../utils/useMenuForQuota';
+import useByteSizeForQuota from '../utils/useByteSizeForQuota';
 
 const Server: React.FC = () => {
   const theme = useTheme();
@@ -35,10 +34,13 @@ const Server: React.FC = () => {
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [nasInfo] = useAtom(atomNasInfo);
   const [quotaList] = useAtom(atomQuotaList);
-  const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
-  const [targeByteSizeForQuota, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
+  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
+  const [targeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const { zoomWindowForDarwin } = useWindow();
+
+  const { getQuota } = useQuota();
+  const { updateByteSize: updateByteSizeForQuota } = useByteSizeForQuota();
 
   const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuForQuota();
 
@@ -91,28 +93,25 @@ const Server: React.FC = () => {
   ];
 
   useUpdateEffect(() => {
-    const targetVolume = find(quotaList, {
-      name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
-    });
+    window.electron?.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota);
+    updateByteSizeForQuota();
+  }, [quotaList]);
 
-    if (targetVolume !== undefined) {
-      const targetQuota = find(targetVolume.children, {
-        name: targeMenuItemForQuota.split(',')[1],
-      }) as Share | undefined;
-
-      console.log('targetQuota', targetQuota);
-
-      if (targetQuota) {
-        setTargeByteSizeForQuota({
-          max: byteSize(targetQuota.share_quota * 1024 * 1024, { units: 'iec', precision: 2 }),
-          available: byteSize((targetQuota.share_quota - targetQuota.share_used) * 1024 * 1024, {
-            units: 'iec',
-            precision: 2,
-          }),
-        });
-      }
-    }
+  useUpdateEffect(() => {
+    updateByteSizeForQuota();
   }, [targeMenuItemForQuota]);
+
+  useEffect(() => {
+    console.log('server fetchStatus', fetchStatus);
+
+    if (fetchStatus === 'polling') {
+      const timer = setInterval(() => {
+        getQuota();
+      }, 4000);
+      return () => clearInterval(timer);
+    }
+    return undefined;
+  }, [fetchStatus]);
 
   return (
     <Box>

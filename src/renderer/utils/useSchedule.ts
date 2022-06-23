@@ -79,9 +79,9 @@ const useSchedule = () => {
     if (fetchStatus === 'switching') {
       resetTasks();
       resetQuota();
-      resetTargetMenuItemForQuota();
       resetNasInfo();
       getNasInfo();
+      console.log('switching');
       return undefined;
     }
 
@@ -89,15 +89,17 @@ const useSchedule = () => {
       const timer = setInterval(() => {
         getNasInfo();
       }, 4000);
+      console.log('pending');
       return () => clearInterval(timer);
     }
 
     if (fetchStatus === 'polling') {
+      getNasInfo();
+      getQuota();
       const timer = setInterval(() => {
-        getNasInfo();
-        getQuota();
         pollTasks();
       }, 2000);
+      console.log('polling');
       return () => clearInterval(timer);
     }
 
@@ -116,7 +118,7 @@ const useSchedule = () => {
   useEffect(() => {
     if (targetDid.length === 0) {
       setFetchStatus('stopped');
-    } else if (prevTargetDid !== targetDid) {
+    } else if (prevTargetDid && prevTargetDid !== targetDid) {
       setFetchStatus('switching');
     } else {
       setFetchStatus('polling');

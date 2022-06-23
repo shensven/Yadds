@@ -1,24 +1,22 @@
 import { useAtom } from 'jotai';
-import byteSize from 'byte-size';
 import { find } from 'lodash';
-import { atomPersistenceTargeMenuItemForQuota, atomQuotaList, atomTargeByteSizeForQuota, Share } from '../atoms/atomUI';
+import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
 import { atomFetchStatus } from '../atoms/atomTask';
+import useByteSizeForQuota from './useByteSizeForQuota';
 
 const useQuota = () => {
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
   const [targetDid] = useAtom(atomPersistenceTargetDid);
   const [, setQuotaList] = useAtom(atomQuotaList);
-  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
-  const [, setTargeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
+  const [, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [, setFetchStatus] = useAtom(atomFetchStatus);
+
+  const { resetByteSize: resizeByteSizeForQuota } = useByteSizeForQuota();
 
   const resetQuota = () => {
     setQuotaList([]);
-    setTargeByteSizeForQuota({
-      max: { value: '-', unit: '', long: '', toString: () => '' },
-      available: { value: '-', unit: '', long: '', toString: () => '' },
-    });
+    resizeByteSizeForQuota();
   };
 
   const resetTargetMenuItem = () => {
@@ -46,29 +44,8 @@ const useQuota = () => {
         setFetchStatus('pending');
         resetQuota();
       } else {
+        setFetchStatus('polling');
         setQuotaList(resp.data.items);
-        window.electron?.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota);
-
-        const targetVolume = find(resp.data.items, {
-          name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
-        });
-
-        if (targetVolume !== undefined) {
-          const targetQuota = find(targetVolume.children, {
-            name: targeMenuItemForQuota.split(',')[1],
-          }) as Share | undefined;
-
-          if (targetQuota) {
-            setFetchStatus('polling');
-            setTargeByteSizeForQuota({
-              max: byteSize(targetQuota.share_quota * 1024 * 1024, { units: 'iec', precision: 2 }),
-              available: byteSize((targetQuota.share_quota - targetQuota.share_used) * 1024 * 1024, {
-                units: 'iec',
-                precision: 2,
-              }),
-            });
-          }
-        }
       }
     } catch (error) {
       setFetchStatus('pending');
