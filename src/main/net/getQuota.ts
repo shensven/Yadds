@@ -1,11 +1,11 @@
 import { net } from 'electron';
 import queryString from 'query-string';
-import { Volume } from '../../renderer/atoms/atomUI';
+import { Quota } from '../../renderer/atoms/atomUI';
 
 export interface PersonalSettingsInfo {
   success: true;
   data: {
-    items: Volume[];
+    items: Quota[];
     total: number;
   };
 }

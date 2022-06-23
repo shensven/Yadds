@@ -93,7 +93,7 @@ export interface Share {
   share_used: number;
   used: number;
 }
-export interface Volume {
+export interface Quota {
   children: Share[];
   expanded: boolean;
   leaf: boolean;
@@ -103,7 +103,7 @@ export interface Volume {
   share_used: string; // 'NotSupport'
   used: string; // 'NotSupport'
 }
-export const atomQuotaList = atom<Volume[]>([]);
+export const atomQuotaList = atom<Quota[]>([]);
 
 export type TargeMenuItemForQuota = `volume:${number},share:${string}`;
 
