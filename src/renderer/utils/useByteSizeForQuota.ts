@@ -27,55 +27,53 @@ const useByteSizeForQuota = () => {
       name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
     });
 
-    if (targetVolume !== undefined) {
-      const targetQuota = find(targetVolume.children, {
-        name: targeMenuItemForQuota.split(',')[1],
-      }) as Share | undefined;
+    if (!targetVolume) return;
 
-      if (targetQuota) {
-        const targetQuotaName = targetQuota.name.split(':')[1];
+    const targetQuota = find(targetVolume.children, {
+      name: targeMenuItemForQuota.split(',')[1],
+    }) as Share | undefined;
 
-        const targetShareInFileStation = find(volumeList, {
-          name: targetQuotaName,
-        });
+    if (!targetQuota) return;
 
-        const getMax = () => {
-          let shareQuota = 0;
-          let quota = 0;
+    const targetShareInFileStation = find(volumeList, {
+      name: targetQuota.name.split(':')[1],
+    });
 
-          if (targetQuota.share_quota === 0) {
-            shareQuota = targetShareInFileStation!.additional.volume_status.totalspace;
-          } else {
-            shareQuota = targetQuota.share_quota * 1024 * 1024;
-          }
+    if (!targetShareInFileStation) return;
 
-          if (targetQuota.quota === 0) {
-            quota = targetShareInFileStation!.additional.volume_status.totalspace;
-          } else {
-            quota = targetQuota.quota * 1024 * 1024;
-          }
-
-          if (shareQuota < quota) {
-            return shareQuota;
-          }
-          return quota;
-        };
-
-        const getAvailable = () => {
-          if (getMax() === targetShareInFileStation!.additional.volume_status.totalspace) {
-            return targetShareInFileStation!.additional.volume_status.freespace;
-          }
-          return getMax() - targetQuota.share_used * 1024 * 1024;
-        };
-
-        setTargeByteSizeForQuota({
-          max: byteSize(getMax(), { units: 'iec', precision: 2 }),
-          available: byteSize(getAvailable(), {
+    if (targetQuota.share_quota === 0 && targetQuota.quota === 0) {
+      setTargeByteSizeForQuota({
+        max: { value: '∞', unit: '', long: '', toString: () => '' },
+        available: byteSize(targetShareInFileStation.additional.volume_status.freespace, {
+          units: 'iec',
+          precision: 2,
+        }),
+      });
+    } else if (targetQuota.share_quota !== 0 && targetQuota.quota !== 0) {
+      setTargeByteSizeForQuota({
+        max: byteSize(Math.min(targetQuota.share_quota, targetQuota.quota) * 1024 * 1024, {
+          units: 'iec',
+          precision: 2,
+        }),
+        available: byteSize(
+          (Math.min(targetQuota.share_quota, targetQuota.quota) - targetQuota.share_used) * 1024 * 1024,
+          {
             units: 'iec',
             precision: 2,
-          }),
-        });
-      }
+          }
+        ),
+      });
+    } else {
+      setTargeByteSizeForQuota({
+        max: byteSize((targetQuota.share_quota || targetQuota.quota) * 1024 * 1024, {
+          units: 'iec',
+          precision: 2,
+        }),
+        available: byteSize(((targetQuota.share_quota || targetQuota.quota) - targetQuota.share_used) * 1024 * 1024, {
+          units: 'iec',
+          precision: 2,
+        }),
+      });
     }
   };
 
