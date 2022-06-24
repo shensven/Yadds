@@ -24,6 +24,7 @@ import useWindow from '../utils/useWindow';
 import useQuota from '../utils/useQuota';
 import useMenuForQuota from '../utils/useMenuForQuota';
 import useByteSizeForQuota from '../utils/useByteSizeForQuota';
+import useVolume from '../utils/useVolume';
 
 const Server: React.FC = () => {
   const theme = useTheme();
@@ -40,6 +41,7 @@ const Server: React.FC = () => {
   const { zoomWindowForDarwin } = useWindow();
 
   const { getQuota } = useQuota();
+  const { getVolume } = useVolume();
   const { updateByteSize: updateByteSizeForQuota } = useByteSizeForQuota();
 
   const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuForQuota();
@@ -62,7 +64,10 @@ const Server: React.FC = () => {
       value: targeByteSizeForQuota.max.value,
       unit: targeByteSizeForQuota.max.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
-      onClick: () => window.electron.contextMenuForQuota.create(menuItemConstructorOptionsInQuota),
+      onClick: () => {
+        getVolume();
+        window.electron.contextMenuForQuota.create(menuItemConstructorOptionsInQuota);
+      },
     },
     {
       title: t('server.available_capacity'),
@@ -103,6 +108,7 @@ const Server: React.FC = () => {
 
   useEffect(() => {
     if (fetchStatus === 'polling') {
+      getVolume();
       const timer = setInterval(() => {
         getQuota();
       }, 4000);

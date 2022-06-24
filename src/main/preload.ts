@@ -152,5 +152,8 @@ contextBridge.exposeInMainWorld('electron', {
     getQuata(args: any) {
       return ipcRenderer.invoke('net:get-quota', args);
     },
+    getVolume(args: any) {
+      return ipcRenderer.invoke('net:get-volume', args);
+    },
   },
 });

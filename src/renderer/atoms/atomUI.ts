@@ -84,6 +84,23 @@ export interface NasInfo {
 
 export const atomNasInfo = atom<NasInfo>({ model: '-', version: '-' });
 
+export interface Volume {
+  additional: {
+    volume_status: {
+      freespace: number; // 5123129237504
+      readonly: boolean;
+      totalspace: number; // 7667032023040
+    };
+  };
+  hybridshare_cache_status: number; // -1
+  hybridshare_pin_status: number; // -1
+  isdir: true;
+  name: string; // 'SvenDev'
+  path: string; // '/SvenDev'
+}
+
+export const atomVolumeList = atom<Volume[]>([]);
+
 export interface Share {
   expanded: boolean;
   leaf: boolean;

@@ -36,6 +36,7 @@ import auth from './net/auth';
 import poll from './net/poll';
 import getDsmInfo from './net/getDsmInfo';
 import getQuota from './net/getQuota';
+import getVolume from './net/getVolume';
 
 export default class AppUpdater {
   constructor() {
@@ -640,4 +641,8 @@ ipcMain.handle('net:get-dsm-info', async (_, args) => {
 
 ipcMain.handle('net:get-quota', async (_, args) => {
   return getQuota(args);
+});
+
+ipcMain.handle('net:get-volume', async (_, args) => {
+  return getVolume(args);
 });

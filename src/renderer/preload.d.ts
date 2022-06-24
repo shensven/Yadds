@@ -13,6 +13,7 @@ import { MenuItemConstructorOptionsInQuota } from './utils/useMenuForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
 import { DsmInfo } from '../main/net/getDsmInfo';
 import { PersonalSettingsInfo } from '../main/net/getQuota';
+import { FileStationList } from '../main/net/getVolume';
 
 declare global {
   interface Window {
@@ -89,6 +90,8 @@ declare global {
         getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<DsmInfo>;
 
         getQuata: (props: { host: string; port: number; sid: string }) => Promise<PersonalSettingsInfo>;
+
+        getVolume: (props: { host: string; port: number; sid: string }) => Promise<FileStationList>;
       };
     };
   }
