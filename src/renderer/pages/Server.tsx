@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useUpdateEffect } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
@@ -21,7 +21,6 @@ import {
 } from '../atoms/atomUI';
 import { atomFetchStatus } from '../atoms/atomTask';
 import useWindow from '../utils/useWindow';
-import useQuota from '../utils/useQuota';
 import useMenuForQuota from '../utils/useMenuForQuota';
 import useByteSizeForQuota from '../utils/useByteSizeForQuota';
 import useVolume from '../utils/useVolume';
@@ -40,7 +39,6 @@ const Server: React.FC = () => {
 
   const { zoomWindowForDarwin } = useWindow();
 
-  const { getQuota } = useQuota();
   const { getVolume } = useVolume();
   const { updateByteSize: updateByteSizeForQuota } = useByteSizeForQuota();
 
@@ -105,17 +103,6 @@ const Server: React.FC = () => {
   useUpdateEffect(() => {
     updateByteSizeForQuota();
   }, [targeMenuItemForQuota]);
-
-  useEffect(() => {
-    if (fetchStatus === 'polling') {
-      getVolume();
-      const timer = setInterval(() => {
-        getQuota();
-      }, 4000);
-      return () => clearInterval(timer);
-    }
-    return undefined;
-  }, [fetchStatus]);
 
   return (
     <Box>

@@ -14,6 +14,7 @@ import { atomFetchStatus } from '../atoms/atomTask';
 import useNav from './useNav';
 import useNasInfo from './useNasInfo';
 import useQuota from './useQuota';
+import useVolume from './useVolume';
 import useTasks from './useTasks';
 import useMenuForApp from './useMenuForApp';
 import useMenuForTray from './useMenuForTray';
@@ -39,6 +40,7 @@ const useSchedule = () => {
 
   const { getNasInfo, resetNasInfo } = useNasInfo();
   const { getQuota, resetQuota, resetTargetMenuItem: resetTargetMenuItemForQuota } = useQuota();
+  const { getVolume } = useVolume();
 
   const { pollTasks, resetTasks } = useTasks();
 
@@ -81,25 +83,26 @@ const useSchedule = () => {
       resetQuota();
       resetNasInfo();
       getNasInfo();
-      // console.log('switching');
+      console.log('switching');
       return undefined;
     }
 
     if (fetchStatus === 'pending') {
       const timer = setInterval(() => {
         getNasInfo();
-      }, 4000);
-      // console.log('pending');
+        console.log('pending');
+      }, 5000);
       return () => clearInterval(timer);
     }
 
     if (fetchStatus === 'polling') {
       getNasInfo();
-      getQuota();
+      getVolume();
       const timer = setInterval(() => {
+        getQuota();
         pollTasks();
-      }, 2000);
-      // console.log('polling');
+        console.log('polling');
+      }, 3000);
       return () => clearInterval(timer);
     }
 
@@ -108,7 +111,7 @@ const useSchedule = () => {
       resetQuota();
       resetTargetMenuItemForQuota();
       resetNasInfo();
-      // console.log('stopped');
+      console.log('stopped');
       return undefined;
     }
 
