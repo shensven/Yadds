@@ -129,7 +129,7 @@ const Server: React.FC = () => {
             </Tooltip>
           )}
         </Stack>
-        <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+        <Stack flexDirection="row" alignItems="center" justifyContent="space-between" sx={{ height: theme.spacing(4) }}>
           <ToggleButtonGroup size="small" sx={{ height: theme.spacing(3) }}>
             <ToggleButton
               value="left"
@@ -197,7 +197,7 @@ const Server: React.FC = () => {
           </Stack>
         </Stack>
         {serverActiveTab === 'basicInfomation' && (
-          <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
+          <Stack flexDirection="row" mt={theme.spacing(3)} width="100%">
             {basicInfomation.map((item, index) => (
               <BaseInfomationCard
                 type={item.type as 'text' | 'select'}
@@ -212,7 +212,7 @@ const Server: React.FC = () => {
           </Stack>
         )}
         {serverActiveTab === 'route' && (
-          <Stack flexDirection="column" mt={theme.spacing(4)} width="100%">
+          <Stack flexDirection="column" mt={theme.spacing(3)} width="100%">
             {route.map((item) => (
               <CardUnit
                 hasIconButton={false}
@@ -226,7 +226,7 @@ const Server: React.FC = () => {
           </Stack>
         )}
         {serverActiveTab === 'responsiveness' && (
-          <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
+          <Stack flexDirection="row" mt={theme.spacing(3)} width="100%">
             {responsiveness.map((item, index) => (
               <CardUnit
                 hasIconButton={false}

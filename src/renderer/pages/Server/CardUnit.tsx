@@ -27,7 +27,8 @@ const CardUnit: React.FC<ICardUnit> = (props: ICardUnit) => {
         mr: !hasMarginRight ? 0 : theme.spacing(2),
         mb: theme.spacing(2),
         p: theme.spacing(1),
-        minWidth: theme.spacing(19),
+        minWidth: 159.5,
+        height: theme.spacing(9),
       }}
     >
       <Stack flexDirection="row" justifyContent="space-between">
