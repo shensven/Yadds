@@ -30,7 +30,6 @@ import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
 import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
-import { MenuItemConstructorOptionsInQuota } from '../renderer/utils/useMenuForQuota';
 import { Appearance } from '../renderer/atoms/atomUI';
 import auth from './net/auth';
 import poll from './net/poll';
@@ -539,23 +538,6 @@ ipcMain.handle('ctx-menu-for-queue:create', async (_, args: MenuItemsInQueue) =>
       ],
     },
   ];
-
-  Menu.buildFromTemplate(template).popup();
-});
-
-ipcMain.handle('ctx-menu-for-quota:create', async (_, args: MenuItemConstructorOptionsInQuota) => {
-  const template: MenuItemConstructorOptions[] = [];
-
-  args.forEach((item) => {
-    if (!item.enabled) {
-      template.push(item);
-    } else {
-      const newItem: MenuItemConstructorOptions = { ...item };
-      newItem.label = item.label?.split(',')[1].split(':')[1];
-      newItem.click = () => mainWindow?.webContents.send('ctx-menu-for-quota:set-target-item', item.label);
-      template.push(newItem);
-    }
-  });
 
   Menu.buildFromTemplate(template).popup();
 });

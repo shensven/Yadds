@@ -24,7 +24,7 @@ const useByteSizeForQuota = () => {
 
   const updateByteSize = () => {
     const targetVolume = find(quotaList, {
-      name: targeMenuItemForQuota.split(',')[0].split(':')[1].toString(),
+      name: targeMenuItemForQuota.split(',')[0].split(':')[1],
     });
 
     if (!targetVolume) return;

@@ -21,7 +21,7 @@ const useQuota = () => {
   };
 
   const resetTargetMenuItem = () => {
-    setTargeMenuItemForQuota(`volume:${0},share:${''}`);
+    setTargeMenuItemForQuota('');
   };
 
   const getQuota = async () => {

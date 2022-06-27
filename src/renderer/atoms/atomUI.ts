@@ -122,11 +122,10 @@ export interface Quota {
 }
 export const atomQuotaList = atom<Quota[]>([]);
 
-export type TargeMenuItemForQuota = `volume:${number},share:${string}`;
+export type TargeMenuItemForQuota = '' | `volume:${string},share:${string}`;
 
 const atomTargeMenuItemForQuota = atom<TargeMenuItemForQuota>(
-  (window.electron?.cache.get('targeMenuItemForQuota') as TargeMenuItemForQuota | undefined) ??
-    `volume:${0},share:${''}`
+  (window.electron?.cache.get('targeMenuItemForQuota') as TargeMenuItemForQuota | undefined) ?? ''
 );
 export const atomPersistenceTargeMenuItemForQuota = atom(
   (get) => get(atomTargeMenuItemForQuota),

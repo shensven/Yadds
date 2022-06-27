@@ -4,12 +4,11 @@ import { YaddsPreferences } from '../main/store/preferences';
 import { YaddsConnectedUsers } from '../main/store/connectedUsers';
 import { ServerError } from '../main/net/getServerInfo';
 import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
-import { Appearance, QueueIterater, TargeMenuItemForQuota } from './atoms/atomUI';
+import { Appearance, QueueIterater } from './atoms/atomUI';
 import { Nav } from './utils/useNav';
 import { MenuItemsInApp } from './utils/useMenuForApp';
 import { MenuItemsInTray } from './utils/useMenuForTray';
 import { MenuItemsInQueue } from './utils/useMenuForQueue';
-import { MenuItemConstructorOptionsInQuota } from './utils/useMenuForQuota';
 import { TasksError, TasksInfo } from '../main/net/poll';
 import { DsmInfo } from '../main/net/getDsmInfo';
 import { PersonalSettingsInfo } from '../main/net/getQuota';
@@ -60,11 +59,6 @@ declare global {
 
       contextMenuForQueue: {
         create: (update: MenuItemsInQueue) => void;
-      };
-
-      contextMenuForQuota: {
-        create: (update: MenuItemConstructorOptionsInQuota) => void;
-        setTargetItem: (setTargeMenuItemForQuota: (update: TargeMenuItemForQuota) => void) => void;
       };
 
       yadds: {

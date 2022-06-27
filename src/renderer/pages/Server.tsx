@@ -3,6 +3,7 @@ import { useUpdateEffect } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography, useTheme } from '@mui/material';
+import BaseInfomationCard from './Server/BaseInfomationCard';
 import CardUnit from './Server/CardUnit';
 import FluentVirtualNetwork20Filled from '../assets/icons/FluentVirtualNetwork20Filled';
 import EosIconsThreeDotsLoading from '../assets/icons/EosIconsThreeDotsLoading';
@@ -21,9 +22,7 @@ import {
 } from '../atoms/atomUI';
 import { atomFetchStatus } from '../atoms/atomTask';
 import useWindow from '../utils/useWindow';
-import useMenuForQuota from '../utils/useMenuForQuota';
 import useByteSizeForQuota from '../utils/useByteSizeForQuota';
-import useVolume from '../utils/useVolume';
 
 const Server: React.FC = () => {
   const theme = useTheme();
@@ -34,15 +33,12 @@ const Server: React.FC = () => {
   const [serverActiveTab, setServerActiveTab] = useAtom(atomPersistenceServerActiveTab);
   const [nasInfo] = useAtom(atomNasInfo);
   const [quotaList] = useAtom(atomQuotaList);
-  const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
+  const [targeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
   const [targeByteSizeForQuota] = useAtom(atomTargeByteSizeForQuota);
 
   const { zoomWindowForDarwin } = useWindow();
 
-  const { getVolume } = useVolume();
   const { updateByteSize: updateByteSizeForQuota } = useByteSizeForQuota();
-
-  const { menuItemConstructorOptions: menuItemConstructorOptionsInQuota } = useMenuForQuota();
 
   const basicInfomation = [
     {
@@ -50,28 +46,28 @@ const Server: React.FC = () => {
       value: nasInfo.model,
       unit: '',
       icon: <IcRoundCalendarViewWeek sx={{ fontSize: 20 }} />,
+      type: 'text',
     },
     {
       title: t('server.dsm_version'),
       value: nasInfo.version,
       unit: '',
       icon: <IcOutlineInfo sx={{ fontSize: 20 }} />,
+      type: 'text',
     },
     {
       title: t('server.quota'),
       value: targeByteSizeForQuota.max.value,
       unit: targeByteSizeForQuota.max.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
-      onClick: () => {
-        getVolume();
-        window.electron.contextMenuForQuota.create(menuItemConstructorOptionsInQuota);
-      },
+      type: 'select',
     },
     {
       title: t('server.available_capacity'),
       value: targeByteSizeForQuota.available.value,
       unit: targeByteSizeForQuota.available.unit,
       icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
+      type: 'text',
     },
   ];
   const route = [
@@ -96,7 +92,6 @@ const Server: React.FC = () => {
   ];
 
   useUpdateEffect(() => {
-    window.electron?.contextMenuForQuota.setTargetItem(setTargeMenuItemForQuota);
     updateByteSizeForQuota();
   }, [quotaList]);
 
@@ -204,15 +199,14 @@ const Server: React.FC = () => {
         {serverActiveTab === 'basicInfomation' && (
           <Stack flexDirection="row" mt={theme.spacing(4)} width="100%">
             {basicInfomation.map((item, index) => (
-              <CardUnit
-                hasIconButton={index === 2}
+              <BaseInfomationCard
+                type={item.type as 'text' | 'select'}
                 hasMarginRight={basicInfomation.length - 1 !== index}
                 title={item.title}
                 value={item.value}
                 unit={item.unit}
                 icon={item.icon}
                 key={item.title}
-                onClick={item.onClick}
               />
             ))}
           </Stack>

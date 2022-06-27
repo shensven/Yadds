@@ -81,6 +81,7 @@ const useSchedule = () => {
     if (fetchStatus === 'switching') {
       resetTasks();
       resetQuota();
+      resetTargetMenuItemForQuota();
       resetNasInfo();
       getNasInfo();
       console.log('switching');
