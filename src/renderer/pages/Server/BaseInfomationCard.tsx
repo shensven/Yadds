@@ -25,13 +25,12 @@ const BaseInfomationCard: React.FC<IBaseInfomationCard> = (props: IBaseInfomatio
   return (
     <Stack
       sx={{
-        // flex: 1,
         borderRadius: 1,
         backgroundColor: theme.palette.card.default,
         mr: !hasMarginRight ? 0 : theme.spacing(2),
         p: theme.spacing(1),
         minWidth: 159.5,
-        height: theme.spacing(9.5),
+        height: theme.spacing(9),
         justifyContent: 'space-between',
       }}
     >
@@ -42,7 +41,7 @@ const BaseInfomationCard: React.FC<IBaseInfomationCard> = (props: IBaseInfomatio
         </Typography>
       </Stack>
       {type === 'text' && (
-        <Stack flexDirection="row" alignItems="baseline" pr={theme.spacing(1)} mb={theme.spacing(0.25)}>
+        <Stack flexDirection="row" alignItems="baseline" pr={theme.spacing(1)}>
           <Typography
             color={value === '-' ? theme.palette.text.disabled : theme.palette.text.primary}
             noWrap
@@ -94,9 +93,7 @@ const BaseInfomationCard: React.FC<IBaseInfomationCard> = (props: IBaseInfomatio
             width: '100%',
             fontSize: 14,
             borderRadius: 0.6,
-            mt: theme.spacing(0.5),
             '& .MuiOutlinedInput-input': {
-              height: theme.spacing(4),
               py: 0,
               px: theme.spacing(1),
             },

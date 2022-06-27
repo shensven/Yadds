@@ -175,7 +175,7 @@ const Server: React.FC = () => {
                   ml: theme.spacing(1),
                 }}
               >
-                <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
+                <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
                   {t('server.network_diagnosis')}
                 </Typography>
               </Button>
@@ -189,7 +189,7 @@ const Server: React.FC = () => {
                   ml: theme.spacing(1),
                 }}
               >
-                <Typography fontSize={12} fontWeight={500} sx={{ lineHeight: 'normal', px: theme.spacing(0.5) }}>
+                <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
                   {t('server.ping')}
                 </Typography>
               </Button>

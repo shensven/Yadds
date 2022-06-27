@@ -122,7 +122,7 @@ const YaddsMain: React.FC = () => {
               mr: theme.spacing(2),
             }}
           >
-            <Typography fontWeight={500} sx={{ fontSize: 12, lineHeight: 'normal', px: theme.spacing(0.5) }}>
+            <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
               {t('main.new_task')}
             </Typography>
           </Button>
