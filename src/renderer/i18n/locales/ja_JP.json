@@ -7,7 +7,7 @@
     "inactive": "非アクティブ",
     "stopped": "停止しました",
     "server": "サーバー",
-    "settings": "設定"
+    "preferences": "Preferences"
   },
   "main": {
     "filter": "フィルタ...",
@@ -33,8 +33,9 @@
     "connection_to_dsm_established": "Connection to DSM established",
     "basic_information": "基本情報",
     "route": "ルート",
-    "responsiveness": "Responsiveness",
+    "advanced": "Advanced",
     "network_diagnosis": "ネットワーク診断",
+    "latency_test": "Latency Test",
     "ping": "Ping",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSMバージョン",
@@ -42,17 +43,18 @@
     "volume": "Volume",
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
-    "host_address": "Host address"
+    "host_address": "Host address",
+    "local_address": "Local address"
   },
-  "settings": {
-    "settings": "設定",
-    "appearance": "外観",
+  "preferences": {
+    "preferences": "Preferences",
+    "appearance": "Appearance",
     "light": "Light",
     "dark": "Dark",
     "follow_system": "FLW SYS",
     "quickconnect_id_or_address": "QuickConnect ID / Address",
     "new_connection": "NEW CONNECTION",
-    "language": "言語",
+    "language": "Language",
     "application": "Application",
     "launch_yadds_at_login": "Launch Yadds at Login",
     "about": "About",
