@@ -7,7 +7,7 @@
     "inactive": "非アクティブ",
     "stopped": "停止しました",
     "server": "サーバー",
-    "settings": "設定"
+    "preferences": "設定"
   },
   "main": {
     "filter": "フィルタ...",
@@ -24,7 +24,7 @@
     "download_speed": "Download Speed",
     "ascending": "Ascending",
     "descending": "Descending",
-    "completed": "Completed"
+    "completed": "完了"
   },
   "server": {
     "server": "サーバー",
@@ -33,19 +33,20 @@
     "connection_to_dsm_established": "Connection to DSM established",
     "basic_information": "基本情報",
     "route": "ルート",
-    "responsiveness": "Responsiveness",
+    "advanced": "Advanced",
     "network_diagnosis": "ネットワーク診断",
-    "ping": "Ping",
+    "latency_test": "Latency Test",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSMバージョン",
     "quota": "Quota",
     "volume": "Volume",
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
-    "host_address": "Host address"
+    "host_address": "Host address",
+    "local_ip": "Local IP"
   },
-  "settings": {
-    "settings": "設定",
+  "preferences": {
+    "preferences": "設定",
     "appearance": "外観",
     "light": "Light",
     "dark": "Dark",
@@ -88,7 +89,7 @@
     "darwin": {
       "about_yadds": "About Yadds",
       "check_for_updates": "更新の確認",
-      "preferences": "Preferences",
+      "preferences": "設定",
       "services": "Services",
       "hide_yadds": "Yadds を非表示にする",
       "hide_others": "その他を非表示にする",

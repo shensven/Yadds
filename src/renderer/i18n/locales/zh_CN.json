@@ -7,7 +7,7 @@
     "inactive": "非进行中",
     "stopped": "停用",
     "server": "服务器",
-    "settings": "设置"
+    "preferences": "偏好设置"
   },
   "main": {
     "filter": "过滤...",
@@ -33,19 +33,20 @@
     "connection_to_dsm_established": "已和 DSM 建立连接",
     "basic_information": "基本信息",
     "route": "路由",
-    "responsiveness": "延迟",
-    "network_diagnosis": "网络诊断",
-    "ping": "Ping 测试",
+    "advanced": "高级",
+    "network_diagnosis": "诊断网络",
+    "latency_test": "测试延迟",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
     "quota": "配额",
     "volume": "存储空间",
     "available_capacity": "可用空间",
     "quickconnect_coordinator": "QuickConnent 协调服务器",
-    "host_address": "主机地址"
+    "host_address": "主机地址",
+    "local_ip": "本地 IP"
   },
-  "settings": {
-    "settings": "设置",
+  "preferences": {
+    "preferences": "偏好设置",
     "appearance": "外观",
     "light": "浅色",
     "dark": "深色",
