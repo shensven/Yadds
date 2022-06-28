@@ -108,21 +108,21 @@ const Server: React.FC = () => {
             {t('server.server')}
           </Typography>
           {fetchStatus === 'stopped' && (
-            <Tooltip title="没有连接 DSM 实例" placement="right" arrow>
+            <Tooltip title={t('server.no_dsm_instance_connected')} placement="right" arrow>
               <Stack alignItems="center" sx={{ ml: theme.spacing(1) }}>
                 <FluentVirtualNetwork20Filled color="disabled" sx={{ fontSize: 40 }} />
               </Stack>
             </Tooltip>
           )}
           {['pending'].includes(fetchStatus) && (
-            <Tooltip title="等待网络" placement="right" arrow>
+            <Tooltip title={t('server.network_pending')} placement="right" arrow>
               <Stack alignItems="center" sx={{ ml: theme.spacing(1) }}>
                 <EosIconsThreeDotsLoading color="primary" sx={{ fontSize: 40 }} />
               </Stack>
             </Tooltip>
           )}
           {fetchStatus === 'polling' && (
-            <Tooltip title="已和 DSM 建立连接" placement="right" arrow>
+            <Tooltip title={t('server.connection_to_dsm_established')} placement="right" arrow>
               <Stack alignItems="center" sx={{ ml: theme.spacing(1) }}>
                 <FluentVirtualNetwork20Filled color="primary" sx={{ fontSize: 40 }} />
               </Stack>

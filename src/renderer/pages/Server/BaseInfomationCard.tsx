@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { Icon, MenuItem, Select, Stack, Typography, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '../../atoms/atomUI';
 
 interface IBaseInfomationCard {
@@ -16,6 +17,7 @@ const BaseInfomationCard: React.FC<IBaseInfomationCard> = (props: IBaseInfomatio
   const { type, hasMarginRight, icon, title, value, unit } = props;
 
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const [quotaList] = useAtom(atomQuotaList);
   const [targeMenuItemForQuota, setTargeMenuItemForQuota] = useAtom(atomPersistenceTargeMenuItemForQuota);
@@ -105,7 +107,7 @@ const BaseInfomationCard: React.FC<IBaseInfomationCard> = (props: IBaseInfomatio
           {quotaList.map((volume) => [
             <MenuItem key={volume.name} disabled dense disableRipple>
               <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {`Volume ${volume.name}`}
+                {`${t('server.volume')} ${volume.name}`}
               </Typography>
             </MenuItem>,
             volume.children.map((share) => (
