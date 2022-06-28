@@ -7,7 +7,7 @@
     "inactive": "非進行中",
     "stopped": "停用",
     "server": "伺服器",
-    "preferences": "Preferences"
+    "preferences": "偏好設定"
   },
   "main": {
     "filter": "篩選...",
@@ -35,8 +35,7 @@
     "route": "路由",
     "advanced": "Advanced",
     "network_diagnosis": "網絡檢測",
-    "latency_test": "Latency Test",
-    "ping": "Ping",
+    "latency_test": "測試延遲",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
     "quota": "空間配額",
@@ -44,37 +43,37 @@
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
     "host_address": "主機位址",
-    "local_address": "Local address"
+    "local_ip": "Local IP"
   },
   "preferences": {
-    "preferences": "Preferences",
-    "appearance": "Appearance",
-    "light": "Light",
-    "dark": "Dark",
-    "follow_system": "FLW SYS",
+    "preferences": "偏好設定",
+    "appearance": "外觀",
+    "light": "淺色",
+    "dark": "深色",
+    "follow_system": "跟隨系統",
     "quickconnect_id_or_address": "QuickConnect ID / Address",
     "new_connection": "NEW CONNECTION",
-    "language": "Language",
-    "application": "Application",
-    "launch_yadds_at_login": "Launch Yadds at Login",
-    "about": "About",
-    "automaticly_check_for_updates": "Automaticly Check for Updates",
-    "check_now": "CHECk NOW",
-    "current_version": "Current version",
-    "license": "License",
-    "this_copy_is_licensed_under_GPL_3_0": "This copy is licensed under GPL-3.0",
-    "devoloper": "Devoloper",
+    "language": "語言",
+    "application": "應用程式",
+    "launch_yadds_at_login": "在登入時啟動 Yadds",
+    "about": "關於",
+    "automaticly_check_for_updates": "自動檢查更新",
+    "check_now": "立即檢查",
+    "current_version": "當前版本",
+    "license": "授權",
+    "this_copy_is_licensed_under_GPL_3_0": "本拷貝通過 GPL-3.0 協議授權",
+    "devoloper": "開發者",
     "dialog_add": {
       "address": "Address",
-      "username": "Username",
-      "password": "Password",
-      "cancel": "CANCEL",
-      "ok": "OK"
+      "username": "使用者名稱",
+      "password": "密碼",
+      "cancel": "取消",
+      "ok": "確認"
     },
     "dialog_remove": {
       "confirm_remove": "Confirm Remove",
-      "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
-      "cancel": "CANCEL",
+      "are_you_sure": "你確定你要登出和關閉應用程式？",
+      "cancel": "取消",
       "yes": "YES"
     },
     "snackbar": {
@@ -82,7 +81,7 @@
       "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist",
       "wrong_account_or_password": "Wrong account or password",
       "invalid_quickconnect_id": "Invalid QuickConnect ID",
-      "cannot_connect_to": "Cannot connect to",
+      "cannot_connect_to": "無法連接到",
       "no_duplicate_logins_allowed": "No duplicate logins allowed"
     }
   },
@@ -104,7 +103,7 @@
       "copy": "複製",
       "paste": "貼上",
       "select_all": "全選",
-      "view": "View",
+      "view": "檢視",
       "show_sidebar": "顯示側邊欄",
       "hide_sidebar": "隱藏側邊欄",
       "enter_full_screen": "進入全螢幕",
