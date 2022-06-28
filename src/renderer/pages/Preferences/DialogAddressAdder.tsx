@@ -74,13 +74,13 @@ const DialogAddressAdder: React.FC = () => {
       !/(^[a-zA-Z])/.test(newConnect.connectAddress) ||
       /-$/.test(newConnect.connectAddress)
     ) {
-      setSnackbar({ show: true, errorInfo: t('settings.snackbar.invalid_quickconnect_id') });
+      setSnackbar({ show: true, errorInfo: t('preferences.snackbar.invalid_quickconnect_id') });
       setFormErr({ ...formErr, address: true });
       return;
     }
 
     if (newConnect.username.length === 0 || newConnect.password.length === 0) {
-      setSnackbar({ show: true, errorInfo: t('settings.snackbar.wrong_account_or_password') });
+      setSnackbar({ show: true, errorInfo: t('preferences.snackbar.wrong_account_or_password') });
       setFormErr({ ...formErr, username: true, password: true });
       return;
     }
@@ -91,7 +91,7 @@ const DialogAddressAdder: React.FC = () => {
         username: newConnect.username,
       })
     ) {
-      setSnackbar({ show: true, errorInfo: t('settings.snackbar.no_duplicate_logins_allowed') });
+      setSnackbar({ show: true, errorInfo: t('preferences.snackbar.no_duplicate_logins_allowed') });
       setFormErr({ ...formErr, address: true, username: true });
       return;
     }
@@ -107,7 +107,10 @@ const DialogAddressAdder: React.FC = () => {
 
       if ('command' in resp) {
         if (resp.errno === 4 && resp.suberrno === 1) {
-          setSnackbar({ show: true, errorInfo: t('settings.snackbar.quickconnect_id_is_incorrect_or_does_not_exist') });
+          setSnackbar({
+            show: true,
+            errorInfo: t('preferences.snackbar.quickconnect_id_is_incorrect_or_does_not_exist'),
+          });
           setHasLoading(false);
           setFormErr({ ...formErr, address: true });
         }
@@ -115,7 +118,7 @@ const DialogAddressAdder: React.FC = () => {
         if (resp.errno === 30) {
           setSnackbar({
             show: true,
-            errorInfo: `${t('settings.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
+            errorInfo: `${t('preferences.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
           });
           setHasLoading(false);
           setFormErr({ ...formErr, address: true });
@@ -124,7 +127,7 @@ const DialogAddressAdder: React.FC = () => {
 
       if ('success' in resp) {
         if (!resp.success && resp.error.code === 400) {
-          setSnackbar({ show: true, errorInfo: t('settings.snackbar.wrong_account_or_password') });
+          setSnackbar({ show: true, errorInfo: t('preferences.snackbar.wrong_account_or_password') });
           setHasLoading(false);
           setFormErr({ ...formErr, username: true, password: true });
         } else if (resp.success && resp.data.did.length > 0) {
@@ -145,7 +148,7 @@ const DialogAddressAdder: React.FC = () => {
     } catch {
       setSnackbar({
         show: true,
-        errorInfo: `${t('settings.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
+        errorInfo: `${t('preferences.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
       });
       setHasLoading(false);
       setFormErr({ ...formErr, address: true });
@@ -199,7 +202,7 @@ const DialogAddressAdder: React.FC = () => {
               }
             >
               <Typography variant="button" fontSize={11} fontWeight={600}>
-                {t('settings.dialog_add.address')}
+                {t('preferences.dialog_add.address')}
               </Typography>
             </ToggleButton>
           </ToggleButtonGroup>
@@ -212,7 +215,7 @@ const DialogAddressAdder: React.FC = () => {
             spellCheck={false}
             disabled={hasLoading}
             error={formErr.address === true}
-            label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('settings.dialog_add.address')}
+            label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('preferences.dialog_add.address')}
             value={newConnect.connectAddress}
             sx={{ mt: theme.spacing(2) }}
             InputLabelProps={{ sx: { fontSize: 14 } }}
@@ -236,7 +239,7 @@ const DialogAddressAdder: React.FC = () => {
             spellCheck={false}
             disabled={hasLoading}
             error={formErr.username === true}
-            label={t('settings.dialog_add.username')}
+            label={t('preferences.dialog_add.username')}
             value={newConnect.username}
             InputLabelProps={{ sx: { fontSize: 14 } }}
             onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value.replace(/\s/g, '') })}
@@ -247,7 +250,7 @@ const DialogAddressAdder: React.FC = () => {
             spellCheck={false}
             disabled={hasLoading}
             error={formErr.password === true}
-            label={t('settings.dialog_add.password')}
+            label={t('preferences.dialog_add.password')}
             value={newConnect.password}
             type={newConnect.showPassword ? 'text' : 'password'}
             sx={{ mt: theme.spacing(2) }}
@@ -276,7 +279,7 @@ const DialogAddressAdder: React.FC = () => {
       </DialogContent>
       <DialogActions>
         <Button color="inherit" onClick={() => dismissDailogAdd()}>
-          {t('settings.dialog_add.cancel')}
+          {t('preferences.dialog_add.cancel')}
         </Button>
         <Button
           sx={{
@@ -291,7 +294,7 @@ const DialogAddressAdder: React.FC = () => {
           disabled={hasLoading}
           onClick={() => handleAuth()}
         >
-          {hasLoading ? <EosIconsThreeDotsLoading /> : t('settings.dialog_add.ok')}
+          {hasLoading ? <EosIconsThreeDotsLoading /> : t('preferences.dialog_add.ok')}
         </Button>
       </DialogActions>
       <Snackbar

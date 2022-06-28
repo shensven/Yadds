@@ -48,21 +48,21 @@ const DialogAddressRemover: React.FC = () => {
     <Dialog keepMounted open={hasDialogAddressRemover} onClose={() => dismissDialogRemove()}>
       <DialogTitle>
         <Stack flexDirection="row" alignItems="center">
-          <Typography>{t('settings.dialog_remove.confirm_remove')}</Typography>
+          <Typography>{t('preferences.dialog_remove.confirm_remove')}</Typography>
           <IonTrashOutline sx={{ fontSize: 17, ml: theme.spacing(1) }} />
         </Stack>
       </DialogTitle>
       <DialogContent>
         <Typography color={theme.palette.text.secondary} sx={{ fontSize: 14, width: theme.spacing(28) }}>
-          {t('settings.dialog_remove.are_you_sure')}
+          {t('preferences.dialog_remove.are_you_sure')}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button color="inherit" onClick={() => dismissDialogRemove()}>
-          {t('settings.dialog_remove.cancel')}
+          {t('preferences.dialog_remove.cancel')}
         </Button>
         <Button color="error" onClick={() => handleRemove()}>
-          {t('settings.dialog_remove.yes')}
+          {t('preferences.dialog_remove.yes')}
         </Button>
       </DialogActions>
     </Dialog>

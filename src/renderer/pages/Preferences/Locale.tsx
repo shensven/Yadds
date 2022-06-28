@@ -32,7 +32,7 @@ const Locale: React.FC = () => {
   };
 
   return (
-    <RowItem label={t('settings.language')}>
+    <RowItem label={t('preferences.language')}>
       <FormGroup>
         <FormControl>
           <Select

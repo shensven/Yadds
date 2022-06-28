@@ -10,10 +10,10 @@ const About: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <RowItem label={t('settings.about')} hasMargin={false}>
+    <RowItem label={t('preferences.about')} hasMargin={false}>
       <FormGroup>
         <Stack flexDirection="row">
-          <Typography variant="subtitle2">{t('settings.license')}</Typography>
+          <Typography variant="subtitle2">{t('preferences.license')}</Typography>
           <Typography
             variant="subtitle2"
             color={theme.palette.primary.main}
@@ -23,11 +23,11 @@ const About: React.FC = () => {
             }}
             onClick={() => window.electron.app.openURL('https://github.com/shensven/Yadds/blob/main/LICENSE')}
           >
-            {t('settings.this_copy_is_licensed_under_GPL_3_0')}
+            {t('preferences.this_copy_is_licensed_under_GPL_3_0')}
           </Typography>
         </Stack>
         <Stack flexDirection="row" alignItems="center" mt={theme.spacing(1)}>
-          <Typography variant="subtitle2">{t('settings.devoloper')}</Typography>
+          <Typography variant="subtitle2">{t('preferences.devoloper')}</Typography>
           <Typography variant="subtitle2" color={theme.palette.text.secondary} sx={{ ml: theme.spacing(1) }}>
             @SvenFE
           </Typography>

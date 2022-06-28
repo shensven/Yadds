@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography, useTheme } from '@mui/material';
 import BaseInfomationCard from './Server/BaseInfomationCard';
+import RouteCard from './Server/RouteCard';
 import CardUnit from './Server/CardUnit';
 import FluentVirtualNetwork20Filled from '../assets/icons/FluentVirtualNetwork20Filled';
 import EosIconsThreeDotsLoading from '../assets/icons/EosIconsThreeDotsLoading';
@@ -42,52 +43,57 @@ const Server: React.FC = () => {
 
   const basicInfomation = [
     {
+      icon: <IcRoundCalendarViewWeek sx={{ fontSize: 20 }} />,
       title: t('server.synology_nas'),
       value: nasInfo.model,
       unit: '',
-      icon: <IcRoundCalendarViewWeek sx={{ fontSize: 20 }} />,
       type: 'text',
     },
     {
+      icon: <IcOutlineInfo sx={{ fontSize: 20 }} />,
       title: t('server.dsm_version'),
       value: nasInfo.version,
       unit: '',
-      icon: <IcOutlineInfo sx={{ fontSize: 20 }} />,
       type: 'text',
     },
     {
+      icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
       title: t('server.quota'),
       value: targeByteSizeForQuota.max.value,
       unit: targeByteSizeForQuota.max.unit,
-      icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
       type: 'select',
     },
     {
+      icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
       title: t('server.available_capacity'),
       value: targeByteSizeForQuota.available.value,
       unit: targeByteSizeForQuota.available.unit,
-      icon: <IcOutlineAlbum sx={{ fontSize: 20 }} />,
       type: 'text',
     },
   ];
   const route = [
     {
+      icon: <IcOutlineExplore sx={{ fontSize: 20 }} />,
       title: t('server.quickconnect_coordinator'),
       value: 'global.quickconnect.to',
-      icon: <IcOutlineExplore sx={{ fontSize: 20 }} />,
     },
     {
+      icon: <IcOutlineCable sx={{ fontSize: 20 }} />,
       title: t('server.host_address'),
       value: 'your-nas.cn3.quickconnect.cn',
+    },
+    {
       icon: <IcOutlineCable sx={{ fontSize: 20 }} />,
+      title: t('server.local_ip'),
+      value: '222.222.222.222',
     },
   ];
-  const responsiveness = [
+  const advanced = [
     {
+      icon: <IcRoundSwapHoriz sx={{ fontSize: 20 }} />,
       title: 'DS920+',
       value: '32',
       unit: 'ms',
-      icon: <IcRoundSwapHoriz sx={{ fontSize: 20 }} />,
     },
   ];
 
@@ -156,43 +162,43 @@ const Server: React.FC = () => {
             <ToggleButton
               value="right"
               disableRipple
-              selected={serverActiveTab === 'responsiveness'}
+              selected={serverActiveTab === 'advanced'}
               sx={{ px: theme.spacing(2) }}
-              onClick={() => setServerActiveTab('responsiveness')}
+              onClick={() => setServerActiveTab('advanced')}
             >
               <Typography variant="button" fontSize={12} fontWeight={600}>
-                {t('server.responsiveness')}
+                {t('server.advanced')}
               </Typography>
             </ToggleButton>
           </ToggleButtonGroup>
           <Stack flexDirection="row">
             {serverActiveTab === 'route' && (
-              <Button
-                size="small"
-                sx={{
-                  backgroundColor: theme.palette.input.default,
-                  '&:hover': { backgroundColor: theme.palette.input.hover },
-                  ml: theme.spacing(1),
-                }}
-              >
-                <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
-                  {t('server.network_diagnosis')}
-                </Typography>
-              </Button>
-            )}
-            {serverActiveTab === 'responsiveness' && (
-              <Button
-                size="small"
-                sx={{
-                  backgroundColor: theme.palette.input.default,
-                  '&:hover': { backgroundColor: theme.palette.input.hover },
-                  ml: theme.spacing(1),
-                }}
-              >
-                <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
-                  {t('server.ping')}
-                </Typography>
-              </Button>
+              <Stack flexDirection="row">
+                <Button
+                  size="small"
+                  sx={{
+                    backgroundColor: theme.palette.input.default,
+                    '&:hover': { backgroundColor: theme.palette.input.hover },
+                    ml: theme.spacing(1),
+                  }}
+                >
+                  <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
+                    {t('server.latency_test')}
+                  </Typography>
+                </Button>
+                <Button
+                  size="small"
+                  sx={{
+                    backgroundColor: theme.palette.input.default,
+                    '&:hover': { backgroundColor: theme.palette.input.hover },
+                    ml: theme.spacing(1),
+                  }}
+                >
+                  <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
+                    {t('server.network_diagnosis')}
+                  </Typography>
+                </Button>
+              </Stack>
             )}
           </Stack>
         </Stack>
@@ -214,23 +220,16 @@ const Server: React.FC = () => {
         {serverActiveTab === 'route' && (
           <Stack flexDirection="column" mt={theme.spacing(3)} width="100%">
             {route.map((item) => (
-              <CardUnit
-                hasIconButton={false}
-                hasMarginRight={false}
-                title={item.title}
-                value={item.value}
-                icon={item.icon}
-                key={item.title}
-              />
+              <RouteCard title={item.title} value={item.value} icon={item.icon} key={item.title} />
             ))}
           </Stack>
         )}
-        {serverActiveTab === 'responsiveness' && (
+        {serverActiveTab === 'advanced' && (
           <Stack flexDirection="row" mt={theme.spacing(3)} width="100%">
-            {responsiveness.map((item, index) => (
+            {advanced.map((item, index) => (
               <CardUnit
                 hasIconButton={false}
-                hasMarginRight={responsiveness.length - 1 === index}
+                hasMarginRight={advanced.length - 1 === index}
                 title={item.title}
                 value={item.value}
                 unit={item.unit}

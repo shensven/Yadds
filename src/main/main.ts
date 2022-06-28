@@ -324,7 +324,7 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemsInApp) => {
         {
           label: args.preferences,
           accelerator: 'Command+,',
-          click: () => mainWindow?.webContents.send('yadds:navigate', '/settings'),
+          click: () => mainWindow?.webContents.send('yadds:navigate', '/preferences'),
         },
         { type: 'separator' },
         { label: args.services, submenu: [] },

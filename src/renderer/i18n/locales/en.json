@@ -7,7 +7,7 @@
     "inactive": "Inactive",
     "stopped": "Stopped",
     "server": "Server",
-    "settings": "Settings"
+    "preferences": "Preferences"
   },
   "main": {
     "filter": "Filter...",
@@ -33,19 +33,20 @@
     "connection_to_dsm_established": "Connection to DSM established",
     "basic_information": "Basic Information",
     "route": "Route",
-    "responsiveness": "Responsiveness",
+    "advanced": "Advanced",
     "network_diagnosis": "Network Diagnosis",
-    "ping": "Ping",
+    "latency_test": "Latency Test",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM version",
     "quota": "Quota",
     "volume": "Volume",
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
-    "host_address": "Host address"
+    "host_address": "Host address",
+    "local_ip": "Local IP"
   },
-  "settings": {
-    "settings": "Settings",
+  "preferences": {
+    "preferences": "Preferences",
     "appearance": "Appearance",
     "light": "Light",
     "dark": "Dark",

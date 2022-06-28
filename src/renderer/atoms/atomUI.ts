@@ -23,7 +23,7 @@ export type SidebarCategory =
   | '/queueInactive'
   | '/queueStopped'
   | '/server'
-  | '/settings';
+  | '/preferences';
 
 const atomSidebarCategory = atom<SidebarCategory>(
   (window.electron?.cache.get('sidebarCategory') as SidebarCategory | undefined) ?? '/queueAll'
@@ -64,7 +64,7 @@ export const atomPersistenceQueueIsAscend = atom(
 // Server
 // -----------------------------------------------------------------------------
 
-export type ServerActiveTab = 'basicInfomation' | 'route' | 'responsiveness';
+export type ServerActiveTab = 'basicInfomation' | 'route' | 'advanced';
 
 const atomServerActiveTab = atom<ServerActiveTab>(
   (window.electron?.cache.get('serverActiveTab') as ServerActiveTab | undefined) ?? 'basicInfomation'
@@ -145,7 +145,7 @@ export const atomTargeByteSizeForQuota = atom<TargeByteSizeForQuota>({
   available: { value: '-', unit: '', long: '', toString: () => '' },
 });
 
-// Settings
+// Preferences
 // -----------------------------------------------------------------------------
 
 export type Appearance = 'light' | 'dark' | 'system';
