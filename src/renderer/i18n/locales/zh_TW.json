@@ -7,7 +7,7 @@
     "inactive": "非進行中",
     "stopped": "停用",
     "server": "伺服器",
-    "settings": "設定"
+    "preferences": "偏好設定"
   },
   "main": {
     "filter": "篩選...",
@@ -33,19 +33,20 @@
     "connection_to_dsm_established": "Connection to DSM established",
     "basic_information": "基本資訊",
     "route": "路由",
-    "responsiveness": "延遲",
+    "advanced": "Advanced",
     "network_diagnosis": "網絡檢測",
-    "ping": "Ping",
+    "latency_test": "測試延遲",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
     "quota": "空間配額",
     "volume": "Volume",
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
-    "host_address": "主機位址"
+    "host_address": "主機位址",
+    "local_ip": "Local IP"
   },
-  "settings": {
-    "settings": "設定",
+  "preferences": {
+    "preferences": "偏好設定",
     "appearance": "外觀",
     "light": "淺色",
     "dark": "深色",
@@ -71,7 +72,7 @@
     },
     "dialog_remove": {
       "confirm_remove": "Confirm Remove",
-      "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
+      "are_you_sure": "你確定你要登出和關閉應用程式？",
       "cancel": "取消",
       "yes": "YES"
     },
@@ -80,7 +81,7 @@
       "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist",
       "wrong_account_or_password": "Wrong account or password",
       "invalid_quickconnect_id": "Invalid QuickConnect ID",
-      "cannot_connect_to": "Cannot connect to",
+      "cannot_connect_to": "無法連接到",
       "no_duplicate_logins_allowed": "No duplicate logins allowed"
     }
   },
@@ -102,7 +103,7 @@
       "copy": "複製",
       "paste": "貼上",
       "select_all": "全選",
-      "view": "View",
+      "view": "檢視",
       "show_sidebar": "顯示側邊欄",
       "hide_sidebar": "隱藏側邊欄",
       "enter_full_screen": "進入全螢幕",
