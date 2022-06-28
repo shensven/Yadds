@@ -7,7 +7,7 @@
     "inactive": "非進行中",
     "stopped": "停用",
     "server": "伺服器",
-    "settings": "設定"
+    "preferences": "Preferences"
   },
   "main": {
     "filter": "篩選...",
@@ -33,8 +33,9 @@
     "connection_to_dsm_established": "Connection to DSM established",
     "basic_information": "基本資訊",
     "route": "路由",
-    "responsiveness": "延遲",
+    "advanced": "Advanced",
     "network_diagnosis": "網絡檢測",
+    "latency_test": "Latency Test",
     "ping": "Ping",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
@@ -42,37 +43,38 @@
     "volume": "Volume",
     "available_capacity": "Available capacity",
     "quickconnect_coordinator": "QuickConnent coordinator",
-    "host_address": "主機位址"
+    "host_address": "主機位址",
+    "local_address": "Local address"
   },
-  "settings": {
-    "settings": "設定",
-    "appearance": "外觀",
-    "light": "淺色",
-    "dark": "深色",
-    "follow_system": "跟隨系統",
+  "preferences": {
+    "preferences": "Preferences",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "follow_system": "FLW SYS",
     "quickconnect_id_or_address": "QuickConnect ID / Address",
     "new_connection": "NEW CONNECTION",
-    "language": "語言",
-    "application": "應用程式",
-    "launch_yadds_at_login": "在登入時啟動 Yadds",
-    "about": "關於",
-    "automaticly_check_for_updates": "自動檢查更新",
-    "check_now": "立即檢查",
-    "current_version": "當前版本",
-    "license": "授權",
-    "this_copy_is_licensed_under_GPL_3_0": "本拷貝通過 GPL-3.0 協議授權",
-    "devoloper": "開發者",
+    "language": "Language",
+    "application": "Application",
+    "launch_yadds_at_login": "Launch Yadds at Login",
+    "about": "About",
+    "automaticly_check_for_updates": "Automaticly Check for Updates",
+    "check_now": "CHECk NOW",
+    "current_version": "Current version",
+    "license": "License",
+    "this_copy_is_licensed_under_GPL_3_0": "This copy is licensed under GPL-3.0",
+    "devoloper": "Devoloper",
     "dialog_add": {
       "address": "Address",
-      "username": "使用者名稱",
-      "password": "密碼",
-      "cancel": "取消",
-      "ok": "確認"
+      "username": "Username",
+      "password": "Password",
+      "cancel": "CANCEL",
+      "ok": "OK"
     },
     "dialog_remove": {
       "confirm_remove": "Confirm Remove",
       "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
-      "cancel": "取消",
+      "cancel": "CANCEL",
       "yes": "YES"
     },
     "snackbar": {
