@@ -42,7 +42,7 @@ const Address: React.FC = () => {
   };
 
   return (
-    <RowItem label={t('settings.quickconnect_id_or_address')}>
+    <RowItem label={t('preferences.quickconnect_id_or_address')}>
       <FormGroup row>
         <FormControl>
           <Select
@@ -89,7 +89,7 @@ const Address: React.FC = () => {
           sx={{ ml: theme.spacing(1), px: theme.spacing(1) }}
           onClick={() => setHasDialogAddressAdder(true)}
         >
-          {t('settings.new_connection')}
+          {t('preferences.new_connection')}
         </Button>
       </FormGroup>
     </RowItem>

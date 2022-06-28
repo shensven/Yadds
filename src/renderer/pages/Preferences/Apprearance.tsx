@@ -72,13 +72,13 @@ const Apprearance: React.FC = () => {
   const [appearance, setAppearance] = useAtom(atomPersistenceAppearance);
 
   const appearanceList: YaddsAppearance[] = [
-    { appearance: 'light', label: t('settings.light') },
-    { appearance: 'dark', label: t('settings.dark') },
-    { appearance: 'system', label: t('settings.follow_system') },
+    { appearance: 'light', label: t('preferences.light') },
+    { appearance: 'dark', label: t('preferences.dark') },
+    { appearance: 'system', label: t('preferences.follow_system') },
   ];
 
   return (
-    <RowItem label={t('settings.appearance')}>
+    <RowItem label={t('preferences.appearance')}>
       <FormGroup row>
         {appearanceList.map((item) => (
           <Stack key={item.label} alignItems="center" mr={theme.spacing(2)}>

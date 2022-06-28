@@ -6,7 +6,7 @@ import QueueActive from './QueueActive';
 import QueueInactive from './QueueInactive';
 import QueueStopped from './QueueStopped';
 import Server from './Server';
-import Settings from './Settings';
+import Preferences from './Preferences';
 import { SidebarCategory } from '../atoms/atomUI';
 
 const RedirectEl: React.FC = () => {
@@ -27,8 +27,8 @@ const RedirectEl: React.FC = () => {
       return <QueueStopped />;
     case '/server':
       return <Server />;
-    case '/settings':
-      return <Settings />;
+    case '/preferences':
+      return <Preferences />;
     default:
       return <QueueAll />;
   }

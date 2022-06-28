@@ -24,22 +24,22 @@ const Application: React.FC = () => {
   const [APP_VERSION] = useAtom(atomAppVersion);
 
   return (
-    <RowItem label={t('settings.application')}>
+    <RowItem label={t('preferences.application')}>
       <FormGroup>
         <FormControlLabel
           checked={isAutoLaunch}
-          label={<Typography variant="subtitle2">{t('settings.launch_yadds_at_login')}</Typography>}
+          label={<Typography variant="subtitle2">{t('preferences.launch_yadds_at_login')}</Typography>}
           control={<Checkbox size="small" checked={isAutoLaunch} />}
           onClick={() => setIsAutoLaunch(!isAutoLaunch)}
         />
         <FormControlLabel
           checked={isAutoUpdate}
-          label={<Typography variant="subtitle2">{t('settings.automaticly_check_for_updates')}</Typography>}
+          label={<Typography variant="subtitle2">{t('preferences.automaticly_check_for_updates')}</Typography>}
           control={<Checkbox size="small" checked={isAutoUpdate} />}
           onClick={() => setIsAutoUpdate(!isAutoUpdate)}
         />
         <Stack flexDirection="row" alignItems="center">
-          <FormHelperText>{`${t('settings.current_version')} ${APP_VERSION}`}</FormHelperText>
+          <FormHelperText>{`${t('preferences.current_version')} ${APP_VERSION}`}</FormHelperText>
           <Button
             size="small"
             sx={{
@@ -50,7 +50,7 @@ const Application: React.FC = () => {
             onClick={() => {}}
           >
             <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
-              {t('settings.check_now')}
+              {t('preferences.check_now')}
             </Typography>
           </Button>
         </Stack>

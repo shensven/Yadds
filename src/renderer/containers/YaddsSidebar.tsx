@@ -210,17 +210,17 @@ const YaddsSidebar: React.FC = () => {
         <ListItem>
           <ListItemButton
             disableRipple
-            selected={sidebarCategory === '/settings'}
+            selected={sidebarCategory === '/preferences'}
             sx={{ width: '100%' }}
-            onClick={() => navigate('/settings')}
+            onClick={() => navigate('/preferences')}
           >
             <ListItemIcon
               sx={{
                 minWidth: theme.spacing(4),
-                color: sidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary,
+                color: sidebarCategory === '/preferences' ? theme.palette.primary.main : theme.palette.text.primary,
               }}
             >
-              {sidebarCategory === '/settings' ? (
+              {sidebarCategory === '/preferences' ? (
                 <IonCog sx={{ fontSize: 20 }} />
               ) : (
                 <IonCogOutline sx={{ fontSize: 20 }} />
@@ -231,10 +231,10 @@ const YaddsSidebar: React.FC = () => {
                 <Typography
                   noWrap
                   variant="subtitle2"
-                  color={sidebarCategory === '/settings' ? theme.palette.primary.main : theme.palette.text.primary}
+                  color={sidebarCategory === '/preferences' ? theme.palette.primary.main : theme.palette.text.primary}
                   fontWeight={600}
                 >
-                  {t('sidebar.settings')}
+                  {t('sidebar.preferences')}
                 </Typography>
               }
             />

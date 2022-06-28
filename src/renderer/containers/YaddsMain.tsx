@@ -19,7 +19,7 @@ import QueueActive from '../pages/QueueActive';
 import QueueInactive from '../pages/QueueInactive';
 import QueueStopped from '../pages/QueueStopped';
 import Server from '../pages/Server';
-import Settings from '../pages/Settings';
+import Preferences from '../pages/Preferences';
 import useWindow from '../utils/useWindow';
 import useMenuForQueue from '../utils/useMenuForQueue';
 
@@ -77,7 +77,7 @@ const YaddsMain: React.FC = () => {
           position: 'sticky',
           flexDirection: 'column',
           backgroundColor: 'transparent',
-          display: ['/server', '/settings'].includes(sidebarCategory) ? 'none' : 'flex',
+          display: ['/server', '/preferences'].includes(sidebarCategory) ? 'none' : 'flex',
         }}
         onDoubleClick={() => zoomWindowForDarwin()}
       >
@@ -144,8 +144,8 @@ const YaddsMain: React.FC = () => {
       <Box
         sx={{
           px: theme.spacing(3),
-          overflowY: ['/settings', '/server'].includes(sidebarCategory) ? 'hidden' : 'scroll',
-          height: ['/settings', '/server'].includes(sidebarCategory)
+          overflowY: ['/preferences', '/server'].includes(sidebarCategory) ? 'hidden' : 'scroll',
+          height: ['/preferences', '/server'].includes(sidebarCategory)
             ? '100%'
             : `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
         }}
@@ -159,7 +159,7 @@ const YaddsMain: React.FC = () => {
           <Route path="/queueInactive" element={<QueueInactive />} />
           <Route path="/queueStopped" element={<QueueStopped />} />
           <Route path="/server" element={<Server />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/preferences" element={<Preferences />} />
         </Routes>
       </Box>
     </Paper>
