@@ -21,11 +21,19 @@ const RouteCard: React.FC<IRouteCard> = (props: IRouteCard) => {
         height: theme.spacing(9),
       }}
     >
-      <Stack flexDirection="row" justifyContent="space-between">
+      <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
         <Stack flexDirection="row" alignItems="center">
           <Icon color="primary">{icon}</Icon>
           <Typography noWrap variant="subtitle2" color={theme.palette.primary.main}>
             {title}
+          </Typography>
+        </Stack>
+        <Stack flexDirection="row">
+          <Typography fontSize={12} fontWeight={700} color={theme.palette.text.secondary}>
+            100
+          </Typography>
+          <Typography fontSize={12} color={theme.palette.text.secondary} pl={theme.spacing(0.25)}>
+            ms
           </Typography>
         </Stack>
       </Stack>
