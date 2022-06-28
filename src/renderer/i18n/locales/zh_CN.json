@@ -7,7 +7,7 @@
     "inactive": "非进行中",
     "stopped": "停用",
     "server": "服务器",
-    "settings": "设置"
+    "preferences": "Preferences"
   },
   "main": {
     "filter": "过滤...",
@@ -33,8 +33,9 @@
     "connection_to_dsm_established": "已和 DSM 建立连接",
     "basic_information": "基本信息",
     "route": "路由",
-    "responsiveness": "延迟",
-    "network_diagnosis": "网络诊断",
+    "advanced": "Advanced",
+    "network_diagnosis": "诊断网络",
+    "latency_test": "Latency Test",
     "ping": "Ping 测试",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
@@ -42,46 +43,47 @@
     "volume": "存储空间",
     "available_capacity": "可用空间",
     "quickconnect_coordinator": "QuickConnent 协调服务器",
-    "host_address": "主机地址"
+    "host_address": "主机地址",
+    "local_address": "Local address"
   },
-  "settings": {
-    "settings": "设置",
-    "appearance": "外观",
-    "light": "浅色",
-    "dark": "深色",
-    "follow_system": "跟随系统",
-    "quickconnect_id_or_address": "QuickConnect ID / 地址",
-    "new_connection": "新增连接",
-    "language": "语言",
-    "application": "应用程序",
-    "launch_yadds_at_login": "在登录时启动 Yadds",
-    "about": "关于",
-    "automaticly_check_for_updates": "自动检查更新",
-    "check_now": "立即检查",
-    "current_version": "当前版本",
-    "license": "许可证",
-    "this_copy_is_licensed_under_GPL_3_0": "本拷贝通过 GPL-3.0 协议授权",
-    "devoloper": "开发者",
+  "preferences": {
+    "preferences": "Preferences",
+    "appearance": "Appearance",
+    "light": "Light",
+    "dark": "Dark",
+    "follow_system": "FLW SYS",
+    "quickconnect_id_or_address": "QuickConnect ID / Address",
+    "new_connection": "NEW CONNECTION",
+    "language": "Language",
+    "application": "Application",
+    "launch_yadds_at_login": "Launch Yadds at Login",
+    "about": "About",
+    "automaticly_check_for_updates": "Automaticly Check for Updates",
+    "check_now": "CHECk NOW",
+    "current_version": "Current version",
+    "license": "License",
+    "this_copy_is_licensed_under_GPL_3_0": "This copy is licensed under GPL-3.0",
+    "devoloper": "Devoloper",
     "dialog_add": {
-      "address": "地址",
-      "username": "用户帐号",
-      "password": "密码",
-      "cancel": "取消",
-      "ok": "确定"
+      "address": "Address",
+      "username": "Username",
+      "password": "Password",
+      "cancel": "CANCEL",
+      "ok": "OK"
     },
     "dialog_remove": {
-      "confirm_remove": "再次确认",
-      "are_you_sure": "您确定登出并断开与 DSM 的连接吗？",
-      "cancel": "取消",
-      "yes": "确定"
+      "confirm_remove": "Confirm Remove",
+      "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
+      "cancel": "CANCEL",
+      "yes": "YES"
     },
     "snackbar": {
-      "timeout": "连接超时",
-      "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID 不存在或不正确",
-      "wrong_account_or_password": "帐号或密码错误",
-      "invalid_quickconnect_id": "无效的 QuickConnect ID",
-      "cannot_connect_to": "无法连接到",
-      "no_duplicate_logins_allowed": "不允许重复登录"
+      "timeout": "Timeout",
+      "quickconnect_id_is_incorrect_or_does_not_exist": "QuickConnect ID is incorrect or does not exist",
+      "wrong_account_or_password": "Wrong account or password",
+      "invalid_quickconnect_id": "Invalid QuickConnect ID",
+      "cannot_connect_to": "Cannot connect to",
+      "no_duplicate_logins_allowed": "No duplicate logins allowed"
     }
   },
   "application_menu": {
