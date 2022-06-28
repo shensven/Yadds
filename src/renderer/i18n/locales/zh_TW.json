@@ -34,7 +34,7 @@
     "basic_information": "基本資訊",
     "route": "路由",
     "advanced": "Advanced",
-    "network_diagnosis": "網絡檢測",
+    "network_diagnosis": "檢測網絡",
     "latency_test": "測試延遲",
     "synology_nas": "Synology NAS",
     "dsm_version": "DSM 版本",
