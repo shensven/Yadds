@@ -43,7 +43,7 @@
     "available_capacity": "可用空间",
     "quickconnect_coordinator": "QuickConnent 协调服务器",
     "host_address": "主机地址",
-    "local_ip": "Local IP"
+    "local_ip": "本地 IP"
   },
   "preferences": {
     "preferences": "偏好设置",
