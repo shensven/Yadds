@@ -28,9 +28,9 @@
   },
   "server": {
     "server": "服务器",
-    "no_dsm_instance_connected": "No DSM instance connected",
-    "network_pending": "Network pending",
-    "connection_to_dsm_established": "Connection to DSM established",
+    "no_dsm_instance_connected": "没有连接 DSM 实例",
+    "network_pending": "等待网络",
+    "connection_to_dsm_established": "已和 DSM 建立连接",
     "basic_information": "基本信息",
     "route": "路由",
     "responsiveness": "延迟",
