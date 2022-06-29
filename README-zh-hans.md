@@ -25,7 +25,7 @@
 - [x] 多语言热切换 （English、简体中文、繁體中文、日本語等）
 - [x] 暗黑模式
 - [ ] 支持 Touch Bar（仅部分麦金塔机型）
-- [ ] 使用 WebSocket 建立连接
+- [ ] 支持 [Synology Secure Signin](https://www.synology.cn/zh-cn/dsm/packages/SecureSignIn) 无密码登录
 - [ ] 多用户切换
 - [ ] 自动接入 BitTorrent tracker 列表
 - [ ] 下载进度可视化
