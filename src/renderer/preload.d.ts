@@ -2,17 +2,20 @@ import { Channels } from 'main/preload';
 import { YaddsCache } from '../main/store/cache';
 import { YaddsPreferences } from '../main/store/preferences';
 import { YaddsConnectedUsers } from '../main/store/connectedUsers';
-import { ServerError } from '../main/net/getServerInfo';
-import { SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { Appearance, QueueIterater } from './atoms/atomUI';
 import { Nav } from './utils/useNav';
 import { MenuItemsInApp } from './utils/useMenuForApp';
 import { MenuItemsInTray } from './utils/useMenuForTray';
 import { MenuItemsInQueue } from './utils/useMenuForQueue';
-import { TasksError, TasksInfo } from '../main/net/poll';
+import { ServerError } from '../main/net/findServer';
+import { PropQuickConnectID } from '../main/net/getServerAddres';
+import { PingPongInfo } from '../main/net/pingPong';
+import { AuthTypeInfo, PropsAuthType } from '../main/net/getAuthType';
+import { PropsSignIn, SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { DsmInfo } from '../main/net/getDsmInfo';
 import { PersonalSettingsInfo } from '../main/net/getQuota';
 import { FileStationList } from '../main/net/getVolume';
+import { TasksError, TasksInfo } from '../main/net/poll';
 
 declare global {
   interface Window {
@@ -73,19 +76,13 @@ declare global {
       };
 
       net: {
-        auth: (props: {
-          quickConnectID: string;
-          account: string;
-          passwd: string;
-        }) => Promise<ServerError | SignInWrongAccountOrPasswd | SignInInfo>;
-
-        poll: (props: { host: string; port: number; sid: string }) => Promise<TasksError | TasksInfo>;
-
+        getServerAddress: (prop: PropQuickConnectID) => Promise<ServerError | PingPongInfo>;
+        getAuthType: (props: PropsAuthType) => Promise<AuthTypeInfo>;
+        signIn: (props: PropsSignIn) => Promise<SignInWrongAccountOrPasswd | SignInInfo>;
         getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<DsmInfo>;
-
         getQuata: (props: { host: string; port: number; sid: string }) => Promise<PersonalSettingsInfo>;
-
         getVolume: (props: { host: string; port: number; sid: string }) => Promise<FileStationList>;
+        poll: (props: { host: string; port: number; sid: string }) => Promise<TasksError | TasksInfo>;
       };
     };
   }

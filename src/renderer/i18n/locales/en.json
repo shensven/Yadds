@@ -63,14 +63,20 @@
     "license": "License",
     "this_copy_is_licensed_under_GPL_3_0": "This copy is licensed under GPL-3.0",
     "devoloper": "Devoloper",
-    "dialog_add": {
+    "dialog_adder": {
+      "sign_in_with": "Sign in with",
+      "host_address": "Host Address",
+      "next": "Next",
       "address": "Address",
       "username": "Username",
+      "login": "Login",
+      "other_sign_in_methods": "Other sign-in methods",
       "password": "Password",
-      "cancel": "CANCEL",
-      "ok": "OK"
+      "waiting_for_verification": "Waiting for verification",
+      "approve_the_request_on_your_synology_secure_signin_app": "Approve the request on your Synology Secure Signin app",
+      "complate_sign_in_with_your_hardware_security_key": "Complate sign-in with your hardware security key"
     },
-    "dialog_remove": {
+    "dialog_remover": {
       "confirm_remove": "Confirm Remove",
       "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
       "cancel": "CANCEL",

@@ -1,10 +1,10 @@
 import { net } from 'electron';
-import { ServerInfo } from './getServerInfo';
+import { ServerInfo } from './findServer';
 
 export interface PingPongInfo {
   success: true;
   ezid: string;
-  hostname: string;
+  host: string;
   port: number;
 }
 
@@ -39,11 +39,11 @@ const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
   // 221.213.xxx.xxx
   // const WAN_IP = serverInfo.server?.external.ip as string;
 
-  const newInstance = (hostname: string, port: number) => {
+  const newInstance = (host: string, port: number) => {
     const options = {
       method: 'GET',
       protocol: 'https:',
-      hostname,
+      hostname: host,
       path: PINGPONG_PATH,
       port,
       headers: {
@@ -56,7 +56,7 @@ const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
 
       setTimeout(() => {
         request.abort();
-        reject(new Error(`[PingPong] [Timeout] https://${hostname}:${port}`));
+        reject(new Error(`[PingPong] [Timeout] https://${host}:${port}`));
       }, 5000);
 
       request.on('error', reject);
@@ -72,7 +72,7 @@ const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
           const json = Buffer.concat(data).toString();
           const parsed = JSON.parse(json);
 
-          parsed.hostname = hostname;
+          parsed.host = host;
           parsed.port = port;
 
           resolve(parsed);

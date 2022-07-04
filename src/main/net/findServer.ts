@@ -126,7 +126,7 @@ const queryCoordinator = (quickConnectID: string, controlHost?: string) => {
   });
 };
 
-const getServerInfo = async (quickConnectID: string): Promise<ServerInfo | ServerError> => {
+const findServer = async (quickConnectID: string): Promise<ServerInfo | ServerError> => {
   const respViaGlobal = await queryCoordinator(quickConnectID);
 
   // When error info 'get_server_info.go:69[Alias not found]' is returned
@@ -161,4 +161,4 @@ const getServerInfo = async (quickConnectID: string): Promise<ServerInfo | Serve
   return respViaGlobal as ServerInfo;
 };
 
-export default getServerInfo;
+export default findServer;

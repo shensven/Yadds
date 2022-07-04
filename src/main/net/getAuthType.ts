@@ -1,39 +1,27 @@
 import { net } from 'electron';
 import queryString from 'query-string';
 
-export type PropsSignIn = {
+export type PropsAuthType = {
   host: string;
   port: number;
   username: string;
-  passwd: string;
 };
 
-export interface SignInWrongAccountOrPasswd {
-  success: false;
-  error: {
-    code: 400;
-  };
-}
-export interface SignInInfo {
+export interface AuthTypeInfo {
   success: true;
   data: {
-    did: string;
-    sid: string;
-    is_portal_port?: boolean;
-  };
-  host: string;
-  port: number;
+    type: 'passwd' | 'authenticator' | 'fido';
+  }[];
 }
 
-const signIn = (props: PropsSignIn) => {
-  const { host, port, username, passwd } = props;
+const getAuthType = (props: PropsAuthType) => {
+  const { host, port, username } = props;
 
   const params = {
-    api: 'SYNO.API.Auth',
-    version: 6,
-    method: 'login',
+    api: 'SYNO.API.Auth.Type',
+    method: 'get',
+    version: 1,
     account: username,
-    passwd,
   };
 
   const options = {
@@ -47,13 +35,13 @@ const signIn = (props: PropsSignIn) => {
     },
   };
 
-  return new Promise<SignInInfo | SignInWrongAccountOrPasswd>((resolve, reject) => {
+  return new Promise<AuthTypeInfo>((resolve, reject) => {
     const request = net.request(options);
 
     setTimeout(() => {
       request.abort();
-      reject(new Error(`[SYNO.API.Auth] [Timeout] https://${host}:${port}`));
-    }, 10000);
+      reject(new Error(`[Get User Type] [Timeout] https://${host}/webapi/entry.cgi?${queryString.stringify(params)}`));
+    }, 5000);
 
     request.on('error', reject);
 
@@ -66,12 +54,8 @@ const signIn = (props: PropsSignIn) => {
 
       response.on('end', () => {
         const json = Buffer.concat(data).toString();
-        const parsed = JSON.parse(json);
-
-        parsed.host = host;
-        parsed.port = port;
-
-        resolve(parsed);
+        console.log(JSON.parse(json));
+        resolve(JSON.parse(json));
       });
     });
 
@@ -79,4 +63,4 @@ const signIn = (props: PropsSignIn) => {
   });
 };
 
-export default signIn;
+export default getAuthType;

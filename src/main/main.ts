@@ -31,11 +31,13 @@ import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
 import { Appearance } from '../renderer/atoms/atomUI';
-import auth from './net/auth';
-import poll from './net/poll';
+import getServerAddress, { PropQuickConnectID } from './net/getServerAddres';
+import getAuthType, { PropsAuthType } from './net/getAuthType';
+import signIn, { PropsSignIn } from './net/signIn';
 import getDsmInfo from './net/getDsmInfo';
 import getQuota from './net/getQuota';
 import getVolume from './net/getVolume';
+import poll from './net/poll';
 
 export default class AppUpdater {
   constructor() {
@@ -609,8 +611,16 @@ ipcMain.handle('app:set-system-mode', async () => {
   }
 });
 
-ipcMain.handle('net:auth', async (_, args) => {
-  return auth(args);
+ipcMain.handle('net:get-server-address', async (_, prop: PropQuickConnectID) => {
+  return getServerAddress(prop);
+});
+
+ipcMain.handle('net:get-auth-type', async (_, props: PropsAuthType) => {
+  return getAuthType(props);
+});
+
+ipcMain.handle('net:sign-in', async (_, props: PropsSignIn) => {
+  return signIn(props);
 });
 
 ipcMain.handle('net:poll', async (_, args) => {

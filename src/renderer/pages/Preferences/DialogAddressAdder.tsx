@@ -4,12 +4,13 @@ import { find } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  Box,
   Button,
   Checkbox,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
+  Fade,
   FormControlLabel,
   IconButton,
   InputAdornment,
@@ -17,17 +18,30 @@ import {
   Snackbar,
   Stack,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
   useTheme,
 } from '@mui/material';
-import IonPersonCircle from '../../assets/icons/IonPersonCircle';
-import { atomHasDialogAddressAdder } from '../../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
+import IcRoundAccountCircle from '../../assets/icons/IcRoundAccountCircle';
+import IcRoundArrowBack from '../../assets/icons/IcRoundArrowBack';
 import IonEyeOutline from '../../assets/icons/IonEyeOutline';
 import IonEyeOffOutline from '../../assets/icons/IonEyeOffOutline';
+import IcRoundPhoneAndroid from '../../assets/icons/IcRoundPhoneAndroid';
+import IcRoundFingerprint from '../../assets/icons/IcRoundFingerprint';
+import IcRoundPassword from '../../assets/icons/IcRoundPassword';
 import EosIconsThreeDotsLoading from '../../assets/icons/EosIconsThreeDotsLoading';
+import { atomHasDialogAddressAdder } from '../../atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
+
+interface NewConnect {
+  connectType: '' | 'qc' | 'host';
+  quickConnectID: string;
+  host: string;
+  port: number;
+  isHttps: boolean;
+  username: string;
+  authType: { type: 'authenticator' | 'fido' | 'passwd' }[];
+  passwd: string;
+}
 
 const DialogAddressAdder: React.FC = () => {
   const theme = useTheme();
@@ -37,266 +51,550 @@ const DialogAddressAdder: React.FC = () => {
   const [, setTargetDid] = useAtom(atomPersistenceTargetDid);
   const [hasDialogAddressAdder, setHasDialogAddressAdder] = useAtom(atomHasDialogAddressAdder);
 
-  const [hasLoading, setHasLoading] = useState(false);
-  const [newConnect, setNewConnect] = useState({
-    isQuickConnectID: true,
-    connectAddress: '',
+  const [dialogSize, setDialogSize] = useState([{ height: theme.spacing(24), width: theme.spacing(32) }]);
+
+  const [newConnect, setNewConnect] = useState<NewConnect>({
+    connectType: '',
+    quickConnectID: '',
+    host: '',
+    port: 0,
     isHttps: false,
     username: '',
-    password: '',
-    showPassword: false,
+    authType: [],
+    passwd: '',
   });
-  const [formErr, setFormErr] = useState({ address: false, username: false, password: false });
+  const [hasLoading, setHasLoading] = useState(false);
+  const [textFieldError, setTextFieldError] = useState(false);
+  const [targetAuthType, setTargetAuthType] = useState<'' | 'authenticator' | 'fido' | 'passwd'>('');
+  const [showPasswd, setShowPasswd] = useState(false);
   const [snackbar, setSnackbar] = useState({ show: false, errorInfo: '' });
 
-  const dismissDailogAdd = () => {
+  const resetDialogSize = () => {
+    setDialogSize([{ height: theme.spacing(24), width: theme.spacing(32) }]);
+  };
+
+  const dismissDailogAdder = () => {
     setHasDialogAddressAdder(false);
-    setHasLoading(false);
-    setNewConnect({
-      isQuickConnectID: true,
-      connectAddress: '',
-      isHttps: false,
-      username: '',
-      password: '',
-      showPassword: false,
-    });
-    setFormErr({ address: false, username: false, password: false });
+    setTimeout(() => {
+      setHasLoading(false);
+      setTextFieldError(false);
+      setSnackbar({ show: false, errorInfo: '' });
+      setTargetAuthType('');
+      setShowPasswd(false);
+      setNewConnect({
+        connectType: '',
+        quickConnectID: '',
+        host: '',
+        port: 0,
+        isHttps: false,
+        username: '',
+        authType: [],
+        passwd: '',
+      });
+      resetDialogSize();
+    }, 200);
   };
 
   const dismissSnackbar = () => {
     setSnackbar({ show: false, errorInfo: '' });
-    setFormErr({ address: false, username: false, password: false });
+    setTextFieldError(false);
   };
 
   const handleAuth = async () => {
-    if (
-      newConnect.connectAddress.length === 0 ||
-      !/(^[a-zA-Z])/.test(newConnect.connectAddress) ||
-      /-$/.test(newConnect.connectAddress)
-    ) {
-      setSnackbar({ show: true, errorInfo: t('preferences.snackbar.invalid_quickconnect_id') });
-      setFormErr({ ...formErr, address: true });
-      return;
-    }
-
-    if (newConnect.username.length === 0 || newConnect.password.length === 0) {
-      setSnackbar({ show: true, errorInfo: t('preferences.snackbar.wrong_account_or_password') });
-      setFormErr({ ...formErr, username: true, password: true });
-      return;
-    }
-
-    if (
-      find(connectedUsers, {
-        quickConnectID: newConnect.connectAddress,
-        username: newConnect.username,
-      })
-    ) {
-      setSnackbar({ show: true, errorInfo: t('preferences.snackbar.no_duplicate_logins_allowed') });
-      setFormErr({ ...formErr, address: true, username: true });
-      return;
-    }
-
-    setHasLoading(true);
-
     try {
-      const resp = await window.electron.net.auth({
-        quickConnectID: newConnect.connectAddress,
-        account: newConnect.username,
-        passwd: newConnect.password,
+      const resp = await window.electron.net.signIn({
+        host: newConnect.host,
+        port: newConnect.port,
+        username: newConnect.username,
+        passwd: newConnect.passwd,
       });
-
-      if ('command' in resp) {
-        if (resp.errno === 4 && resp.suberrno === 1) {
-          setSnackbar({
-            show: true,
-            errorInfo: t('preferences.snackbar.quickconnect_id_is_incorrect_or_does_not_exist'),
-          });
-          setHasLoading(false);
-          setFormErr({ ...formErr, address: true });
-        }
-
-        if (resp.errno === 30) {
-          setSnackbar({
-            show: true,
-            errorInfo: `${t('preferences.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
-          });
-          setHasLoading(false);
-          setFormErr({ ...formErr, address: true });
-        }
-      }
 
       if ('success' in resp) {
         if (!resp.success && resp.error.code === 400) {
           setSnackbar({ show: true, errorInfo: t('preferences.snackbar.wrong_account_or_password') });
           setHasLoading(false);
-          setFormErr({ ...formErr, username: true, password: true });
+          setTextFieldError(true);
         } else if (resp.success && resp.data.did.length > 0) {
           const arr = [...connectedUsers];
           arr.push({
-            host: resp.hostname,
+            host: resp.host,
             port: resp.port,
-            quickConnectID: resp.quickConnectID,
+            quickConnectID: newConnect.quickConnectID,
             username: newConnect.username,
             did: resp.data.did,
             sid: resp.data.sid,
           });
           setConnectedUsers(arr);
           setTargetDid(resp.data.did);
-          dismissDailogAdd();
+          dismissDailogAdder();
         }
       }
-    } catch {
-      setSnackbar({
-        show: true,
-        errorInfo: `${t('preferences.snackbar.cannot_connect_to')} ${newConnect.connectAddress}`,
-      });
-      setHasLoading(false);
-      setFormErr({ ...formErr, address: true });
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(newConnect);
+  };
+
+  const handleNext = async () => {
+    if (dialogSize.length === 2) {
+      if (!/(^[a-zA-Z])/.test(newConnect.quickConnectID) || /-$/.test(newConnect.quickConnectID)) {
+        setSnackbar({ show: true, errorInfo: t('preferences.snackbar.invalid_quickconnect_id') });
+        setTextFieldError(true);
+        return;
+      }
+
+      setHasLoading(true);
+
+      try {
+        const resp = await window.electron.net.getServerAddress(newConnect.quickConnectID);
+
+        if ('command' in resp) {
+          if (resp.errno === 4 && resp.suberrno === 1) {
+            setSnackbar({
+              show: true,
+              errorInfo: t('preferences.snackbar.quickconnect_id_is_incorrect_or_does_not_exist'),
+            });
+            setTextFieldError(true);
+            setHasLoading(false);
+            return;
+          }
+
+          if (resp.errno === 30) {
+            setSnackbar({
+              show: true,
+              errorInfo: `${t('preferences.snackbar.cannot_connect_to')} ${newConnect.quickConnectID}`,
+            });
+            setHasLoading(false);
+            setTextFieldError(true);
+            return;
+          }
+        }
+
+        if ('success' in resp && resp.success) {
+          setNewConnect({ ...newConnect, host: resp.host, port: resp.port });
+          setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(40) }]);
+          setHasLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (dialogSize.length === 3) {
+      if (find(connectedUsers, { quickConnectID: newConnect.quickConnectID, username: newConnect.username })) {
+        setSnackbar({ show: true, errorInfo: t('preferences.snackbar.no_duplicate_logins_allowed') });
+        setTextFieldError(true);
+        return;
+      }
+
+      setHasLoading(true);
+
+      try {
+        const resp = await window.electron.net.getAuthType({
+          host: newConnect.host,
+          port: newConnect.port,
+          username: newConnect.username,
+        });
+
+        if (resp.success) {
+          if (find(resp.data, { type: 'fido' })) {
+            setTargetAuthType('fido');
+          } else if (find(resp.data, { type: 'authenticator' })) {
+            setTargetAuthType('authenticator');
+          } else {
+            setTargetAuthType('passwd');
+          }
+          setNewConnect({ ...newConnect, authType: resp.data });
+          setDialogSize([...dialogSize, { height: theme.spacing(40), width: theme.spacing(40) }]);
+          setHasLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (dialogSize.length === 4) {
+      setHasLoading(true);
+      handleAuth();
     }
   };
 
   return (
-    <Dialog keepMounted open={hasDialogAddressAdder} onClose={() => dismissDailogAdd()}>
+    <Dialog
+      keepMounted
+      open={hasDialogAddressAdder}
+      PaperProps={{
+        sx: {
+          transition: theme.transitions.create(['height', 'width']),
+          height: dialogSize[dialogSize.length - 1].height,
+          width: dialogSize[dialogSize.length - 1].width,
+        },
+      }}
+      onClose={() => dismissDailogAdder()}
+    >
       <DialogTitle>
-        <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
-          <Stack flexDirection="row" alignItems="center">
-            <IonPersonCircle sx={{ fontSize: 32 }} />
-          </Stack>
-          <ToggleButtonGroup size="small" sx={{ height: theme.spacing(3) }}>
-            <ToggleButton
-              value="left"
-              disableRipple
-              selected={newConnect.isQuickConnectID}
-              sx={{ px: theme.spacing(2) }}
-              onClick={() =>
-                setNewConnect({
-                  ...newConnect,
-                  isQuickConnectID: true,
-                  connectAddress: '',
-                  isHttps: false,
-                  username: '',
-                  password: '',
-                  showPassword: false,
-                })
+        <Stack flexDirection="row" alignItems="center">
+          <IcRoundAccountCircle
+            sx={{
+              position: 'absolute',
+              color: theme.palette.text.secondary,
+              transition: theme.transitions.create(['transform', 'opacity']),
+              transform: dialogSize.length === 1 ? 'scale(1)' : 'scale(0)',
+              opacity: dialogSize.length === 1 ? 1 : 0,
+            }}
+          />
+          <IconButton
+            disabled={dialogSize.length === 1}
+            color="primary"
+            size="small"
+            sx={{
+              position: 'absolute',
+              transition: theme.transitions.create(['transform', 'opacity']),
+              transform: dialogSize.length === 1 ? 'scale(0)' : 'scale(1)',
+              opacity: dialogSize.length === 1 ? 0 : 1,
+              backgroundColor: theme.palette.input.default,
+              '&:hover': { backgroundColor: theme.palette.input.hover },
+            }}
+            onClick={() => {
+              if (dialogSize.length !== 1) {
+                setDialogSize([...dialogSize.slice(0, dialogSize.length - 1)]);
               }
-            >
-              <Typography variant="button" fontSize={11} fontWeight={600}>
-                QuickConnect ID
-              </Typography>
-            </ToggleButton>
-            <ToggleButton
-              value="right"
-              disableRipple
-              selected={!newConnect.isQuickConnectID}
-              sx={{ px: theme.spacing(2) }}
-              onClick={() =>
-                setNewConnect({
-                  ...newConnect,
-                  isQuickConnectID: false,
-                  connectAddress: '',
-                  isHttps: false,
-                  username: '',
-                  password: '',
-                  showPassword: false,
-                })
-              }
-            >
-              <Typography variant="button" fontSize={11} fontWeight={600}>
-                {t('preferences.dialog_add.address')}
-              </Typography>
-            </ToggleButton>
-          </ToggleButtonGroup>
+            }}
+          >
+            <IcRoundArrowBack sx={{ fontSize: 18 }} />
+          </IconButton>
+          <Typography
+            noWrap
+            variant="subtitle2"
+            color={theme.palette.text.secondary}
+            sx={{
+              transition: theme.transitions.create('margin'),
+              ml: dialogSize.length === 1 ? theme.spacing(4) : theme.spacing(5),
+            }}
+          >
+            {[1, 2].includes(dialogSize.length) && t('preferences.dialog_adder.sign_in_with')}
+            {dialogSize.length === 3 && newConnect.quickConnectID}
+            {dialogSize.length === 4 && newConnect.username}
+          </Typography>
         </Stack>
       </DialogTitle>
       <DialogContent>
-        <Stack width={theme.spacing(34)} mt={theme.spacing(1)}>
-          <TextField
-            size="small"
-            spellCheck={false}
-            disabled={hasLoading}
-            error={formErr.address === true}
-            label={newConnect.isQuickConnectID ? 'QuickConnect ID' : t('preferences.dialog_add.address')}
-            value={newConnect.connectAddress}
-            sx={{ mt: theme.spacing(2) }}
-            InputLabelProps={{ sx: { fontSize: 14 } }}
-            InputProps={{
-              [(!newConnect.isQuickConnectID && 'startAdornment') as string]: (
-                <InputAdornment position="start">{newConnect.isHttps ? 'https://' : 'http://'}</InputAdornment>
-              ),
-            }}
-            onChange={(evt) => setNewConnect({ ...newConnect, connectAddress: evt.target.value.replace(/\s/g, '') })}
-            onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
-          />
-          <FormControlLabel
-            sx={{ alignSelf: 'flex-end', visibility: newConnect.isQuickConnectID ? 'hidden' : 'visible' }}
-            labelPlacement="start"
-            label={<Typography color={theme.palette.text.secondary}>HTTPS</Typography>}
-            control={<Checkbox size="small" checked={newConnect.isHttps} />}
-            onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
-          />
-          <TextField
-            size="small"
-            spellCheck={false}
-            disabled={hasLoading}
-            error={formErr.username === true}
-            label={t('preferences.dialog_add.username')}
-            value={newConnect.username}
-            InputLabelProps={{ sx: { fontSize: 14 } }}
-            onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value.replace(/\s/g, '') })}
-            onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
-          />
-          <TextField
-            size="small"
-            spellCheck={false}
-            disabled={hasLoading}
-            error={formErr.password === true}
-            label={t('preferences.dialog_add.password')}
-            value={newConnect.password}
-            type={newConnect.showPassword ? 'text' : 'password'}
-            sx={{ mt: theme.spacing(2) }}
-            InputLabelProps={{ sx: { fontSize: 14 } }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    edge="end"
-                    size="small"
-                    onClick={() => setNewConnect({ ...newConnect, showPassword: !newConnect.showPassword })}
-                  >
-                    {newConnect.showPassword ? (
-                      <IonEyeOutline fontSize="small" />
-                    ) : (
-                      <IonEyeOffOutline fontSize="small" />
+        <Stack height="100%">
+          {dialogSize.length === 1 && (
+            <Fade in>
+              <Stack flex={1} justifyContent="center">
+                <Button
+                  sx={{
+                    height: theme.spacing(5),
+                    backgroundColor: theme.palette.input.default,
+                    '&:hover': { backgroundColor: theme.palette.input.hover },
+                  }}
+                  onClick={() => {
+                    setNewConnect({ ...newConnect, connectType: 'qc' });
+                    setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(40) }]);
+                  }}
+                >
+                  <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
+                    QuickConnect ID
+                  </Typography>
+                </Button>
+                <Button
+                  sx={{
+                    height: theme.spacing(5),
+                    mt: theme.spacing(2),
+                    backgroundColor: theme.palette.input.default,
+                    '&:hover': { backgroundColor: theme.palette.input.hover },
+                  }}
+                  onClick={() => {
+                    setNewConnect({ ...newConnect, connectType: 'host' });
+                    setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(48) }]);
+                  }}
+                >
+                  <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
+                    {t('preferences.dialog_adder.host_address')}
+                  </Typography>
+                </Button>
+              </Stack>
+            </Fade>
+          )}
+          {[2, 3, 4].includes(dialogSize.length) && (
+            <Fade in>
+              <Stack flex={1} justifyContent="space-between">
+                {dialogSize.length === 2 && (
+                  <Stack>
+                    {newConnect.connectType === 'qc' && (
+                      <TextField
+                        size="small"
+                        disabled={hasLoading}
+                        error={textFieldError}
+                        autoFocus
+                        spellCheck={false}
+                        label="QuickConnect ID"
+                        value={newConnect.quickConnectID}
+                        sx={{ mt: theme.spacing(2) }}
+                        InputLabelProps={{ sx: { fontSize: 14 } }}
+                        onChange={(evt) =>
+                          setNewConnect({ ...newConnect, quickConnectID: evt.target.value.replace(/\s/g, '') })
+                        }
+                        onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                      />
                     )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            onChange={(evt) => setNewConnect({ ...newConnect, password: evt.target.value })}
-            onKeyPress={(evt) => evt.key === 'Enter' && handleAuth()}
-          />
+                    {newConnect.connectType === 'host' && (
+                      <TextField
+                        size="small"
+                        disabled={hasLoading}
+                        error={textFieldError}
+                        autoFocus
+                        spellCheck={false}
+                        label={t('preferences.dialog_adder.host_address')}
+                        value={newConnect.quickConnectID}
+                        sx={{ mt: theme.spacing(2) }}
+                        InputLabelProps={{ sx: { fontSize: 14 } }}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              {newConnect.isHttps ? 'https://' : 'http://'}
+                            </InputAdornment>
+                          ),
+                        }}
+                        onChange={(evt) =>
+                          setNewConnect({ ...newConnect, quickConnectID: evt.target.value.replace(/\s/g, '') })
+                        }
+                        onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                      />
+                    )}
+                    {newConnect.connectType === 'host' && (
+                      <FormControlLabel
+                        labelPlacement="start"
+                        label={<Typography color={theme.palette.text.secondary}>HTTPS</Typography>}
+                        control={<Checkbox size="small" checked={newConnect.isHttps} />}
+                        onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
+                      />
+                    )}
+                  </Stack>
+                )}
+                {dialogSize.length === 3 && (
+                  <TextField
+                    size="small"
+                    autoFocus
+                    spellCheck={false}
+                    label={t('preferences.dialog_adder.username')}
+                    value={newConnect.username}
+                    sx={{ mt: theme.spacing(2) }}
+                    InputLabelProps={{ sx: { fontSize: 14 } }}
+                    onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value.replace(/\s/g, '') })}
+                    onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                  />
+                )}
+                {dialogSize.length === 4 && (
+                  <Stack>
+                    {targetAuthType === 'fido' && (
+                      <Stack>
+                        <Stack flexDirection="row" alignItems="center">
+                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                            {t('preferences.dialog_adder.waiting_for_verification')}
+                          </Typography>
+                          <EosIconsThreeDotsLoading sx={{ ml: theme.spacing(0.5) }} />
+                        </Stack>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: theme.palette.text.secondary }}
+                          mt={theme.spacing(0.5)}
+                        >
+                          {t('preferences.dialog_adder.complate_sign_in_with_your_hardware_security_key')}
+                        </Typography>
+                      </Stack>
+                    )}
+                    {targetAuthType === 'authenticator' && (
+                      <Stack>
+                        <Stack flexDirection="row" alignItems="center">
+                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                            {t('preferences.dialog_adder.waiting_for_verification')}
+                          </Typography>
+                          <EosIconsThreeDotsLoading sx={{ ml: theme.spacing(0.5) }} />
+                        </Stack>
+                        <Typography
+                          variant="body2"
+                          sx={{ color: theme.palette.text.secondary }}
+                          mt={theme.spacing(0.5)}
+                        >
+                          {t('preferences.dialog_adder.approve_the_request_on_your_synology_secure_signin_app')}
+                        </Typography>
+                      </Stack>
+                    )}
+                    {targetAuthType === 'passwd' && (
+                      <TextField
+                        size="small"
+                        autoFocus
+                        spellCheck={false}
+                        label={t('preferences.dialog_adder.password')}
+                        value={newConnect.passwd}
+                        type={showPasswd ? 'text' : 'password'}
+                        sx={{ mt: theme.spacing(2) }}
+                        InputLabelProps={{ sx: { fontSize: 14 } }}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton edge="end" size="small" onClick={() => setShowPasswd(!showPasswd)}>
+                                {showPasswd ? (
+                                  <IonEyeOutline fontSize="small" />
+                                ) : (
+                                  <IonEyeOffOutline fontSize="small" />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                        onChange={(evt) => setNewConnect({ ...newConnect, passwd: evt.target.value })}
+                        onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                      />
+                    )}
+                  </Stack>
+                )}
+
+                <Stack>
+                  <Button
+                    disabled={
+                      (dialogSize.length === 2 && (newConnect.quickConnectID.length === 0 || hasLoading)) ||
+                      (dialogSize.length === 3 && (newConnect.username.length === 0 || hasLoading)) ||
+                      (dialogSize.length === 4 && (newConnect.passwd.length === 0 || hasLoading))
+                    }
+                    sx={{
+                      mb: theme.spacing(1),
+                      height: theme.spacing(5),
+                      alignItems: 'center',
+                      backgroundColor: theme.palette.input.default,
+                      '&:hover': { backgroundColor: theme.palette.input.hover },
+                      transition: theme.transitions.create('opacity'),
+                      opacity:
+                        [2, 3].includes(dialogSize.length) || (dialogSize.length === 4 && targetAuthType === 'passwd')
+                          ? 1
+                          : 0,
+                    }}
+                    onClick={() => handleNext()}
+                  >
+                    {hasLoading && <EosIconsThreeDotsLoading />}
+                    {!hasLoading && (
+                      <Typography fontWeight={500} sx={{ fontSize: 12 }}>
+                        {[2, 3].includes(dialogSize.length) && t('preferences.dialog_adder.next')}
+                        {dialogSize.length === 4 && targetAuthType === 'passwd' && t('preferences.dialog_adder.login')}
+                      </Typography>
+                    )}
+                  </Button>
+
+                  <Stack
+                    sx={{
+                      mt: theme.spacing(1),
+                      transition: theme.transitions.create('height'),
+                      height: dialogSize.length === 4 ? theme.spacing(9) : 0,
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
+                      <Box flex={1} height="1px" sx={{ backgroundColor: theme.palette.divider }} />
+                      <Typography
+                        noWrap
+                        color={theme.palette.text.disabled}
+                        sx={{ fontSize: 10, mx: theme.spacing(1) }}
+                      >
+                        {t('preferences.dialog_adder.other_sign_in_methods')}
+                      </Typography>
+                      <Box flex={1} height="1px" sx={{ backgroundColor: theme.palette.divider }} />
+                    </Stack>
+
+                    <Stack flexDirection="row" mt={theme.spacing(1)}>
+                      {find(newConnect.authType, { type: 'fido' }) && (
+                        <Stack alignItems="center" mr={theme.spacing(2)}>
+                          <Button
+                            size="large"
+                            sx={{
+                              backgroundColor: theme.palette.input.default,
+                              minWidth: theme.spacing(5),
+                              maxWidth: theme.spacing(5),
+                              '&:hover': { backgroundColor: theme.palette.input.hover },
+                            }}
+                            onClick={() => setTargetAuthType('fido')}
+                          >
+                            <IcRoundFingerprint
+                              fontSize="small"
+                              sx={{
+                                color:
+                                  targetAuthType === 'fido' ? theme.palette.primary.main : theme.palette.text.secondary,
+                              }}
+                            />
+                          </Button>
+
+                          <Typography
+                            color={theme.palette.text.secondary}
+                            sx={{ fontSize: 8, mt: theme.spacing(0.25) }}
+                          >
+                            FIDO
+                          </Typography>
+                        </Stack>
+                      )}
+
+                      {find(newConnect.authType, { type: 'authenticator' }) && (
+                        <Stack alignItems="center" mr={theme.spacing(2)}>
+                          <Button
+                            size="large"
+                            sx={{
+                              backgroundColor: theme.palette.input.default,
+                              minWidth: theme.spacing(5),
+                              maxWidth: theme.spacing(5),
+                              '&:hover': { backgroundColor: theme.palette.input.hover },
+                            }}
+                          >
+                            <IcRoundPhoneAndroid
+                              fontSize="small"
+                              sx={{
+                                color:
+                                  targetAuthType === 'authenticator'
+                                    ? theme.palette.primary.main
+                                    : theme.palette.text.secondary,
+                              }}
+                              onClick={() => setTargetAuthType('authenticator')}
+                            />
+                          </Button>
+                          <Typography
+                            color={theme.palette.text.secondary}
+                            sx={{ fontSize: 8, mt: theme.spacing(0.25) }}
+                          >
+                            OTP
+                          </Typography>
+                        </Stack>
+                      )}
+
+                      <Stack alignItems="center" mr={theme.spacing(2)}>
+                        <Button
+                          size="large"
+                          sx={{
+                            backgroundColor: theme.palette.input.default,
+                            minWidth: theme.spacing(5),
+                            maxWidth: theme.spacing(5),
+                            '&:hover': { backgroundColor: theme.palette.input.hover },
+                          }}
+                          onClick={() => setTargetAuthType('passwd')}
+                        >
+                          <IcRoundPassword
+                            fontSize="small"
+                            sx={{
+                              color:
+                                targetAuthType === 'passwd' ? theme.palette.primary.main : theme.palette.text.secondary,
+                            }}
+                          />
+                        </Button>
+                        <Typography color={theme.palette.text.secondary} sx={{ fontSize: 8, mt: theme.spacing(0.25) }}>
+                          {t('preferences.dialog_adder.password')}
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                  </Stack>
+                </Stack>
+              </Stack>
+            </Fade>
+          )}
         </Stack>
       </DialogContent>
-      <DialogActions>
-        <Button color="inherit" onClick={() => dismissDailogAdd()}>
-          {t('preferences.dialog_add.cancel')}
-        </Button>
-        <Button
-          sx={{
-            transition: theme.transitions.create(['background-color'], {
-              easing: theme.transitions.easing.easeIn,
-              duration: theme.transitions.duration.standard,
-            }),
-            ...(hasLoading && {
-              backgroundColor: theme.palette.action.disabledBackground,
-            }),
-          }}
-          disabled={hasLoading}
-          onClick={() => handleAuth()}
-        >
-          {hasLoading ? <EosIconsThreeDotsLoading /> : t('preferences.dialog_add.ok')}
-        </Button>
-      </DialogActions>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={snackbar.show}
