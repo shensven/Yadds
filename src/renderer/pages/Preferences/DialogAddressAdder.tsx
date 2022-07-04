@@ -319,7 +319,7 @@ const DialogAddressAdder: React.FC = () => {
           )}
           {[2, 3, 4].includes(dialogSize.length) && (
             <Fade in>
-              <Stack flex={1} justifyContent="space-between">
+              <Stack flex={1} justifyContent="space-between" sx={{ overflow: 'hidden' }}>
                 {dialogSize.length === 2 && (
                   <Stack>
                     {newConnect.connectType === 'qc' && (
@@ -340,40 +340,40 @@ const DialogAddressAdder: React.FC = () => {
                       />
                     )}
                     {newConnect.connectType === 'host' && (
-                      <TextField
-                        size="small"
-                        disabled={hasLoading}
-                        error={textFieldError}
-                        autoFocus
-                        spellCheck={false}
-                        label={t('preferences.dialog_adder.host_address')}
-                        value={newConnect.quickConnectID}
-                        sx={{ mt: theme.spacing(2) }}
-                        InputLabelProps={{ sx: { fontSize: 14 } }}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              {newConnect.isHttps ? 'https://' : 'http://'}
-                            </InputAdornment>
-                          ),
-                        }}
-                        onChange={(evt) =>
-                          setNewConnect({ ...newConnect, quickConnectID: evt.target.value.replace(/\s/g, '') })
-                        }
-                        onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
-                      />
-                    )}
-                    {newConnect.connectType === 'host' && (
-                      <FormControlLabel
-                        labelPlacement="start"
-                        label={
-                          <Typography fontSize={12} fontWeight={500} color={theme.palette.text.secondary}>
-                            HTTPS
-                          </Typography>
-                        }
-                        control={<Checkbox size="small" checked={newConnect.isHttps} />}
-                        onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
-                      />
+                      <Stack>
+                        <TextField
+                          size="small"
+                          disabled={hasLoading}
+                          error={textFieldError}
+                          autoFocus
+                          spellCheck={false}
+                          label={t('preferences.dialog_adder.host_address')}
+                          value={newConnect.quickConnectID}
+                          sx={{ mt: theme.spacing(2) }}
+                          InputLabelProps={{ sx: { fontSize: 14 } }}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                {newConnect.isHttps ? 'https://' : 'http://'}
+                              </InputAdornment>
+                            ),
+                          }}
+                          onChange={(evt) =>
+                            setNewConnect({ ...newConnect, quickConnectID: evt.target.value.replace(/\s/g, '') })
+                          }
+                          onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                        />
+                        <FormControlLabel
+                          labelPlacement="start"
+                          label={
+                            <Typography fontSize={12} fontWeight={500} color={theme.palette.text.secondary}>
+                              HTTPS
+                            </Typography>
+                          }
+                          control={<Checkbox size="small" checked={newConnect.isHttps} />}
+                          onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
+                        />
+                      </Stack>
                     )}
                   </Stack>
                 )}
@@ -483,7 +483,6 @@ const DialogAddressAdder: React.FC = () => {
                       mt: theme.spacing(1),
                       transition: theme.transitions.create('height'),
                       height: dialogSize.length === 4 ? theme.spacing(9) : 0,
-                      overflow: 'hidden',
                     }}
                   >
                     <Stack flexDirection="row" alignItems="center" justifyContent="space-between">
