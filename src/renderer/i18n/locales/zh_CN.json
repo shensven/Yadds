@@ -63,18 +63,24 @@
     "license": "许可证",
     "this_copy_is_licensed_under_GPL_3_0": "本拷贝通过 GPL-3.0 协议授权",
     "devoloper": "开发者",
-    "dialog_add": {
-      "address": "地址",
-      "username": "用户帐号",
-      "password": "密码",
-      "cancel": "取消",
-      "ok": "确定"
+    "dialog_adder": {
+      "sign_in_with": "Sign in with",
+      "host_address": "Host Address",
+      "next": "Next",
+      "address": "Address",
+      "username": "Username",
+      "login": "Login",
+      "other_sign_in_methods": "Other sign-in methods",
+      "password": "Password",
+      "waiting_for_verification": "Waiting for verification",
+      "approve_the_request_on_your_synology_secure_signin_app": "Approve the request on your Synology Secure Signin app",
+      "complate_sign_in_with_your_hardware_security_key": "Complate sign-in with your hardware security key"
     },
-    "dialog_remove": {
-      "confirm_remove": "再次确认",
-      "are_you_sure": "您确定登出并断开与 DSM 的连接吗？",
-      "cancel": "取消",
-      "yes": "确定"
+    "dialog_remover": {
+      "confirm_remove": "Confirm Remove",
+      "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
+      "cancel": "CANCEL",
+      "yes": "YES"
     },
     "snackbar": {
       "timeout": "连接超时",
