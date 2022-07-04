@@ -64,23 +64,22 @@
     "this_copy_is_licensed_under_GPL_3_0": "本拷贝通过 GPL-3.0 协议授权",
     "devoloper": "开发者",
     "dialog_adder": {
-      "sign_in_with": "Sign in with",
-      "host_address": "Host Address",
-      "next": "Next",
-      "address": "Address",
-      "username": "Username",
-      "login": "Login",
-      "other_sign_in_methods": "Other sign-in methods",
-      "password": "Password",
-      "waiting_for_verification": "Waiting for verification",
-      "approve_the_request_on_your_synology_secure_signin_app": "Approve the request on your Synology Secure Signin app",
-      "complate_sign_in_with_your_hardware_security_key": "Complate sign-in with your hardware security key"
+      "sign_in_with": "登录方式",
+      "host_address": "主机地址",
+      "next": "下一步",
+      "username": "用户帐号",
+      "login": "登 录",
+      "other_sign_in_methods": "其他登录方式",
+      "password": "密码",
+      "waiting_for_verification": "等待验证",
+      "approve_the_request_on_your_synology_secure_signin_app": "在 Synology Secure Signin 应用程序中批准登录",
+      "complate_sign_in_with_your_hardware_security_key": "使用硬件安全密钥以完成登录"
     },
     "dialog_remover": {
-      "confirm_remove": "Confirm Remove",
-      "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
-      "cancel": "CANCEL",
-      "yes": "YES"
+      "confirm_remove": "再次确认",
+      "are_you_sure": "您确定登出并断开与 DSM 的连接吗？",
+      "cancel": "取 消",
+      "yes": "确 定"
     },
     "snackbar": {
       "timeout": "连接超时",
