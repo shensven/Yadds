@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography, useTheme } from '@mui/material';
-import IonTrashOutline from '../../assets/icons/IonTrashOutline';
+import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography, useTheme } from '@mui/material';
+import IcRoundDelete from '../../assets/icons/IcRoundDelete';
 import { atomHasDialogAddressRemover, atomWhoWillRemove } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 
@@ -45,26 +45,49 @@ const DialogAddressRemover: React.FC = () => {
   };
 
   return (
-    <Dialog keepMounted open={hasDialogAddressRemover} onClose={() => dismissDialogRemove()}>
+    <Dialog
+      keepMounted
+      open={hasDialogAddressRemover}
+      PaperProps={{
+        sx: { width: theme.spacing(32), height: theme.spacing(24) },
+      }}
+      onClose={() => dismissDialogRemove()}
+    >
       <DialogTitle>
         <Stack flexDirection="row" alignItems="center">
-          <Typography>{t('preferences.dialog_remove.confirm_remove')}</Typography>
-          <IonTrashOutline sx={{ fontSize: 17, ml: theme.spacing(1) }} />
+          <IcRoundDelete sx={{ color: theme.palette.text.secondary, ml: theme.spacing(-0.5) }} />
+          <Typography
+            noWrap
+            variant="subtitle2"
+            color={theme.palette.text.secondary}
+            sx={{ fontWeight: 500, ml: theme.spacing(1) }}
+          >
+            {t('preferences.dialog_remover.confirm_remove')}
+          </Typography>
         </Stack>
       </DialogTitle>
       <DialogContent>
-        <Typography color={theme.palette.text.secondary} sx={{ fontSize: 14, width: theme.spacing(28) }}>
-          {t('preferences.dialog_remove.are_you_sure')}
-        </Typography>
+        <Stack height="100%" justifyContent="space-between">
+          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+            {t('preferences.dialog_remover.are_you_sure')}
+          </Typography>
+
+          <Button
+            color="warning"
+            sx={{
+              height: theme.spacing(5),
+              mt: theme.spacing(2),
+              backgroundColor: theme.palette.input.default,
+              '&:hover': { backgroundColor: theme.palette.input.hover },
+            }}
+            onClick={() => handleRemove()}
+          >
+            <Typography fontWeight={500} sx={{ fontSize: 12 }}>
+              {t('preferences.dialog_remover.yes')}
+            </Typography>
+          </Button>
+        </Stack>
       </DialogContent>
-      <DialogActions>
-        <Button color="inherit" onClick={() => dismissDialogRemove()}>
-          {t('preferences.dialog_remove.cancel')}
-        </Button>
-        <Button color="error" onClick={() => handleRemove()}>
-          {t('preferences.dialog_remove.yes')}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

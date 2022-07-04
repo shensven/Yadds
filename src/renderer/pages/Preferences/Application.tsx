@@ -49,7 +49,7 @@ const Application: React.FC = () => {
             }}
             onClick={() => {}}
           >
-            <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
+            <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
               {t('preferences.check_now')}
             </Typography>
           </Button>

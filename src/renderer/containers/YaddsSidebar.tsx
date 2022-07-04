@@ -194,7 +194,7 @@ const YaddsSidebar: React.FC = () => {
             <ListItemText
               primary={
                 <Typography
-                  // noWrap
+                  noWrap
                   variant="subtitle2"
                   color={sidebarCategory === '/server' ? theme.palette.primary.main : theme.palette.text.secondary}
                   fontWeight={600}

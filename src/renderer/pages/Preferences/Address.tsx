@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import RowItem from './RowItem';
-import IonTrashOutline from '../../assets/icons/IonTrashOutline';
+import IcRoundDelete from '../../assets/icons/IcRoundDelete';
 import { atomHasDialogAddressAdder, atomHasDialogAddressRemover, atomWhoWillRemove } from '../../atoms/atomUI';
 import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 
@@ -50,7 +50,7 @@ const Address: React.FC = () => {
             displayEmpty
             value={targetDid}
             renderValue={() => (
-              <Typography sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <Typography fontSize={14} fontWeight={500} sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {targetDid.length === 0 && 'N/A'}
                 {targetDid.length > 0 &&
                   `${find(connectedUsers, { did: targetDid })?.username} @ ${
@@ -71,13 +71,15 @@ const Address: React.FC = () => {
               <MenuItem key={item.did} dense disableRipple value={item.did}>
                 <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
                   <Typography
-                    sx={{ fontSize: 14, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
+                    fontSize={14}
+                    fontWeight={500}
+                    sx={{ overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
                     onClick={() => handleAddress(item.did, index, false)}
                   >
                     {item.username} @ {item.quickConnectID}
                   </Typography>
-                  <IconButton sx={{ width: 20, height: 20 }} onClick={() => handleAddress(item.did, index, true)}>
-                    <IonTrashOutline sx={{ fontSize: 14 }} />
+                  <IconButton sx={{ width: 24, height: 24 }} onClick={() => handleAddress(item.did, index, true)}>
+                    <IcRoundDelete sx={{ color: theme.palette.text.secondary, fontSize: 18 }} />
                   </IconButton>
                 </Stack>
               </MenuItem>
@@ -89,7 +91,9 @@ const Address: React.FC = () => {
           sx={{ ml: theme.spacing(1), px: theme.spacing(1) }}
           onClick={() => setHasDialogAddressAdder(true)}
         >
-          {t('preferences.new_connection')}
+          <Typography fontSize={12} fontWeight={500}>
+            {t('preferences.new_connection')}
+          </Typography>
         </Button>
       </FormGroup>
     </RowItem>

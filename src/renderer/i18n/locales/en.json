@@ -78,7 +78,6 @@
     "dialog_remover": {
       "confirm_remove": "Confirm Remove",
       "are_you_sure": "Are you sure you want to log out and disconnect from DSM?",
-      "cancel": "CANCEL",
       "yes": "YES"
     },
     "snackbar": {

@@ -294,7 +294,7 @@ const DialogAddressAdder: React.FC = () => {
                     setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(40) }]);
                   }}
                 >
-                  <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
+                  <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
                     QuickConnect ID
                   </Typography>
                 </Button>
@@ -310,7 +310,7 @@ const DialogAddressAdder: React.FC = () => {
                     setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(48) }]);
                   }}
                 >
-                  <Typography fontWeight={500} sx={{ fontSize: 12, px: theme.spacing(0.5) }}>
+                  <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
                     {t('preferences.dialog_adder.host_address')}
                   </Typography>
                 </Button>
@@ -366,7 +366,11 @@ const DialogAddressAdder: React.FC = () => {
                     {newConnect.connectType === 'host' && (
                       <FormControlLabel
                         labelPlacement="start"
-                        label={<Typography color={theme.palette.text.secondary}>HTTPS</Typography>}
+                        label={
+                          <Typography fontSize={12} fontWeight={500} color={theme.palette.text.secondary}>
+                            HTTPS
+                          </Typography>
+                        }
                         control={<Checkbox size="small" checked={newConnect.isHttps} />}
                         onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
                       />
@@ -391,16 +395,12 @@ const DialogAddressAdder: React.FC = () => {
                     {targetAuthType === 'fido' && (
                       <Stack>
                         <Stack flexDirection="row" alignItems="center">
-                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          <Typography fontWeight={500} variant="subtitle1">
                             {t('preferences.dialog_adder.waiting_for_verification')}
                           </Typography>
                           <EosIconsThreeDotsLoading sx={{ ml: theme.spacing(0.5) }} />
                         </Stack>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: theme.palette.text.secondary }}
-                          mt={theme.spacing(0.5)}
-                        >
+                        <Typography variant="body2" color={theme.palette.text.secondary} mt={theme.spacing(0.5)}>
                           {t('preferences.dialog_adder.complate_sign_in_with_your_hardware_security_key')}
                         </Typography>
                       </Stack>
@@ -408,16 +408,12 @@ const DialogAddressAdder: React.FC = () => {
                     {targetAuthType === 'authenticator' && (
                       <Stack>
                         <Stack flexDirection="row" alignItems="center">
-                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                          <Typography fontWeight={500} variant="subtitle1">
                             {t('preferences.dialog_adder.waiting_for_verification')}
                           </Typography>
                           <EosIconsThreeDotsLoading sx={{ ml: theme.spacing(0.5) }} />
                         </Stack>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: theme.palette.text.secondary }}
-                          mt={theme.spacing(0.5)}
-                        >
+                        <Typography variant="body2" color={theme.palette.text.secondary} mt={theme.spacing(0.5)}>
                           {t('preferences.dialog_adder.approve_the_request_on_your_synology_secure_signin_app')}
                         </Typography>
                       </Stack>
@@ -475,7 +471,7 @@ const DialogAddressAdder: React.FC = () => {
                   >
                     {hasLoading && <EosIconsThreeDotsLoading />}
                     {!hasLoading && (
-                      <Typography fontWeight={500} sx={{ fontSize: 12 }}>
+                      <Typography fontSize={12} fontWeight={500}>
                         {[2, 3].includes(dialogSize.length) && t('preferences.dialog_adder.next')}
                         {dialogSize.length === 4 && targetAuthType === 'passwd' && t('preferences.dialog_adder.login')}
                       </Typography>
@@ -494,8 +490,9 @@ const DialogAddressAdder: React.FC = () => {
                       <Box flex={1} height="1px" sx={{ backgroundColor: theme.palette.divider }} />
                       <Typography
                         noWrap
+                        fontSize={10}
                         color={theme.palette.text.disabled}
-                        sx={{ fontSize: 10, mx: theme.spacing(1) }}
+                        sx={{ mx: theme.spacing(1) }}
                       >
                         {t('preferences.dialog_adder.other_sign_in_methods')}
                       </Typography>
@@ -525,8 +522,9 @@ const DialogAddressAdder: React.FC = () => {
                           </Button>
 
                           <Typography
+                            fontSize={8}
                             color={theme.palette.text.secondary}
-                            sx={{ fontSize: 8, mt: theme.spacing(0.25) }}
+                            sx={{ mt: theme.spacing(0.25) }}
                           >
                             FIDO
                           </Typography>
@@ -556,8 +554,9 @@ const DialogAddressAdder: React.FC = () => {
                             />
                           </Button>
                           <Typography
+                            fontSize={8}
                             color={theme.palette.text.secondary}
-                            sx={{ fontSize: 8, mt: theme.spacing(0.25) }}
+                            sx={{ mt: theme.spacing(0.25) }}
                           >
                             OTP
                           </Typography>
@@ -583,7 +582,7 @@ const DialogAddressAdder: React.FC = () => {
                             }}
                           />
                         </Button>
-                        <Typography color={theme.palette.text.secondary} sx={{ fontSize: 8, mt: theme.spacing(0.25) }}>
+                        <Typography fontSize={8} color={theme.palette.text.secondary} sx={{ mt: theme.spacing(0.25) }}>
                           {t('preferences.dialog_adder.password')}
                         </Typography>
                       </Stack>
