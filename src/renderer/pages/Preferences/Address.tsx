@@ -43,7 +43,7 @@ const Address: React.FC = () => {
   };
 
   return (
-    <RowItem label={t('preferences.quickconnect_id_or_address')}>
+    <RowItem label={t('preferences.quickconnect_id_or_host_address')}>
       <FormGroup row>
         <FormControl>
           <Select

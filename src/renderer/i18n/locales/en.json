@@ -51,7 +51,7 @@
     "light": "Light",
     "dark": "Dark",
     "follow_system": "FLW SYS",
-    "quickconnect_id_or_address": "QuickConnect ID / Address",
+    "quickconnect_id_or_host_address": "QuickConnect ID / Host Address",
     "new_connection": "NEW CONNECTION",
     "language": "Language",
     "application": "Application",
