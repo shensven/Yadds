@@ -78,7 +78,6 @@
     "dialog_remover": {
       "confirm_remove": "再次确认",
       "are_you_sure": "登出并断开与 DSM 的连接？",
-      "cancel": "取 消",
       "yes": "确 定"
     },
     "snackbar": {
