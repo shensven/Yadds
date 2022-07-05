@@ -51,7 +51,7 @@
     "light": "浅色",
     "dark": "深色",
     "follow_system": "跟随系统",
-    "quickconnect_id_or_address": "QuickConnect ID / 地址",
+    "quickconnect_id_or_host_address": "QuickConnect ID / 主机地址",
     "new_connection": "新增连接",
     "language": "语言",
     "application": "应用程序",
@@ -66,6 +66,7 @@
     "dialog_adder": {
       "sign_in_with": "登录方式",
       "host_address": "主机地址",
+      "port": "端口",
       "next": "下一步",
       "username": "用户帐号",
       "login": "登 录",
