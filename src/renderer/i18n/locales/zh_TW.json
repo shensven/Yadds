@@ -51,7 +51,7 @@
     "light": "淺色",
     "dark": "深色",
     "follow_system": "跟隨系統",
-    "quickconnect_id_or_address": "QuickConnect ID / Address",
+    "quickconnect_id_or_host_address": "QuickConnect ID / Host Address",
     "new_connection": "NEW CONNECTION",
     "language": "語言",
     "application": "應用程式",
@@ -66,6 +66,7 @@
     "dialog_adder": {
       "sign_in_with": "Sign in with",
       "host_address": "Host Address",
+      "port": "Port",
       "next": "Next",
       "username": "Username",
       "login": "Login",
