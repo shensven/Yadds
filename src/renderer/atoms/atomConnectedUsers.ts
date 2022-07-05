@@ -1,8 +1,10 @@
 import { atom } from 'jotai';
 
 export interface ConnectedUser {
+  connectType: 'qc' | 'host';
   host: string;
   port: number;
+  isHttps: boolean;
   username: string;
   did: string;
   sid: string;

@@ -12,8 +12,10 @@ const schema: Schema<YaddsConnectedUsers> = {
     items: {
       type: 'object',
       properties: {
+        connectType: { type: 'string' },
         host: { type: 'string' },
         port: { type: 'number' },
+        isHttps: { type: 'boolean' },
         username: { type: 'string' },
         did: { type: 'string' },
         sid: { type: 'string' },

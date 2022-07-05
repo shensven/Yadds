@@ -11,7 +11,6 @@ import {
   DialogContent,
   DialogTitle,
   Fade,
-  FormControlLabel,
   IconButton,
   InputAdornment,
   Slide,
@@ -117,12 +116,14 @@ const DialogAddressAdder: React.FC = () => {
         } else if (resp.success && resp.data.did.length > 0) {
           const arr = [...connectedUsers];
           arr.push({
+            connectType: newConnect.connectType as 'qc' | 'host',
             host: resp.host,
             port: resp.port,
-            quickConnectID: newConnect.quickConnectID,
+            isHttps: newConnect.isHttps,
             username: newConnect.username,
             did: resp.data.did,
             sid: resp.data.sid,
+            quickConnectID: newConnect.quickConnectID,
           });
           setConnectedUsers(arr);
           setTargetDid(resp.data.did);
@@ -135,8 +136,17 @@ const DialogAddressAdder: React.FC = () => {
     console.log(newConnect);
   };
 
-  const handleNext = async () => {
-    if (dialogSize.length === 2) {
+  const handleNext = async (connectType?: 'qc' | 'host') => {
+    if (dialogSize.length === 1 && connectType) {
+      setNewConnect({ ...newConnect, connectType });
+      if (connectType === 'qc') {
+        setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(40) }]);
+      } else {
+        setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(56) }]);
+      }
+    }
+
+    if (dialogSize.length === 2 && newConnect.connectType === 'qc') {
       if (!/(^[a-zA-Z])/.test(newConnect.quickConnectID) || /-$/.test(newConnect.quickConnectID)) {
         setSnackbar({ show: true, errorInfo: t('preferences.snackbar.invalid_quickconnect_id') });
         setTextFieldError(true);
@@ -171,8 +181,29 @@ const DialogAddressAdder: React.FC = () => {
         }
 
         if ('success' in resp && resp.success) {
-          setNewConnect({ ...newConnect, host: resp.host, port: resp.port });
+          setNewConnect({ ...newConnect, host: resp.host, port: resp.port, isHttps: true });
           setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(40) }]);
+          setHasLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (dialogSize.length === 2 && newConnect.connectType === 'host') {
+      setHasLoading(true);
+
+      try {
+        const resp = await window.electron.net.pingPongHost({
+          host: newConnect.host,
+          port: newConnect.port,
+          isHtpps: newConnect.isHttps,
+        });
+
+        console.log(resp);
+
+        if ('success' in resp && resp.success) {
+          setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(48) }]);
           setHasLoading(false);
         }
       } catch (error) {
@@ -219,6 +250,19 @@ const DialogAddressAdder: React.FC = () => {
     }
   };
 
+  const handlePrev = () => {
+    if (dialogSize.length === 4) {
+      setNewConnect({ ...newConnect, passwd: '', authType: [] });
+    }
+    if (dialogSize.length === 3) {
+      setNewConnect({ ...newConnect, username: '', host: '', port: 0 });
+    }
+    if (dialogSize.length === 2) {
+      setNewConnect({ ...newConnect, quickConnectID: '', connectType: '' });
+    }
+    setDialogSize([...dialogSize.slice(0, dialogSize.length - 1)]);
+  };
+
   return (
     <Dialog
       keepMounted
@@ -255,11 +299,7 @@ const DialogAddressAdder: React.FC = () => {
               backgroundColor: theme.palette.input.default,
               '&:hover': { backgroundColor: theme.palette.input.hover },
             }}
-            onClick={() => {
-              if (dialogSize.length !== 1) {
-                setDialogSize([...dialogSize.slice(0, dialogSize.length - 1)]);
-              }
-            }}
+            onClick={() => handlePrev()}
           >
             <IcRoundArrowBack sx={{ fontSize: 18 }} />
           </IconButton>
@@ -273,7 +313,10 @@ const DialogAddressAdder: React.FC = () => {
             }}
           >
             {[1, 2].includes(dialogSize.length) && t('preferences.dialog_adder.sign_in_with')}
-            {dialogSize.length === 3 && newConnect.quickConnectID}
+            {dialogSize.length === 3 && newConnect.connectType === 'qc' && newConnect.quickConnectID}
+            {dialogSize.length === 3 &&
+              newConnect.connectType === 'host' &&
+              `${newConnect.isHttps ? 'https' : 'http'}://${newConnect.host}:${newConnect.port}`}
             {dialogSize.length === 4 && newConnect.username}
           </Typography>
         </Stack>
@@ -289,10 +332,7 @@ const DialogAddressAdder: React.FC = () => {
                     backgroundColor: theme.palette.input.default,
                     '&:hover': { backgroundColor: theme.palette.input.hover },
                   }}
-                  onClick={() => {
-                    setNewConnect({ ...newConnect, connectType: 'qc' });
-                    setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(40) }]);
-                  }}
+                  onClick={() => handleNext('qc')}
                 >
                   <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
                     QuickConnect ID
@@ -305,10 +345,7 @@ const DialogAddressAdder: React.FC = () => {
                     backgroundColor: theme.palette.input.default,
                     '&:hover': { backgroundColor: theme.palette.input.hover },
                   }}
-                  onClick={() => {
-                    setNewConnect({ ...newConnect, connectType: 'host' });
-                    setDialogSize([...dialogSize, { height: theme.spacing(32), width: theme.spacing(48) }]);
-                  }}
+                  onClick={() => handleNext('host')}
                 >
                   <Typography fontSize={12} fontWeight={500} sx={{ px: theme.spacing(0.5) }}>
                     {t('preferences.dialog_adder.host_address')}
@@ -321,7 +358,7 @@ const DialogAddressAdder: React.FC = () => {
             <Fade in>
               <Stack flex={1} justifyContent="space-between" sx={{ overflow: 'hidden' }}>
                 {dialogSize.length === 2 && (
-                  <Stack>
+                  <Stack sx={{ mt: theme.spacing(2) }}>
                     {newConnect.connectType === 'qc' && (
                       <TextField
                         size="small"
@@ -331,8 +368,7 @@ const DialogAddressAdder: React.FC = () => {
                         spellCheck={false}
                         label="QuickConnect ID"
                         value={newConnect.quickConnectID}
-                        sx={{ mt: theme.spacing(2) }}
-                        InputLabelProps={{ sx: { fontSize: 14 } }}
+                        // InputLabelProps={{ sx: { fontSize: 14 } }}
                         onChange={(evt) =>
                           setNewConnect({ ...newConnect, quickConnectID: evt.target.value.replace(/\s/g, '') })
                         }
@@ -341,38 +377,62 @@ const DialogAddressAdder: React.FC = () => {
                     )}
                     {newConnect.connectType === 'host' && (
                       <Stack>
-                        <TextField
-                          size="small"
-                          disabled={hasLoading}
-                          error={textFieldError}
-                          autoFocus
-                          spellCheck={false}
-                          label={t('preferences.dialog_adder.host_address')}
-                          value={newConnect.quickConnectID}
-                          sx={{ mt: theme.spacing(2) }}
-                          InputLabelProps={{ sx: { fontSize: 14 } }}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                {newConnect.isHttps ? 'https://' : 'http://'}
-                              </InputAdornment>
-                            ),
-                          }}
-                          onChange={(evt) =>
-                            setNewConnect({ ...newConnect, quickConnectID: evt.target.value.replace(/\s/g, '') })
-                          }
-                          onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
-                        />
-                        <FormControlLabel
-                          labelPlacement="start"
-                          label={
-                            <Typography fontSize={12} fontWeight={500} color={theme.palette.text.secondary}>
-                              HTTPS
-                            </Typography>
-                          }
-                          control={<Checkbox size="small" checked={newConnect.isHttps} />}
-                          onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
-                        />
+                        <Stack flexDirection="row">
+                          <TextField
+                            size="small"
+                            disabled={hasLoading}
+                            error={textFieldError}
+                            autoFocus
+                            spellCheck={false}
+                            label={t('preferences.dialog_adder.host_address')}
+                            value={newConnect.host}
+                            // InputLabelProps={{ sx: { fontSize: 14 } }}
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  {newConnect.isHttps ? 'https://' : 'http://'}
+                                </InputAdornment>
+                              ),
+                            }}
+                            sx={{ flex: 1 }}
+                            onChange={(evt) =>
+                              setNewConnect({ ...newConnect, host: evt.target.value.replace(/\s/g, '') })
+                            }
+                            onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                          />
+                          <TextField
+                            size="small"
+                            disabled={hasLoading}
+                            error={textFieldError}
+                            spellCheck={false}
+                            label={t('preferences.dialog_adder.port')}
+                            value={newConnect.port}
+                            // InputLabelProps={{ sx: { fontSize: 14 } }}
+                            sx={{ ml: theme.spacing(1), width: theme.spacing(9) }}
+                            onChange={(evt) =>
+                              setNewConnect({
+                                ...newConnect,
+                                port: Number(
+                                  evt.target.value.match(
+                                    /^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$/gi
+                                  )
+                                ),
+                              })
+                            }
+                            onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
+                          />
+                        </Stack>
+                        <Stack flexDirection="row" alignItems="center">
+                          <Checkbox
+                            size="small"
+                            checked={newConnect.isHttps}
+                            disabled={hasLoading}
+                            onClick={() => setNewConnect({ ...newConnect, isHttps: !newConnect.isHttps })}
+                          />
+                          <Typography fontSize={12} fontWeight={500} color={theme.palette.text.secondary}>
+                            HTTP over SSL
+                          </Typography>
+                        </Stack>
                       </Stack>
                     )}
                   </Stack>
@@ -385,7 +445,7 @@ const DialogAddressAdder: React.FC = () => {
                     label={t('preferences.dialog_adder.username')}
                     value={newConnect.username}
                     sx={{ mt: theme.spacing(2) }}
-                    InputLabelProps={{ sx: { fontSize: 14 } }}
+                    // InputLabelProps={{ sx: { fontSize: 14 } }}
                     onChange={(evt) => setNewConnect({ ...newConnect, username: evt.target.value.replace(/\s/g, '') })}
                     onKeyPress={(evt) => evt.key === 'Enter' && handleNext()}
                   />
@@ -427,7 +487,7 @@ const DialogAddressAdder: React.FC = () => {
                         value={newConnect.passwd}
                         type={showPasswd ? 'text' : 'password'}
                         sx={{ mt: theme.spacing(2) }}
-                        InputLabelProps={{ sx: { fontSize: 14 } }}
+                        // InputLabelProps={{ sx: { fontSize: 14 } }}
                         InputProps={{
                           endAdornment: (
                             <InputAdornment position="end">
@@ -451,7 +511,10 @@ const DialogAddressAdder: React.FC = () => {
                 <Stack>
                   <Button
                     disabled={
-                      (dialogSize.length === 2 && (newConnect.quickConnectID.length === 0 || hasLoading)) ||
+                      (dialogSize.length === 2 &&
+                        ((newConnect.connectType === 'qc' && newConnect.quickConnectID.length === 0) || hasLoading)) ||
+                      (dialogSize.length === 2 &&
+                        ((newConnect.connectType === 'host' && newConnect.host.length === 0) || hasLoading)) ||
                       (dialogSize.length === 3 && (newConnect.username.length === 0 || hasLoading)) ||
                       (dialogSize.length === 4 && (newConnect.passwd.length === 0 || hasLoading))
                     }

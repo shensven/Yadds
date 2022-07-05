@@ -1,14 +1,14 @@
 import { net } from 'electron';
 import { ServerInfo } from './findServer';
 
-export interface PingPongInfo {
+export interface PingPongQCInfo {
   success: true;
   ezid: string;
   host: string;
   port: number;
 }
 
-const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
+const pingPongQC = async (quickConnectID: string, serverInfo: ServerInfo) => {
   // 5001
   const PORT = serverInfo.service?.port as number;
 
@@ -51,12 +51,12 @@ const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
       },
     };
 
-    return new Promise<PingPongInfo>((resolve, reject) => {
+    return new Promise<PingPongQCInfo>((resolve, reject) => {
       const request = net.request(options);
 
       setTimeout(() => {
         request.abort();
-        reject(new Error(`[PingPong] [Timeout] https://${host}:${port}`));
+        reject(new Error(`[PingPongQC] [Timeout] https://${host}:${port}`));
       }, 5000);
 
       request.on('error', reject);
@@ -114,4 +114,4 @@ const pingPong = async (quickConnectID: string, serverInfo: ServerInfo) => {
   return Promise.any(INSTANCE_SETS);
 };
 
-export default pingPong;
+export default pingPongQC;

@@ -1,5 +1,5 @@
 import findServer from './findServer';
-import pingPong from './pingPong';
+import pingPongQC from './pingPongQC';
 
 export type PropQuickConnectID = string;
 
@@ -10,7 +10,7 @@ const getServerAddress = async (quickConnectID: PropQuickConnectID) => {
     return serverInfo;
   }
 
-  const pingPongInfo = await pingPong(quickConnectID, serverInfo);
+  const pingPongInfo = await pingPongQC(quickConnectID, serverInfo);
 
   return pingPongInfo;
 };

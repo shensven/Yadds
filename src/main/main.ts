@@ -31,6 +31,7 @@ import { MenuItemsInApp } from '../renderer/utils/useMenuForApp';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
 import { Appearance } from '../renderer/atoms/atomUI';
+import pingPongHost, { PropsPingPongHost } from './net/pingPongHost';
 import getServerAddress, { PropQuickConnectID } from './net/getServerAddres';
 import getAuthType, { PropsAuthType } from './net/getAuthType';
 import signIn, { PropsSignIn } from './net/signIn';
@@ -609,6 +610,10 @@ ipcMain.handle('app:set-system-mode', async () => {
       mainWindow?.setBackgroundColor('#e6e6e6'); // Light background
     }
   }
+});
+
+ipcMain.handle('net:ping-pong-host', async (_, props: PropsPingPongHost) => {
+  return pingPongHost(props);
 });
 
 ipcMain.handle('net:get-server-address', async (_, prop: PropQuickConnectID) => {

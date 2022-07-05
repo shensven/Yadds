@@ -9,6 +9,7 @@ import {
   MenuItem,
   Select,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -50,13 +51,33 @@ const Address: React.FC = () => {
             displayEmpty
             value={targetDid}
             renderValue={() => (
-              <Typography fontSize={14} fontWeight={500} sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {targetDid.length === 0 && 'N/A'}
-                {targetDid.length > 0 &&
-                  `${find(connectedUsers, { did: targetDid })?.username} @ ${
-                    find(connectedUsers, { did: targetDid })?.quickConnectID
-                  }`}
-              </Typography>
+              <Tooltip
+                title={
+                  (targetDid.length > 0 &&
+                    find(connectedUsers, { did: targetDid })?.connectType === 'qc' &&
+                    `${find(connectedUsers, { did: targetDid })?.username} @ ${
+                      find(connectedUsers, { did: targetDid })?.quickConnectID
+                    }`) ||
+                  (find(connectedUsers, { did: targetDid })?.connectType === 'host' &&
+                    `${find(connectedUsers, { did: targetDid })?.username} @ ${
+                      find(connectedUsers, { did: targetDid })?.isHttps ? 'https://' : 'http://'
+                    }${find(connectedUsers, { did: targetDid })?.host}:${
+                      find(connectedUsers, { did: targetDid })?.port
+                    }`) ||
+                  (targetDid.length === 0 && '')
+                }
+                placement="left"
+                arrow
+              >
+                <Typography fontSize={14} fontWeight={500} sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  {targetDid.length === 0 && 'N/A'}
+                  {(targetDid.length > 0 &&
+                    find(connectedUsers, { did: targetDid })?.connectType === 'qc' &&
+                    `${find(connectedUsers, { did: targetDid })?.quickConnectID}`) ||
+                    (find(connectedUsers, { did: targetDid })?.connectType === 'host' &&
+                      `${find(connectedUsers, { did: targetDid })?.host}`)}
+                </Typography>
+              </Tooltip>
             )}
             disabled={connectedUsers.length === 0}
             MenuProps={{
@@ -70,14 +91,24 @@ const Address: React.FC = () => {
             {connectedUsers.map((item, index) => (
               <MenuItem key={item.did} dense disableRipple value={item.did}>
                 <Stack width="100%" flexDirection="row" justifyContent="space-between" alignItems="center">
-                  <Typography
-                    fontSize={14}
-                    fontWeight={500}
-                    sx={{ overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-                    onClick={() => handleAddress(item.did, index, false)}
+                  <Tooltip
+                    title={`${item.username} @ ${
+                      item.connectType === 'qc'
+                        ? item.quickConnectID
+                        : `${item.isHttps ? 'https://' : 'http://'}${item.host}:${item.port}`
+                    }`}
+                    placement="left"
+                    arrow
                   >
-                    {item.username} @ {item.quickConnectID}
-                  </Typography>
+                    <Typography
+                      fontSize={14}
+                      fontWeight={500}
+                      sx={{ overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
+                      onClick={() => handleAddress(item.did, index, false)}
+                    >
+                      {item.connectType === 'qc' ? item.quickConnectID : item.host}
+                    </Typography>
+                  </Tooltip>
                   <IconButton sx={{ width: 24, height: 24 }} onClick={() => handleAddress(item.did, index, true)}>
                     <IcRoundDelete sx={{ color: theme.palette.text.secondary, fontSize: 18 }} />
                   </IconButton>

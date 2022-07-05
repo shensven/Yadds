@@ -7,9 +7,10 @@ import { Nav } from './utils/useNav';
 import { MenuItemsInApp } from './utils/useMenuForApp';
 import { MenuItemsInTray } from './utils/useMenuForTray';
 import { MenuItemsInQueue } from './utils/useMenuForQueue';
+import { PingPongHostInfo, PropsPingPongHost } from '../main/net/pingPongHost';
 import { ServerError } from '../main/net/findServer';
 import { PropQuickConnectID } from '../main/net/getServerAddres';
-import { PingPongInfo } from '../main/net/pingPong';
+import { PingPongQCInfo } from '../main/net/pingPongQC';
 import { AuthTypeInfo, PropsAuthType } from '../main/net/getAuthType';
 import { PropsSignIn, SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
 import { DsmInfo } from '../main/net/getDsmInfo';
@@ -76,7 +77,8 @@ declare global {
       };
 
       net: {
-        getServerAddress: (prop: PropQuickConnectID) => Promise<ServerError | PingPongInfo>;
+        pingPongHost: (props: PropsPingPongHost) => Promise<PingPongHostInfo>;
+        getServerAddress: (prop: PropQuickConnectID) => Promise<ServerError | PingPongQCInfo>;
         getAuthType: (props: PropsAuthType) => Promise<AuthTypeInfo>;
         signIn: (props: PropsSignIn) => Promise<SignInWrongAccountOrPasswd | SignInInfo>;
         getDsmInfo: (props: { host: string; port: number; sid: string }) => Promise<DsmInfo>;

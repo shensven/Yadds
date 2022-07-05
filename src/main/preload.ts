@@ -7,6 +7,7 @@ import { Nav } from '../renderer/utils/useNav';
 import { MenuItemsInTray } from '../renderer/utils/useMenuForTray';
 import { MenuItemsInQueue } from '../renderer/utils/useMenuForQueue';
 import { Appearance, SidebarCategory } from '../renderer/atoms/atomUI';
+import { PropsPingPongHost } from './net/pingPongHost';
 import { PropQuickConnectID } from './net/getServerAddres';
 import { PropsAuthType } from './net/getAuthType';
 import { PropsSignIn } from './net/signIn';
@@ -131,6 +132,9 @@ contextBridge.exposeInMainWorld('electron', {
   },
 
   net: {
+    pingPongHost(props: PropsPingPongHost) {
+      return ipcRenderer.invoke('net:ping-pong-host', props);
+    },
     getServerAddress(prop: PropQuickConnectID) {
       return ipcRenderer.invoke('net:get-server-address', prop);
     },

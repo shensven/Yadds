@@ -66,6 +66,7 @@
     "dialog_adder": {
       "sign_in_with": "Sign in with",
       "host_address": "Host Address",
+      "port": "Port",
       "next": "Next",
       "username": "Username",
       "login": "Login",
