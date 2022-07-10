@@ -26,7 +26,7 @@
 - [x] 暗黑模式
 - [ ] 支持 Touch Bar（仅部分麦金塔机型）
 - [ ] 支持 [Synology Secure Signin](https://www.synology.cn/zh-cn/dsm/packages/SecureSignIn) 无密码登录
-- [ ] 多用户切换
+- [x] 多用户切换
 - [ ] 自动接入 BitTorrent tracker 列表
 - [ ] 下载进度可视化
 

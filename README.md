@@ -26,7 +26,7 @@ English | [简体中文](./README-zh-hans.md)
 - [x] Dark mode
 - [ ] Support Touch Bar (Mac only if available)
 - [ ] Support for [Synology Secure Signin](https://www.synology.com/en-us/dsm/packages/SecureSignIn) passwordless login
-- [ ] Multi-account switching
+- [x] Multi-account switching
 - [ ] Automatic access to BitTorrent tracker list
 - [ ] Download progress visualization
 
@@ -39,8 +39,8 @@ Not release yet
 ### INTRO
 
 - Written with [Electron](https://www.electronjs.org/) & [React](https://reactjs.org/)
-- Use [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate) to keep dependencies up to date under the same major version
-- Use [Github Actions](https://github.com/shensven/Readhubn/actions) exclusively for testing and continuous integration
+- To keep dependencies up to date under the same major version via [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate)
+- Testing and continuous integration via [Github Actions](https://github.com/shensven/Readhubn/actions)
 
 ### PREREQUISITES
 
