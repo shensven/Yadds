@@ -23,7 +23,7 @@ import {
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { isDarwin, isDebug, isLinux, isProduction, isWin32, resolveHtmlPath } from './util';
+import { isDarwin, isDebug, isLinux, isMAS, isProduction, isWin32, resolveHtmlPath } from './util';
 import cache, { YaddsCache } from './store/cache';
 import preferences, { YaddsPreferences } from './store/preferences';
 import connectedUsers, { YaddsConnectedUsers } from './store/connectedUsers';
@@ -240,8 +240,10 @@ const createWindow = async () => {
   });
 
   // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  new AppUpdater();
+  if (!isMAS) {
+    // eslint-disable-next-line
+    new AppUpdater();
+  }
 };
 
 //------------------------------------------------------------------------------
@@ -254,7 +256,10 @@ app.applicationMenu = null;
 //------------------------------------------------------------------------------
 // When Electron has finished initializing, create the main window.
 
-const lock = app.requestSingleInstanceLock();
+let lock = true;
+if (!isMAS) {
+  lock = app.requestSingleInstanceLock();
+}
 
 if (!lock) {
   app.quit();
@@ -293,7 +298,7 @@ nativeTheme.on('updated', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow?.isVisible() === false) {
+  if (!mainWindow?.isVisible()) {
     mainWindow?.show();
   }
 });

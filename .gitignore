@@ -17,6 +17,8 @@ node_modules
 
 # OSX
 .DS_Store
+*.provisionprofile
+*.provisionprofile.asc
 
 release/app/dist
 release/build

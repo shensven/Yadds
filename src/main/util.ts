@@ -9,6 +9,8 @@ export const isDarwin = process.platform === 'darwin';
 export const isWin32 = process.platform === 'win32';
 export const isLinux = process.platform === 'linux';
 
+export const isMAS = process.mas ?? false;
+
 export let resolveHtmlPath: (htmlFileName: string) => string;
 if (isDebug) {
   const port = process.env.PORT || 1212;
