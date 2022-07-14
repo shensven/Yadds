@@ -23,6 +23,8 @@
   },
   "main": "./src/main/main.ts",
   "scripts": {
+    "release:outside": "electron-builder build --publish always --win --mac --linux",
+    "release:mas": "electron-builder build --config ./build/electron.mas.json --publish always --mac",
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.prod.ts",
@@ -191,7 +193,7 @@
   "build": {
     "productName": "Yadds",
     "appId": "com.shensven.yadds",
-    "buildVersion": 29,
+    "buildVersion": 1,
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -214,23 +216,11 @@
             "x64",
             "universal"
           ]
-        },
-        {
-          "target": "mas"
         }
       ]
     },
     "dmg": {
       "icon": "assets/DMG_Installer.icns"
-    },
-    "mas": {
-      "entitlements": "build/entitlements.mas.plist",
-      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "entitlementsLoginHelper": "build/entitlements.mas.loginhelper.plist",
-      "provisioningProfile": "build/embedded.provisionprofile",
-      "hardenedRuntime": false,
-      "gatekeeperAssess": false,
-      "darkModeSupport": true
     },
     "win": {
       "target": [
