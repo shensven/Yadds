@@ -1,0 +1,20 @@
+{
+  "productName": "Yadds",
+  "appId": "com.shensven.yadds",
+  "buildVersion": 1,
+  "asar": true,
+  "asarUnpack": "**\\*.{node,dll}",
+  "files": ["dist", "node_modules", "package.json"],
+  "afterSign": ".erb/scripts/notarize.js",
+  "directories": {
+    "app": "release/app",
+    "buildResources": "assets",
+    "output": "release/build"
+  },
+  "extraResources": ["./assets/**"],
+  "publish": {
+    "provider": "github",
+    "owner": "shensven",
+    "repo": "Yadds"
+  }
+}

@@ -1,15 +1,6 @@
 {
-  "productName": "Yadds",
-  "appId": "com.shensven.yadds",
-  "buildVersion": 31,
-  "asar": true,
-  "asarUnpack": "**\\*.{node,dll}",
-  "files": ["dist", "node_modules", "package.json"],
-  "afterSign": ".erb/scripts/notarize.js",
+  "extends": "build/electron.common.json",
   "mac": {
-    "target": ["mas"]
-  },
-  "mas": {
     "type": "distribution",
     "entitlements": "build/entitlements.mas.plist",
     "entitlementsInherit": "build/entitlements.mas.inherit.plist",
@@ -18,19 +9,7 @@
     "icon": "build/icon.icns",
     "hardenedRuntime": false,
     "gatekeeperAssess": false,
-    "darkModeSupport": true
-  },
-  "directories": {
-    "app": "release/app",
-    "buildResources": "assets",
-    "output": "release/build"
-  },
-  "extraResources": ["assets/**"],
-  "publish": {
-    "provider": "github",
-    "owner": "shensven",
-    "repo": "Yadds",
-    "channel": "app-store",
-    "publishAutoUpdate": false
+    "darkModeSupport": true,
+    "target": "mas"
   }
 }
