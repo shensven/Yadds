@@ -8,24 +8,19 @@
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
     "darkModeSupport": true,
-    "target": [
-      {
-        "target": "dmg",
-        "arch": ["arm64", "x64", "universal"]
-      }
-    ]
+    "target": [{ "target": "dmg", "arch": ["arm64", "x64", "universal"] }]
   },
   "dmg": {
     "icon": "assets/installer/DMG_Installer.icns"
   },
   "win": {
-    "target": ["nsis"]
+    "target": [{ "target": "nsis", "arch": ["x64", "ia32", "arm64"] }]
   },
   "nsis": {
     "installerIcon": "assets/installer/NSIS_Installer.ico"
   },
   "linux": {
-    "target": ["AppImage"],
+    "target": [{ "target": "AppImage", "arch": ["x64", "arm64"] }],
     "category": "Utility"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "extends": "build/electron.common.json",
+  "win": {
+    "target": "appx"
+  }
+}

@@ -37,7 +37,7 @@
     "release:outside:win": "electron-builder build --config ./build/electron.outside.json --publish always --win",
     "release:outside:linux": "electron-builder build --config ./build/electron.outside.json --publish always --linux",
     "release:mas": "electron-builder build --config ./build/electron.mas.json --publish never",
-    "release:snap": "",
+    "release:snap": "electron-builder build --config ./build/electron.snap.json --publish never",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest",

@@ -1,0 +1,4 @@
+{
+  "extends": "build/electron.common.json",
+  "linux": { "target": "snap", "arch": ["x64"] }
+}
