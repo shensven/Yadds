@@ -455,8 +455,8 @@ ipcMain.handle('ctx-menu-for-tray:create', async (_, args: MenuItemsInTray) => {
     switch (process.platform) {
       case 'darwin':
         return isDebug
-          ? nativeImage.createFromPath(getAssetPath('tray/darwin/trayDevTemplate.png'))
-          : nativeImage.createFromPath(getAssetPath('tray/darwin/trayTemplate.png'));
+          ? nativeImage.createFromPath(getAssetPath('tray/darwin/trayDev.png'))
+          : nativeImage.createFromPath(getAssetPath('tray/darwin/tray.png'));
       case 'win32':
         return isDebug
           ? nativeImage.createFromPath(getAssetPath('tray/win32/trayDev@2x.png')).resize({ width: 16, height: 16 })

@@ -6,7 +6,7 @@
     "entitlementsInherit": "build/entitlements.mas.inherit.plist",
     "entitlementsLoginHelper": "build/entitlements.mas.loginhelper.plist",
     "provisioningProfile": "build/embedded.provisionprofile",
-    "icon": "build/icon.icns",
+    "icon": "assets/icon.icns",
     "hardenedRuntime": false,
     "gatekeeperAssess": false,
     "darkModeSupport": true,
