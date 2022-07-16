@@ -1,0 +1,11 @@
+{
+  "extends": "build/electron.common.json",
+  "linux": {
+    "target": [
+      { "target": "AppImage", "arch": ["x64", "arm64"] },
+      { "target": "deb", "arch": ["x64", "arm64"] },
+      { "target": "rpm", "arch": ["x64", "arm64"] }
+    ],
+    "category": "Utility"
+  }
+}

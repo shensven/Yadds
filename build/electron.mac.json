@@ -12,15 +12,5 @@
   },
   "dmg": {
     "icon": "assets/installer/DMG_Installer.icns"
-  },
-  "win": {
-    "target": [{ "target": "nsis", "arch": ["x64", "ia32", "arm64"] }]
-  },
-  "nsis": {
-    "installerIcon": "assets/installer/NSIS_Installer.ico"
-  },
-  "linux": {
-    "target": [{ "target": "AppImage", "arch": ["x64", "arm64"] }],
-    "category": "Utility"
   }
 }

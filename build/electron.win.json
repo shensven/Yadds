@@ -1,0 +1,13 @@
+{
+  "extends": "build/electron.common.json",
+  "win": {
+    "target": [{ "target": "nsis", "arch": ["x64", "ia32", "arm64"] }]
+  },
+  "nsis": {
+    "installerIcon": "assets/installer/NSIS_Installer.ico",
+    "artifactName": "${productName}-Setup-${version}-${arch}.${ext}",
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": true
+  }
+}

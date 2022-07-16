@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.ref }}
+
 jobs:
   publish_outside:
     name: Publish Outside
@@ -18,12 +21,12 @@ jobs:
       APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
       CSC_LINK: ${{ secrets.CSC_LINK }}
       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      # This is used for uploading release assets to github
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+      WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout git repo
@@ -35,6 +38,13 @@ jobs:
           node-version: 16
           cache: 'npm'
 
+      - name: Get version
+        id: get_version
+        shell: bash
+        run: |
+          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
+          echo ::set-output name=yadds_version::$YADDS_VERSION
+
       - name: Rewritten buildVersion
         run: |
           npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
@@ -43,14 +53,39 @@ jobs:
         run: |
           npm install
 
-      - name: Releases
+      - name: Release for win
+        if: ${{ matrix.os == 'windows-latest' }}
         run: |
           npm run postinstall
           npm run build
-          npm run release:outside
+          npm run release:win
+
+      - name: Release for mac
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          npm run postinstall
+          npm run build
+          npm run release:mac
+
+      - name: Release for linux
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          npm run postinstall
+          npm run build
+          npm run release:linux
+
+      - name: Upload artifacts
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.get_version.outputs.yadds_version }}
+          tag: ${{ steps.get_version.outputs.yadds_version }}
+          allowUpdates: true
+          draft: true
+          artifacts: 'release/build/*.exe,release/build/*.dmg,release/build/*.blockmap,release/build/*.AppImage,release/build/*.deb,release/build/*.rpm'
 
   publish_app_store:
-    name: Publish App Store
+    name: Publish Store
     if: ${{ github.repository_owner == 'shensven' }}
 
     runs-on: ${{ matrix.os }}
@@ -61,12 +96,12 @@ jobs:
       APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
       CSC_LINK: ${{ secrets.CSC_LINK }}
       CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      # This is used for uploading release assets to github
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+      WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
 
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout git repo
@@ -92,13 +127,29 @@ jobs:
         run: |
           npm install
 
-      - name: Releases
+      # - name: Release for uwp
+      #   if: ${{ matrix.os == 'windows-latest' }}
+      #   run: |
+      #     npm run postinstall
+      #     npm run build
+      #     npm run release:uwp
+      #     ls release/build
+
+      - name: Release for mas
+        if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run postinstall
           npm run build
           npm run release:mas
 
-      - name: Upload app store
+      - name: Release for snap
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          npm run postinstall
+          npm run build
+          npm run release:snap
+
+      - name: Upload artifacts
         uses: ncipollo/release-action@v1.10.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -106,4 +157,4 @@ jobs:
           tag: app-store
           allowUpdates: true
           draft: true
-          artifacts: 'release/build/mas/*.pkg'
+          artifacts: 'release/build/mas/*.pkg,release/build/*.snap'
