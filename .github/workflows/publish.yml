@@ -30,13 +30,12 @@ jobs:
 
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Install Node and NPM
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
 
       - name: Get version
         id: get_version
@@ -51,7 +50,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          npm ci
 
       - name: Release for win
         if: ${{ matrix.os == 'windows-latest' }}
@@ -104,10 +103,10 @@ jobs:
         os: [macos-latest, ubuntu-latest]
 
     steps:
-      - name: Checkout git repo
+      - name: Checkout git repository
         uses: actions/checkout@v1
 
-      - name: Install Node and NPM
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -125,7 +124,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          npm ci
 
       # - name: Release for uwp
       #   if: ${{ matrix.os == 'windows-latest' }}
