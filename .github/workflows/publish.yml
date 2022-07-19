@@ -29,20 +29,23 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - name: Checkout git repo
+      - name: Checkout git repository
         uses: actions/checkout@v3
 
-      - name: Install Node and NPM
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      - name: Get version
-        id: get_version
-        shell: bash
-        run: |
-          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
-          echo ::set-output name=yadds_version::$YADDS_VERSION
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Rewritten buildVersion
         run: |
@@ -72,6 +75,13 @@ jobs:
           npm run postinstall
           npm run build
           npm run release:linux
+
+      - name: Get version
+        id: get_version
+        shell: bash
+        run: |
+          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
+          echo ::set-output name=yadds_version::$YADDS_VERSION
 
       - name: Upload artifacts
         uses: ncipollo/release-action@v1.10.0
@@ -104,13 +114,22 @@ jobs:
 
     steps:
       - name: Checkout git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
       - name: Rewritten buildVersion
         run: |
