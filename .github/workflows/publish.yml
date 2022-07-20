@@ -94,7 +94,7 @@ jobs:
           artifacts: 'release/build/*.exe,release/build/*.dmg,release/build/*.blockmap,release/build/*.AppImage,release/build/*.deb,release/build/*.rpm'
 
   publish_app_store:
-    name: Publish Store
+    name: Publish App Store
     if: ${{ github.repository_owner == 'shensven' }}
 
     runs-on: ${{ matrix.os }}
@@ -138,8 +138,7 @@ jobs:
       - name: Restore provisionprofile
         run: |
           cd build
-          echo "${{ secrets.EMBEDDED_PROVISIONPROFILE_ASC }}" > embedded.provisionprofile.asc
-          gpg -d --passphrase ${{ secrets.EMBEDDED_PROVISIONPROFILE_PASSPHRASE }} --batch embedded.provisionprofile.asc > embedded.provisionprofile
+          echo -n ${{ secrets.PROVISIONING_PROFILE_BASE64 }} | base64 --decode --output embedded.provisionprofile
 
       - name: Install dependencies
         run: |
