@@ -62,21 +62,21 @@ jobs:
         run: |
           npm ci
 
-      - name: Release for win
+      - name: Release for Windwos
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           npm run postinstall
           npm run build
           npm run release:win
 
-      - name: Release for mac
+      - name: Release for macOS
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run postinstall
           npm run build
           npm run release:mac
 
-      - name: Release for linux
+      - name: Release for Linux
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           npm run postinstall
@@ -136,6 +136,7 @@ jobs:
           npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
 
       - name: Restore provisionprofile
+        if: ${{ matrix.os == 'macos-latest' }}
         run: |
           cd build
           echo -n "${{ secrets.PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > embedded.provisionprofile
@@ -151,15 +152,7 @@ jobs:
         run: |
           npm ci
 
-      # - name: Release for uwp
-      #   if: ${{ matrix.os == 'windows-latest' }}
-      #   run: |
-      #     npm run postinstall
-      #     npm run build
-      #     npm run release:uwp
-      #     ls release/build
-
-      - name: Release for mas
+      - name: Release for Mac App Store
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run postinstall
@@ -167,13 +160,21 @@ jobs:
           npm run release:mas
           # xcrun altool --upload-app --type macos --file "release/build/mas/*.pkg" --username "$APPLE_ID" --password "$APPLE_ID_PASS"
 
-      - name: Release for snap
+      - name: Release for Snapcraft
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           npm run postinstall
           npm run build
           npm run release:snap
-          # snapcraft upload --release=edge release/build/yadds_${{ steps.get_version.outputs.yadds_version }}_amd64.snap
+
+      - name: Publish Snapcraft
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
+        with:
+          snap: 'release/build/yadds_${{ steps.get_version.outputs.yadds_version }}_amd64.snap'
+          release: edge
 
       - name: Upload artifacts
         uses: ncipollo/release-action@v1
