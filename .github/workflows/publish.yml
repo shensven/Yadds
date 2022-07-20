@@ -51,6 +51,13 @@ jobs:
         run: |
           npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
 
+      - name: Get version
+        id: get_version
+        shell: bash
+        run: |
+          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
+          echo ::set-output name=yadds_version::$YADDS_VERSION
+
       - name: Install dependencies
         run: |
           npm ci
@@ -76,15 +83,8 @@ jobs:
           npm run build
           npm run release:linux
 
-      - name: Get version
-        id: get_version
-        shell: bash
-        run: |
-          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
-          echo ::set-output name=yadds_version::$YADDS_VERSION
-
       - name: Upload artifacts
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ steps.get_version.outputs.yadds_version }}
@@ -138,7 +138,14 @@ jobs:
       - name: Restore provisionprofile
         run: |
           cd build
-          echo -n ${{ secrets.PROVISIONING_PROFILE_BASE64 }} | base64 --decode --output embedded.provisionprofile
+          echo -n "${{ secrets.PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > embedded.provisionprofile
+
+      - name: Get version
+        id: get_version
+        shell: bash
+        run: |
+          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
+          echo ::set-output name=yadds_version::$YADDS_VERSION
 
       - name: Install dependencies
         run: |
@@ -158,6 +165,7 @@ jobs:
           npm run postinstall
           npm run build
           npm run release:mas
+          # xcrun altool --upload-app --type macos --file "release/build/mas/*.pkg" --username "$APPLE_ID" --password "$APPLE_ID_PASS"
 
       - name: Release for snap
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -165,9 +173,10 @@ jobs:
           npm run postinstall
           npm run build
           npm run release:snap
+          # snapcraft upload --release=edge release/build/yadds_${{ steps.get_version.outputs.yadds_version }}_amd64.snap
 
       - name: Upload artifacts
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: app-store
