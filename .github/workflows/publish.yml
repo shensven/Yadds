@@ -83,7 +83,7 @@ jobs:
           npm run build
           npm run release:linux
 
-      - name: Upload artifacts
+      - name: Upload to Github
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -152,13 +152,17 @@ jobs:
         run: |
           npm ci
 
-      - name: Release for Mac App Store
+      - name: Release for Mac App Store & Upload to TestFlight
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run postinstall
           npm run build
           npm run release:mas
-          # xcrun altool --upload-app --type macos --file "release/build/mas/*.pkg" --username "$APPLE_ID" --password "$APPLE_ID_PASS"
+          xcrun altool --upload-app \
+            --type macos \
+            --file "release/build/mas/Yadds-${{ steps.get_version.outputs.yadds_version }}.pkg" \
+            --username "$APPLE_ID" \
+            --password "$APPLE_ID_PASS"
 
       - name: Release for Snapcraft
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -167,7 +171,7 @@ jobs:
           npm run build
           npm run release:snap
 
-      - name: Publish Snapcraft
+      - name: Upload to Snap Store
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: snapcore/action-publish@v1
         env:
@@ -176,12 +180,12 @@ jobs:
           snap: 'release/build/yadds_${{ steps.get_version.outputs.yadds_version }}_amd64.snap'
           release: edge
 
-      - name: Upload artifacts
+      - name: Backup to GitHub
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: app-store
-          tag: app-store
+          name: App Store Backup
+          tag: app-store-backup
           allowUpdates: true
           draft: true
           artifacts: 'release/build/mas/*.pkg,release/build/*.snap'
