@@ -26,7 +26,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout git repository
@@ -99,18 +99,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    env:
-      # These values are used for auto updates signing
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-      CSC_LINK: ${{ secrets.CSC_LINK }}
-      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-      WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - name: Checkout git repository
@@ -152,8 +143,21 @@ jobs:
         run: |
           npm ci
 
+      - name: Release for Microsoft Store
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          npm run postinstall
+          npm run build
+          npm run release:uwp
+
       - name: Release for Mac App Store & Upload to TestFlight
         if: ${{ matrix.os == 'macos-latest' }}
+        env:
+          # These values are used for auto updates signing
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
         run: |
           npm run postinstall
           npm run build
@@ -188,4 +192,4 @@ jobs:
           tag: app-store-backup
           allowUpdates: true
           draft: true
-          artifacts: 'release/build/mas/*.pkg,release/build/*.snap'
+          artifacts: 'release/build/*.appx,release/build/mas/*.pkg,release/build/*.snap'
