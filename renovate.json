@@ -5,6 +5,8 @@
   "packageRules": [
     {
       "groupName": "devDependencies",
+      "matchFiles": ["package.json"],
+      "matchManagers": ["npm"],
       "matchDepTypes": ["devDependencies"],
       "matchUpdateTypes": ["patch", "minor"],
       "enabled": false,
@@ -27,6 +29,8 @@
     },
     {
       "groupName": "dependencies",
+      "matchFiles": ["package.json"],
+      "matchManagers": ["npm"],
       "matchDepTypes": ["dependencies"],
       "matchUpdateTypes": ["patch", "minor"],
       "enabled": false,
