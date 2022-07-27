@@ -2,11 +2,11 @@
   "extends": ["config:base"],
   "baseBranches": ["dev"],
   "semanticCommits": "enabled",
-  "major": false,
   "packageRules": [
     {
       "groupName": "devDependencies",
       "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
       "enabled": false,
       "excludePackageNames": [
         "@testing-library/jest-dom",
@@ -28,6 +28,7 @@
     {
       "groupName": "dependencies",
       "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
       "enabled": false,
       "excludePackageNames": [
         "@emotion/react",
