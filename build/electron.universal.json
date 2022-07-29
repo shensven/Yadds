@@ -1,0 +1,27 @@
+{
+  "extends": "build/electron.common.json",
+  "mac": {
+    "target": {
+      "target": "default",
+      "arch": ["arm64", "x64"]
+    },
+    "type": "distribution",
+    "entitlements": "build/entitlements.mas.plist",
+    "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false
+  },
+  "dmg": {
+    "contents": [
+      { "x": 130, "y": 220 },
+      { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+    ]
+  },
+  "win": {
+    "target": ["nsis"]
+  },
+  "linux": {
+    "target": ["AppImage"],
+    "category": "Development"
+  }
+}
