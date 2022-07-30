@@ -116,7 +116,7 @@
     "electron-log": "^4.4.8",
     "electron-store": "8.0.2",
     "electron-updater": "^5.0.5",
-    "i18next": "21.8.14",
+    "i18next": "21.8.16",
     "jotai": "1.7.6",
     "lodash": "4.17.21",
     "query-string": "7.1.1",
