@@ -4,30 +4,6 @@
   "semanticCommits": "enabled",
   "packageRules": [
     {
-      "groupName": "devDependencies",
-      "matchFiles": ["package.json"],
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "enabled": false,
-      "excludePackageNames": [
-        "@testing-library/jest-dom",
-        "@testing-library/react",
-        "@types/byte-size",
-        "@types/jest",
-        "@types/lodash",
-        "@types/node",
-        "@types/react",
-        "@types/react-dom",
-        "@types/react-test-renderer",
-        "electron",
-        "electron-builder",
-        "jest",
-        "react-test-renderer",
-        "ts-jest"
-      ]
-    },
-    {
       "groupName": "dependencies",
       "matchFiles": ["package.json"],
       "matchManagers": ["npm"],
@@ -50,7 +26,21 @@
         "react",
         "react-dom",
         "react-i18next",
-        "react-router-dom"
+        "react-router-dom",
+        "@testing-library/jest-dom",
+        "@testing-library/react",
+        "@types/byte-size",
+        "@types/jest",
+        "@types/lodash",
+        "@types/node",
+        "@types/react",
+        "@types/react-dom",
+        "@types/react-test-renderer",
+        "electron",
+        "electron-builder",
+        "jest",
+        "react-test-renderer",
+        "ts-jest"
       ]
     }
   ]
