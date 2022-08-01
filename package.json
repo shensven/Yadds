@@ -117,7 +117,7 @@
     "electron-store": "8.1.0",
     "electron-updater": "^5.0.5",
     "i18next": "21.8.16",
-    "jotai": "1.7.6",
+    "jotai": "1.7.7",
     "lodash": "4.17.21",
     "query-string": "7.1.1",
     "react": "18.2.0",
