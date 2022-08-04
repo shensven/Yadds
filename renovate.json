@@ -1,16 +1,15 @@
 {
   "extends": ["config:base"],
-  "baseBranches": ["dev"],
-  "semanticCommits": "enabled",
   "packageRules": [
     {
       "groupName": "dependencies",
       "matchFiles": ["package.json"],
+      "matchDepTypes": ["dependencies", "devDependencies"],
       "matchManagers": ["npm"],
-      "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "enabled": false,
-      "excludePackageNames": [
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchBaseBranches": ["dev"],
+      "enabled": true,
+      "matchPackageNames": [
         "@emotion/react",
         "@emotion/styled",
         "@fontsource/barlow",
@@ -27,10 +26,7 @@
         "react-dom",
         "react-i18next",
         "react-router-dom",
-        "@testing-library/jest-dom",
-        "@testing-library/react",
         "@types/byte-size",
-        "@types/jest",
         "@types/lodash",
         "@types/node",
         "@types/react",
@@ -38,9 +34,7 @@
         "@types/react-test-renderer",
         "electron",
         "electron-builder",
-        "jest",
-        "react-test-renderer",
-        "ts-jest"
+        "react-test-renderer"
       ]
     }
   ]
