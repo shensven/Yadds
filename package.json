@@ -105,7 +105,7 @@
     }
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
+    "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@fontsource/barlow": "^4.5.7",
     "@mui/material": "^5.9.3",
