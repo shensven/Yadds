@@ -39,7 +39,7 @@
 ### 简介
 
 - 使用 [Electron](https://www.electronjs.org/) 和 [React](https://reactjs.org/) 编写
-- 使用 [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate) 保持依赖在同一个大版本下始终最新
+- 使用 [Dependabot](https://github.com/features/security/software-supply-chain) 保持依赖在同一个大版本下始终最新
 - 使用 [Github Actions](https://github.com/shensven/Readhubn/actions) 进行测试和持续集成
 
 ### 先决条件

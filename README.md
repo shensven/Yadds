@@ -39,7 +39,7 @@ Not release yet
 ### INTRO
 
 - Written with [Electron](https://www.electronjs.org/) & [React](https://reactjs.org/)
-- To keep dependencies up to date under the same major version via [WhiteSource Renovate](https://www.whitesourcesoftware.com/free-developer-tools/renovate)
+- To keep dependencies up to date under the same major version via [Dependabot](https://github.com/features/security/software-supply-chain)
 - Testing and continuous integration via [Github Actions](https://github.com/shensven/Readhubn/actions)
 
 ### PREREQUISITES
