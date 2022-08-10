@@ -11,16 +11,12 @@ export const isLinux = process.platform === 'linux';
 
 export const isMAS = process.mas ?? false;
 
-export let resolveHtmlPath: (htmlFileName: string) => string;
-if (isDebug) {
-  const port = process.env.PORT || 1212;
-  resolveHtmlPath = (htmlFileName: string) => {
+export function resolveHtmlPath(htmlFileName: string) {
+  if (isDebug) {
+    const port = process.env.PORT || 1212;
     const url = new URL(`http://localhost:${port}`);
     url.pathname = htmlFileName;
     return url.href;
-  };
-} else {
-  resolveHtmlPath = (htmlFileName: string) => {
-    return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
-  };
+  }
+  return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
 }

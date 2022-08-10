@@ -20,7 +20,6 @@ import {
   nativeImage,
   MenuItemConstructorOptions,
 } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { isDarwin, isDebug, isLinux, isMAS, isProduction, isWin32, resolveHtmlPath } from './util';
@@ -40,7 +39,7 @@ import getQuota from './net/getQuota';
 import getVolume from './net/getVolume';
 import poll from './net/poll';
 
-export default class AppUpdater {
+class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
@@ -60,18 +59,30 @@ if (isProduction) {
   sourceMapSupport.install();
 }
 
-const getAssetPath = (...paths: string[]): string => {
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
+const installExtensions = async () => {
+  const installer = require('electron-devtools-installer');
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = ['REACT_DEVELOPER_TOOLS'];
 
+  return installer
+    .default(
+      extensions.map((name) => installer[name]),
+      forceDownload
+    )
+    .catch(console.log);
+};
+
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+
+const getAssetPath = (...paths: string[]): string => {
   return path.join(RESOURCES_PATH, ...paths);
 };
 
 const createWindow = async () => {
   if (isDebug) {
-    const isForceDownload = !!process.env.UPGRADE_EXTENSIONS;
-    await installExtension(REACT_DEVELOPER_TOOLS, isForceDownload);
+    await installExtensions();
   }
 
   switch (process.platform) {
@@ -269,7 +280,7 @@ if (!lock) {
       if (mainWindow.isMinimized()) {
         mainWindow.restore();
       }
-      if (!mainWindow.isVisible()) {
+      if (mainWindow.isVisible()) {
         mainWindow.show();
       }
       mainWindow.focus();
@@ -298,7 +309,7 @@ nativeTheme.on('updated', () => {
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (!mainWindow?.isVisible()) {
+  if (mainWindow?.isVisible()) {
     mainWindow?.show();
   }
 });
@@ -311,10 +322,10 @@ app.on('window-all-closed', () => {
   }
 });
 
-ipcMain.on('ipc-example', async (evt, arg) => {
+ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
-  evt.reply('ipc-example', msgTemplate('pong'));
+  event.reply('ipc-example', msgTemplate('pong'));
 });
 
 ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemsInApp) => {
@@ -366,7 +377,7 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemsInApp) => {
         {
           label: args.toggleFullScreen,
           accelerator: 'Ctrl+Command+F',
-          click: () => mainWindow?.setFullScreen(!mainWindow.isFullScreen()),
+          click: () => mainWindow?.setFullScreen(mainWindow.isFullScreen()),
         },
       ],
     };
