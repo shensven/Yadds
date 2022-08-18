@@ -100,6 +100,7 @@ const createWindow = async () => {
         vibrancy: 'sidebar',
         icon: getAssetPath('icon_darwin.png'),
         webPreferences: {
+          sandbox: false,
           preload: app.isPackaged
             ? path.join(__dirname, 'preload.js')
             : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -118,6 +119,7 @@ const createWindow = async () => {
         backgroundColor: '#e6e6e6',
         icon: getAssetPath('icon_win32.png'),
         webPreferences: {
+          sandbox: false,
           preload: app.isPackaged
             ? path.join(__dirname, 'preload.js')
             : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -135,6 +137,7 @@ const createWindow = async () => {
         minHeight: 720,
         backgroundColor: '#e6e6e6',
         webPreferences: {
+          sandbox: false,
           preload: app.isPackaged
             ? path.join(__dirname, 'preload.js')
             : path.join(__dirname, '../../.erb/dll/preload.js'),
@@ -152,6 +155,7 @@ const createWindow = async () => {
         minHeight: 720,
         backgroundColor: '#e6e6e6',
         webPreferences: {
+          sandbox: false,
           preload: app.isPackaged
             ? path.join(__dirname, 'preload.js')
             : path.join(__dirname, '../../.erb/dll/preload.js'),
