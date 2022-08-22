@@ -3,17 +3,17 @@ import { MemoryRouter } from 'react-router-dom';
 import { CssBaseline, Stack, ThemeProvider } from '@mui/material';
 import YaddsSidebar from './containers/YaddsSidebar';
 import YaddsMain from './containers/YaddsMain';
-import useDesignSystem from './utils/useDesignSystem';
+import useColorSystem from './utils/useColorSystem';
 import useSchedule from './utils/useSchedule';
 import './i18n/i18n';
 import './App.scss';
 
 const Route: React.FC = () => {
-  const { designSystem } = useDesignSystem();
+  const { colorSystem } = useColorSystem();
   useSchedule();
 
   return (
-    <ThemeProvider theme={designSystem}>
+    <ThemeProvider theme={colorSystem}>
       <CssBaseline />
       <Stack direction="row">
         <YaddsSidebar />

@@ -13,7 +13,7 @@ declare module '@mui/material/styles' {
   }
 }
 
-const createDesignTokens = (mode: PaletteMode) => {
+const createColorTokens = (mode: PaletteMode) => {
   return {
     palette: {
       mode,
@@ -118,24 +118,24 @@ const createOverrideCompnents = (mode: PaletteMode) => {
   };
 };
 
-const useDesignSystem = () => {
+const useColorSystem = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   const [appearance] = useAtom(atomPersistenceAppearance);
 
-  let designSystem: Theme;
+  let colorSystem: Theme;
 
   if (appearance === 'system') {
     if (prefersDarkMode) {
-      designSystem = createTheme(createDesignTokens('dark'), createOverrideCompnents('dark'));
+      colorSystem = createTheme(createColorTokens('dark'), createOverrideCompnents('dark'));
     } else {
-      designSystem = createTheme(createDesignTokens('light'), createOverrideCompnents('light'));
+      colorSystem = createTheme(createColorTokens('light'), createOverrideCompnents('light'));
     }
   } else {
-    designSystem = createTheme(createDesignTokens(appearance), createOverrideCompnents(appearance));
+    colorSystem = createTheme(createColorTokens(appearance), createOverrideCompnents(appearance));
   }
 
-  return { designSystem };
+  return { colorSystem };
 };
 
-export default useDesignSystem;
+export default useColorSystem;
