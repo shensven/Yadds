@@ -109,7 +109,7 @@
     "@emotion/styled": "^11.10.0",
     "@fontsource/barlow": "^4.5.8",
     "@mui/material": "^5.10.1",
-    "@mui/system": "^5.10.1",
+    "@mui/system": "^5.10.2",
     "ahooks": "^3.7.0",
     "byte-size": "^8.1.0",
     "electron-debug": "^3.2.0",
