@@ -108,7 +108,7 @@
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@fontsource/barlow": "^4.5.8",
-    "@mui/material": "^5.10.1",
+    "@mui/material": "^5.10.2",
     "@mui/system": "^5.10.1",
     "ahooks": "^3.7.0",
     "byte-size": "^8.1.0",
