@@ -126,7 +126,7 @@
     "react-router-dom": "^6.4.2"
   },
   "devDependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.8",
     "@svgr/webpack": "^6.4.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.16.5",
