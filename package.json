@@ -117,7 +117,7 @@
     "electron-store": "^8.1.0",
     "electron-updater": "^5.2.1",
     "i18next": "^21.9.2",
-    "jotai": "^1.8.4",
+    "jotai": "^1.8.5",
     "lodash": "^4.17.21",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
@@ -127,7 +127,7 @@
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
-    "@svgr/webpack": "^6.3.1",
+    "@svgr/webpack": "^6.4.0",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
