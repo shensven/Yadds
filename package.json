@@ -139,7 +139,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-test-renderer": "^18.0.0",
     "@types/terser-webpack-plugin": "^5.0.4",
-    "@types/webpack-bundle-analyzer": "^4.4.2",
+    "@types/webpack-bundle-analyzer": "^4.6.0",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.38.0",
     "browserslist-config-erb": "^0.0.3",
