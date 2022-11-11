@@ -12,7 +12,6 @@ import {
   Divider,
   useTheme,
 } from '@mui/material';
-import IonShapesOutline from '@/renderer/assets/icons/IonShapesOutline';
 import { atomOS, atomSidebarWidth } from '@/renderer/atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
@@ -22,7 +21,7 @@ import {
 } from '@/renderer/atoms/atomUI';
 import { atomTasks } from '@/renderer/atoms/atomTask';
 import useNav from '@/renderer/utils/useNav';
-// import IonShapesOutline from '../assets/icons/IonShapesOutline';
+import IonShapesOutline from '@/renderer/assets/icons/IonShapesOutline';
 import IonShapes from '@/renderer/assets/icons/IonShapes';
 import IonArrowDownCircleOutline from '@/renderer/assets/icons/IonArrowDownCircleOutline';
 import IonArrowDownCircle from '@/renderer/assets/icons/IonArrowDownCircle';

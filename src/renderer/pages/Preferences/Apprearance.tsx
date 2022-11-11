@@ -3,17 +3,17 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Box, FormGroup, Stack, Typography, useTheme } from '@mui/material';
 import { atomOS } from '@/renderer/atoms/atomConstant';
-import darwinLight from '@/renderer/assets/images/darwin_light.png';
-import darwinDark from '@/renderer/assets/images/darwin_dark.png';
-import darwinFollowSystem from '@/renderer/assets/images/darwin_follow_system.png';
-import win32Light from '@/renderer/assets/images/win32_light.png';
-import win32Dark from '@/renderer/assets/images/win32_dark.png';
-import win32FollowSystem from '@/renderer/assets/images/win32_follow_system.png';
-import gnomeLight from '@/renderer/assets/images/gnome_light.png';
-import gnomeDark from '@/renderer/assets/images/gnome_dark.png';
-import gnomeFollowSystem from '@/renderer/assets/images/gnome_follow_system.png';
 import { Appearance, atomPersistenceAppearance } from '@/renderer/atoms/atomUI';
 import RowItem from './RowItem';
+import darwinLight from '../../assets/images/darwin_light.png';
+import darwinDark from '../../assets/images/darwin_dark.png';
+import darwinFollowSystem from '../../assets/images/darwin_follow_system.png';
+import win32Light from '../../assets/images/win32_light.png';
+import win32Dark from '../../assets/images/win32_dark.png';
+import win32FollowSystem from '../../assets/images/win32_follow_system.png';
+import gnomeLight from '../../assets/images/gnome_light.png';
+import gnomeDark from '../../assets/images/gnome_dark.png';
+import gnomeFollowSystem from '../../assets/images/gnome_follow_system.png';
 
 interface IProps {
   appearance: 'light' | 'dark' | 'system';

@@ -8,9 +8,6 @@ import { atomPersistenceHasSidebar, atomPersistenceSidebarCategory } from '@/ren
 import { atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
 import IcRoundFilterList from '@/renderer/assets/icons/IcRoundFilterList';
 import IonEllipsisHorizontal from '@/renderer/assets/icons/IonEllipsisHorizontal';
-import greyInactiveSvg from '@/renderer/assets/images/grey_inactive.svg';
-import greyActiveLeftSvg from '@/renderer/assets/images/grey_active_left.svg';
-import greyActiveRightSvg from '@/renderer/assets/images/grey_active_right.svg';
 import RedirectEl from '@/renderer/pages/RedirectEl';
 import QueueAll from '@/renderer/pages/QueueAll';
 import QueueDownloading from '@/renderer/pages/QueueDownloading';
@@ -22,6 +19,9 @@ import Server from '@/renderer/pages/Server';
 import Preferences from '@/renderer/pages/Preferences';
 import useWindow from '@/renderer/utils/useWindow';
 import useMenuForQueue from '@/renderer/utils/useMenuForQueue';
+import greyInactiveSvg from '../assets/images/grey_inactive.svg';
+import greyActiveLeftSvg from '../assets/images/grey_active_left.svg';
+import greyActiveRightSvg from '../assets/images/grey_active_right.svg';
 
 const YaddsMain: React.FC = () => {
   const theme = useTheme();
