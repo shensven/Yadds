@@ -29,16 +29,13 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      - name: Checkout git repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      - name: Cache npm dependencies
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         id: npm-cache
         with:
           path: |
@@ -48,8 +45,7 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Rewritten buildVersion
-        run: |
-          npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
 
       - name: Get version
         id: get_version
@@ -59,8 +55,7 @@ jobs:
           echo ::set-output name=yadds_version::$YADDS_VERSION
 
       - name: Install dependencies
-        run: |
-          npm ci
+        run: npm ci
 
       - name: Release for Windwos
         if: ${{ matrix.os == 'windows-latest' }}
@@ -83,8 +78,7 @@ jobs:
           npm run build
           npm run release:linux
 
-      - name: Upload to Github
-        uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ steps.get_version.outputs.yadds_version }}
@@ -104,16 +98,13 @@ jobs:
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
-      - name: Checkout git repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
 
-      - name: Cache npm dependencies
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         id: npm-cache
         with:
           path: |
@@ -123,8 +114,7 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Rewritten buildVersion
-        run: |
-          npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
 
       - name: Restore provisionprofile
         if: ${{ matrix.os == 'macos-latest' }}
