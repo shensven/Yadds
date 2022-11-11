@@ -14,10 +14,10 @@ import {
   useTheme,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import IcRoundDelete from '@/renderer/assets/icons/IcRoundDelete';
+import { atomHasDialogAddressAdder, atomHasDialogAddressRemover, atomWhoWillRemove } from '@/renderer/atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
 import RowItem from './RowItem';
-import IcRoundDelete from '../../assets/icons/IcRoundDelete';
-import { atomHasDialogAddressAdder, atomHasDialogAddressRemover, atomWhoWillRemove } from '../../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
 
 const Address: React.FC = () => {
   const theme = useTheme();

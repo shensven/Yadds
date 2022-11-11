@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormGroup, FormHelperText, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import IonLogoTwitter from '@/renderer/assets/icons/IonLogoTwitter';
+import IonLogoGithub from '@/renderer/assets/icons/IonLogoGithub';
 import RowItem from './RowItem';
-import IonLogoTwitter from '../../assets/icons/IonLogoTwitter';
-import IonLogoGithub from '../../assets/icons/IonLogoGithub';
 
 const About: React.FC = () => {
   const theme = useTheme();

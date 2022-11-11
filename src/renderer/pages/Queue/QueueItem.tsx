@@ -11,11 +11,11 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import IonPlay from '../../assets/icons/IonPlay';
-import IonPause from '../../assets/icons/IonPause';
-import TablerArrowNarrowUp from '../../assets/icons/TablerArrowNarrowUp';
-import TablerArrowNarrowDown from '../../assets/icons/TablerArrowNarrowDown';
-import { Task } from '../../atoms/atomTask';
+import IonPlay from '@/renderer/assets/icons/IonPlay';
+import IonPause from '@/renderer/assets/icons/IonPause';
+import TablerArrowNarrowUp from '@/renderer/assets/icons/TablerArrowNarrowUp';
+import TablerArrowNarrowDown from '@/renderer/assets/icons/TablerArrowNarrowDown';
+import { Task } from '@/renderer/atoms/atomTask';
 
 const QueueItem: React.FC<{ item: Task }> = (props: { item: Task }) => {
   const theme = useTheme();

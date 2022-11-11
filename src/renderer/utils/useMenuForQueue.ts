@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { atomPersistenceQueueIsAscend, atomPersistenceQueueIterater } from '../atoms/atomUI';
+import { atomPersistenceQueueIsAscend, atomPersistenceQueueIterater } from '@/renderer/atoms/atomUI';
 
 const useMenuForQueue = () => {
   const { t } = useTranslation();

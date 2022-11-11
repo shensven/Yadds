@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { atomOS } from '../atoms/atomConstant';
+import { atomOS } from '@/renderer/atoms/atomConstant';
 
 const useWindow = () => {
   const [OS_PLATFORM] = useAtom(atomOS);

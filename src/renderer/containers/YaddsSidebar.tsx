@@ -12,31 +12,32 @@ import {
   Divider,
   useTheme,
 } from '@mui/material';
-import { atomOS, atomSidebarWidth } from '../atoms/atomConstant';
+import IonShapesOutline from '@/renderer/assets/icons/IonShapesOutline';
+import { atomOS, atomSidebarWidth } from '@/renderer/atoms/atomConstant';
 import {
   atomHasSidebarMarginTop,
   atomPersistenceHasSidebar,
   SidebarCategory,
   atomPersistenceSidebarCategory,
-} from '../atoms/atomUI';
-import { atomTasks } from '../atoms/atomTask';
-import useNav from '../utils/useNav';
-import IonShapesOutline from '../assets/icons/IonShapesOutline';
-import IonShapes from '../assets/icons/IonShapes';
-import IonArrowDownCircleOutline from '../assets/icons/IonArrowDownCircleOutline';
-import IonArrowDownCircle from '../assets/icons/IonArrowDownCircle';
-import IonCheckmarkCircleOutline from '../assets/icons/IonCheckmarkCircleOutline';
-import IonCheckmarkCircle from '../assets/icons/IonCheckmarkCircle';
-import IonArrowUpCircleOutline from '../assets/icons/IonArrowUpCircleOutline';
-import IonArrowUpCircle from '../assets/icons/IonArrowUpCircle';
-import IonCloseCircleOutline from '../assets/icons/IonCloseCircleOutline';
-import IonCloseCircle from '../assets/icons/IonCloseCircle';
-import IonStopCircleOutline from '../assets/icons/IonStopCircleOutline';
-import IonStopCircle from '../assets/icons/IonStopCircle';
-import IonServerOutline from '../assets/icons/IonServerOutline';
-import IonServer from '../assets/icons/IonServer';
-import IonCogOutline from '../assets/icons/IonCogOutline';
-import IonCog from '../assets/icons/IonCog';
+} from '@/renderer/atoms/atomUI';
+import { atomTasks } from '@/renderer/atoms/atomTask';
+import useNav from '@/renderer/utils/useNav';
+// import IonShapesOutline from '../assets/icons/IonShapesOutline';
+import IonShapes from '@/renderer/assets/icons/IonShapes';
+import IonArrowDownCircleOutline from '@/renderer/assets/icons/IonArrowDownCircleOutline';
+import IonArrowDownCircle from '@/renderer/assets/icons/IonArrowDownCircle';
+import IonCheckmarkCircleOutline from '@/renderer/assets/icons/IonCheckmarkCircleOutline';
+import IonCheckmarkCircle from '@/renderer/assets/icons/IonCheckmarkCircle';
+import IonArrowUpCircleOutline from '@/renderer/assets/icons/IonArrowUpCircleOutline';
+import IonArrowUpCircle from '@/renderer/assets/icons/IonArrowUpCircle';
+import IonCloseCircleOutline from '@/renderer/assets/icons/IonCloseCircleOutline';
+import IonCloseCircle from '@/renderer/assets/icons/IonCloseCircle';
+import IonStopCircleOutline from '@/renderer/assets/icons/IonStopCircleOutline';
+import IonStopCircle from '@/renderer/assets/icons/IonStopCircle';
+import IonServerOutline from '@/renderer/assets/icons/IonServerOutline';
+import IonServer from '@/renderer/assets/icons/IonServer';
+import IonCogOutline from '@/renderer/assets/icons/IonCogOutline';
+import IonCog from '@/renderer/assets/icons/IonCog';
 
 interface YaddsCategoryObj {
   path: SidebarCategory;

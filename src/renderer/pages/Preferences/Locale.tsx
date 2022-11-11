@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { FormControl, FormGroup, MenuItem, Select, Stack, Typography, useTheme } from '@mui/material';
+import { atomPersistenceLocaleName, LocaleName } from '@/renderer/atoms/atomUI';
 import RowItem from './RowItem';
-import { atomPersistenceLocaleName, LocaleName } from '../../atoms/atomUI';
 
 interface SettingsLocale {
   localeName: LocaleName;

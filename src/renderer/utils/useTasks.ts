@@ -1,8 +1,8 @@
 import { startTransition } from 'react';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomTasks, atomFetchStatus } from '../atoms/atomTask';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
+import { atomTasks, atomFetchStatus } from '@/renderer/atoms/atomTask';
 
 const useTasks = () => {
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);

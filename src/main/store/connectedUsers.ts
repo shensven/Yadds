@@ -1,5 +1,5 @@
 import Store, { Schema } from 'electron-store';
-import { ConnectedUser } from '../../renderer/atoms/atomConnectedUsers';
+import { ConnectedUser } from '@/renderer/atoms/atomConnectedUsers';
 
 export type YaddsConnectedUsers = {
   list: ConnectedUser[];

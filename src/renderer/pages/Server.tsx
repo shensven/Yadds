@@ -3,27 +3,27 @@ import { useUpdateEffect } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { Box, Button, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography, useTheme } from '@mui/material';
-import BaseInfomationCard from './Server/BaseInfomationCard';
-import RouteCard from './Server/RouteCard';
-import CardUnit from './Server/CardUnit';
-import FluentVirtualNetwork20Filled from '../assets/icons/FluentVirtualNetwork20Filled';
-import EosIconsThreeDotsLoading from '../assets/icons/EosIconsThreeDotsLoading';
-import IcRoundCalendarViewWeek from '../assets/icons/IcRoundCalendarViewWeek';
-import IcOutlineInfo from '../assets/icons/IcOutlineInfo';
-import IcOutlineAlbum from '../assets/icons/IcOutlineAlbum';
-import IcOutlineExplore from '../assets/icons/IcOutlineExplore';
-import IcOutlineCable from '../assets/icons/IcOutlineCable';
-import IcRoundSwapHoriz from '../assets/icons/IcRoundSwapHoriz';
+import FluentVirtualNetwork20Filled from '@/renderer/assets/icons/FluentVirtualNetwork20Filled';
+import EosIconsThreeDotsLoading from '@/renderer/assets/icons/EosIconsThreeDotsLoading';
+import IcRoundCalendarViewWeek from '@/renderer/assets/icons/IcRoundCalendarViewWeek';
+import IcOutlineInfo from '@/renderer/assets/icons/IcOutlineInfo';
+import IcOutlineAlbum from '@/renderer/assets/icons/IcOutlineAlbum';
+import IcOutlineExplore from '@/renderer/assets/icons/IcOutlineExplore';
+import IcOutlineCable from '@/renderer/assets/icons/IcOutlineCable';
+import IcRoundSwapHoriz from '@/renderer/assets/icons/IcRoundSwapHoriz';
 import {
   atomNasInfo,
   atomPersistenceServerActiveTab,
   atomPersistenceTargeMenuItemForQuota,
   atomQuotaList,
   atomTargeByteSizeForQuota,
-} from '../atoms/atomUI';
-import { atomFetchStatus } from '../atoms/atomTask';
-import useWindow from '../utils/useWindow';
-import useByteSizeForQuota from '../utils/useByteSizeForQuota';
+} from '@/renderer/atoms/atomUI';
+import { atomFetchStatus } from '@/renderer/atoms/atomTask';
+import useWindow from '@/renderer/utils/useWindow';
+import useByteSizeForQuota from '@/renderer/utils/useByteSizeForQuota';
+import BaseInfomationCard from './Server/BaseInfomationCard';
+import RouteCard from './Server/RouteCard';
+import CardUnit from './Server/CardUnit';
 
 const Server: React.FC = () => {
   const theme = useTheme();

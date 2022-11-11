@@ -8,9 +8,9 @@ import {
   atomPersistenceLocaleName,
   atomPersistenceQueueIsAscend,
   atomPersistenceQueueIterater,
-} from '../atoms/atomUI';
-import { atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomFetchStatus } from '../atoms/atomTask';
+} from '@/renderer/atoms/atomUI';
+import { atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
+import { atomFetchStatus } from '@/renderer/atoms/atomTask';
 import useNav from './useNav';
 import useNasInfo from './useNasInfo';
 import useQuota from './useQuota';

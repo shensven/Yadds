@@ -1,5 +1,5 @@
 import Store, { Schema } from 'electron-store';
-import { Appearance, LocaleName } from 'renderer/atoms/atomUI';
+import { Appearance, LocaleName } from '@/renderer/atoms/atomUI';
 
 export type YaddsPreferences = {
   appearance: Appearance;

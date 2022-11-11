@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { createTheme, darkScrollbar, PaletteMode, Theme, useMediaQuery } from '@mui/material';
-import { atomPersistenceAppearance } from '../atoms/atomUI';
+import { atomPersistenceAppearance } from '@/renderer/atoms/atomUI';
 
 declare module '@mui/material/styles' {
   interface Palette {

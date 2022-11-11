@@ -1,22 +1,22 @@
 import { Channels } from 'main/preload';
-import { YaddsCache } from '../main/store/cache';
-import { YaddsPreferences } from '../main/store/preferences';
-import { YaddsConnectedUsers } from '../main/store/connectedUsers';
+import { YaddsCache } from '@/main/store/cache';
+import { YaddsPreferences } from '@/main/store/preferences';
+import { YaddsConnectedUsers } from '@/main/store/connectedUsers';
+import { PingPongHostInfo, PropsPingPongHost } from '@/main/net/pingPongHost';
+import { PropQuickConnectID } from '@/main/net/getServerAddres';
+import { ServerError } from '@/main/net/findServer';
+import { PingPongQCInfo } from '@/main/net/pingPongQC';
+import { AuthTypeInfo, PropsAuthType } from '@/main/net/getAuthType';
+import { PropsSignIn, SignInInfo, SignInWrongAccountOrPasswd } from '@/main/net/signIn';
+import { DsmInfo } from '@/main/net/getDsmInfo';
+import { PersonalSettingsInfo } from '@/main/net/getQuota';
+import { FileStationList } from '@/main/net/getVolume';
+import { TasksError, TasksInfo } from '@/main/net/poll';
 import { Appearance, QueueIterater } from './atoms/atomUI';
 import { Nav } from './utils/useNav';
 import { MenuItemsInApp } from './utils/useMenuForApp';
 import { MenuItemsInTray } from './utils/useMenuForTray';
 import { MenuItemsInQueue } from './utils/useMenuForQueue';
-import { PingPongHostInfo, PropsPingPongHost } from '../main/net/pingPongHost';
-import { ServerError } from '../main/net/findServer';
-import { PropQuickConnectID } from '../main/net/getServerAddres';
-import { PingPongQCInfo } from '../main/net/pingPongQC';
-import { AuthTypeInfo, PropsAuthType } from '../main/net/getAuthType';
-import { PropsSignIn, SignInInfo, SignInWrongAccountOrPasswd } from '../main/net/signIn';
-import { DsmInfo } from '../main/net/getDsmInfo';
-import { PersonalSettingsInfo } from '../main/net/getQuota';
-import { FileStationList } from '../main/net/getVolume';
-import { TasksError, TasksInfo } from '../main/net/poll';
 
 declare global {
   interface Window {

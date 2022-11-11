@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai';
 import { Card, Icon, IconButton, Stack, Typography, useTheme } from '@mui/material';
-import IonEllipsisHorizontal from '../../assets/icons/IonEllipsisHorizontal';
-import { atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
+import IonEllipsisHorizontal from '@/renderer/assets/icons/IonEllipsisHorizontal';
+import { atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
 
 interface ICardUnit {
   hasIconButton: boolean;

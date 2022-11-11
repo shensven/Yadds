@@ -7,7 +7,7 @@ import {
   atomTargeByteSizeForQuota,
   atomVolumeList,
   Share,
-} from '../atoms/atomUI';
+} from '@/renderer/atoms/atomUI';
 
 const useByteSizeForQuota = () => {
   const [volumeList] = useAtom(atomVolumeList);

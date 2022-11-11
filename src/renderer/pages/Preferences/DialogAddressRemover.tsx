@@ -2,9 +2,9 @@ import React from 'react';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, DialogContent, DialogTitle, Stack, Typography, useTheme } from '@mui/material';
-import IcRoundDelete from '../../assets/icons/IcRoundDelete';
-import { atomHasDialogAddressRemover, atomWhoWillRemove } from '../../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
+import IcRoundDelete from '@/renderer/assets/icons/IcRoundDelete';
+import { atomHasDialogAddressRemover, atomWhoWillRemove } from '@/renderer/atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
 
 const DialogAddressRemover: React.FC = () => {
   const theme = useTheme();

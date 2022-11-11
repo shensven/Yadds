@@ -20,16 +20,16 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import IcRoundAccountCircle from '../../assets/icons/IcRoundAccountCircle';
-import IcRoundArrowBack from '../../assets/icons/IcRoundArrowBack';
-import IonEyeOutline from '../../assets/icons/IonEyeOutline';
-import IonEyeOffOutline from '../../assets/icons/IonEyeOffOutline';
-import IcRoundPhoneAndroid from '../../assets/icons/IcRoundPhoneAndroid';
-import IcRoundFingerprint from '../../assets/icons/IcRoundFingerprint';
-import IcRoundPassword from '../../assets/icons/IcRoundPassword';
-import EosIconsThreeDotsLoading from '../../assets/icons/EosIconsThreeDotsLoading';
-import { atomHasDialogAddressAdder } from '../../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../../atoms/atomConnectedUsers';
+import IcRoundAccountCircle from '@/renderer/assets/icons/IcRoundAccountCircle';
+import IcRoundArrowBack from '@/renderer/assets/icons/IcRoundArrowBack';
+import IonEyeOutline from '@/renderer/assets/icons/IonEyeOutline';
+import IonEyeOffOutline from '@/renderer/assets/icons/IonEyeOffOutline';
+import IcRoundPhoneAndroid from '@/renderer/assets/icons/IcRoundPhoneAndroid';
+import IcRoundFingerprint from '@/renderer/assets/icons/IcRoundFingerprint';
+import IcRoundPassword from '@/renderer/assets/icons/IcRoundPassword';
+import EosIconsThreeDotsLoading from '@/renderer/assets/icons/EosIconsThreeDotsLoading';
+import { atomHasDialogAddressAdder } from '@/renderer/atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
 
 interface NewConnect {
   connectType: '' | 'qc' | 'host';

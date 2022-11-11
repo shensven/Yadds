@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
-import { atomPersistenceSidebarCategory, SidebarCategory } from '../atoms/atomUI';
+import { atomPersistenceSidebarCategory, SidebarCategory } from '@/renderer/atoms/atomUI';
 
 const useNav = () => {
   const n = useNavigate();

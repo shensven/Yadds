@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
-import { atomHasSidebarMarginTop, atomPersistenceHasSidebar } from '../atoms/atomUI';
+import { atomHasSidebarMarginTop, atomPersistenceHasSidebar } from '@/renderer/atoms/atomUI';
 
 const useMenuForApp = () => {
   const { t } = useTranslation();

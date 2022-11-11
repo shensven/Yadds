@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAtom } from 'jotai';
 import { Icon, MenuItem, Select, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '../../atoms/atomUI';
+import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '@/renderer/atoms/atomUI';
 
 interface IBaseInfomationCard {
   type: 'text' | 'select';

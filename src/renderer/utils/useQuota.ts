@@ -1,9 +1,9 @@
 import { startTransition } from 'react';
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
-import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomFetchStatus } from '../atoms/atomTask';
+import { atomPersistenceTargeMenuItemForQuota, atomQuotaList } from '@/renderer/atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
+import { atomFetchStatus } from '@/renderer/atoms/atomTask';
 import useByteSizeForQuota from './useByteSizeForQuota';
 
 const useQuota = () => {

@@ -11,9 +11,9 @@ import {
   useTheme,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { atomAppVersion } from '@/renderer/atoms/atomConstant';
+import { atomPersistenceIsAutoLaunch, atomPersistenceIsAutoUpdate } from '@/renderer/atoms/atomUI';
 import RowItem from './RowItem';
-import { atomAppVersion } from '../../atoms/atomConstant';
-import { atomPersistenceIsAutoLaunch, atomPersistenceIsAutoUpdate } from '../../atoms/atomUI';
 
 const Application: React.FC = () => {
   const theme = useTheme();

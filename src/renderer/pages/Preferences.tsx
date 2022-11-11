@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
+import useWindow from '@/renderer/utils/useWindow';
 import Apprearance from './Preferences/Apprearance';
 import Address from './Preferences/Address';
 import Locale from './Preferences/Locale';
@@ -8,7 +9,6 @@ import Application from './Preferences/Application';
 import About from './Preferences/About';
 import DialogAddressAdder from './Preferences/DialogAddressAdder';
 import DialogAddressRemover from './Preferences/DialogAddressRemover';
-import useWindow from '../utils/useWindow';
 
 const Preferences: React.FC = () => {
   const theme = useTheme();

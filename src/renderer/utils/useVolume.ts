@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai';
 import { find } from 'lodash';
-import { atomVolumeList } from '../atoms/atomUI';
-import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '../atoms/atomConnectedUsers';
-import { atomFetchStatus } from '../atoms/atomTask';
+import { atomVolumeList } from '@/renderer/atoms/atomUI';
+import { atomPersistenceConnectedUsers, atomPersistenceTargetDid } from '@/renderer/atoms/atomConnectedUsers';
+import { atomFetchStatus } from '@/renderer/atoms/atomTask';
 
 const useVolume = () => {
   const [connectedUsers] = useAtom(atomPersistenceConnectedUsers);
