@@ -23,7 +23,7 @@ import greyInactiveSvg from '../assets/images/grey_inactive.svg';
 import greyActiveLeftSvg from '../assets/images/grey_active_left.svg';
 import greyActiveRightSvg from '../assets/images/grey_active_right.svg';
 
-const YaddsMain: React.FC = () => {
+const Panes: React.FC = () => {
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -166,4 +166,4 @@ const YaddsMain: React.FC = () => {
   );
 };
 
-export default YaddsMain;
+export default Panes;

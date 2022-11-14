@@ -1,8 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { CssBaseline, Stack, ThemeProvider } from '@mui/material';
-import YaddsSidebar from './containers/YaddsSidebar';
-import YaddsMain from './containers/YaddsMain';
+import { Panes, Sidebar } from './layouts';
 import useColorSystem from './utils/useColorSystem';
 import useSchedule from './utils/useSchedule';
 import './i18n/i18n';
@@ -16,8 +15,8 @@ const Route: React.FC = () => {
     <ThemeProvider theme={colorSystem}>
       <CssBaseline />
       <Stack direction="row">
-        <YaddsSidebar />
-        <YaddsMain />
+        <Sidebar />
+        <Panes />
       </Stack>
     </ThemeProvider>
   );
