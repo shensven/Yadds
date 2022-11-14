@@ -1,10 +1,10 @@
-import { Box, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
+import { ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useAtom } from 'jotai';
 import { atomPersistenceSidebarCategory, SidebarCategory } from '../atoms/atomUI';
 import useNav from '../utils/useNav';
 
-interface Category {
+export interface Category {
   path: SidebarCategory;
   tasksLength: number;
   name: string;

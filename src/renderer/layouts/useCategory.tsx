@@ -13,7 +13,7 @@ import IonCloseCircle from '@/renderer/assets/icons/IonCloseCircle';
 import IonStopCircleOutline from '@/renderer/assets/icons/IonStopCircleOutline';
 import IonStopCircle from '@/renderer/assets/icons/IonStopCircle';
 import { atomTasks } from '../atoms/atomTask';
-import { Category } from './StyledListItemButton';
+import type { Category } from './StyledListItemButton';
 
 const useCategory = () => {
   const [tasks] = useAtom(atomTasks);
