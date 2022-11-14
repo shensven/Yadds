@@ -109,6 +109,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/barlow": "^4.5.9",
+    "@fontsource/noto-sans-mono": "^4.5.12",
     "@mui/material": "^5.10.13",
     "@mui/system": "^5.10.10",
     "ahooks": "^3.7.2",

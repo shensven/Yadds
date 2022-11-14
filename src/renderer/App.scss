@@ -1,4 +1,5 @@
 @use '@fontsource/barlow/scss/mixins.scss' as Barlow;
+@use '@fontsource/noto-sans-mono/scss/mixins.scss' as NotoSansMono;
 
 @include Barlow.fontFace($display: block, $weight: 100);
 @include Barlow.fontFace($display: block, $weight: 200);
@@ -9,6 +10,16 @@
 @include Barlow.fontFace($display: block, $weight: 700);
 @include Barlow.fontFace($display: block, $weight: 800);
 @include Barlow.fontFace($display: block, $weight: 900);
+
+@include NotoSansMono.fontFace($display: block, $weight: 100);
+@include NotoSansMono.fontFace($display: block, $weight: 200);
+@include NotoSansMono.fontFace($display: block, $weight: 300);
+@include NotoSansMono.fontFace($display: block, $weight: 400);
+@include NotoSansMono.fontFace($display: block, $weight: 500);
+@include NotoSansMono.fontFace($display: block, $weight: 600);
+@include NotoSansMono.fontFace($display: block, $weight: 700);
+@include NotoSansMono.fontFace($display: block, $weight: 800);
+@include NotoSansMono.fontFace($display: block, $weight: 900);
 
 body {
   margin: 0;
