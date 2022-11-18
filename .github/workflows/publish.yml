@@ -9,24 +9,12 @@ concurrency:
   group: ${{ github.ref }}
 
 jobs:
-  publish_outside:
-    name: Publish Outside
+  get_version:
+    name: Get version
+    runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'shensven' }}
-
-    runs-on: ${{ matrix.os }}
-
-    env:
-      # These values are used for auto updates signing
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
-      CSC_LINK: ${{ secrets.CSC_LINK }}
-      CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-      WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-      WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+    outputs:
+      APP_VERSION: ${{ steps.get-version.outputs.APP_VERSION }}
 
     steps:
       - uses: actions/checkout@v3
@@ -35,115 +23,33 @@ jobs:
         with:
           node-version: 16
 
-      - uses: actions/cache@v3
-        id: npm-cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Rewritten buildVersion
-        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
-
-      - name: Get version
-        id: get_version
-        shell: bash
+      - name: Get version from package.json
+        id: get-version
         run: |
-          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
-          echo ::set-output name=yadds_version::$YADDS_VERSION
+          APP_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_OUTPUT
+
+  build_dmg_target:
+    name: Build dmg target
+    needs: get_version
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Insert github.run_number into electron.common.json
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Release for Windwos
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          npm run postinstall
-          npm run build
-          npm run release:win
-
-      - name: Release for macOS
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: |
-          npm run postinstall
-          npm run build
-          npm run release:mac
-
-      - name: Release for Linux
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          npm run postinstall
-          npm run build
-          npm run release:linux
-
-      - uses: ncipollo/release-action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ steps.get_version.outputs.yadds_version }}
-          tag: ${{ steps.get_version.outputs.yadds_version }}
-          allowUpdates: true
-          draft: true
-          artifacts: 'release/build/*.exe,release/build/*.dmg,release/build/*.blockmap,release/build/*.AppImage,release/build/*.deb,release/build/*.rpm'
-
-  publish_app_store:
-    name: Publish App Store
-    if: ${{ github.repository_owner == 'shensven' }}
-
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - uses: actions/cache@v3
-        id: npm-cache
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Rewritten buildVersion
-        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
-
-      - name: Restore provisionprofile
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: |
-          cd build
-          echo -n "${{ secrets.PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > embedded.provisionprofile
-
-      - name: Get version
-        id: get_version
-        shell: bash
-        run: |
-          YADDS_VERSION=$(node -e "console.log(require('./release/app/package.json').version)")
-          echo ::set-output name=yadds_version::$YADDS_VERSION
-
-      - name: Install dependencies
-        run: |
-          npm ci
-
-      - name: Release for Microsoft Store
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          npm run postinstall
-          npm run build
-          npm run release:uwp
-
-      - name: Release for Mac App Store & Upload to TestFlight
-        if: ${{ matrix.os == 'macos-latest' }}
+      - name: Package
         env:
-          # These values are used for auto updates signing
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
@@ -151,35 +57,209 @@ jobs:
         run: |
           npm run postinstall
           npm run build
-          npm run release:mas
-          xcrun altool --upload-app \
-            --type macos \
-            --file "release/build/mas/Yadds-${{ steps.get_version.outputs.yadds_version }}.pkg" \
-            --username "$APPLE_ID" \
-            --password "$APPLE_ID_PASS"
+          npm run package:dmg
 
-      - name: Release for Snapcraft
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dmg-${{ needs.get_version.outputs.APP_VERSION }}
+          path: |
+            release/build/*.dmg
+            release/build/*.blockmap
+
+  build_mas_target:
+    name: Build mas target
+    needs: get_version
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Restore provisionprofile
+        run: |
+          cd build
+          echo -n "${{ secrets.PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > embedded.provisionprofile
+
+      - name: Insert github.run_number into electron.common.json
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Package
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASS: ${{ secrets.APPLE_ID_PASS }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
         run: |
           npm run postinstall
           npm run build
-          npm run release:snap
+          npm run package:mas
+          xcrun altool --upload-app \
+            --type macos \
+            --file "release/build/mas/Yadds-${{ needs.get_version.outputs.APP_VERSION }}.pkg" \
+            --username "$APPLE_ID" \
+            --password "$APPLE_ID_PASS"
 
-      - name: Upload to Snap Store
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: snapcore/action-publish@v1
+  build_nsis_target:
+    name: Build nsis target
+    needs: get_version
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Insert github.run_number into electron.common.json
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Package
+        env:
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+        run: |
+          npm run postinstall
+          npm run build
+          npm run package:nsis
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: nsis-${{ needs.get_version.outputs.APP_VERSION }}
+          path: |
+            release/build/*.exe
+            release/build/*.blockmap
+
+  build_appx_target:
+    name: Build appx target
+    needs: get_version
+    runs-on: windows-latest
+    outputs:
+      APP_VERSION: ${{ steps.get-version.outputs.APP_VERSION }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Insert github.run_number into electron.common.json
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Package
+        run: |
+          npm run postinstall
+          npm run build
+          npm run package:appx
+
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: appx-${{ needs.get_version.outputs.APP_VERSION }}
+      #     path: |
+      #       release/build/*.appx
+
+  build_linux_target:
+    name: Build linux target
+    needs: get_version
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Insert github.run_number into electron.common.json
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Package
+        run: |
+          npm run postinstall
+          npm run build
+          npm run package:linux
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-${{ needs.get_version.outputs.APP_VERSION }}
+          path: |
+            release/build/*.AppImage
+            release/build/*.deb
+            release/build/*.rpm
+
+  build_snap_target:
+    name: Build snap target
+    needs: get_version
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Insert github.run_number into electron.common.json
+        run: npx -y json -I -f build/electron.common.json -e "this.buildVersion=${{ github.run_number }}"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Package
+        run: |
+          npm run postinstall
+          npm run build
+          npm run package:snap
+
+      - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
         with:
-          snap: 'release/build/yadds_${{ steps.get_version.outputs.yadds_version }}_amd64.snap'
+          snap: 'release/build/yadds_${{ needs.get_version.outputs.APP_VERSION }}_amd64.snap'
           release: edge
 
-      - name: Backup to GitHub
-        uses: ncipollo/release-action@v1
+  publish:
+    name: Publish
+    needs: [get_version, build_dmg_target, build_nsis_target, build_linux_target]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: download
+
+      - name: Move artifacts
+        run: |
+          mkdir -p staged
+          mv download/dmg-${{ needs.get_version.outputs.APP_VERSION }}/* staged
+          mv download/nsis-${{ needs.get_version.outputs.APP_VERSION }}/* staged
+          mv download/linux-${{ needs.get_version.outputs.APP_VERSION }}/* staged
+
+      - uses: ncipollo/release-action@v1.11.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: App Store Backup
-          tag: app-store-backup
+          name: ${{ needs.get_version.outputs.APP_VERSION }}
+          tag: ${{ needs.get_version.outputs.APP_VERSION }}
           allowUpdates: true
           draft: true
-          artifacts: 'release/build/*.appx,release/build/mas/*.pkg,release/build/*.snap'
+          artifacts: 'staged/*.*'
