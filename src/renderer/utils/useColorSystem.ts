@@ -41,22 +41,6 @@ const createColorTokens = (mode: PaletteMode) => {
     shape: {
       borderRadius: 8,
     },
-    typography: {
-      fontFamily: [
-        'Barlow',
-        'system-ui',
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-    },
   };
 };
 

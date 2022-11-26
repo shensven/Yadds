@@ -60,23 +60,20 @@ function StyledListItemButton({ category = defaultProps.category }: Props) {
           justifyContent="center"
           alignItems="center"
           height={theme.spacing(2)}
-          minWidth={theme.spacing(2)}
-          px={theme.spacing(0.5)}
+          minWidth={theme.spacing(3)}
           sx={{
             backgroundColor: theme.palette.text.secondary,
             borderRadius: theme.spacing(1),
+            px: category.tasksLength >= 100 ? theme.spacing(0.25) : 0,
           }}
         >
           <Typography
             fontSize={10}
             fontWeight={500}
             color={theme.palette.card.default}
-            sx={{
-              // fontFamily: 'monospace',
-              fontFamily: 'Noto Sans Mono',
-            }}
+            sx={{ fontFamily: 'Noto Sans Mono' }}
           >
-            {category.tasksLength >= 100 ? category.tasksLength : '99+'}
+            {category.tasksLength >= 100 ? '99+' : category.tasksLength}
           </Typography>
         </Stack>
       )}
