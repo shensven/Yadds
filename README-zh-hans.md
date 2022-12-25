@@ -1,20 +1,14 @@
-<div align="center">
-  <h1>
-    <img src="./assets/icon_darwin.png" width="180px" height="180px"/>
-    <p>Yadds</p>
-  </h1>
-  <p>优雅的 <a href="https://www.synology.cn/zh-cn/dsm/packages/DownloadStation">Download Station</a> 仪表盘</p>
-  <img src="./screenshots/hero_early_preview_zh_hans.png" />
-</div>
+# Yadds
 
 [![GitHub](https://img.shields.io/github/license/shensven/Yadds)](./LICENSE)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/dev/electron)](./package.json)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/react)](./package.json)
 [![Test](https://github.com/shensven/Yadds/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/shensven/Yadds/actions/workflows/test.yml)
 [![Publish](https://github.com/shensven/Yadds/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/shensven/Yadds/actions/workflows/publish.yml)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/shensven/Yadds.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/shensven/Yadds/context:javascript)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
 [![Crowdin](https://badges.crowdin.net/yadds/localized.svg)](https://crowdin.com/project/yadds)
+
+⚠️ 本仓库已不再维护，目前正在使用原生语言分别为 macOS 和 Windows 开发，敬请期待！
 
 [English](./README.md) | 简体中文
 
@@ -30,10 +24,6 @@
 - [x] 多用户切换
 - [ ] 自动接入 BitTorrent tracker 列表
 - [ ] 下载进度可视化
-
-## 📦 安装方式
-
-尚未发布
 
 ## 🔨 编译
 
@@ -64,6 +54,10 @@ npm run start
 npm run package
 ```
 
+## 👀 预览
+
+ <img src="./screenshots/hero_early_preview_zh_hans.png"/>
+ 
 ## 👍 致谢
 
 - [Electron React Boilerplate - A Foundation for Scalable Cross-Platform Apps](https://github.com/electron-react-boilerplate/electron-react-boilerplate)

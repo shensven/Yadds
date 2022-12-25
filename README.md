@@ -1,20 +1,14 @@
-<div align="center">
-  <h1>
-    <img src="./assets/icon_darwin.png" width="180px" height="180px"/>
-    <p>Yadds</p>
-  </h1>
-  <p>Yet another DSM <a href="https://www.synology.com/en-us/dsm/packages/DownloadStation">Download Station</a></p>
-  <img src="./screenshots/hero_early_preview.png" />
-</div>
+# Yadds
 
 [![GitHub](https://img.shields.io/github/license/shensven/Yadds)](./LICENSE)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/dev/electron)](./package.json)
 [![](https://img.shields.io/github/package-json/dependency-version/shensven/Yadds/react)](./package.json)
 [![Test](https://github.com/shensven/Yadds/actions/workflows/test.yml/badge.svg?branch=dev)](https://github.com/shensven/Yadds/actions/workflows/test.yml)
 [![Publish](https://github.com/shensven/Yadds/actions/workflows/publish.yml/badge.svg?branch=main)](https://github.com/shensven/Yadds/actions/workflows/publish.yml)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/shensven/Yadds.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/shensven/Yadds/context:javascript)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/2c554add7a15405094f0433d1c903f41)](https://app.codacy.com/gh/shensven/Yadds?utm_source=github.com&utm_medium=referral&utm_content=shensven/Yadds&utm_campaign=Badge_Grade_Settings)
 [![Crowdin](https://badges.crowdin.net/yadds/localized.svg)](https://crowdin.com/project/yadds)
+
+⚠️ This repository is no longer maintained and is currently being developed in native languages for macOS and Windows respectively, so stay tuned!
 
 English | [简体中文](./README-zh-hans.md)
 
@@ -30,10 +24,6 @@ English | [简体中文](./README-zh-hans.md)
 - [x] Multi-account switching
 - [ ] Automatic access to BitTorrent tracker list
 - [ ] Download progress visualization
-
-## 📦 INSTALLATION
-
-Not released yet
 
 ## 🔨 BUILD
 
@@ -63,6 +53,10 @@ To package apps for the local platform:
 ```bash
 npm run package
 ```
+
+## 👀 PREVIEW
+
+ <img src="./screenshots/hero_early_preview.png" />
 
 ## 👍 CREDITS
 
