@@ -21,7 +21,7 @@ const About: React.FC = () => {
               ml: theme.spacing(1),
               '&:hover': { opacity: 0.5 },
             }}
-            onClick={() => window.electron.app.openURL('https://github.com/shensven/Yadds/blob/main/LICENSE')}
+            onClick={() => window.electron.app.openURL('https://github.com/shensven/Yadds-Electron/blob/main/LICENSE')}
           >
             {t('preferences.this_copy_is_licensed_under_GPL_3_0')}
           </Typography>

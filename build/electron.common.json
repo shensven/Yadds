@@ -1,6 +1,6 @@
 {
-  "productName": "Yadds",
-  "appId": "com.shensven.yadds",
+  "productName": "Yadds-Electron",
+  "appId": "com.shensven.yaddselectron",
   "buildVersion": 1,
   "asar": true,
   "asarUnpack": "**\\*.{node,dll}",
@@ -15,6 +15,6 @@
   "publish": {
     "provider": "github",
     "owner": "shensven",
-    "repo": "Yadds"
+    "repo": "Yadds-Electron"
   }
 }

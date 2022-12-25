@@ -406,10 +406,16 @@ ipcMain.handle('top-menu-for-app:create', async (_, args: MenuItemsInApp) => {
     const subMenuHelp: MenuItemConstructorOptions = {
       label: args.help,
       submenu: [
-        { label: args.openYaddsWebsite, click: () => shell.openExternal('https://github.com/shensven/Yadds') },
+        { label: args.openYaddsWebsite, click: () => shell.openExternal('https://github.com/shensven/Yadds-Electron') },
         { type: 'separator' },
-        { label: args.openYaddsRepository, click: () => shell.openExternal('https://github.com/shensven/Yadds') },
-        { label: args.reportABug, click: () => shell.openExternal('https://github.com/shensven/Yadds/issues') },
+        {
+          label: args.openYaddsRepository,
+          click: () => shell.openExternal('https://github.com/shensven/Yadds-Electron'),
+        },
+        {
+          label: args.reportABug,
+          click: () => shell.openExternal('https://github.com/shensven/Yadds-Electron/issues'),
+        },
       ],
     };
     const subMenuDev: MenuItemConstructorOptions = {

@@ -102,7 +102,7 @@ jobs:
           npm run package:mas
           xcrun altool --upload-app \
             --type macos \
-            --file "release/build/mas/Yadds-${{ needs.get_version.outputs.APP_VERSION }}.pkg" \
+            --file "release/build/mas/Yadds-Electron-${{ needs.get_version.outputs.APP_VERSION }}.pkg" \
             --username "$APPLE_ID" \
             --password "$APPLE_ID_PASS"
 
@@ -232,12 +232,12 @@ jobs:
           npm run build
           npm run package:snap
 
-      - uses: snapcore/action-publish@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
-        with:
-          snap: 'release/build/yadds_${{ needs.get_version.outputs.APP_VERSION }}_amd64.snap'
-          release: edge
+      # - uses: snapcore/action-publish@v1
+      #   env:
+      #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_CREDENTIALS }}
+      #   with:
+      #     snap: 'release/build/yaddselectron_${{ needs.get_version.outputs.APP_VERSION }}_amd64.snap'
+      #     release: edge
 
   publish:
     name: Publish
