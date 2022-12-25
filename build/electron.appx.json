@@ -4,9 +4,9 @@
     "target": "appx"
   },
   "appx": {
-    "applicationId": "Yadds",
-    "identityName": "43692SvenFE.Yadds",
-    "publisher": "CN=0CC52094-7C23-4972-BE01-34C7C8EB1468",
+    "applicationId": "YaddsElectron",
+    "identityName": "43692SvenFE.YaddsElectron",
+    "publisher": "CN=00000000-0000-0000-0000-000000000000",
     "setBuildNumber": true,
     "artifactName": "${productName}-${version}.${ext}"
   }

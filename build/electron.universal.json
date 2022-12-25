@@ -1,21 +1,16 @@
 {
   "extends": "build/electron.common.json",
   "mac": {
-    "target": {
-      "target": "default",
-      "arch": ["arm64", "x64"]
-    },
     "type": "distribution",
-    "entitlements": "build/entitlements.mas.plist",
-    "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
     "hardenedRuntime": true,
-    "gatekeeperAssess": false
+    "gatekeeperAssess": false,
+    "darkModeSupport": true,
+    "target": { "target": "dmg", "arch": ["arm64", "x64", "universal"] }
   },
   "dmg": {
-    "contents": [
-      { "x": 130, "y": 220 },
-      { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
-    ]
+    "icon": "assets/icon.icns"
   },
   "win": {
     "target": ["nsis"]
